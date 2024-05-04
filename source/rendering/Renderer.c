@@ -215,7 +215,6 @@ void Renderer_Render() {
 
 		Inventory_Draw(8, 0, player->inventory, sizeof(player->inventory) / sizeof(ItemStack));
 
-//test
 	}
 
 	if (showDebugInfo) DebugUI_Draw();
