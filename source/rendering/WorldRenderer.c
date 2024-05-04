@@ -123,7 +123,7 @@ static void renderWorld() {
 		}
 		// if (polysTotal >= 150000) break;
 
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 24; i++) {
 			Direction dir = i;
 			const int* offset = DirectionToOffset[dir];
 

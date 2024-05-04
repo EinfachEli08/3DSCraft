@@ -34,7 +34,7 @@ typedef struct {
 
 	float breakPlaceTimeout;
 
-	ItemStack inventory[45]; // 9*3 is default (for 27 cells like in MC)
+	ItemStack inventory[27]; // 9*3 is default (for 27 cells like in MC)
 
 	int quickSelectBarSlots;
 	int quickSelectBarSlot;

@@ -204,14 +204,12 @@ void Renderer_Render() {
 	if (*gamestate == GameState_SelectWorld)
 		WorldSelect_Render();
 	else {
-		SpriteBatch_PushText(0, 40, 0, INT16_MAX, true, INT_MAX, NULL, sizeof(ItemStack));
 
 		SpriteBatch_SetScale(2);
 		player->quickSelectBarSlots = Inventory_QuickSelectCalcSlots(160);
 		Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth(player->quickSelectBarSlots) / 2,
 					  120 - INVENTORY_QUICKSELECT_HEIGHT, player->quickSelectBar, player->quickSelectBarSlots,
 					  &player->quickSelectBarSlot);
-
 
 		Inventory_Draw(8, 0, player->inventory, sizeof(player->inventory) / sizeof(ItemStack));
 
