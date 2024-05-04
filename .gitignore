@@ -6,3 +6,4 @@ debug_build
 .vscode/*
 .vs
 *.cia
+.idea
