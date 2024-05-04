@@ -34,10 +34,10 @@ DATA		:=	data
 INCLUDES	:=	dependencies include
 ROMFS		:=	romfs
 
-APP_AUTHOR	:= u/SomeRandoLameo
-APP_TITLE	:= Minecraft
+APP_AUTHOR	:= u/SomeRandoLameo & Moddimation
+APP_TITLE	:= 3DSCraft
 APP_DESCRIPTION := A Minecraft clone for 3DS
-ICON		:=	icon/craftusreloaded.png
+ICON		:=	icon/icon.png
 
 DEBUG		?=	0
 ifeq ($(DEBUG), 0)
@@ -157,7 +157,7 @@ run:
 	@echo running...
 	@3dslink $(TARGET).3dsx
 make_cia:
-	@makerom -f cia -o $(TARGET).cia -rsf $(TARGET).rsf -target t -exefslogo -elf $(TARGET).elf -icon $(TARGET).smdh -banner banner.bin
+	@makerom -f cia -o $(TARGET).cia -rsf $(TARGET).rsf -target t -exefslogo -elf $(TARGET).elf -icon $(TARGET).smdh -banner test.bin
 	@echo built ... $(TARGET).cia
 
 #---------------------------------------------------------------------------------
