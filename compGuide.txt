@@ -1,0 +1,10 @@
+Compiling all files:
+
+make clean && make && make make_cia
+
+
+creating the Banner:
+
+.\bannertool.exe makebanner -ci "C:\Users\Elias\Desktop\3DSCraft\icon\iconmodel.cgfx" -a "C:\Users\Elias\Desktop\3DSCraft\icon\banner.wav" -o "test.bin"
+
+(replace with your Path)
