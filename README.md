@@ -1,14 +1,15 @@
-# Craftus 3D Reloaded
+# 3DSCraft
 
-Craftus Reloaded is a homebrew Minecraft clone for Nintendo 3DS. It's under active development. It currently features only a creative-mode-esque game mode with infinite resources.
+3DSCraft is a homebrew Minecraft clone based on Craftus Reloaded for Nintendo 3DS. It's under development. It currently features only a creative-mode-esque game mode with infinite resources.
 
+## Old Photos
 ![](https://raw.githubusercontent.com/wiki/RSDuck/craftus_reloaded/screenshots/15t.png)|![](https://raw.githubusercontent.com/wiki/RSDuck/craftus_reloaded/screenshots/17t.png)|![](https://raw.githubusercontent.com/wiki/RSDuck/craftus_reloaded/screenshots/16t.png)
 ----|----|----
 ![](https://raw.githubusercontent.com/wiki/RSDuck/craftus_reloaded/screenshots/15b.png)|![](https://raw.githubusercontent.com/wiki/RSDuck/craftus_reloaded/screenshots/17b.png)|![](https://raw.githubusercontent.com/wiki/RSDuck/craftus_reloaded/screenshots/16b.png)
 
 ## History
 
-It's been a while since I started developing this version of Craftus. I started to do a rewrite, because the old Craftus was beyond fixable. Probably 15% is copied from the old Craftus the remaining part is rewritten.
+It's been a while since RSDuck started developing this version of Craftus. RSDuck started to do a rewrite, because the old Craftus was beyond fixable. Probably 15% is copied from the old Craftus the remaining part is rewritten. After a bit of time, RSDuck abandoned this Project. Now, it is our turn!
 
 ## Features
 
@@ -22,35 +23,35 @@ It's been a while since I started developing this version of Craftus. I started 
 
 ## Default Controls
 
-_The controls can be changed by editing the file which can be found at `sd:/craftus/options.ini` (instructions can be found there too)._
+_The controls can be changed by editing the file which can be found at `sd:/craft/options.ini` (instructions can be found there too)._
 
-| Category | Action | OLD 3DS | NEW 3DS |
-| ------------- | ------------- | ------------- | ------------- |
-| Blocks | Place Block | L | L |
-| Blocks | Break Block | R | R |
-|  |  |  |  |
-| Move | Forward | X | Circle Pad (Up) |
-| Move | Backward | B | Circle Pad (Down) |
-| Move | Left | Y | Circle Pad (Left) |
+| Category | Action | OLD 3DS | NEW 3DS            |
+| ------------- | ------------- | ------------- |--------------------|
+| Blocks | Place Block | L | L                  |
+| Blocks | Break Block | R | R                  |
+|  |  |  |                    |
+| Move | Forward | X | Circle Pad (Up)    |
+| Move | Backward | B | Circle Pad (Down)  |
+| Move | Left | Y | Circle Pad (Left)  |
 | Move | Right | A | Circle Pad (Right) |
-| Move | Jump | DPad (Up) | ZL |
-| Move | Shift | DPad (Down) | ZR |
-|  |  |  |  |
-| Camera | Up | Circle Pad (Up) | C-Stick (Up) |
-| Camera | Down | Circle Pad (Down) | C-Stick (Down) |
-| Camera | Left | Circle Pad (Left) | C-Stick (Left) |
-| Camera | Right | Circle Pad (Right) | C-Stick (Right) |
-|  |  |  |  |
-| Inventory | Switch Block | DPad (Left) | DPad (Left) |
-| Inventory | Switch Block | DPad (Right) | DPad (Right) |
-|  |  |  |  |
-| Commands | Open Console | Select | Select |
-|  |  |  |  |
-| Menu | Back | Start | Start |
+| Move | Jump | DPad (Up) | A                  |
+| Move | Shift | DPad (Down) | DPad(Down)         |
+|  |  |  |                    |
+| Camera | Up | Circle Pad (Up) | C-Stick (Up)       |
+| Camera | Down | Circle Pad (Down) | C-Stick (Down)     |
+| Camera | Left | Circle Pad (Left) | C-Stick (Left)     |
+| Camera | Right | Circle Pad (Right) | C-Stick (Right)    |
+|  |  |  |                    |
+| Inventory | Switch Block | DPad (Left) | DPad (Left)        |
+| Inventory | Switch Block | DPad (Right) | DPad (Right)       |
+|  |  |  |                    |
+| Commands | Open Console | Select | Select             |
+|  |  |  |                    |
+| Menu | Back | Start | Start              |
 
 ## Options
 
-_The options are changed in `sd:/craftus/options.ini`._
+_The options are changed in `sd:/craft/options.ini`._
 
 | Option | Meaning | Default (OLD 3DS) | Default (NEW 3DS) | Values to Change |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
@@ -67,7 +68,8 @@ _The options are changed in `sd:/craftus/options.ini`._
     * Contributors of the 3dbrew.org wiki and ctrulib
     * Fincs for citro3d
     * More people I forgot about, even though I extended this list multiple times
-* XSSheep, for the textures, taken from his [resourcepack](http://www.minecraftforum.net/forums/mapping-and-modding/resource-packs/1242533-pixel-perfection-now-with-polar-bears-1-11) which is licensed under [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/)
+* Minecraft, for the textures
 * Tommaso Checchi, for his [culling algorithm](https://tomcc.github.io/2014/08/31/visibility-1.html), orginally developed for the use in MC PE
 * Of course all other MC devs, how could I forget them?
 * All people who worked on the libraries Craftus is depending on(see the dependencies folder)
+* RSDuck for the Craftus Reloaded source code
