@@ -32,7 +32,8 @@ Alles mögliche:
     ✔ Welt wechseln @low @0.3 @done (2017-10-24 16:05:18)
     ✔ "Neue Welt erstellen" implementieren @done (21.8.2017, 18:19:32)
     ✔ Block Metadaten @high @0.3 @done (2017-10-3 15:57:08)
-    ☐ Andere Blockmodelle
+    ☐ Andere Blockmodelle @high
+    ☐ Orientation für andere Blockmodelle (z.B. Treppen, Leitern, Türen, Betten usw.) @high
     ☐ Funktion die für eine Seite Vertexdaten ausfüllt
 
 Weltgeneration:
@@ -54,9 +55,6 @@ Rendering:
     ✔ Seperaten Shader für Welt und UI, um partielle Blöcke zu unterstützen @low @done (2017-10-22 23:55:47)
     ✔ Cursor verbessern(nicht mehr hinter anderen Blöcken sichtbar sein, Farbe anpassen) @done (2017-9-16 15:13:26)
     ☐ Texelkonstanten in Polygen.c und SpriteBatch.c entfernen
-
-PC Port:
-    ☐ Rendering Code portabler machen
 
 Bugs:
     ✔ Wenn man sich einbaut, werden die Vertexe um einen nicht generiert @critical @0.2 @done (12.8.2017, 18:09:17)

@@ -14,7 +14,7 @@ It's been a while since RSDuck started developing this version of Craftus. RSDuc
 ## Features
 
 * An infinte world(in theory)
-* Two different world generators
+* Multiple world generators (Superflat, Normal and Custom)
 * Blocks, of multiple variants, can be broken and placed down to build structures
 * A basic inventory system
 * Saving and loading, multiple worlds
