@@ -216,6 +216,9 @@ clean:
 	@rm -fr $(BUILD) $(TARGET).elf
 	@rm -fr $(OUTDIR)
 #---------------------------------------------------------------------------------
+
+rund: #run dima
+	@3dslink $(TARGET).3dsx -a 192.168.178.37
 run:
 	@echo running...
 	@3dslink $(TARGET).3dsx

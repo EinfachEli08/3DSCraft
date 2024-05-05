@@ -17,14 +17,18 @@ static bool clicked_back = false;
 
 static int menustate = 0;
 
+#define TEX_QR_SRCSIZE 32
+#define TEX_QR_SIZE TEX_QR_SRCSIZE*3
+
 
 void TitleScreen_Render(){
 	SpriteBatch_SetScale(2);
 
+	#define SPRITE_BG_SIZE 32
 	SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
 	for (int i = 0; i < 160 / 32 + 1; i++) {
 		for (int j = 0; j < 120 / 32 + 1; j++) {
-			SpriteBatch_PushQuadColor(i * 32, j * 32, -4 , 32, 32, 0, 0, 32, 32, INT16_MAX);
+			SpriteBatch_PushQuad(i * SPRITE_BG_SIZE, j * SPRITE_BG_SIZE, -4 , SPRITE_BG_SIZE, SPRITE_BG_SIZE, 0, 0, SPRITE_BG_SIZE, SPRITE_BG_SIZE);
 		}
 	}
 
@@ -55,9 +59,9 @@ void TitleScreen_Render(){
 
 	//TODO: Krams rendern, hier passiert nix
 		SpriteBatch_BindGuiTexture(GuiTexture_SupportQR);
-		SpriteBatch_PushQuadColor(32, 32, 100, 150, 150, 0, 0, 150, 150, INT16_MAX);
+		SpriteBatch_PushQuad(0, 0, 1, TEX_QR_SIZE, TEX_QR_SIZE, 0, 0, TEX_QR_SRCSIZE, TEX_QR_SRCSIZE);
 
-		Gui_Offset(0, 150 + BUTTON_TEXT_PADDING);
+		Gui_Offset(0, TEX_QR_SIZE + BUTTON_TEXT_PADDING);
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.80f), 2);
 		clicked_back = Gui_Button(1.f, "Back");
 		Gui_EndRow();

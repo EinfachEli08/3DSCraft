@@ -23,7 +23,7 @@ SystemControlInfo:
   
 AccessControlInfo:
   # ExtData
-  UseExtSaveData                : false # enables ExtData       
+  UseExtSaveData                : true # enables ExtData       
   #ExtSaveDataId                : 0x300 # only set this when the ID is different to the UniqueId
 
   # FS:USER Archive Access Permissions
@@ -32,11 +32,12 @@ AccessControlInfo:
    #- CategorySystemApplication
    #- CategoryHardwareCheck
    #- CategoryFileSystemTool
-   #- Debug
+   - Debug
    #- TwlCardBackup
    #- TwlNandData
    #- Boss
-   #- DirectSdmc
+   - DirectSdmc
+   - DirectSdmcWrite
    #- Core
    #- CtrNandRo
    #- CtrNandRw
@@ -53,7 +54,7 @@ AccessControlInfo:
    #- SeedDB
 
   # New3DS Exclusive Process Settings
-  SystemModeExt                 : Legacy # Legacy(Default)/124MB/178MB  Legacy:Use Old3DS SystemMode
+  SystemModeExt                 : 178MB # Legacy(Default)/124MB/178MB  Legacy:Use Old3DS SystemMode
   CpuSpeed                      : 804MHz # 268MHz(Default)/804MHz
   EnableL2Cache                 : true # false(default)/true
   CanAccessCore2                : true 
@@ -177,9 +178,10 @@ AccessControlInfo:
    - mcu::HWC
    
 SystemControlInfo:
-  SaveDataSize: 128KB
-  RemasterVersion: 7
-  StackSize: 0x40000
+  SaveDataSize: 0KB
+  RemasterVersion: 0
+  StackSize: 0x9000
+  
  # do not edit below here.
   Dependency: 
     ac: 0x0004013000002402L
