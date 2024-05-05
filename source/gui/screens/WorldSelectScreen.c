@@ -1,4 +1,4 @@
-#include <gui/WorldSelect.h>
+#include <gui/screens/WorldSelectScreen.h>
 
 #include <gui/Gui.h>
 #include <gui/SpriteBatch.h>
@@ -108,7 +108,7 @@ static bool canceled_world_options = false;
 static bool confirmed_deletion = false;
 static bool canceled_deletion = false;
 
-static WorldGenType worldGenType = WorldGen_SuperFlat;
+static WorldGenType worldGenType = WorldGen_Normal;
 
 static char* worldGenTypesStr[] = {"Normal", "Superflat","Custom"};
 

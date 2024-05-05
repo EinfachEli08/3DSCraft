@@ -28,6 +28,7 @@ static C3D_Tex whiteTex;
 static C3D_Tex widgetsTex;
 static C3D_Tex iconsTex;
 static C3D_Tex menuBackgroundTex;
+static C3D_Tex supportQRTex;
 
 static C3D_Mtx iconModelMtx;
 
@@ -52,6 +53,7 @@ void SpriteBatch_Init(int projUniform_) {
 	C3D_TexLoadImage(&whiteTex, data, GPU_TEXFACE_2D, 0);
 
 	Texture_Load(&menuBackgroundTex, "romfs:/textures/gui/options_background.png");
+	Texture_Load(&supportQRTex, "romfs:/textures/others/support-image.png");
 
 	Mtx_Identity(&iconModelMtx);
 	Mtx_RotateY(&iconModelMtx, M_PI / 4.f, false);
@@ -88,6 +90,9 @@ void SpriteBatch_BindGuiTexture(GuiTexture texture) {
 		case GuiTexture_MenuBackground:
 			currentTexture = &menuBackgroundTex;
 			break;
+		case GuiTexture_SupportQR:
+			currentTexture = &supportQRTex;
+		break;
 		default:
 			break;
 	}
