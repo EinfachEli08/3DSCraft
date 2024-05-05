@@ -139,7 +139,11 @@ int main() {
 		InputData inputData = (InputData){keysheld,    keysdown,    hidKeysUp(),  circlePos.dx, circlePos.dy,
 						  touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy};
 
-		if(TitleScreen_SelectQuit()){
+//TODO: Fix da shit, need better scene management
+		if(WorldSelectScreen_Previous()){
+		//TODO: Doesnt switch
+			gamestate == GameState_TitleScreen;
+		}else if(TitleScreen_SelectQuit()){
 			break;
 		}else if(TitleScreen_SelectWorld() && gamestate == GameState_TitleScreen){
 			gamestate = GameState_SelectWorld;

@@ -15,10 +15,11 @@ static bool clicked_language = false;
 static bool clicked_support = false;
 static bool clicked_back = false;
 
-static int menustate = 0;
+typedef enum { TitleState_Default, TitleState_Support, TitleState_Language } TitleState;
+static TitleState menustate = TitleState_Default;
 
 #define TEX_QR_SRCSIZE 32
-#define TEX_QR_SIZE TEX_QR_SRCSIZE*3
+#define TEX_QR_SIZE TEX_QR_SRCSIZE*2
 
 
 void TitleScreen_Render(){
@@ -32,7 +33,7 @@ void TitleScreen_Render(){
 		}
 	}
 
-	if(menustate==0){
+	if(menustate==TitleState_Default){
 		int movementX = 0, movementY = 0;
 		Gui_GetCursorMovement(&movementX, &movementY);
 
@@ -55,22 +56,29 @@ void TitleScreen_Render(){
 		Gui_Space(0.49);
 		clicked_support = Gui_Button(0.25f, "Sup");
 		Gui_EndRow();
-	}else{
 
-	//TODO: Krams rendern, hier passiert nix
+	}else if(menustate==TitleState_Support){
+
+		//TODO: Krams rendern, hier passiert nix
+		Gui_BeginRowCenter(Gui_RelativeWidth(0.80f), 1);
+		Gui_Label(25,true,INT16_MAX,true,"This QRCode quides you to the 3DSCraft Discord server!");
+		Gui_EndRow();
+
 		SpriteBatch_BindGuiTexture(GuiTexture_SupportQR);
-		SpriteBatch_PushQuad(0, 0, 1, TEX_QR_SIZE, TEX_QR_SIZE, 0, 0, TEX_QR_SRCSIZE, TEX_QR_SRCSIZE);
+		SpriteBatch_PushQuad(44, 20, 1, TEX_QR_SIZE, TEX_QR_SIZE, 0, 0, TEX_QR_SRCSIZE, TEX_QR_SRCSIZE);
 
-		Gui_Offset(0, TEX_QR_SIZE + BUTTON_TEXT_PADDING);
-		Gui_BeginRowCenter(Gui_RelativeWidth(0.80f), 2);
+		Gui_Offset(0, 94 + BUTTON_TEXT_PADDING);
+		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 0);
 		clicked_back = Gui_Button(1.f, "Back");
 		Gui_EndRow();
 
 	}
 	if(clicked_support){
-		menustate=1;
-	}else{
-		menustate=0;
+		menustate=TitleState_Support;
+		clicked_support=false;
+	}else if(clicked_back){
+		menustate=TitleState_Default;
+		clicked_back=false;
 	}
 
 
