@@ -24,7 +24,7 @@ SystemControlInfo:
 AccessControlInfo:
   # ExtData
   UseExtSaveData                : true # enables ExtData       
-  #ExtSaveDataId                : 0x300 # only set this when the ID is different to the UniqueId
+  ExtSaveDataId                : 0x421 # only set this when the ID is different to the UniqueId
 
   # FS:USER Archive Access Permissions
   # Uncomment as required
@@ -39,13 +39,9 @@ AccessControlInfo:
    - DirectSdmc
    - DirectSdmcWrite
    #- Core
-   #- CtrNandRo
-   #- CtrNandRw
-   #- CtrNandRoWrite
    #- CategorySystemSettings
    #- CardBoard
    #- ExportImportIvs
-   #- DirectSdmcWrite
    #- SwitchCleanup
    #- SaveDataMove
    #- Shop
@@ -54,7 +50,7 @@ AccessControlInfo:
    #- SeedDB
 
   # New3DS Exclusive Process Settings
-  SystemModeExt                 : 178MB # Legacy(Default)/124MB/178MB  Legacy:Use Old3DS SystemMode
+  SystemModeExt                 : Legacy # Legacy(Default)/124MB/178MB  Legacy:Use Old3DS SystemMode
   CpuSpeed                      : 804MHz # 268MHz(Default)/804MHz
   EnableL2Cache                 : true # false(default)/true
   CanAccessCore2                : true 
