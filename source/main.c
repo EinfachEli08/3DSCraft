@@ -11,6 +11,7 @@
 #include <gui/DebugUI.h>
 #include <gui/Gui.h>
 #include <gui/WorldSelect.h>
+#include <gui/screens/TitleScreen.h>
 #include <rendering/PolyGen.h>
 #include <rendering/Renderer.h>
 #include <world/ChunkWorker.h>
@@ -40,7 +41,7 @@ void releaseWorld(ChunkWorker* chunkWorker, SaveManager* savemgr, World* world) 
 }
 
 int main() {
-	GameState gamestate = GameState_SelectWorld;
+	GameState gamestate = GameState_TitleScreen;
 
 	gfxInitDefault();
 
@@ -115,9 +116,7 @@ int main() {
 		hidScanInput();
 		u32 keysheld = hidKeysHeld(), keysdown = hidKeysDown();
 		if (keysdown & KEY_START) {
-			if (gamestate == GameState_SelectWorld)
-				break;
-			else if (gamestate == GameState_Playing) {
+			if (gamestate == GameState_Playing) {
 				releaseWorld(&chunkWorker, &savemgr, world);
 
 				gamestate = GameState_SelectWorld;
@@ -139,6 +138,10 @@ int main() {
 
 		InputData inputData = (InputData){keysheld,    keysdown,    hidKeysUp(),  circlePos.dx, circlePos.dy,
 						  touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy};
+
+		if(TitleScreen_SelectWorld() && gamestate == GameState_TitleScreen){
+			gamestate = GameState_SelectWorld;
+		}
 
 		if (gamestate == GameState_Playing) {
 			while (timeAccum >= 1.f / 20.f) {

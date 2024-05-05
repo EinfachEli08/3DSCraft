@@ -29,7 +29,7 @@ include $(DEVKITARM)/3ds_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 
-SOURCES		:=	source source/misc source/world source/world/worldgen source/world/savegame source/world/worldgen/artefacts source/blocks source/rendering source/gui source/entity source/savegame dependencies/mpack dependencies/vec dependencies/sino dependencies/lodepng dependencies/miniz dependencies/ini
+SOURCES		:=	source source/misc source/world source/world/worldgen source/world/savegame source/world/worldgen/artefacts source/blocks source/rendering source/gui source/gui/screens source/entity source/savegame dependencies/mpack dependencies/vec dependencies/sino dependencies/lodepng dependencies/miniz dependencies/ini
 DATA		:=	data
 INCLUDES	:=	dependencies include
 ROMFS		:=	romfs
