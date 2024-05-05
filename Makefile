@@ -27,27 +27,61 @@ include $(DEVKITARM)/3ds_rules
 #     - icon.png
 #     - <libctru folder>/default_icon.png
 #---------------------------------------------------------------------------------
-TARGET		:=	$(notdir $(CURDIR))
 
-SOURCES		:=	source source/misc source/world source/world/worldgen source/world/savegame source/world/worldgen/artefacts source/blocks source/rendering source/gui source/gui/screens source/entity source/savegame dependencies/mpack dependencies/vec dependencies/sino dependencies/lodepng dependencies/miniz dependencies/ini
-DATA		:=	data
-INCLUDES	:=	dependencies include
-ROMFS		:=	romfs
+TARGET			:=	3DSCraft
+SOURCES 		:=  source \
+					source/misc \
+					source/world \
+					source/world/worldgen \
+					source/world/savegame \
+					source/world/worldgen/artefacts \
+					source/blocks \
+					source/rendering \
+					source/gui \
+					source/gui/screens \					\
+					source/entity \
+					source/savegame \
+					dependencies/mpack \
+					dependencies/vec \
+					dependencies/sino \
+					dependencies/lodepng \
+					dependencies/miniz \
+					dependencies/ini
+DATA			:=	data
+INCLUDES		:=	dependencies include
+ROMFS			:=	romfs
 
-APP_AUTHOR	:= u/SomeRandoLameo & Moddimation
-APP_TITLE	:= 3DSCraft
-APP_DESCRIPTION := A Minecraft clone for 3DS
-ICON		:=	icon/icon.png
+# 3dsx
+APP_TITLE		:=	3DSCRAFT
+APP_DESCRIPTION :=  Re-reload of Craftus Reloaded
+APP_AUTHOR		:=  u/SomeRandoLameo
+ICON			:=	res/icon.png
 
-DEBUG		?=	0
+# CIA
+BANNER_AUDIO	:=	res/banner.wav
+BANNER_IMAGE	:=	res/banner.cgfx
+RSF_PATH		:=	res/app.rsf
+LOGO			:=	res/logo.lz11
+UNIQUE_ID		:=	0x181169
+PRODUCT_CODE	:=	CTR-3D-CRFT
+ICON_FLAGS		:=	nosavebackups,visible
+
+# Version
+VERSION_MAJOR	:=	1
+VERSION_MINOR	:=	0
+VERSION_MICRO	:=	0
+
+
+
+DEBUG			?=	0
 ifeq ($(DEBUG), 0)
-BUILD		:=	build
-CFLAGS_ADD	:=	-fomit-frame-pointer -O2
-LIBS	:= -lcitro3d -lctru -lm
+BUILD			:=	build
+CFLAGS_ADD		:=	-fomit-frame-pointer -O2
+LIBS			:= -lcitro3d -lctru -lm
 else
-BUILD		:=	debug_build
-CFLAGS_ADD	:=	-Og -D_DEBUG
-LIBS	:= -lcitro3dd -lctrud -lm
+BUILD			:=	debug_build
+CFLAGS_ADD		:=	-Og -D_DEBUG
+LIBS			:= -lcitro3dd -lctrud -lm
 endif
 
 #---------------------------------------------------------------------------------
@@ -88,12 +122,12 @@ export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
-CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
-CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
-SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-PICAFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.v.pica)))
-SHLISTFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.shlist)))
-BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+CFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
+CPPFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
+SFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+PICAFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.v.pica)))
+SHLISTFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.shlist)))
+BINFILES		:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -143,6 +177,34 @@ endif
 .PHONY: $(BUILD) clean all
 
 #---------------------------------------------------------------------------------
+
+BANNERTOOL   ?= tools/bannertool.exe
+MAKEROM      ?= tools/makerom.exe
+
+MAKEROM_ARGS := -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(BUILD)/icon.icn" -DAPP_TITLE="$(APP_TITLE)" -DAPP_PRODUCT_CODE="$(PRODUCT_CODE)" -DAPP_UNIQUE_ID="$(UNIQUE_ID)"
+MAKEROM_ARGS += -major $(VERSION_MAJOR) -minor $(VERSION_MINOR) -micro $(VERSION_MICRO)
+
+ifneq ($(strip $(LOGO)),)
+	MAKEROM_ARGS	+=	 -logo "$(LOGO)"
+endif
+ifneq ($(strip $(ROMFS)),)
+	MAKEROM_ARGS	+=	 -DAPP_ROMFS="$(ROMFS)"
+endif
+
+
+ifeq ($(suffix $(BANNER_IMAGE)),.cgfx)
+	BANNER_IMAGE_ARG := -ci
+else
+	BANNER_IMAGE_ARG := -i
+endif
+
+ifeq ($(suffix $(BANNER_AUDIO)),.cwav)
+	BANNER_AUDIO_ARG := -ca
+else
+	BANNER_AUDIO_ARG := -a
+endif
+
+#---------------------------------------------------------------------------------
 all: $(BUILD)
 
 $(BUILD):
@@ -151,13 +213,16 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf
+	@rm -fr $(BUILD) $(TARGET).elf
+	@rm -fr $(OUTDIR)
 #---------------------------------------------------------------------------------
 run:
 	@echo running...
 	@3dslink $(TARGET).3dsx
-make_cia:
-	@makerom -f cia -o $(TARGET).cia -rsf $(TARGET).rsf -target t -exefslogo -elf $(TARGET).elf -icon $(TARGET).smdh -banner test.bin
+cia:
+	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
+	@$(BANNERTOOL) makesmdh -s "$(APP_TITLE)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
+	$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
 	@echo built ... $(TARGET).cia
 
 #---------------------------------------------------------------------------------
