@@ -17,3 +17,6 @@ void WorldSelect_Render();
 bool WorldSelect_Update(char* out_worldpath, char* out_name, WorldGenType* worldType, bool* newWorld);
 
 void WorldSelect_ScanWorlds();
+
+//TODO: Doesnt switch
+bool WorldSelectScreen_Previous();

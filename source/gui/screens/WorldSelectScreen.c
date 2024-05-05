@@ -115,6 +115,7 @@ static char* worldGenTypesStr[] = {"Normal", "Superflat","Custom"};
 static MenuState menustate = MenuState_SelectWorld;
 
 static float max_velocity = 20.f;
+bool clicked_Back = false;
 
 void WorldSelect_Render() {
 	SpriteBatch_SetScale(2);
@@ -163,8 +164,10 @@ void WorldSelect_Render() {
 		clicked_play = Gui_Button(1.f, "Play selected world");
 		Gui_EndRow();
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 2);
-		clicked_new_world = Gui_Button(0.5f, "New World");
-		clicked_delete_world = Gui_Button(0.5f, "Delete World");
+		clicked_new_world = Gui_Button(0.4f, "New World");
+		clicked_delete_world = Gui_Button(0.4f, "Delete World");
+		//TODO: Doesnt switch
+		clicked_Back = Gui_Button(0.2f, "Back");
 		Gui_EndRow();
 	} else if (menustate == MenuState_ConfirmDeletion) {
 		Gui_Offset(0, 10);
@@ -286,4 +289,9 @@ bool WorldSelect_Update(char* out_worldpath, char* out_name, WorldGenType* world
 	}
 
 	return false;
+}
+//TODO: Doesnt switch
+bool WorldSelectScreen_Previous(){
+	return clicked_Back;
+	clicked_Back=false;
 }
