@@ -10,7 +10,7 @@
 #include <entity/PlayerController.h>
 #include <gui/DebugUI.h>
 #include <gui/Gui.h>
-#include <gui/WorldSelect.h>
+#include <gui/screens/WorldSelectScreen.h>
 #include <gui/screens/TitleScreen.h>
 #include <rendering/PolyGen.h>
 #include <rendering/Renderer.h>
@@ -139,11 +139,11 @@ int main() {
 		InputData inputData = (InputData){keysheld,    keysdown,    hidKeysUp(),  circlePos.dx, circlePos.dy,
 						  touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy};
 
-		if(TitleScreen_SelectWorld() && gamestate == GameState_TitleScreen){
+		if(TitleScreen_SelectQuit()){
+			break;
+		}else if(TitleScreen_SelectWorld() && gamestate == GameState_TitleScreen){
 			gamestate = GameState_SelectWorld;
-		}
-
-		if (gamestate == GameState_Playing) {
+		}else if (gamestate == GameState_Playing) {
 			while (timeAccum >= 1.f / 20.f) {
 				World_Tick(world);
 

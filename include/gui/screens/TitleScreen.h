@@ -6,3 +6,4 @@
 void WorldSelect_Render();
 
 bool TitleScreen_SelectWorld();
+bool TitleScreen_SelectQuit();

@@ -5,7 +5,7 @@
 #include <gui/Gui.h>
 #include <gui/Inventory.h>
 #include <gui/SpriteBatch.h>
-#include <gui/WorldSelect.h>
+#include <gui/screens/WorldSelectScreen.h>
 #include <gui/screens/TitleScreen.h>
 #include <rendering/Camera.h>
 #include <rendering/Clouds.h>

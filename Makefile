@@ -38,7 +38,7 @@ SOURCES 		:=  source \
 					source/blocks \
 					source/rendering \
 					source/gui \
-					source/gui/screens \					\
+					source/gui/screens \
 					source/entity \
 					source/savegame \
 					dependencies/mpack \
@@ -52,7 +52,7 @@ INCLUDES		:=	dependencies include
 ROMFS			:=	romfs
 
 # 3dsx
-APP_TITLE		:=	3DSCRAFT
+APP_TITLE		:=	3DSCraft
 APP_DESCRIPTION :=  Re-reload of Craftus Reloaded
 APP_AUTHOR		:=  u/SomeRandoLameo
 ICON			:=	res/icon.png
