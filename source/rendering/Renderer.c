@@ -6,13 +6,13 @@
 #include <gui/Inventory.h>
 #include <gui/SpriteBatch.h>
 #include <gui/WorldSelect.h>
+#include <gui/screens/TitleScreen.h>
 #include <rendering/Camera.h>
 #include <rendering/Clouds.h>
 #include <rendering/Cursor.h>
 #include <rendering/PolyGen.h>
 #include <rendering/TextureMap.h>
 #include <rendering/WorldRenderer.h>
-
 #include <citro3d.h>
 
 #include <gui_shbin.h>
@@ -199,7 +199,9 @@ void Renderer_Render() {
 
 	SpriteBatch_StartFrame(320, 240);
 
-
+	if (*gamestate == GameState_TitleScreen)
+		TitleScreen_Render();
+	else
 	// Inventar rendern
 	if (*gamestate == GameState_SelectWorld)
 		WorldSelect_Render();
