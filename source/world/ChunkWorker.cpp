@@ -11,7 +11,7 @@ ChunkWorker::ChunkWorker() {
 		Crash("Couldn't set AppCpuTimeLimit");
 	}
 
-	for (int i = 0; i < WorkerItemTypes_Count; i++) vec_init(handler[i]);
+	for (int i = 0; i < WorkerItemType::WorkerItemTypes_Count; i++) vec_init(handler[i]);
 
 	s32 priority;
 	bool isNew3ds = false;

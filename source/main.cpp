@@ -69,10 +69,10 @@ int main() {
 
 
 	ChunkWorker* chunkWorker = new ChunkWorker();
-	chunkWorker->addHandler(WorkerItemType_PolyGen, (ChunkWorkerObjBase*) polyGen);
-	chunkWorker->addHandler(WorkerItemType_BaseGen, (ChunkWorkerObjBase*) flatGen);
-	chunkWorker->addHandler(WorkerItemType_BaseGen, (ChunkWorkerObjBase*) normalGen);
-	chunkWorker->addHandler(WorkerItemType_BaseGen, (ChunkWorkerObjBase*) customGen);
+	chunkWorker->addHandler(WorkerItemType::WorkerItemType_PolyGen, (ChunkWorkerObjBase*) polyGen);
+	chunkWorker->addHandler(WorkerItemType::WorkerItemType_BaseGen, (ChunkWorkerObjBase*) flatGen);
+	chunkWorker->addHandler(WorkerItemType::WorkerItemType_BaseGen, (ChunkWorkerObjBase*) normalGen);
+	chunkWorker->addHandler(WorkerItemType::WorkerItemType_BaseGen, (ChunkWorkerObjBase*) customGen);
 
 	sino_init();
 
