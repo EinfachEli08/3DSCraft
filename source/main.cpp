@@ -69,10 +69,10 @@ int main() {
 
 
 	ChunkWorker* chunkWorker = new ChunkWorker();
-	chunkWorker->addHandler(WorkerItemType::WorkerItemType_PolyGen, (ChunkWorkerObjBase*) polyGen);
-	chunkWorker->addHandler(WorkerItemType::WorkerItemType_BaseGen, (ChunkWorkerObjBase*) flatGen);
-	chunkWorker->addHandler(WorkerItemType::WorkerItemType_BaseGen, (ChunkWorkerObjBase*) normalGen);
-	chunkWorker->addHandler(WorkerItemType::WorkerItemType_BaseGen, (ChunkWorkerObjBase*) customGen);
+	chunkWorker->addHandler(WorkerItemType::PolyGen, (ChunkWorkerObjBase*) polyGen);
+	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) flatGen);
+	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) normalGen);
+	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) customGen);
 
 	sino_init();
 
@@ -87,8 +87,8 @@ int main() {
 	SaveManager* saveMgr = new SaveManager(player);
 	SaveManager::LoadChunk* loadChunk = new SaveManager::LoadChunk(saveMgr);
 	SaveManager::SaveChunk* saveChunk = new SaveManager::SaveChunk(saveMgr);
-	chunkWorker->addHandler(WorkerItemType_Load, (ChunkWorkerObjBase*) loadChunk);
-	chunkWorker->addHandler(WorkerItemType_Save, (ChunkWorkerObjBase*) saveChunk);
+	chunkWorker->addHandler(WorkerItemType::Load, (ChunkWorkerObjBase*) loadChunk);
+	chunkWorker->addHandler(WorkerItemType::Save, (ChunkWorkerObjBase*) saveChunk);
 
 	uint64_t lastTime = svcGetSystemTick();
 	float dt = 0.f, timeAccum = 0.f, fpsClock = 0.f;
@@ -169,9 +169,9 @@ int main() {
 
 				saveMgr->load(path);
 
-				chunkWorker->setHandlerActive(WorkerItemType_BaseGen, (ChunkWorkerObjBase*) flatGen, world->genSettings.type == WorldGen_SuperFlat);
-				chunkWorker->setHandlerActive(WorkerItemType_BaseGen, (ChunkWorkerObjBase*) customGen, world->genSettings.type == WorldGen_Custom);
-				chunkWorker->setHandlerActive(WorkerItemType_BaseGen, (ChunkWorkerObjBase*) normalGen, world->genSettings.type == WorldGen_Normal);
+				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) flatGen, world->genSettings.type == WorldGen_SuperFlat);
+				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) customGen, world->genSettings.type == WorldGen_Custom);
+				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) normalGen, world->genSettings.type == WorldGen_Normal);
 
 				world->cacheTranslationX = WorldToChunkCoord(FastFloor(player->position.x));
 				world->cacheTranslationZ = WorldToChunkCoord(FastFloor(player->position.z));

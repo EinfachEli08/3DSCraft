@@ -51,6 +51,7 @@ Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* ga
 
 	Texture_Load(&logoTex, "romfs:/textures/gui/title/minecraft.png");
 }
+
 Renderer::~Renderer() {
 	C3D_TexDelete(&logoTex);
 
@@ -75,11 +76,7 @@ void Renderer::render() {
 
 	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
-
-
 	if (*gamestate == GameState_Playing) polyGen->harvest();
-
-
 
 	for (int i = 0; i < 2; i++) {
 		C3D_RenderTargetClear(renderTargets[i], C3D_CLEAR_ALL, CLEAR_COLOR_SKY, 0);
