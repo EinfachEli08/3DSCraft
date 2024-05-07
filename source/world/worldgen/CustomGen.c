@@ -6,7 +6,7 @@ void CustomGen_Init(CustomGen* gen, World* world) { gen->world = world; }
 
 // based off https://github.com/smealum/3dscraft/blob/master/source/generation.c
 void CustomGen_Generate(WorkQueue* queue, WorkerItem item, void* notthis) {
-	CustomGen* gen = this;
+	CustomGen* gen = notthis;
 	for (int x = 0; x < CHUNK_SIZE; x++) {
 		for (int z = 0; z < CHUNK_SIZE; z++) {
 			float px = (float)(x + item.chunk->x * CHUNK_SIZE);
