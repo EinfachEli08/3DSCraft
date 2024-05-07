@@ -26,7 +26,7 @@ class ChunkWorker {
 		WorkQueue* queue;
 		volatile bool working;
 		Thread* thread;
-		vec_t(WorkerFuncObj)* handler[WorkerItemTypes_Count];
+		vec_t(WorkerFuncObj)* handler[WorkerItemType::WorkerItemTypes_Count];
 
 };
 void mainLoop(void* todo);
