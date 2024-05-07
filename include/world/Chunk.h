@@ -62,7 +62,7 @@ typedef struct {
 
 extern Xorshift32 uuidGenerator;
 extern const uint8_t _seethroughTable[6][6];
-inline uint16_t ChunkSeeThrough(Direction in, Direction out) { return 1 << (uint16_t)(_seethroughTable[in][out]); }
+inline uint16_t ChunkSeeThrough(int inDirection, int outDirection) { return 1 << (uint16_t)(_seethroughTable[inDirection][outDirection]); }
 inline bool ChunkCanBeSeenThrough(uint16_t visiblity, Direction in, Direction out) {
 	return visiblity & (1 << (uint16_t)(_seethroughTable[in][out]));
 }

@@ -4,7 +4,7 @@
 
 void SuperFlatGen_Init(SuperFlatGen* gen, World* world) {}
 
-void SuperFlatGen_Generate(WorkQueue* queue, WorkerItem item, void* this) {
+void SuperFlatGen_Generate(WorkQueue* queue, WorkerItem item, void* notthis) {
 	SuperFlatGen* gen = this;
 	for (int y = 0; y < 17; y++) {
 		Block block = Block_Air;

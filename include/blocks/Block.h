@@ -30,7 +30,7 @@ enum {
 void Block_Init();
 void Block_Deinit();
 
-void* Block_GetTextureMap();
+void* Block_GetTextureMap(); // always a C3D_Tex*
 
 void Block_GetTexture(Block block, Direction direction, uint8_t metadata, int16_t* out_uv);
 
