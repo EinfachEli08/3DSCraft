@@ -20,13 +20,13 @@ class ChunkWorker {
 		~ChunkWorker();
 
 		void finish();
-		void addHandler(int type, ChunkWorkerObjBase* worker);
-		void setHandlerActive(int type, ChunkWorkerObjBase* worker, bool active);
+		void addHandler(WorkerItemType type, ChunkWorkerObjBase* worker);
+		void setHandlerActive(WorkerItemType type, ChunkWorkerObjBase* worker, bool active);
 
 		WorkQueue* queue;
 		volatile bool working;
 		Thread* thread;
-		vec_t(WorkerFuncObj)* handler[WorkerItemType::WorkerItemTypes_Count];
+		vec_t(WorkerFuncObj)* handler[(int)WorkerItemType::Count];
 
 };
 void mainLoop(void* todo);
