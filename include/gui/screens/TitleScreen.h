@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-void WorldSelect_Render();
+void TitleScreen_Render();// Why was this WorldSelect???
 
 bool TitleScreen_SelectWorld();
 bool TitleScreen_SelectQuit();

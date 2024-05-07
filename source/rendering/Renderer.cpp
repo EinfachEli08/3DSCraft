@@ -89,7 +89,8 @@ void Renderer::render() {
 
 		C3D_TexEnv* env = C3D_GetTexEnv(0);
 		C3D_TexEnvInit(env);
-		C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR, nullptr);
+		// OLD : C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR, 0);
+		C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR);
 		C3D_TexEnvFunc(env, C3D_Both, GPU_MODULATE);
 
 		C3D_BindProgram(&world_shader);
@@ -162,8 +163,8 @@ void Renderer::render() {
 	else {
 
 		SpriteBatch_SetScale(2);
-		player->quickSelectBarSlots = Inventory_QuickSelectCalcSlots(160);
-		Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth(player->quickSelectBarSlots) / 2,
+		player->quickSelectBarSlots = Inventory_QuickSelectCalcSlots();
+		Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth() / 2,
 					  120 - INVENTORY_QUICKSELECT_HEIGHT, player->quickSelectBar, player->quickSelectBarSlots,
 					  &player->quickSelectBarSlot);
 
