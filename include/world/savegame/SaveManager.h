@@ -1,27 +1,42 @@
 #pragma once
 
 #include <stdio.h>
-
 #include <vec/vec.h>
 
 #include <entity/Player.h>
-
+#include <world/ChunkWorkerObjBase.h>
 #include <world/savegame/SuperChunk.h>
 
-typedef struct {
+class SaveManager {
+       public:
 	Player* player;
 	World* world;
+	vec_t(SuperChunk*) superChunks;
 
-	vec_t(SuperChunk*) superchunks;
-} SaveManager;
+	SaveManager(Player* player);
+	~SaveManager();
 
-void SaveManager_InitFileSystem();
+	static void initFileSystem();
 
-void SaveManager_Init(SaveManager* mgr, Player* player);
-void SaveManager_Deinit(SaveManager* mgr);
+	void load(const char* path);
+	void unload();
 
-void SaveManager_Load(SaveManager* mgr, char* path);
-void SaveManager_Unload(SaveManager* mgr);
+	class LoadChunk : public ChunkWorkerObjBase {
+	       public:
+		LoadChunk(SaveManager* parent) : parent(parent) {};
 
-void SaveManager_LoadChunk(WorkQueue* queue, WorkerItem item, void* this);
-void SaveManager_SaveChunk(WorkQueue* queue, WorkerItem item, void* this);
+		void chunkFunction (WorkQueue* queue, WorkerItem item) override;
+
+	       private:
+		SaveManager* parent;
+	};
+	class SaveChunk : public ChunkWorkerObjBase {
+	       public:
+		SaveChunk(SaveManager* parent): parent(parent) {};
+
+		void chunkFunction (WorkQueue* queue, WorkerItem item) override;
+
+	       private:
+		SaveManager* parent;
+	};
+};

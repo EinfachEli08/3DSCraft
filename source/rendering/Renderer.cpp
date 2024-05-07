@@ -1,55 +1,13 @@
 #include <rendering/Renderer.h>
 
-#include <blocks/Block.h>
-#include <gui/DebugUI.h>
-#include <gui/Gui.h>
-#include <gui/Inventory.h>
-#include <gui/SpriteBatch.h>
-#include <gui/screens/WorldSelectScreen.h>
-#include <gui/screens/TitleScreen.h>
-#include <rendering/Camera.h>
-#include <rendering/Clouds.h>
-#include <rendering/Cursor.h>
-#include <rendering/PolyGen.h>
-#include <rendering/TextureMap.h>
-#include <rendering/WorldRenderer.h>
-#include <citro3d.h>
-
 #include <gui_shbin.h>
 #include <world_shbin.h>
 
-#define DISPLAY_TRANSFER_FLAGS                                                                                                          \
-	(GX_TRANSFER_FLIP_VERT(0) | GX_TRANSFER_OUT_TILED(0) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) | \
-	 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGB8) | \
-GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO))
+#include <gui/screens/WorldSelectScreen.h>
+#include <gui/screens/TitleScreen.h>
 
-#define CLEAR_COLOR_SKY 0x90d9ffff
-#define CLEAR_COLOR_BLACK 0x000000ff
-
-static C3D_RenderTarget* renderTargets[2];
-static C3D_RenderTarget* lowerScreen;
-
-static DVLB_s *world_dvlb, *gui_dvlb;
-static shaderProgram_s world_shader, gui_shader;
-static int world_shader_uLocProjection, gui_shader_uLocProjection;
-
-static C3D_AttrInfo world_vertexAttribs, gui_vertexAttribs;
-
-static C3D_Tex logoTex;
-
-static World* world;
-static Player* player;
-static WorkQueue* workqueue;
-
-static GameState* gamestate;
-
-extern bool showDebugInfo;
-
-void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* gamestate_) {
-	world = world_;
-	player = player_;
-	workqueue = queue;
-	gamestate = gamestate_;
+Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* gamestate, PolyGen* polyGen)
+	: world(world), player(player), workqueue(workqueue), gamestate(gamestate), polyGen(polyGen){
 
 	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
 
@@ -81,8 +39,6 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 	AttrInfo_AddLoader(&gui_vertexAttribs, 0, GPU_SHORT, 3);
 	AttrInfo_AddLoader(&gui_vertexAttribs, 1, GPU_SHORT, 3);
 
-	PolyGen_Init(world, player_);
-
 	WorldRenderer_Init(player, world, workqueue, world_shader_uLocProjection);
 
 	SpriteBatch_Init(gui_shader_uLocProjection);
@@ -95,12 +51,10 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 
 	Texture_Load(&logoTex, "romfs:/textures/gui/title/minecraft.png");
 }
-void Renderer_Deinit() {
+Renderer::~Renderer() {
 	C3D_TexDelete(&logoTex);
 
 	Block_Deinit();
-
-	PolyGen_Deinit();
 
 	WorldRenderer_Deinit();
 
@@ -116,14 +70,14 @@ void Renderer_Deinit() {
 	C3D_Fini();
 }
 
-void Renderer_Render() {
+void Renderer::render() {
 	float iod = osGet3DSliderState() * PLAYER_HALFEYEDIFF;
 
 	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
 
 
-	if (*gamestate == GameState_Playing) PolyGen_Harvest();
+	if (*gamestate == GameState_Playing) polyGen->harvest();
 
 
 
@@ -135,14 +89,14 @@ void Renderer_Render() {
 
 		C3D_TexEnv* env = C3D_GetTexEnv(0);
 		C3D_TexEnvInit(env);
-		C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR, 0);
+		C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR, nullptr);
 		C3D_TexEnvFunc(env, C3D_Both, GPU_MODULATE);
 
 		C3D_BindProgram(&world_shader);
 		C3D_SetAttrInfo(&world_vertexAttribs);
 
 		if (*gamestate == GameState_Playing) {
-			C3D_TexBind(0, Block_GetTextureMap());
+			C3D_TexBind(0, (C3D_Tex*) Block_GetTextureMap());
 
 			WorldRenderer_Render(!i ? -iod : iod);
 
@@ -217,7 +171,9 @@ void Renderer_Render() {
 
 	}
 
-	if (showDebugInfo) DebugUI_Draw();
+#ifdef ISDEBUG
+	DebugUI_Draw();
+#endif
 
 	Gui_Frame();
 

@@ -24,7 +24,7 @@ void generateCaves(Chunk* chunk, int x, int y, int z) {
 
 int i = 0;
 
-void NormalGen_Generate(WorkQueue* queue, WorkerItem item, void* this) {
+void NormalGen_Generate(WorkQueue* queue, WorkerItem item, void* notthis) {
     NormalGen* gen = this;
 
     for (int x = 0; x < CHUNK_SIZE; x++) {
