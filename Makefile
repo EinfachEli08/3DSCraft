@@ -73,16 +73,15 @@ VERSION_MICRO	:=	0
 
 
 
-DEBUG			?=	0
+DEBUG			?=	1
 ifeq ($(DEBUG), 0)
 BUILD			:=	build
 CFLAGS_ADD		:=	-fomit-frame-pointer -O2
-LIBS			:= -lcitro3d -lctru -lm
 else
 BUILD			:=	debug_build
-CFLAGS_ADD		:=	-Og -D_DEBUG
-LIBS			:= -lcitro2d -lcitro3d -lctru -lstdc++
+CFLAGS_ADD		:=	-g -D_DEBUG
 endif
+LIBS			:= -lcitro3dd -lctru -lstdc++ -lm
 
 #---------------------------------------------------------------------------------
 # options for code generation

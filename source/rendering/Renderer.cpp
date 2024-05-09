@@ -49,7 +49,7 @@ Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* ga
 
 	Block_Init();
 
-	Texture_Load(&logoTex, "romfs:/textures/gui/title/minecraft.png");
+	Texture(&logoTex, "romfs:/textures/gui/title/minecraft.png");
 }
 
 Renderer::~Renderer() {
