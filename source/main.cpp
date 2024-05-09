@@ -5,34 +5,32 @@
 
 #include <3ds.h>
 
-#include <Project.h>
-#include <entity/player.h>
-#include <entity/PlayerController.h>
-#include <gui/DebugUI.h>
-#include <gui/Gui.h>
-#include <gui/screens/WorldSelectScreen.h>
-#include <gui/screens/TitleScreen.h>
-#include <rendering/PolyGen.h>
-#include <rendering/Renderer.h>
-#include <world/ChunkWorker.h>
-#include <world/World.h>
-#include <world/savegame/SaveManager.h>
-#include <world/savegame/SuperChunk.h>
-#include <world/worldgen/NormalGen.h>
-#include <world/worldgen/CustomGen.h>
-#include <world/worldgen/SuperFlatGen.h>
+#include "Project.h"
+#include "entity/PlayerController.h"
+#include "entity/player.h"
+#include "gui/DebugUI.h"
+#include "gui/Gui.h"
+#include "gui/screens/TitleScreen.h"
+#include "gui/screens/WorldSelectScreen.h"
+#include "rendering/PolyGen.h"
+#include "rendering/Renderer.h"
+#include "world/ChunkWorker.h"
+#include "world/World.h"
+#include "world/savegame/SaveManager.h"
+#include "world/savegame/SuperChunk.h"
+#include "world/worldgen/CustomGen.h"
+#include "world/worldgen/NormalGen.h"
+#include "world/worldgen/SuperFlatGen.h"
 
 #include <sino/sino.h>
 
 #include <citro3d.h>
 
-bool showDebugInfo = true;  // muss noch besser gemacht werden, vlt. über eine Options Struktur wo auch andere Einstellungen drinne sind
+bool showDebugInfo = true;	// muss noch besser gemacht werden, vlt. über eine Options Struktur wo auch andere Einstellungen drinne sind
 
 void releaseWorld(ChunkWorker* chunkWorker, SaveManager* saveMgr, World* world) {
 	for (int i = 0; i < CHUNKCACHE_SIZE; i++) {
-		for (int j = 0; j < CHUNKCACHE_SIZE; j++) {
-			World_UnloadChunk(world, world->chunkCache[i][j]);
-		}
+		for (int j = 0; j < CHUNKCACHE_SIZE; j++) { World_UnloadChunk(world, world->chunkCache[i][j]); }
 	}
 	chunkWorker->finish();
 	World_Reset(world);
@@ -67,12 +65,11 @@ int main() {
 	NormalGen_Init(normalGen, world);
 	CustomGen_Init(customGen, world);
 
-
 	ChunkWorker* chunkWorker = new ChunkWorker();
-	chunkWorker->addHandler(WorkerItemType::PolyGen, (ChunkWorkerObjBase*) polyGen);
-	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) flatGen);
-	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) normalGen);
-	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) customGen);
+	chunkWorker->addHandler(WorkerItemType::PolyGen, (ChunkWorkerObjBase*)polyGen);
+	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)flatGen);
+	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)normalGen);
+	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)customGen);
 
 	sino_init();
 
@@ -84,33 +81,33 @@ int main() {
 
 	World_Init(world, chunkWorker->queue);
 
-	SaveManager* saveMgr = new SaveManager(player);
+	SaveManager* saveMgr			  = new SaveManager(player);
 	SaveManager::LoadChunk* loadChunk = new SaveManager::LoadChunk(saveMgr);
 	SaveManager::SaveChunk* saveChunk = new SaveManager::SaveChunk(saveMgr);
-	chunkWorker->addHandler(WorkerItemType::Load, (ChunkWorkerObjBase*) loadChunk);
-	chunkWorker->addHandler(WorkerItemType::Save, (ChunkWorkerObjBase*) saveChunk);
+	chunkWorker->addHandler(WorkerItemType::Load, (ChunkWorkerObjBase*)loadChunk);
+	chunkWorker->addHandler(WorkerItemType::Save, (ChunkWorkerObjBase*)saveChunk);
 
 	uint64_t lastTime = svcGetSystemTick();
 	float dt = 0.f, timeAccum = 0.f, fpsClock = 0.f;
 	int frameCounter = 0, fps = 0;
 	while (aptMainLoop()) {
 		DebugUI_Text("%d FPS  Usage: CPU: %5.2f%% GPU: %5.2f%% Buf: %5.2f%% Lin: %d", fps, C3D_GetProcessingTime() * 6.f,
-			     C3D_GetDrawingTime() * 6.f, C3D_GetCmdBufUsage() * 100.f, linearSpaceFree());
+					 C3D_GetDrawingTime() * 6.f, C3D_GetCmdBufUsage() * 100.f, linearSpaceFree());
 		DebugUI_Text("Player: %f, %f, %f P: %f Y: %f", f3_unpack(player->position), player->pitch, player->yaw);
 
 		renderer->render();
 
 		uint64_t currentTime = svcGetSystemTick();
-		dt = ((float)(currentTime / (float)TICKS_PER_MSEC) - (float)(lastTime / (float)TICKS_PER_MSEC)) / 1000.f;
-		lastTime = currentTime;
+		dt					 = ((float)(currentTime / (float)TICKS_PER_MSEC) - (float)(lastTime / (float)TICKS_PER_MSEC)) / 1000.f;
+		lastTime			 = currentTime;
 		timeAccum += dt;
 
 		frameCounter++;
 		fpsClock += dt;
 		if (fpsClock >= 1.f) {
-			fps = frameCounter;
+			fps			 = frameCounter;
 			frameCounter = 0;
-			fpsClock = 0.f;
+			fpsClock	 = 0.f;
 		}
 
 		hidScanInput();
@@ -136,18 +133,18 @@ int main() {
 		touchPosition touchPos;
 		hidTouchRead(&touchPos);
 
-		InputData inputData = (InputData){keysheld,    keysdown,    hidKeysUp(),  circlePos.dx, circlePos.dy,
-						  touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy};
+		InputData inputData =
+			(InputData){keysheld, keysdown, hidKeysUp(), circlePos.dx, circlePos.dy, touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy};
 
-//TODO: Fix da shit, need better scene management
-		if(WorldSelectScreen_Previous()){
-		//TODO: Doesnt switch
+		// TODO: Fix da shit, need better scene management
+		if (WorldSelectScreen_Previous()) {
+			// TODO: Doesnt switch
 			gamestate == GameState_TitleScreen;
-		}else if(TitleScreen_SelectQuit()){
+		} else if (TitleScreen_SelectQuit()) {
 			break;
-		}else if(TitleScreen_SelectWorld() && gamestate == GameState_TitleScreen){
+		} else if (TitleScreen_SelectWorld() && gamestate == GameState_TitleScreen) {
 			gamestate = GameState_SelectWorld;
-		}else if (gamestate == GameState_Playing) {
+		} else if (gamestate == GameState_Playing) {
 			while (timeAccum >= 1.f / 20.f) {
 				World_Tick(world);
 
@@ -157,7 +154,7 @@ int main() {
 			PlayerController_Update(playerCtrl, inputData, dt);
 
 			World_UpdateChunkCache(world, WorldToChunkCoord(FastFloor(player->position.x)),
-					       WorldToChunkCoord(FastFloor(player->position.z)));
+								   WorldToChunkCoord(FastFloor(player->position.z)));
 		} else if (gamestate == GameState_SelectWorld) {
 			char path[256];
 			char name[WORLD_NAME_SIZE] = {'\0'};
@@ -169,17 +166,19 @@ int main() {
 
 				saveMgr->load(path);
 
-				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) flatGen, world->genSettings.type == WorldGen_SuperFlat);
-				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) customGen, world->genSettings.type == WorldGen_Custom);
-				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*) normalGen, world->genSettings.type == WorldGen_Normal);
+				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)flatGen,
+											  world->genSettings.type == WorldGen_SuperFlat);
+				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)customGen,
+											  world->genSettings.type == WorldGen_Custom);
+				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)normalGen,
+											  world->genSettings.type == WorldGen_Normal);
 
 				world->cacheTranslationX = WorldToChunkCoord(FastFloor(player->position.x));
 				world->cacheTranslationZ = WorldToChunkCoord(FastFloor(player->position.z));
 				for (int i = 0; i < CHUNKCACHE_SIZE; i++) {
 					for (int j = 0; j < CHUNKCACHE_SIZE; j++) {
-						world->chunkCache[i][j] =
-						    World_LoadChunk(world, i - CHUNKCACHE_SIZE / 2 + world->cacheTranslationX,
-								    j - CHUNKCACHE_SIZE / 2 + world->cacheTranslationZ);
+						world->chunkCache[i][j] = World_LoadChunk(world, i - CHUNKCACHE_SIZE / 2 + world->cacheTranslationX,
+																  j - CHUNKCACHE_SIZE / 2 + world->cacheTranslationZ);
 					}
 				}
 
@@ -202,14 +201,13 @@ int main() {
 				}
 
 				gamestate = GameState_Playing;
-				lastTime = svcGetSystemTick();  // fix timing
+				lastTime  = svcGetSystemTick();	 // fix timing
 			}
 		}
 		Gui_InputData(inputData);
 	}
 
 	if (gamestate == GameState_Playing) releaseWorld(chunkWorker, saveMgr, world);
-
 
 	delete saveMgr;
 
