@@ -3,12 +3,11 @@
 #include <gui_shbin.h>
 #include <world_shbin.h>
 
-#include <gui/screens/WorldSelectScreen.h>
 #include <gui/screens/TitleScreen.h>
+#include <gui/screens/WorldSelectScreen.h>
 
 Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* gamestate, PolyGen* polyGen)
-	: world(world), player(player), workqueue(workqueue), gamestate(gamestate), polyGen(polyGen){
-
+	: world(world), player(player), workqueue(workqueue), gamestate(gamestate), polyGen(polyGen) {
 	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
 
 	renderTargets[0] = C3D_RenderTargetCreate(240, 400, GPU_RB_RGBA8, GPU_RB_DEPTH16);
@@ -94,7 +93,7 @@ void Renderer::render() {
 		C3D_SetAttrInfo(&world_vertexAttribs);
 
 		if (*gamestate == GameState_Playing) {
-			C3D_TexBind(0, (C3D_Tex*) Block_GetTextureMap());
+			C3D_TexBind(0, (C3D_Tex*)Block_GetTextureMap());
 
 			WorldRenderer_Render(!i ? -iod : iod);
 
@@ -102,8 +101,8 @@ void Renderer::render() {
 			if (iod == 0.f) SpriteBatch_PushQuad(92, 52, 0, 16, 16, 240, 0, 16, 16);
 		} else {
 			C3D_Mtx projection;
-			Mtx_PerspStereoTilt(&projection, C3D_AngleFromDegrees(90.f), ((400.f) / (240.f)), 0.22f, 4.f * CHUNK_SIZE,
-					    !i ? -iod : iod, 3.f, false);
+			Mtx_PerspStereoTilt(&projection, C3D_AngleFromDegrees(90.f), ((400.f) / (240.f)), 0.22f, 4.f * CHUNK_SIZE, !i ? -iod : iod, 3.f,
+								false);
 
 			C3D_Mtx view;
 			Mtx_Identity(&view);
@@ -125,21 +124,13 @@ void Renderer::render() {
 
 			SpriteBatch_SetScale(1);
 			// interesting, no + needed
-			//SpriteBatch_PushText(0, 200, 100, 0xffffff, true, INT_MAX, NULL, "fix Top Screen Drawing somehow");
-
+			// SpriteBatch_PushText(0, 200, 100, 0xffffff, true, INT_MAX, NULL, "fix Top Screen Drawing somehow");
 
 			// shouldnt that work?
-
-
 		}
-
-
-
 
 		C3D_BindProgram(&gui_shader);
 		C3D_SetAttrInfo(&gui_vertexAttribs);
-
-
 
 		SpriteBatch_Render(GFX_TOP);
 
@@ -154,20 +145,17 @@ void Renderer::render() {
 	if (*gamestate == GameState_TitleScreen)
 		TitleScreen_Render();
 	else
-	// Inventar rendern
-	if (*gamestate == GameState_SelectWorld)
-		WorldSelect_Render();
-	else {
+		// Inventar rendern
+		if (*gamestate == GameState_SelectWorld)
+			WorldSelect_Render();
+		else {
+			SpriteBatch_SetScale(2);
+			player->quickSelectBarSlots = Inventory_QuickSelectCalcSlots();
+			Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth() / 2, 120 - INVENTORY_QUICKSELECT_HEIGHT,
+									  player->quickSelectBar, player->quickSelectBarSlots, &player->quickSelectBarSlot);
 
-		SpriteBatch_SetScale(2);
-		player->quickSelectBarSlots = Inventory_QuickSelectCalcSlots();
-		Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth() / 2,
-					  120 - INVENTORY_QUICKSELECT_HEIGHT, player->quickSelectBar, player->quickSelectBarSlots,
-					  &player->quickSelectBarSlot);
-
-		Inventory_Draw(8, 0, player->inventory, sizeof(player->inventory) / sizeof(ItemStack));
-
-	}
+			Inventory_Draw(8, 0, player->inventory, sizeof(player->inventory) / sizeof(ItemStack));
+		}
 
 #ifdef ISDEBUG
 	DebugUI_Draw();

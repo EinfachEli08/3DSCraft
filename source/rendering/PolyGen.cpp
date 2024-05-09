@@ -7,63 +7,63 @@
 #include <gui/DebugUI.h>
 
 const WorldVertex cube_sides_lut[] = {
-    // Fourth face (MX)
-    // First triangle
-    {{0, 0, 0}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-    // Second triangle
-    {{0, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 0, 0}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-    // Third face (PX)
-    // First triangle
-    {{1, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 1, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 1, 1}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    // Second triangle
-    {{1, 1, 1}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    // Sixth face (MY)
-    // First triangle
-    {{0, 0, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 0, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    // Second triangle
-    {{1, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 0, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    // Fifth face (PY)
-    // First triangle
-    {{0, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 1, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 1, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    // Second triangle
-    {{1, 1, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 1, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    // Second face (MZ)
-    // First triangle
-    {{0, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 1, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    // Second triangle
-    {{1, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 0, 0}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    // First face (PZ)
-    // First triangle
-    {{0, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-    {{1, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-    // Second triangle
-    {{1, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 1, 1}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-    {{0, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	// Fourth face (MX)
+	// First triangle
+	{{0, 0, 0}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	// Second triangle
+	{{0, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 0, 0}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	// Third face (PX)
+	// First triangle
+	{{1, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 1, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 1, 1}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	// Second triangle
+	{{1, 1, 1}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	// Sixth face (MY)
+	// First triangle
+	{{0, 0, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 0, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	// Second triangle
+	{{1, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 0, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	// Fifth face (PY)
+	// First triangle
+	{{0, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 1, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 1, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	// Second triangle
+	{{1, 1, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 1, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	// Second face (MZ)
+	// First triangle
+	{{0, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 1, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	// Second triangle
+	{{1, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 0, 0}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	// First face (PZ)
+	// First triangle
+	{{0, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{{1, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	// Second triangle
+	{{1, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 1, 1}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{{0, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
 };
 
-PolyGen::PolyGen(World* _world, Player* _player) : player(_player), world(_world){
+PolyGen::PolyGen(World* _world, Player* _player) : player(_player), world(_world) {
 	VBOCache_Init();
 	vec_init(floodFillQueue);
 	LightLock_Init(updateLock);
@@ -85,15 +85,13 @@ void PolyGen::harvest() {
 
 					Chunk* chunk = World_GetChunk(world, update.x, update.z);
 					if (chunk) {
-						if (chunk->clusters[update.y].vertices > 0)
-							VBO_Free(chunk->clusters[update.y].vbo);
-						if (chunk->clusters[update.y].transparentVertices > 0)
-							VBO_Free(chunk->clusters[update.y].transparentVBO);
-						chunk->clusters[update.y].vbo = update.vbo;
-						chunk->clusters[update.y].vertices = update.vertices;
-						chunk->clusters[update.y].transparentVBO = update.transparentVBO;
+						if (chunk->clusters[update.y].vertices > 0) VBO_Free(chunk->clusters[update.y].vbo);
+						if (chunk->clusters[update.y].transparentVertices > 0) VBO_Free(chunk->clusters[update.y].transparentVBO);
+						chunk->clusters[update.y].vbo				  = update.vbo;
+						chunk->clusters[update.y].vertices			  = update.vertices;
+						chunk->clusters[update.y].transparentVBO	  = update.transparentVBO;
 						chunk->clusters[update.y].transparentVertices = update.transparentVertices;
-						chunk->clusters[update.y].seeThrough = update.visibility;
+						chunk->clusters[update.y].seeThrough		  = update.visibility;
 					}
 				}
 		}
@@ -103,7 +101,7 @@ void PolyGen::harvest() {
 }
 
 uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z, Direction entrySide0, Direction entrySide1,
-			  Direction entrySide2) {
+							Direction entrySide2) {
 	if (floodFillVisited[x][y][z] & 1) return 0;
 	uint8_t exitPoints[6] = {false};
 	if (entrySide0 != Direction_Invalid) exitPoints[entrySide0] = true;
@@ -121,17 +119,15 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 			if (x < 0 || y < 0 || z < 0 || x >= CHUNK_SIZE || y >= CHUNK_SIZE || z >= CHUNK_SIZE) {
 				exitPoints[i] = true;
 			} else {
-				if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf) &&
-				    !(floodFillVisited[x][y][z] & 1)) {
+				if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf) && !(floodFillVisited[x][y][z] & 1)) {
 					floodFillVisited[x][y][z] |= 1;
 					vec_push(floodFillQueue, ((QueueElement){x, y, z}));
 				}
 				if ((cluster->blocks[item.x][item.y][item.z] == Block_Air ||
-				     Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf)) &&
-				    cluster->blocks[x][y][z] != Block_Air) {
-					addFace(x, y, z, DirectionOpposite[i], cluster->blocks[x][y][z],
-						cluster->metadataLight[x][y][z] & 0xf, 0,
-						!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
+					 Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf)) &&
+					cluster->blocks[x][y][z] != Block_Air) {
+					addFace(x, y, z, DirectionOpposite[i], cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf, 0,
+							!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
 				}
 			}
 		}
@@ -149,10 +145,10 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 		Cluster* cluster = &item.chunk->clusters[i];
 
 		if (cluster->revision != cluster->vboRevision || cluster->forceVBOUpdate) {
-			cluster->vboRevision = cluster->revision;
+			cluster->vboRevision	= cluster->revision;
 			cluster->forceVBOUpdate = false;
 
-			currentFace = 0;
+			currentFace		 = 0;
 			transparentFaces = 0;
 
 			uint16_t visibility = 0;
@@ -175,13 +171,11 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 
 						if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf))
 							visibility |= floodFill(world, item.chunk, cluster, x, y, z, xDir, yDir, zDir);
-						Block block = fastBlockFetch(world, item.chunk, cluster, x + (!x ? -1 : 1), y, z);
+						Block block	 = fastBlockFetch(world, item.chunk, cluster, x + (!x ? -1 : 1), y, z);
 						uint8_t meta = fastMetadataFetch(world, item.chunk, cluster, x + (!x ? -1 : 1), y, z);
 						if (!Block_Opaque(block, meta) && cluster->blocks[x][y][z] != Block_Air) {
-							addFace(
-							    x, y, z, xDir, cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf,
-							    0,
-							    !Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
+							addFace(x, y, z, xDir, cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf, 0,
+									!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
 						}
 					}
 				}
@@ -202,13 +196,11 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 							zDir = Direction_North;
 						if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf))
 							visibility |= floodFill(world, item.chunk, cluster, x, y, z, xDir, yDir, zDir);
-						Block block = fastBlockFetch(world, item.chunk, cluster, x, y + (!y ? -1 : 1), z);
+						Block block	 = fastBlockFetch(world, item.chunk, cluster, x, y + (!y ? -1 : 1), z);
 						uint8_t meta = fastMetadataFetch(world, item.chunk, cluster, x, y + (!y ? -1 : 1), z);
 						if (!Block_Opaque(block, meta) && cluster->blocks[x][y][z] != Block_Air) {
-							addFace(
-							    x, y, z, yDir, cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf,
-							    0,
-							    !Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
+							addFace(x, y, z, yDir, cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf, 0,
+									!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
 						}
 					}
 				}
@@ -229,14 +221,11 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 							yDir = Direction_Top;
 						if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf))
 							visibility |= floodFill(world, item.chunk, cluster, x, y, z, xDir, yDir, zDir);
-						Block block = fastBlockFetch(world, item.chunk, cluster, x, y, z + (!z ? -1 : 1));
+						Block block	 = fastBlockFetch(world, item.chunk, cluster, x, y, z + (!z ? -1 : 1));
 						uint8_t meta = fastMetadataFetch(world, item.chunk, cluster, x, y, z + (!z ? -1 : 1));
-						if (!Block_Opaque(block, cluster->metadataLight[x][y][z] & 0xf) &&
-						    cluster->blocks[x][y][z] != Block_Air) {
-							addFace(
-							    x, y, z, zDir, cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf,
-							    0,
-							    !Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
+						if (!Block_Opaque(block, cluster->metadataLight[x][y][z] & 0xf) && cluster->blocks[x][y][z] != Block_Air) {
+							addFace(x, y, z, zDir, cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf, 0,
+									!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
 						}
 					}
 				}
@@ -244,14 +233,13 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 			int px = FastFloor(player->position.x);
 			int py = FastFloor(player->position.y);
 			int pz = FastFloor(player->position.z);
-			if (WorldToChunkCoord(px) == item.chunk->x && WorldToChunkCoord(pz) == item.chunk->z &&
-			    WorldToChunkCoord(py) == i) {
+			if (WorldToChunkCoord(px) == item.chunk->x && WorldToChunkCoord(pz) == item.chunk->z && WorldToChunkCoord(py) == i) {
 				floodFill(world, item.chunk, cluster, WorldToLocalCoord(px), WorldToLocalCoord(py), WorldToLocalCoord(pz),
-					  Direction_Invalid, Direction_Invalid, Direction_Invalid);
+						  Direction_Invalid, Direction_Invalid, Direction_Invalid);
 			}
 
 			int transparentVertices = transparentFaces * 6;
-			int verticesTotal = (currentFace * 6) - transparentVertices;
+			int verticesTotal		= (currentFace * 6) - transparentVertices;
 			VBOUpdate update;
 
 			if (currentFace) {
@@ -260,8 +248,8 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 				VBO_Block transparentMem;
 				if (transparentFaces > 0) transparentMem = VBO_Alloc(transparentVertices * sizeof(WorldVertex));
 
-				WorldVertex* opaqueData = (WorldVertex*) memBlock.memory;
-				WorldVertex* transparentData = (WorldVertex*) transparentMem.memory;
+				WorldVertex* opaqueData		 = (WorldVertex*)memBlock.memory;
+				WorldVertex* transparentData = (WorldVertex*)transparentMem.memory;
 				for (int j = 0; j < currentFace; j++) {
 					Face* face = faceBuffer[j];
 
@@ -298,16 +286,16 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 						opaqueData += 6;
 				}
 
-				update.vbo = memBlock;
+				update.vbo			  = memBlock;
 				update.transparentVBO = transparentMem;
 			}
 
-			update.x = item.chunk->x;
-			update.y = i;
-			update.z = item.chunk->z;
-			update.vertices = verticesTotal;
-			update.delay = 0;
-			update.visibility = visibility;
+			update.x				   = item.chunk->x;
+			update.y				   = i;
+			update.z				   = item.chunk->z;
+			update.vertices			   = verticesTotal;
+			update.delay			   = 0;
+			update.visibility		   = visibility;
 			update.transparentVertices = transparentVertices;
 
 			LightLock_Lock(updateLock);
@@ -316,5 +304,5 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 		}
 	}
 	item.chunk->displayRevision = item.chunk->revision;
-	item.chunk->forceVBOUpdate = false;
+	item.chunk->forceVBOUpdate	= false;
 }
