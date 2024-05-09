@@ -1,10 +1,15 @@
 #pragma once
 
-#include <world/WorkQueue.h>
-#include <world/World.h>
+#include "world/ChunkWorkerObjBase.h"
+#include "world/World.h"
 
-typedef struct { World* world; } SuperFlatGen;
+class WorkQueue;
 
-void SuperFlatGen_Init(SuperFlatGen* gen, World* world);
+class SuperFlatGen : public ChunkWorkerObjBase {
+	public:
+		SuperFlatGen(World* world) : world(world) {}
+		void chunkFunction(WorkQueue* queue, WorkerItem item) override;
 
-void SuperFlatGen_Generate(WorkQueue* queue, WorkerItem item, void* notthis);
+	private:
+		World* world;
+};

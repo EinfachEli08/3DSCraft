@@ -1,5 +1,6 @@
 #pragma once
 
+#include <citro3d.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -12,29 +13,29 @@ enum {
 	Block_Stone,
 	Block_Smooth_Stone,
 	Block_Smooth_Stone_Slab,
-      	Block_Dirt,
-      	Block_Grass,
-       	Block_Cobblestone,
-     	Block_Sand,
-       	Block_Log,
-       	Block_Leaves,
-       	Block_Glass,
-       	Block_Stone_Bricks,
-       	Block_Brick,
-       	Block_Planks,
-       	Block_Wool,
-       	Block_Bedrock,
-       	Blocks_Count
-    };
+	Block_Dirt,
+	Block_Grass,
+	Block_Cobblestone,
+	Block_Sand,
+	Block_Log,
+	Block_Leaves,
+	Block_Glass,
+	Block_Stone_Bricks,
+	Block_Brick,
+	Block_Planks,
+	Block_Wool,
+	Block_Bedrock,
+	Blocks_Count
+};
 
 void Block_Init();
 void Block_Deinit();
 
-void* Block_GetTextureMap(); // always a C3D_Tex*
+C3D_Tex* Block_GetTextureMap();	 // always a C3D_Tex*
 
-void Block_GetTexture(Block block, Direction direction, uint8_t metadata, int16_t* out_uv);
+void Block_GetTexture(Block block, int direction, uint8_t metadata, int16_t* out_uv);
 
-void Block_GetColor(Block block, uint8_t metadata, Direction direction, uint8_t out_rgb[]);
+void Block_GetColor(Block block, uint8_t metadata, int direction, uint8_t out_rgb[]);
 
 bool Block_Opaque(Block block, uint8_t metadata);
 

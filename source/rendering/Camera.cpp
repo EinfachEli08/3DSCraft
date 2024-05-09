@@ -1,13 +1,12 @@
-#include <rendering/Camera.h>
+#include "rendering/Camera.h"
 
-#include <world/Chunk.h>
-
-#include <gui/DebugUI.h>
+#include "gui/DebugUI.h"
+#include "world/Chunk.h"
 
 void Camera_Init(Camera* cam) {
 	Mtx_Identity(&cam->view);
 
-	cam->fov = C3D_AngleFromDegrees(60.f);
+	cam->fov  = C3D_AngleFromDegrees(60.f);
 	cam->near = 0.2f, cam->far = 8.f * CHUNK_SIZE;
 
 	Mtx_PerspTilt(&cam->projection, cam->fov, ((400.f) / (240.f)), cam->near, cam->far, false);
@@ -17,8 +16,8 @@ void Camera_Update(Camera* cam, Player* player, float iod) {
 	float fov = cam->fov + C3D_AngleFromDegrees(12.f) * player->fovAdd;
 	Mtx_PerspStereoTilt(&cam->projection, fov, ((400.f) / (240.f)), cam->near, cam->far, iod, 1.f, false);
 
-	float3 playerHead =
-	    f3_new(player->position.x, player->position.y + PLAYER_EYEHEIGHT + sinf(player->bobbing) * 0.1f + player->crouchAdd, player->position.z);
+	float3 playerHead = f3_new(player->position.x, player->position.y + PLAYER_EYEHEIGHT + sinf(player->bobbing) * 0.1f + player->crouchAdd,
+							   player->position.z);
 
 	Mtx_Identity(&cam->view);
 	Mtx_RotateX(&cam->view, -player->pitch, true);
@@ -34,16 +33,16 @@ void Camera_Update(Camera* cam, Player* player, float iod) {
 	C3D_FVec rowZ = vp.r[2];
 	C3D_FVec rowW = vp.r[3];
 
-	cam->frustumPlanes[Frustum_Near] = FVec4_Normalize(FVec4_Subtract(rowW, rowZ));
-	cam->frustumPlanes[Frustum_Right] = FVec4_Normalize(FVec4_Add(rowW, rowX));
-	cam->frustumPlanes[Frustum_Left] = FVec4_Normalize(FVec4_Subtract(rowW, rowX));
-	cam->frustumPlanes[Frustum_Top] = FVec4_Normalize(FVec4_Add(rowW, rowY));
+	cam->frustumPlanes[Frustum_Near]   = FVec4_Normalize(FVec4_Subtract(rowW, rowZ));
+	cam->frustumPlanes[Frustum_Right]  = FVec4_Normalize(FVec4_Add(rowW, rowX));
+	cam->frustumPlanes[Frustum_Left]   = FVec4_Normalize(FVec4_Subtract(rowW, rowX));
+	cam->frustumPlanes[Frustum_Top]	   = FVec4_Normalize(FVec4_Add(rowW, rowY));
 	cam->frustumPlanes[Frustum_Bottom] = FVec4_Normalize(FVec4_Subtract(rowW, rowY));
-	cam->frustumPlanes[Frustum_Far] = FVec4_Normalize(FVec4_Add(rowW, rowZ));
+	cam->frustumPlanes[Frustum_Far]	   = FVec4_Normalize(FVec4_Add(rowW, rowZ));
 
 	float3 forward = player->view;
-	float3 right = f3_crs(f3_new(0, 1, 0), f3_new(sinf(player->yaw), 0.f, cosf(player->yaw)));
-	float3 up = f3_crs(forward, right);
+	float3 right   = f3_crs(f3_new(0, 1, 0), f3_new(sinf(player->yaw), 0.f, cosf(player->yaw)));
+	float3 up	   = f3_crs(forward, right);
 
 	float ar = 400.f / 240.f;
 
@@ -56,16 +55,16 @@ void Camera_Update(Camera* cam, Player* player, float iod) {
 	float wFar = hFar * ar;
 
 	float3 cNear = f3_add(playerHead, f3_scl(forward, cam->near));
-	float3 cFar = f3_add(playerHead, f3_scl(forward, cam->far));
+	float3 cFar	 = f3_add(playerHead, f3_scl(forward, cam->far));
 
-	cam->frustumCorners[Frustum_NearBottomLeft] = f3_sub(f3_sub(cNear, f3_scl(up, hNear * 0.5f)), f3_scl(right, wNear * 0.5f));
+	cam->frustumCorners[Frustum_NearBottomLeft]	 = f3_sub(f3_sub(cNear, f3_scl(up, hNear * 0.5f)), f3_scl(right, wNear * 0.5f));
 	cam->frustumCorners[Frustum_NearBottomRight] = f3_add(f3_sub(cNear, f3_scl(up, hNear * 0.5f)), f3_scl(right, wNear * 0.5f));
-	cam->frustumCorners[Frustum_NearTopLeft] = f3_sub(f3_add(cNear, f3_scl(up, hNear * 0.5f)), f3_scl(right, wNear * 0.5f));
-	cam->frustumCorners[Frustum_NearTopRight] = f3_add(f3_add(cNear, f3_scl(up, hNear * 0.5f)), f3_scl(right, wNear * 0.5f));
-	cam->frustumCorners[Frustum_FarBottomLeft] = f3_sub(f3_sub(cFar, f3_scl(up, hFar * 0.5f)), f3_scl(right, wFar * 0.5f));
-	cam->frustumCorners[Frustum_FarBottomRight] = f3_add(f3_sub(cFar, f3_scl(up, hFar * 0.5f)), f3_scl(right, wFar * 0.5f));
-	cam->frustumCorners[Frustum_FarTopLeft] = f3_sub(f3_add(cFar, f3_scl(up, hFar * 0.5f)), f3_scl(right, wFar * 0.5f));
-	cam->frustumCorners[Frustum_FarTopRight] = f3_add(f3_add(cFar, f3_scl(up, hFar * 0.5f)), f3_scl(right, wFar * 0.5f));
+	cam->frustumCorners[Frustum_NearTopLeft]	 = f3_sub(f3_add(cNear, f3_scl(up, hNear * 0.5f)), f3_scl(right, wNear * 0.5f));
+	cam->frustumCorners[Frustum_NearTopRight]	 = f3_add(f3_add(cNear, f3_scl(up, hNear * 0.5f)), f3_scl(right, wNear * 0.5f));
+	cam->frustumCorners[Frustum_FarBottomLeft]	 = f3_sub(f3_sub(cFar, f3_scl(up, hFar * 0.5f)), f3_scl(right, wFar * 0.5f));
+	cam->frustumCorners[Frustum_FarBottomRight]	 = f3_add(f3_sub(cFar, f3_scl(up, hFar * 0.5f)), f3_scl(right, wFar * 0.5f));
+	cam->frustumCorners[Frustum_FarTopLeft]		 = f3_sub(f3_add(cFar, f3_scl(up, hFar * 0.5f)), f3_scl(right, wFar * 0.5f));
+	cam->frustumCorners[Frustum_FarTopRight]	 = f3_add(f3_add(cFar, f3_scl(up, hFar * 0.5f)), f3_scl(right, wFar * 0.5f));
 }
 
 bool Camera_IsPointVisible(Camera* cam, C3D_FVec point) {
@@ -111,7 +110,6 @@ bool Camera_IsAABBVisible(Camera* cam, C3D_FVec orgin, C3D_FVec size) {
 	out = 0;
 	for (int i = 0; i < 8; i++) out += ((cam->frustumCorners[i].z < min.z));
 	if (out == 8) return false;
-
 
 	return true;
 }

@@ -10,11 +10,11 @@
 #include <stdio.h>
 
 static WorldVertex vertices[] = {{{-1, 0, -1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-				 {{1, 0, -1}, {INT16_MAX, 0}, {255, 255, 255}, {0, 0, 0}},
-				 {{1, 0, 1}, {INT16_MAX, INT16_MAX}, {255, 255, 255}, {0, 0, 0}},
-				 {{1, 0, 1}, {INT16_MAX, INT16_MAX}, {255, 255, 255}, {0, 0, 0}},
-				 {{-1, 0, 1}, {0, INT16_MAX}, {255, 255, 255}, {0, 0, 0}},
-				 {{-1, 0, -1}, {0, 0}, {255, 255, 255}, {0, 0, 0}}};
+								 {{1, 0, -1}, {INT16_MAX, 0}, {255, 255, 255}, {0, 0, 0}},
+								 {{1, 0, 1}, {INT16_MAX, INT16_MAX}, {255, 255, 255}, {0, 0, 0}},
+								 {{1, 0, 1}, {INT16_MAX, INT16_MAX}, {255, 255, 255}, {0, 0, 0}},
+								 {{-1, 0, 1}, {0, INT16_MAX}, {255, 255, 255}, {0, 0, 0}},
+								 {{-1, 0, -1}, {0, 0}, {255, 255, 255}, {0, 0, 0}}};
 
 static C3D_Tex texture;
 static WorldVertex* cloudVBO;
@@ -26,19 +26,17 @@ void Clouds_Init() {
 	for (int i = 0; i < TEXTURE_SIZE; i++) {
 		for (int j = 0; j < TEXTURE_SIZE; j++) {
 			float noise = sino_2d(j * 0.2f, i * 0.3f);
-			for (int k = 1; k < 3; k++) {
-				noise += sino_2d(j * 0.15f / 1, i * 0.2f / 1);
-			}
+			for (int k = 1; k < 3; k++) { noise += sino_2d(j * 0.15f / 1, i * 0.2f / 1); }
 			map[j + i * TEXTURE_SIZE] = (noise / 3.f > 0.2f) * 15 | (15 << 4);
 		}
 	}
 	C3D_TexInit(&texture, TEXTURE_SIZE, TEXTURE_SIZE, GPU_LA4);
 	C3D_TexSetWrap(&texture, GPU_REPEAT, GPU_REPEAT);
-	Texture_TileImage8(map, texture.data, TEXTURE_SIZE);
+	Texture_TileImage8(map, (uint8_t*)texture.data, TEXTURE_SIZE);
 
 	free(map);
 
-	cloudVBO = linearAlloc(sizeof(vertices));
+	cloudVBO = (WorldVertex*)linearAlloc(sizeof(vertices));
 	memcpy(cloudVBO, vertices, sizeof(vertices));
 }
 
@@ -69,9 +67,7 @@ void Clouds_Render(int projUniform, C3D_Mtx* projectionview, World* world, float
 				cloudVBO[i].uv[0] = INT16_MAX;
 		}
 	} else {
-		for (int i = 0; i < 6; i++) {
-			cloudVBO[i].uv[0] -= stepX;
-		}
+		for (int i = 0; i < 6; i++) { cloudVBO[i].uv[0] -= stepX; }
 	}
 	if (((int)cloudVBO[0].uv[1]) + stepZ > INT16_MAX) {
 		for (int i = 0; i < 6; i++) {
@@ -81,9 +77,7 @@ void Clouds_Render(int projUniform, C3D_Mtx* projectionview, World* world, float
 				cloudVBO[i].uv[1] = 0;
 		}
 	} else {
-		for (int i = 0; i < 6; i++) {
-			cloudVBO[i].uv[1] += stepZ;
-		}
+		for (int i = 0; i < 6; i++) { cloudVBO[i].uv[1] += stepZ; }
 	}
 	GSPGPU_FlushDataCache(cloudVBO, sizeof(vertices));
 

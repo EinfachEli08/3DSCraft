@@ -11,7 +11,6 @@
 #include "rendering/Camera.h"
 #include "rendering/Clouds.h"
 #include "rendering/Cursor.h"
-#include "rendering/PolyGen.h"
 #include "rendering/TextureMap.h"
 #include "rendering/WorldRenderer.h"
 #include "world/WorkQueue.h"

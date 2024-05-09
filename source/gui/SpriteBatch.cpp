@@ -10,12 +10,12 @@
 #include <vec/vec.h>
 
 typedef struct {
-	int depth;
-	C3D_Tex* texture;
-	int16_t x0, y0, x1, y1;  // top left, right
-	int16_t x2, y2, x3, y3;  // bottom left, right
-	int16_t u0, v0, u1, v1;
-	int16_t color;
+		int depth;
+		C3D_Tex* texture;
+		int16_t x0, y0, x1, y1;	 // top left, right
+		int16_t x2, y2, x3, y3;	 // bottom left, right
+		int16_t u0, v0, u1, v1;
+		int16_t color;
 } Sprite;
 
 static vec_t(Sprite) cmdList;
@@ -38,8 +38,8 @@ static int guiScale = 2;
 void SpriteBatch_Init(int projUniform_) {
 	vec_init(&cmdList);
 
-	vertexList[0] = linearAlloc(sizeof(GuiVertex) * 256);
-	vertexList[1] = linearAlloc(sizeof(GuiVertex) * 2 * (4096 + 1024));
+	vertexList[0] = (GuiVertex*)linearAlloc(sizeof(GuiVertex) * 256);
+	vertexList[1] = (GuiVertex*)linearAlloc(sizeof(GuiVertex) * 2 * (4096 + 1024));
 
 	projUniform = projUniform_;
 
@@ -92,7 +92,7 @@ void SpriteBatch_BindGuiTexture(GuiTexture texture) {
 			break;
 		case GuiTexture_SupportQR:
 			currentTexture = &supportQRTex;
-		break;
+			break;
 		default:
 			break;
 	}
@@ -107,7 +107,7 @@ void SpriteBatch_PushQuad(int x, int y, int z, int w, int h, int rx, int ry, int
 }
 void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry, int rw, int rh, int16_t color) {
 	vec_push(&cmdList, ((Sprite){z, currentTexture, x * guiScale, y * guiScale, (x + w) * guiScale, y * guiScale, x * guiScale,
-				     (y + h) * guiScale, (x + w) * guiScale, (y + h) * guiScale, rx, ry, rx + rw, ry + rh, color}));
+								 (y + h) * guiScale, (x + w) * guiScale, (y + h) * guiScale, rx, ry, rx + rw, ry + rh, color}));
 }
 
 static float rot = 0.f;
@@ -127,29 +127,30 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 		Block_GetColor(block, metadata, i, color);
 
 		for (int j = 0; j < 5; j++) {
-			int k = i * 6 + j;
-			C3D_FVec p =
-			    FVec3_New((float)vertices[k].xyz[0] - 0.5f, (float)vertices[k].xyz[1] - 0.5f, (float)vertices[k].xyz[2] - 0.5f);
+			int k	   = i * 6 + j;
+			C3D_FVec p = FVec3_New((float)vertices[k].xyz[0] - 0.5f, (float)vertices[k].xyz[1] - 0.5f, (float)vertices[k].xyz[2] - 0.5f);
 			C3D_FVec v = Mtx_MultiplyFVec3(&iconModelMtx, p);
 			vertices[k].xyz[0] = FastFloor(v.x * 20.f * guiScale) + (x + 16) * guiScale;
 			vertices[k].xyz[1] = -FastFloor(v.y * 20.f * guiScale) + (y + 16) * guiScale;  // invertieren auf der Y-Achse
 		}
 
-		WorldVertex bottomLeft = vertices[i * 6 + 0];
+		WorldVertex bottomLeft	= vertices[i * 6 + 0];
 		WorldVertex bottomRight = vertices[i * 6 + 1];
-		WorldVertex topRight = vertices[i * 6 + 2];
-		WorldVertex topLeft = vertices[i * 6 + 4];
+		WorldVertex topRight	= vertices[i * 6 + 2];
+		WorldVertex topLeft		= vertices[i * 6 + 4];
 
 		C3D_Tex* texture = Block_GetTextureMap();
 
 		int16_t color16 = SHADER_RGB(color[0] >> 3, color[1] >> 3, color[2] >> 3);
-		if(i == Direction_South) color16 = SHADER_RGB_DARKEN(color16, 14);
-		else if(i == Direction_West) color16 = SHADER_RGB_DARKEN(color16, 10);
+		if (i == Direction_South)
+			color16 = SHADER_RGB_DARKEN(color16, 14);
+		else if (i == Direction_West)
+			color16 = SHADER_RGB_DARKEN(color16, 10);
 
 #define unpackP(x) (x).xyz[0], (x).xyz[1]
-		vec_push(&cmdList, ((Sprite){z, texture, unpackP(topLeft), unpackP(topRight), unpackP(bottomLeft), unpackP(bottomRight),
-					     iconUV[0] / 256, iconUV[1] / 256 + TEXTURE_TILESIZE, iconUV[0] / 256 + TEXTURE_TILESIZE,
-					     iconUV[1] / 256, color16}));
+		vec_push(&cmdList,
+				 ((Sprite){z, texture, unpackP(topLeft), unpackP(topRight), unpackP(bottomLeft), unpackP(bottomRight), iconUV[0] / 256,
+						   iconUV[1] / 256 + TEXTURE_TILESIZE, iconUV[0] / 256 + TEXTURE_TILESIZE, iconUV[1] / 256, color16}));
 
 #undef unpackP
 	}
@@ -184,7 +185,7 @@ int SpriteBatch_PushTextVargs(int x, int y, int z, int16_t color, bool shadow, i
 		if (*text == '\n' || implicitBreak) {
 			offsetY += CHAR_HEIGHT;
 			maxWidth = MAX(maxWidth, offsetX);
-			offsetX = 0;
+			offsetX	 = 0;
 			if (implicitBreak) --text;
 		} else if (*text == '\t') {
 			offsetX = ((offsetX / CHAR_WIDTH) / TAB_SIZE + 1) * TAB_SIZE * CHAR_WIDTH;
@@ -193,8 +194,7 @@ int SpriteBatch_PushTextVargs(int x, int y, int z, int16_t color, bool shadow, i
 				int texX = *text % 16 * 8, texY = *text / 16 * 8;
 				SpriteBatch_PushQuadColor(x + offsetX, y + offsetY, z, 8, 8, texX, texY, 8, 8, color);
 				if (shadow)
-					SpriteBatch_PushQuadColor(x + offsetX + 1, y + offsetY + 1, z - 1, 8, 8, texX, texY, 8, 8,
-								  SHADER_RGB(10, 10, 10));
+					SpriteBatch_PushQuadColor(x + offsetX + 1, y + offsetY + 1, z - 1, 8, 8, texX, texY, 8, 8, SHADER_RGB(10, 10, 10));
 			}
 			offsetX += font->fontWidth[(int)*text];
 		}
@@ -223,12 +223,12 @@ int SpriteBatch_CalcTextWidthVargs(const char* text, va_list args) {
 
 	char* it = fmtedText;
 
-	int length = 0;
+	int length	  = 0;
 	int maxLength = 0;
 	while (*it != '\0') {
 		if (*it == '\n') {
 			maxLength = MAX(maxLength, length);
-			length = 0;
+			length	  = 0;
 		} else
 			length += font->fontWidth[(int)*(it++)];
 	}
@@ -252,7 +252,7 @@ void SpriteBatch_SetScale(int scale) { guiScale = scale; }
 int SpriteBatch_GetScale() { return guiScale; }
 
 void SpriteBatch_StartFrame(int width, int height) {
-	screenWidth = width;
+	screenWidth	 = width;
 	screenHeight = height;
 }
 
@@ -269,7 +269,7 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 
 	C3D_TexEnv* env = C3D_GetTexEnv(0);
 	C3D_TexEnvInit(env);
-	C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR, 0);
+	C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR);
 	C3D_TexEnvFunc(env, C3D_Both, GPU_MODULATE);
 
 	GuiVertex* usedVertexList = vertexList[screen];
@@ -284,7 +284,7 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 		float divW = 1.f / texture->width * INT16_MAX, divH = 1.f / texture->height * INT16_MAX;
 
 		while (cmdList.length > 0 && vec_last(&cmdList).texture == texture) {
-			Sprite cmd = vec_pop(&cmdList);
+			Sprite cmd	  = vec_pop(&cmdList);
 			int16_t color = cmd.color;
 
 			int16_t u0 = (int16_t)((float)cmd.u0 * divW), v0 = (int16_t)((float)cmd.v0 * divH);
@@ -312,5 +312,5 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 	C3D_DepthTest(true, GPU_GREATER, GPU_WRITE_ALL);
 
 	currentTexture = NULL;
-	guiScale = 2;
+	guiScale	   = 2;
 }

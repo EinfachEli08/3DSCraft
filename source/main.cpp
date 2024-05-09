@@ -26,14 +26,15 @@
 
 #include <citro3d.h>
 
-bool showDebugInfo = true;	// muss noch besser gemacht werden, vlt. über eine Options Struktur wo auch andere Einstellungen drinne sind
+bool gIsDebug		 = false;
+const char* gVersion = "v0.3 Pre 2";
 
 void releaseWorld(ChunkWorker* chunkWorker, SaveManager* saveMgr, World* world) {
 	for (int i = 0; i < CHUNKCACHE_SIZE; i++) {
-		for (int j = 0; j < CHUNKCACHE_SIZE; j++) { World_UnloadChunk(world, world->chunkCache[i][j]); }
+		for (int j = 0; j < CHUNKCACHE_SIZE; j++) { world->unloadChunk(i, j); }
 	}
 	chunkWorker->finish();
-	World_Reset(world);
+	world->reset();
 	saveMgr->unload();
 }
 
@@ -50,26 +51,23 @@ int main() {
 
 	SaveManager::initFileSystem();
 
-	World* world = (World*)malloc(sizeof(World));
+	ChunkWorker* chunkWorker = new ChunkWorker();
+
+	World* world = new World(chunkWorker->queue);
 	Player* player;
 	PlayerController* playerCtrl;
 	Player_Init(player, world);
 	PlayerController_Init(playerCtrl, player);
 
-	PolyGen* polyGen = new PolyGen(world, player);
-	SuperFlatGen* flatGen;
-	NormalGen* normalGen;
-	CustomGen* customGen;
+	PolyGen* polyGen	  = new PolyGen(world, player);
+	SuperFlatGen* flatGen = new SuperFlatGen(world);
+	NormalGen* normalGen  = new NormalGen(world);
+	CustomGen* customGen  = new CustomGen(world);
 
-	SuperFlatGen_Init(flatGen, world);
-	NormalGen_Init(normalGen, world);
-	CustomGen_Init(customGen, world);
-
-	ChunkWorker* chunkWorker = new ChunkWorker();
-	chunkWorker->addHandler(WorkerItemType::PolyGen, (ChunkWorkerObjBase*)polyGen);
-	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)flatGen);
-	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)normalGen);
-	chunkWorker->addHandler(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)customGen);
+	chunkWorker->addHandler(Enum::WorkerItemType::PolyGen, (ChunkWorkerObjBase*)polyGen);
+	chunkWorker->addHandler(Enum::WorkerItemType::BaseGen, (ChunkWorkerObjBase*)flatGen);
+	chunkWorker->addHandler(Enum::WorkerItemType::BaseGen, (ChunkWorkerObjBase*)normalGen);
+	chunkWorker->addHandler(Enum::WorkerItemType::BaseGen, (ChunkWorkerObjBase*)customGen);
 
 	sino_init();
 
@@ -79,13 +77,11 @@ int main() {
 
 	WorldSelect_Init();
 
-	World_Init(world, chunkWorker->queue);
-
 	SaveManager* saveMgr			  = new SaveManager(player);
 	SaveManager::LoadChunk* loadChunk = new SaveManager::LoadChunk(saveMgr);
 	SaveManager::SaveChunk* saveChunk = new SaveManager::SaveChunk(saveMgr);
-	chunkWorker->addHandler(WorkerItemType::Load, (ChunkWorkerObjBase*)loadChunk);
-	chunkWorker->addHandler(WorkerItemType::Save, (ChunkWorkerObjBase*)saveChunk);
+	chunkWorker->addHandler(Enum::WorkerItemType::Load, (ChunkWorkerObjBase*)loadChunk);
+	chunkWorker->addHandler(Enum::WorkerItemType::Save, (ChunkWorkerObjBase*)saveChunk);
 
 	uint64_t lastTime = svcGetSystemTick();
 	float dt = 0.f, timeAccum = 0.f, fpsClock = 0.f;
@@ -146,19 +142,18 @@ int main() {
 			gamestate = GameState_SelectWorld;
 		} else if (gamestate == GameState_Playing) {
 			while (timeAccum >= 1.f / 20.f) {
-				World_Tick(world);
+				world->tick();
 
 				timeAccum -= 1.f / 20.f;
 			}
 
 			PlayerController_Update(playerCtrl, inputData, dt);
 
-			World_UpdateChunkCache(world, WorldToChunkCoord(FastFloor(player->position.x)),
-								   WorldToChunkCoord(FastFloor(player->position.z)));
+			world->updateChunkCache(WorldToChunkCoord(FastFloor(player->position.x)), WorldToChunkCoord(FastFloor(player->position.z)));
 		} else if (gamestate == GameState_SelectWorld) {
 			char path[256];
-			char name[WORLD_NAME_SIZE] = {'\0'};
-			WorldGenType worldType;
+			char name[WORLD_NAME_LIMIT] = {'\0'};
+			Enum::WorldGenType worldType;
 			bool newWorld = false;
 			if (WorldSelect_Update(path, name, &worldType, &newWorld)) {
 				strcpy(world->name, name);
@@ -166,19 +161,19 @@ int main() {
 
 				saveMgr->load(path);
 
-				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)flatGen,
-											  world->genSettings.type == WorldGen_SuperFlat);
-				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)customGen,
-											  world->genSettings.type == WorldGen_Custom);
-				chunkWorker->setHandlerActive(WorkerItemType::BaseGen, (ChunkWorkerObjBase*)normalGen,
-											  world->genSettings.type == WorldGen_Normal);
+				chunkWorker->setHandlerActive(Enum::WorkerItemType::BaseGen, (ChunkWorkerObjBase*)flatGen,
+											  world->genSettings.type == Enum::WorldGenType::SuperFlat);
+				chunkWorker->setHandlerActive(Enum::WorkerItemType::BaseGen, (ChunkWorkerObjBase*)customGen,
+											  world->genSettings.type == Enum::WorldGenType::Custom);
+				chunkWorker->setHandlerActive(Enum::WorkerItemType::BaseGen, (ChunkWorkerObjBase*)normalGen,
+											  world->genSettings.type == Enum::WorldGenType::Normal);
 
 				world->cacheTranslationX = WorldToChunkCoord(FastFloor(player->position.x));
 				world->cacheTranslationZ = WorldToChunkCoord(FastFloor(player->position.z));
 				for (int i = 0; i < CHUNKCACHE_SIZE; i++) {
 					for (int j = 0; j < CHUNKCACHE_SIZE; j++) {
-						world->chunkCache[i][j] = World_LoadChunk(world, i - CHUNKCACHE_SIZE / 2 + world->cacheTranslationX,
-																  j - CHUNKCACHE_SIZE / 2 + world->cacheTranslationZ);
+						world->chunkCache[i][j] = world->loadChunk(i - CHUNKCACHE_SIZE / 2 + world->cacheTranslationX,
+																   j - CHUNKCACHE_SIZE / 2 + world->cacheTranslationZ);
 					}
 				}
 
@@ -186,14 +181,14 @@ int main() {
 					while (chunkWorker->working || chunkWorker->queue->queue.length > 0) {
 						svcSleepThread(50000000);  // 1 Tick
 					}
-					World_Tick(world);
+					world->tick();
 				}
 
 				if (newWorld) {
 					int highestBlock = 0;
 					for (int x = -1; x < 1; x++) {
 						for (int z = -1; z < 1; z++) {
-							int height = World_GetHeight(world, x, z);
+							int height = world->getHeight(x, z);
 							if (height > highestBlock) highestBlock = height;
 						}
 					}

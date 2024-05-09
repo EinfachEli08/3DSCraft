@@ -1,8 +1,15 @@
 #pragma once
 
-#include <world/World.h>
+#include "world/ChunkWorkerObjBase.h"
+#include "world/World.h"
 
-typedef struct { World* world; } NormalGen;
+class WorkQueue;
 
-void NormalGen_Init(NormalGen* gen, World* world);
-void NormalGen_Generate(WorkQueue* queue, WorkerItem item, void* notthis);
+class NormalGen : public ChunkWorkerObjBase {
+	public:
+		NormalGen(World* world) : world(world) {}
+		void chunkFunction(WorkQueue* queue, WorkerItem item) override;
+
+	private:
+		World* world;
+};

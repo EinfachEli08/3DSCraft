@@ -1,50 +1,77 @@
 #pragma once
 
-#include <world/Chunk.h>
-#include <world/WorkQueue.h>
-
-#include <misc/NumberUtils.h>
-#include <misc/Xorshift.h>
 #include <vec/vec.h>
 
+#include "misc/NumberUtils.h"
+#include "misc/Xorshift.h"
+#include "world/Chunk.h"
+#include "world/WorkQueue.h"
+
+#define WORLD_NAME_LIMIT 12
 
 #define CHUNKCACHE_SIZE (8)
-
 #define UNDEADCHUNKS_COUNT (2 * CHUNKCACHE_SIZE + CHUNKCACHE_SIZE * CHUNKCACHE_SIZE)
-
 #define CHUNKPOOL_SIZE (CHUNKCACHE_SIZE * CHUNKCACHE_SIZE + UNDEADCHUNKS_COUNT)
 
-typedef enum { WorldGen_Normal, WorldGen_SuperFlat, WorldGen_Custom, WorldGenTypes_Count } WorldGenType;
-typedef struct {
-	uint64_t seed;
-	WorldGenType type;
-	union {
-		struct {
-			// Keine Einstellungen...
-		} superflat;
-	} settings;
-} GeneratorSettings;
+namespace Enum {
+enum WorldGenType {
+	Normal,
+	SuperFlat,
+	Custom
+};
+const short WorldGenTypeCount = 5;
+};	// namespace Enum
 
-#define WORLD_NAME_SIZE 12
-typedef struct {
-	char name[WORLD_NAME_SIZE];
+struct GeneratorSettings {
+		uint64_t seed;
+		Enum::WorldGenType type;
+		union {
+				struct {
+						// Keine Einstellungen...
+				} superflat;
+		} settings;
+};
 
-	GeneratorSettings genSettings;
+class BlockEvent;
 
-	int cacheTranslationX, cacheTranslationZ;
+class World {
+	public:
+		World(WorkQueue* workqueue);
 
-	Chunk chunkPool[CHUNKPOOL_SIZE];
-	Chunk* chunkCache[CHUNKCACHE_SIZE][CHUNKCACHE_SIZE];
-	vec_t(Chunk*) freeChunks;
+		void reset();
+		void tick();
 
-	WorkQueue* workqueue;
+		Chunk* loadChunk(int x, int y);
+		void unloadChunk(int x, int y);
+		void unloadChunk(Chunk* chunk);
+		Chunk* getChunk(int x, int y);
 
-	Xorshift32 randomTickGen;
-} World;
+		Block getBlock(int x, int y, int z);
+		void setBlock(int x, int y, int z, Block block);
 
-inline static int WorldToChunkCoord(int x) { return (x + (int)(x < 0)) / CHUNK_SIZE - (int)(x < 0); }
-inline static int WorldToLocalCoord(int x) { return x - WorldToChunkCoord(x) * CHUNK_SIZE; }
+		void setBlockAndMeta(int x, int y, int z, Block block, uint8_t metadata);
+		uint8_t getMetadata(int x, int y, int z);
+		void setMetadata(int x, int y, int z, uint8_t metadata);
 
+		void updateChunkCache(int orginX, int orginZ);
+		int getHeight(int x, int z);
+
+		char name[WORLD_NAME_LIMIT];
+
+		GeneratorSettings genSettings;
+
+		int cacheTranslationX, cacheTranslationZ;
+
+		Chunk chunkPool[CHUNKPOOL_SIZE];
+		Chunk* chunkCache[CHUNKCACHE_SIZE][CHUNKCACHE_SIZE];
+		vec_t(Chunk*) freeChunks;
+
+		WorkQueue* workqueue;
+		BlockEvent* blockEvent;
+
+		Xorshift32 randomTickGen;
+};
+/*
 void World_Init(World* world, WorkQueue* workqueue);
 
 void World_Reset(World* world);
@@ -66,3 +93,8 @@ void World_SetBlockAndMeta(World* world, int x, int y, int z, Block block, uint8
 void World_UpdateChunkCache(World* world, int orginX, int orginZ);
 
 int World_GetHeight(World* world, int x, int z);
+*/
+// util
+
+inline static int WorldToChunkCoord(int x) { return (x + (int)(x < 0)) / CHUNK_SIZE - (int)(x < 0); }
+inline static int WorldToLocalCoord(int x) { return x - WorldToChunkCoord(x) * CHUNK_SIZE; }
