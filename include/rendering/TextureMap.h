@@ -1,25 +1,37 @@
 #pragma once
 
-#include <c3d/texture.h>
+#include <citro3d.h>
 #include <stdint.h>
-
-void Texture_Load(C3D_Tex* result, char* filename);
 
 #define TEXTURE_MAPSIZE 128
 #define TEXTURE_TILESIZE 16
 #define TEXTURE_MAPTILES (TEXTURE_MAPSIZE / TEXTURE_TILESIZE)
 
-typedef struct {
-		uint32_t textureHash;
-		int16_t u, v;
-} Texture_MapIcon;
+class Texture {
+	public:
+		Texture(C3D_Tex* texture, char* filename);
+		Texture(){};
 
-typedef struct {
+		struct MapIcon {
+				uint32_t textureHash;
+				int16_t u, v;
+		};
+
+		C3D_Tex* getTexture() { return &texture; }
+
+	protected:
 		C3D_Tex texture;
-		Texture_MapIcon icons[TEXTURE_MAPTILES * TEXTURE_MAPTILES];
-} Texture_Map;
+};
 
-void Texture_MapInit(Texture_Map* map, char** files, int num_files);
-Texture_MapIcon Texture_MapGetIcon(Texture_Map* map, char* filename);
+class TextureMap : public Texture {
+	public:
+		TextureMap(char** files, int num_files);
 
-void Texture_TileImage8(uint8_t* src, uint8_t* dst, int size);
+		MapIcon* getIcon(char* filename);
+
+	private:
+		MapIcon icons[TEXTURE_MAPTILES * TEXTURE_MAPTILES];
+};
+
+void tileImage8(u8* src, u8* dst, s32 size);
+void tileImage32(u32* src, u8* dst, s32 sizex, s32 sizey);

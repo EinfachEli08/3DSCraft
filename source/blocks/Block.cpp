@@ -3,8 +3,6 @@
 #include <rendering/TextureMap.h>
 #include <rendering/VertexFmt.h>
 
-static Texture_Map textureMap;
-
 // PATH PREFIX
 #define PPRX "romfs:/textures/blocks/"
 
@@ -18,38 +16,39 @@ static Texture_Map textureMap;
 char* texture_files[] = {TEXTURE_FILES};
 #undef A
 
+static TextureMap* textureMap = new TextureMap(texture_files, sizeof(texture_files) / sizeof(texture_files[0]));
+
 static struct {
-		Texture_MapIcon stone;
-		Texture_MapIcon stone_bricks;
-		Texture_MapIcon smooth_stone;
-		Texture_MapIcon cobblestone;
-		Texture_MapIcon dirt;
-		Texture_MapIcon grass_side;
-		Texture_MapIcon grass_top;
-		Texture_MapIcon sand;
-		Texture_MapIcon oaklog_side;
-		Texture_MapIcon oaklog_top;
-		Texture_MapIcon leaves_oak;
-		Texture_MapIcon glass;
-		Texture_MapIcon brick;
-		Texture_MapIcon oakplanks;
-		Texture_MapIcon wool;
-		Texture_MapIcon bedrock;
+		Texture::MapIcon stone;
+		Texture::MapIcon stone_bricks;
+		Texture::MapIcon smooth_stone;
+		Texture::MapIcon cobblestone;
+		Texture::MapIcon dirt;
+		Texture::MapIcon grass_side;
+		Texture::MapIcon grass_top;
+		Texture::MapIcon sand;
+		Texture::MapIcon oaklog_side;
+		Texture::MapIcon oaklog_top;
+		Texture::MapIcon leaves_oak;
+		Texture::MapIcon glass;
+		Texture::MapIcon brick;
+		Texture::MapIcon oakplanks;
+		Texture::MapIcon wool;
+		Texture::MapIcon bedrock;
 } icon;
 
 void Block_Init() {
-	Texture_MapInit(&textureMap, texture_files, sizeof(texture_files) / sizeof(texture_files[0]));
-#define A(i, n) icon.i = Texture_MapGetIcon(&textureMap, PPRX n)
+#define A(i, n) icon.i = *textureMap->getIcon(PPRX n)
 	TEXTURE_FILES;
 #undef A
 }
-void Block_Deinit() { C3D_TexDelete(&textureMap.texture); }
+void Block_Deinit() { C3D_TexDelete(textureMap->getTexture()); }
 
-C3D_Tex* Block_GetTextureMap() { return &textureMap.texture; }
+C3D_Tex* Block_GetTextureMap() { return textureMap->getTexture(); }
 
 void Block_GetTexture(Block block, int _direction, uint8_t metadata, int16_t* out_uv) {
-	int direction	  = (int)_direction;
-	Texture_MapIcon i = {0, 0, 0};
+	int direction	   = (int)_direction;
+	Texture::MapIcon i = {0, 0, 0};
 	switch (block) {
 		case Block_Air:
 			return;

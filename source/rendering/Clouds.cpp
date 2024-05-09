@@ -32,7 +32,7 @@ void Clouds_Init() {
 	}
 	C3D_TexInit(&texture, TEXTURE_SIZE, TEXTURE_SIZE, GPU_LA4);
 	C3D_TexSetWrap(&texture, GPU_REPEAT, GPU_REPEAT);
-	Texture_TileImage8(map, (uint8_t*)texture.data, TEXTURE_SIZE);
+	tileImage8(map, (uint8_t*)texture.data, TEXTURE_SIZE);
 
 	free(map);
 
