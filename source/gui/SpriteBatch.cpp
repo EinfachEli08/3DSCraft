@@ -2,6 +2,7 @@
 
 #include <gui/DebugUI.h>
 #include <gui/FontLoader.h>
+#include <rendering/CubeSidesTable.h>
 #include <rendering/TextureMap.h>
 #include <rendering/VertexFmt.h>
 
