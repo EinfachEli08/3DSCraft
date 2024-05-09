@@ -15,7 +15,7 @@ static Texture_Map textureMap;
 		A(brick, "brick.png"), A(oakplanks, "planks_oak.png"), A(wool, "wool.png"), A(bedrock, "bedrock.png")
 
 #define A(i, n) PPRX n
-const char* texture_files[] = {TEXTURE_FILES};
+char* texture_files[] = {TEXTURE_FILES};
 #undef A
 
 static struct {

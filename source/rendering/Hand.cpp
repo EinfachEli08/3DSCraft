@@ -3,9 +3,10 @@
 #include <misc/NumberUtils.h>
 #include <rendering/VertexFmt.h>
 
-#include <rendering/TextureMap.h>
-
 #include <string.h>
+
+#include <rendering/CubeSidesTable.h>
+#include <rendering/TextureMap.h>
 
 static WorldVertex* handVBO;
 static C3D_Tex steveTexture;
