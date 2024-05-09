@@ -1,11 +1,9 @@
-#include <world/worldgen/SuperFlatGen.h>
+#include "world/worldgen/SuperFlatGen.h"
 
-#include <misc/NumberUtils.h>
+#include "misc/NumberUtils.h"
+#include "world/WorkQueue.h"
 
-void SuperFlatGen_Init(SuperFlatGen* gen, World* world) {}
-
-void SuperFlatGen_Generate(WorkQueue* queue, WorkerItem item, void* notthis) {
-	SuperFlatGen* gen = notthis;
+void SuperFlatGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 	for (int y = 0; y < 17; y++) {
 		Block block = Block_Air;
 		switch (y) {  // TODO: Mit einem Lookup Table ersetzen, Superflach Gen konfigurierbar machen

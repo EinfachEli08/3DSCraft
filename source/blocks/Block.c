@@ -8,45 +8,33 @@ static Texture_Map textureMap;
 // PATH PREFIX
 #define PPRX "romfs:/textures/blocks/"
 
-#define TEXTURE_FILES \
-	A(dirt, "dirt.png"), \
-	A(grass_side, "grass_block_side.png"), \
-	A(grass_top, "grass_block_top.png"),  \
-	A(stone, "stone.png"),\
-	A(stone_bricks, "stone_bricks.png"), \
-A(smooth_stone, "smooth_stone.png"),\
-	A(cobblestone, "cobblestone.png"), \
-	A(sand, "sand.png"), \
-	A(oaklog_side, "log_oak.png"), \
-	A(oaklog_top, "log_oak_top.png"), \
-	A(leaves_oak, "leaves_oak.png"), \
-	A(glass, "glass.png"), \
-	A(brick, "brick.png"), \
-	A(oakplanks, "planks_oak.png"), \
-	A(wool, "wool.png"), \
-	A(bedrock, "bedrock.png")
+#define TEXTURE_FILES                                                                                                                     \
+	A(dirt, "dirt.png"), A(grass_side, "grass_block_side.png"), A(grass_top, "grass_block_top.png"), A(stone, "stone.png"),               \
+		A(stone_bricks, "stone_bricks.png"), A(smooth_stone, "smooth_stone.png"), A(cobblestone, "cobblestone.png"), A(sand, "sand.png"), \
+		A(oaklog_side, "log_oak.png"), A(oaklog_top, "log_oak_top.png"), A(leaves_oak, "leaves_oak.png"), A(glass, "glass.png"),          \
+		A(brick, "brick.png"), A(oakplanks, "planks_oak.png"), A(wool, "wool.png"), A(bedrock, "bedrock.png")
 
 #define A(i, n) PPRX n
 const char* texture_files[] = {TEXTURE_FILES};
 #undef A
 
 static struct {
-	Texture_MapIcon stone;
-	Texture_MapIcon stone_bricks;
-	Texture_MapIcon smooth_stone;
-	Texture_MapIcon cobblestone;
-	Texture_MapIcon dirt;
-	Texture_MapIcon grass_side;
-	Texture_MapIcon grass_top;
-	Texture_MapIcon sand;
-	Texture_MapIcon oaklog_side;
-	Texture_MapIcon oaklog_top;
-	Texture_MapIcon leaves_oak;
-	Texture_MapIcon glass;
-	Texture_MapIcon brick;
-	Texture_MapIcon oakplanks;
-	Texture_MapIcon wool;
-	Texture_MapIcon bedrock;
+		Texture_MapIcon stone;
+		Texture_MapIcon stone_bricks;
+		Texture_MapIcon smooth_stone;
+		Texture_MapIcon cobblestone;
+		Texture_MapIcon dirt;
+		Texture_MapIcon grass_side;
+		Texture_MapIcon grass_top;
+		Texture_MapIcon sand;
+		Texture_MapIcon oaklog_side;
+		Texture_MapIcon oaklog_top;
+		Texture_MapIcon leaves_oak;
+		Texture_MapIcon glass;
+		Texture_MapIcon brick;
+		Texture_MapIcon oakplanks;
+		Texture_MapIcon wool;
+		Texture_MapIcon bedrock;
 } icon;
 
 void Block_Init() {
@@ -57,9 +45,10 @@ void Block_Init() {
 }
 void Block_Deinit() { C3D_TexDelete(&textureMap.texture); }
 
-void* Block_GetTextureMap() { return &textureMap.texture; }
+C3D_Tex* Block_GetTextureMap() { return &textureMap.texture; }
 
-void Block_GetTexture(Block block, Direction direction, uint8_t metadata, int16_t* out_uv) {
+void Block_GetTexture(Block block, int _direction, uint8_t metadata, int16_t* out_uv) {
+	int direction	  = (int)_direction;
 	Texture_MapIcon i = {0, 0, 0};
 	switch (block) {
 		case Block_Air:
@@ -124,7 +113,8 @@ void Block_GetTexture(Block block, Direction direction, uint8_t metadata, int16_
 		case Block_Bedrock:
 			i = icon.bedrock;
 			break;
-		default: break;
+		default:
+			break;
 	}
 	out_uv[0] = i.u;
 	out_uv[1] = i.v;
@@ -132,10 +122,11 @@ void Block_GetTexture(Block block, Direction direction, uint8_t metadata, int16_
 
 #define extractR(c) ((c >> 16) & 0xff)
 #define extractG(c) (((c) >> 8) & 0xff)
-#define extractB(c) ((c)&0xff)
+#define extractB(c) ((c) & 0xff)
 /*#define toRGB16(c) \
 	{ extractR(c), extractG(c), extractB(c) }*/
-void Block_GetColor(Block block, uint8_t metadata, Direction direction, uint8_t out_rgb[]) {
+void Block_GetColor(Block block, uint8_t metadata, int _direction, uint8_t out_rgb[]) {
+	int direction = (int)_direction;
 	if ((block == Block_Grass && direction == Direction_Top) || block == Block_Leaves) {
 		out_rgb[0] = 140;
 		out_rgb[1] = 214;
@@ -144,7 +135,7 @@ void Block_GetColor(Block block, uint8_t metadata, Direction direction, uint8_t 
 	}
 	// white, orange, magenta, light blue, yellow, lime, pink, gray, silver, cyan, purple, blue, green, red, black
 	const uint32_t dies[] = {(16777215), (14188339), (11685080), (6724056), (15066419), (8375321), (15892389), (5000268),
-				 (10066329), (5013401),  (8339378),  (3361970), (6704179),  (6717235), (10040115), (1644825)};
+							 (10066329), (5013401),	 (8339378),	 (3361970), (6704179),	(6717235), (10040115), (1644825)};
 	if (block == Block_Wool) {
 		out_rgb[0] = extractR(dies[metadata]);
 		out_rgb[1] = extractG(dies[metadata]);
@@ -158,5 +149,5 @@ void Block_GetColor(Block block, uint8_t metadata, Direction direction, uint8_t 
 
 bool Block_Opaque(Block block, uint8_t metadata) { return block != Block_Air && block != Block_Leaves && block != Block_Glass; }
 
-const char* BlockNames[Blocks_Count] = {"Air",    "Smooth Stone", "Stone", "Dirt",	 "Grass",  "Cobblestone", "Sand", "Log",
-					"Leaves", "Glass", "Stone Bricks", "Bricks", "Planks",      "Wool", "Bedrock"};
+const char* BlockNames[Blocks_Count] = {"Air",	  "Smooth Stone", "Stone",		  "Dirt",	"Grass",  "Cobblestone", "Sand",   "Log",
+										"Leaves", "Glass",		  "Stone Bricks", "Bricks", "Planks", "Wool",		 "Bedrock"};

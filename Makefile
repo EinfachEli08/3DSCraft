@@ -81,7 +81,7 @@ LIBS			:= -lcitro3d -lctru -lm
 else
 BUILD			:=	debug_build
 CFLAGS_ADD		:=	-Og -D_DEBUG
-LIBS			:= -lcitro3dd -lctrud -lm
+LIBS			:= -lcitro2d -lcitro3d -lctru -lstdc++
 endif
 
 #---------------------------------------------------------------------------------
@@ -89,13 +89,14 @@ endif
 #---------------------------------------------------------------------------------
 ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
-CFLAGS	:=	-g -Wall -mword-relocations \
-			 -ffunction-sections $(CFLAGS_ADD)\
-			$(ARCH) -save-temps
+CFLAGS	:=	-g -Wall -Wno-psabi -O2 -mword-relocations \
+			-DC_V=\"$(CURRENT_VERSION)\" \
+			-fomit-frame-pointer -ffunction-sections \
+			$(ARCH)
 
-CFLAGS	+=	$(INCLUDE) -DARM11 -D_3DS
+CFLAGS	+=	$(INCLUDE) -D__3DS__ -D_GNU_SOURCE=1
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17 $(CITRA)
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
@@ -104,8 +105,7 @@ LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(CTRULIB)
-
+LIBDIRS	:= $(CURDIR)/libs $(PORTLIBS) $(CTRULIB)
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional

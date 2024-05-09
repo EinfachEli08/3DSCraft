@@ -7,11 +7,9 @@
 ChunkWorker::ChunkWorker() {
 	queue = new WorkQueue();
 
-	if (R_FAILED(APT_SetAppCpuTimeLimit(30))) {
-		Crash("Couldn't set AppCpuTimeLimit");
-	}
+	if (R_FAILED(APT_SetAppCpuTimeLimit(30))) { Crash("Couldn't set AppCpuTimeLimit"); }
 
-	for (int i = 0; i < (int) WorkerItemType::Count; i++) vec_init(handler[i]);
+	for (int i = 0; i < Enum::WorkerItemTypeCount; i++) vec_init(handler[i]);
 
 	s32 priority;
 	bool isNew3ds = false;
@@ -19,9 +17,7 @@ ChunkWorker::ChunkWorker() {
 	svcGetThreadPriority(&priority, CUR_THREAD_HANDLE);
 
 	*thread = threadCreate(&mainLoop, (void*)this, CHUNKWORKER_THREAD_STACKSIZE, priority - 1, isNew3ds ? 2 : 1, false);
-	if (!*thread) {
-		Crash("Couldn't create worker thread");
-	}
+	if (!*thread) { Crash("Couldn't create worker thread"); }
 
 	working = false;
 }
@@ -35,9 +31,7 @@ ChunkWorker::~ChunkWorker() {
 	threadFree(*thread);
 	delete queue;
 
-	for (int i = 0; i < (int) WorkerItemType::Count; i++) {
-		vec_deinit(handler[i]);
-	}
+	for (int i = 0; i < Enum::WorkerItemTypeCount; i++) { vec_deinit(handler[i]); }
 }
 
 void ChunkWorker::finish() {
@@ -45,13 +39,14 @@ void ChunkWorker::finish() {
 	while (working || queue->queue.length > 0) svcSleepThread(1000000);
 }
 
-void ChunkWorker::addHandler(WorkerItemType workerType, ChunkWorkerObjBase* obj) {
-	WorkerFuncObj newHandler; newHandler.workerPtr = obj, newHandler.active = true;
-	vec_push(handler[(int) workerType], newHandler);
+void ChunkWorker::addHandler(Enum::WorkerItemType workerType, ChunkWorkerObjBase* obj) {
+	WorkerFuncObj newHandler;
+	newHandler.workerPtr = obj, newHandler.active = true;
+	vec_push(handler[(int)workerType], newHandler);
 }
 
-void ChunkWorker::setHandlerActive(WorkerItemType workerType, ChunkWorkerObjBase* worker, bool active) {
-	int typeIndex = (int) workerType;
+void ChunkWorker::setHandlerActive(Enum::WorkerItemType workerType, ChunkWorkerObjBase* worker, bool active) {
+	int typeIndex = (int)workerType;
 	for (size_t i = 0; i < handler[typeIndex]->length; i++) {
 		if (handler[typeIndex]->data[i].workerPtr == worker) {
 			handler[typeIndex]->data[i].active = active;
@@ -61,7 +56,7 @@ void ChunkWorker::setHandlerActive(WorkerItemType workerType, ChunkWorkerObjBase
 }
 
 void mainLoop(void* todo_) {
-	ChunkWorker* todo = (ChunkWorker*) todo_;
+	ChunkWorker* todo = (ChunkWorker*)todo_;
 	vec_t(WorkerItem) privateQueue;
 	vec_init(&privateQueue);
 	while (workerToStop != todo || todo->queue->queue.length > 0) {
@@ -79,21 +74,21 @@ void mainLoop(void* todo_) {
 
 		while (privateQueue.length > 0) {
 			WorkerItem item = vec_pop(&privateQueue);
-			int itemType = (int) item.type;
+			int itemType	= (int)item.type;
 
 			if (item.uuid == item.chunk->uuid) {
 				for (int i = 0; i < todo->handler[itemType]->length; i++) {
 					if (todo->handler[itemType]->data[i].active)
 						todo->handler[itemType]->data[i].workerPtr->chunkFunction(todo->queue, item);
-						//call ChunkFunction
+					// call ChunkFunction
 					svcSleepThread(7000);
 				}
 
 				switch (item.type) {
-					case WorkerItemType::BaseGen:
+					case Enum::WorkerItemType::BaseGen:
 						item.chunk->genProgress = ChunkGen_Terrain;
 						break;
-					case WorkerItemType::Decorate:
+					case Enum::WorkerItemType::Decorate:
 						item.chunk->genProgress = ChunkGen_Finished;
 						break;
 					default:
@@ -101,7 +96,7 @@ void mainLoop(void* todo_) {
 				}
 
 				--item.chunk->tasksRunning;
-				if (item.type == WorkerItemType::PolyGen) --item.chunk->graphicalTasksRunning;
+				if (item.type == Enum::WorkerItemType::PolyGen) --item.chunk->graphicalTasksRunning;
 
 				svcSleepThread(1000);
 			}

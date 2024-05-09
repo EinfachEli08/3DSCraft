@@ -5,9 +5,9 @@
 
 #include <mpack/mpack.h>
 
+#include <entity/Player.h>
 #include <gui/DebugUI.h>
 #include <misc/Crash.h>
-#include <entity/Player.h>
 #include <world/savegame/SuperChunk.h>
 
 #define mkdirFlags S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH
@@ -17,14 +17,14 @@ void SaveManager::initFileSystem() {
 	mkdir("sdmc:/craft/saves", mkdirFlags);
 }
 
-SaveManager::SaveManager(Player* player) : player(player), world(player->world) {
-	vec_init(&superChunks);
-}
+SaveManager::SaveManager(Player* player) : player(player), world(player->world) { vec_init(&superChunks); }
 SaveManager::~SaveManager() { vec_deinit(&superChunks); }
 
-#define mpack_elvis(node, key, typ, default_) \
-	((mpack_node_type(mpack_node_map_cstr_optional((node), (key))) != mpack_type_nil) ? mpack_node_ ## typ (mpack_node_map_cstr_optional((node), (key))) : (default_))
-	
+#define mpack_elvis(node, key, typ, default_)                                         \
+	((mpack_node_type(mpack_node_map_cstr_optional((node), (key))) != mpack_type_nil) \
+		 ? mpack_node_##typ(mpack_node_map_cstr_optional((node), (key)))              \
+		 : (default_))
+
 // Define C-compatible functions
 extern "C" {
 void SaveManager_load(SaveManager* manager, const char* path) {
@@ -47,9 +47,9 @@ void SaveManager_load(SaveManager* manager, const char* path) {
 
 		mpack_node_t worldTypeNode = mpack_node_map_cstr_optional(root, "worldType");
 		if (mpack_node_type(worldTypeNode) != mpack_type_nil)
-			manager->world->genSettings.type = (WorldGenType)mpack_node_uint(worldTypeNode);
+			manager->world->genSettings.type = (Enum::WorldGenType)mpack_node_uint(worldTypeNode);
 		else
-			manager->world->genSettings.type = WorldGen_SuperFlat;
+			manager->world->genSettings.type = Enum::WorldGenType::SuperFlat;
 
 		mpack_node_t player = mpack_node_array_at(mpack_node_map_cstr(root, "players"), 0);
 
@@ -58,21 +58,17 @@ void SaveManager_load(SaveManager* manager, const char* path) {
 		manager->player->position.z = mpack_node_float(mpack_node_map_cstr(player, "z"));
 
 		manager->player->pitch = mpack_node_float(mpack_node_map_cstr(player, "pitch"));
-		manager->player->yaw = mpack_node_float(mpack_node_map_cstr(player, "yaw"));
+		manager->player->yaw   = mpack_node_float(mpack_node_map_cstr(player, "yaw"));
 
-		manager->player->flying = mpack_elvis(player, "flying", bool, false);
+		manager->player->flying	   = mpack_elvis(player, "flying", bool, false);
 		manager->player->crouching = mpack_elvis(player, "crouching", bool, false);
 
 		mpack_error_t err = mpack_tree_destroy(&levelTree);
-		if (err != mpack_ok) {
-			Crash("Mpack error %d while loading world manifest %s", err, path);
-		}
+		if (err != mpack_ok) { Crash("Mpack error %d while loading world manifest %s", err, path); }
 	}
 }
 }
-void SaveManager::load(const char* path) {
-	SaveManager_load(this, path);
-}
+void SaveManager::load(const char* path) { SaveManager_load(this, path); }
 
 void SaveManager::unload() {
 	mpack_writer_t writer;
@@ -100,7 +96,7 @@ void SaveManager::unload() {
 
 	mpack_write_cstr(&writer, "flying");
 	mpack_write_bool(&writer, player->flying);
-	
+
 	mpack_write_cstr(&writer, "crouching");
 	mpack_write_bool(&writer, player->crouching);
 
@@ -113,9 +109,7 @@ void SaveManager::unload() {
 	mpack_finish_map(&writer);
 
 	mpack_error_t err = mpack_writer_destroy(&writer);
-	if (err != mpack_ok) {
-		Crash("Mpack error %d while saving world manifest", err);
-	}
+	if (err != mpack_ok) { Crash("Mpack error %d while saving world manifest", err); }
 
 	for (int i = 0; i < superChunks.length; i++) {
 		SuperChunk_Deinit(superChunks.data[i]);
@@ -126,9 +120,7 @@ void SaveManager::unload() {
 
 static SuperChunk* fetchSuperChunk(SaveManager* mgr, int x, int z) {
 	for (int i = 0; i < mgr->superChunks.length; i++) {
-		if (mgr->superChunks.data[i]->x == x && mgr->superChunks.data[i]->z == z) {
-			return mgr->superChunks.data[i];
-		}
+		if (mgr->superChunks.data[i]->x == x && mgr->superChunks.data[i]->z == z) { return mgr->superChunks.data[i]; }
 	}
 	SuperChunk* superchunk = (SuperChunk*)malloc(sizeof(SuperChunk));
 	SuperChunk_Init(superchunk, x, z);
@@ -138,15 +130,15 @@ static SuperChunk* fetchSuperChunk(SaveManager* mgr, int x, int z) {
 }
 
 void SaveManager::LoadChunk::chunkFunction(WorkQueue* queue, WorkerItem item) {
-	int x = ChunkToSuperChunkCoord(item.chunk->x);
-	int z = ChunkToSuperChunkCoord(item.chunk->z);
+	int x				   = ChunkToSuperChunkCoord(item.chunk->x);
+	int z				   = ChunkToSuperChunkCoord(item.chunk->z);
 	SuperChunk* superChunk = fetchSuperChunk(parent, x, z);
 
 	SuperChunk_LoadChunk(superChunk, item.chunk);
 }
 void SaveManager::SaveChunk::chunkFunction(WorkQueue* queue, WorkerItem item) {
-	int x = ChunkToSuperChunkCoord(item.chunk->x);
-	int z = ChunkToSuperChunkCoord(item.chunk->z);
+	int x				   = ChunkToSuperChunkCoord(item.chunk->x);
+	int z				   = ChunkToSuperChunkCoord(item.chunk->z);
 	SuperChunk* superChunk = fetchSuperChunk(parent, x, z);
 
 	SuperChunk_SaveChunk(superChunk, item.chunk);

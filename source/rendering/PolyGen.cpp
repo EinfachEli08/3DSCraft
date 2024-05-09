@@ -83,7 +83,7 @@ void PolyGen::harvest() {
 				while (vboUpdates->length > 0) {
 					VBOUpdate update = vec_pop(vboUpdates);
 
-					Chunk* chunk = World_GetChunk(world, update.x, update.z);
+					Chunk* chunk = world->getChunk(update.x, update.z);
 					if (chunk) {
 						if (chunk->clusters[update.y].vertices > 0) VBO_Free(chunk->clusters[update.y].vbo);
 						if (chunk->clusters[update.y].transparentVertices > 0) VBO_Free(chunk->clusters[update.y].transparentVBO);

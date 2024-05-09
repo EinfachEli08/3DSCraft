@@ -3,8 +3,9 @@
 #include <gui_shbin.h>
 #include <world_shbin.h>
 
-#include <gui/screens/TitleScreen.h>
-#include <gui/screens/WorldSelectScreen.h>
+#include "gui/screens/TitleScreen.h"
+#include "gui/screens/WorldSelectScreen.h"
+#include "rendering/PolyGen.h"
 
 Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* gamestate, PolyGen* polyGen)
 	: world(world), player(player), workqueue(workqueue), gamestate(gamestate), polyGen(polyGen) {
@@ -120,7 +121,7 @@ void Renderer::render() {
 			SpriteBatch_SetScale(2);
 			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0, 0, 1024, 256);
 
-			SpriteBatch_PushText(0, 0, 0, INT16_MAX, true, INT_MAX, NULL, "v" CRAFTUS_VERSION_STR);
+			SpriteBatch_PushText(0, 0, 0, INT16_MAX, true, INT_MAX, NULL, gVersion);
 
 			SpriteBatch_SetScale(1);
 			// interesting, no + needed
@@ -157,9 +158,7 @@ void Renderer::render() {
 			Inventory_Draw(8, 0, player->inventory, sizeof(player->inventory) / sizeof(ItemStack));
 		}
 
-#ifdef ISDEBUG
-	DebugUI_Draw();
-#endif
+	if (gIsDebug) DebugUI_Draw();
 
 	Gui_Frame();
 

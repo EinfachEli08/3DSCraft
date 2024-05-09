@@ -7,26 +7,23 @@
 
 #define CHUNKWORKER_THREAD_STACKSIZE (16 * 1024)
 
-class WorkerFuncObjBase;
-
-struct WorkerFuncObj {
-	ChunkWorkerObjBase* workerPtr;
-	bool active;
-};
-
 class ChunkWorker {
-       public:
+	public:
 		ChunkWorker();
 		~ChunkWorker();
 
 		void finish();
-		void addHandler(WorkerItemType type, ChunkWorkerObjBase* worker);
-		void setHandlerActive(WorkerItemType type, ChunkWorkerObjBase* worker, bool active);
+		void addHandler(Enum::WorkerItemType type, ChunkWorkerObjBase* worker);
+		void setHandlerActive(Enum::WorkerItemType type, ChunkWorkerObjBase* worker, bool active);
+
+		struct WorkerFuncObj {
+				ChunkWorkerObjBase* workerPtr;
+				bool active;
+		};
 
 		WorkQueue* queue;
 		volatile bool working;
 		Thread* thread;
-		vec_t(WorkerFuncObj)* handler[(int)WorkerItemType::Count];
-
+		vec_t(WorkerFuncObj) * handler[Enum::WorkerItemTypeCount];
 };
 void mainLoop(void* todo);

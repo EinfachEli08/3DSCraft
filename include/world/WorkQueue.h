@@ -7,32 +7,33 @@
 #include <misc/Xorshift.h>
 #include <world/Chunk.h>
 
+namespace Enum {
 enum WorkerItemType {
 	Load,
 	Save,
 	BaseGen,
 	Decorate,
-	PolyGen,
-	Count
+	PolyGen
 };
+const short WorkerItemTypeCount = 5;
+}  // namespace Enum
 
-struct WorkerItem{
-	WorkerItemType type;
-	Chunk* chunk;
-	uint32_t uuid;
+struct WorkerItem {
+		Enum::WorkerItemType type;
+		Chunk* chunk;
+		uint32_t uuid;
 };
 
 class WorkQueue {
-public:
-	WorkQueue();
-	~WorkQueue();
+	public:
+		WorkQueue();
+		~WorkQueue();
 
-	void addItem(WorkerItem item);
+		void addItem(WorkerItem item);
 
-	vec_t(WorkerItem) queue;
-	LightEvent itemAddedEvent;
-	LightLock listInUse;
+		vec_t(WorkerItem) queue;
+		LightEvent itemAddedEvent;
+		LightLock listInUse;
 
-private:
+	private:
 };
-

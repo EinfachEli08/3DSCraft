@@ -17,12 +17,11 @@ static int currentStatusLine = 0;
 
 void DebugUI_Init() {
 	for (int i = 0; i < LOG_LINES; i++) {
-		logLines[i] = malloc(LOG_LINE_LENGTH);
+		logLines[i] = (char*)malloc(LOG_LINE_LENGTH);
 		memset(logLines[i], 0x0, LOG_LINE_LENGTH);
-
 	}
 	for (int i = 0; i < STATUS_LINES; i++) {
-		statusLines[i] = malloc(STATUS_LINE_LENGTH);
+		statusLines[i] = (char*)malloc(STATUS_LINE_LENGTH);
 		memset(statusLines[i], 0x0, STATUS_LINE_LENGTH);
 	}
 }
@@ -55,11 +54,10 @@ void DebugUI_Log(const char* text, ...) {
 }
 
 void DebugUI_Draw() {
-
-//TODO: Upper screen support fix
+	// TODO: Upper screen support fix
 	SpriteBatch_SetScale(1);
 
-	//SpriteBatch_PushSingleColorQuad(0, 0, 1, 320, 8*4, SHADER_RGB(4, 4, 4));
+	// SpriteBatch_PushSingleColorQuad(0, 0, 1, 320, 8*4, SHADER_RGB(4, 4, 4));
 
 	int yOffset = (240 / 3) * 2;
 	for (int i = 0; i < LOG_LINES; i++) {

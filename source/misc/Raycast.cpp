@@ -22,24 +22,24 @@ bool Raycast_Cast(World* world, float3 inpos, float3 raydir, Raycast_Result* out
 	int stepX, stepY, stepZ;
 	float sideDistX, sideDistY, sideDistZ;
 	if (raydir.x < 0) {
-		stepX = -1;
+		stepX	  = -1;
 		sideDistX = (inpos.x - mapX) * deltaDistX;
 	} else {
-		stepX = 1;
+		stepX	  = 1;
 		sideDistX = (mapX + 1.f - inpos.x) * deltaDistX;
 	}
 	if (raydir.y < 0) {
-		stepY = -1;
+		stepY	  = -1;
 		sideDistY = (inpos.y - mapY) * deltaDistY;
 	} else {
-		stepY = 1;
+		stepY	  = 1;
 		sideDistY = (mapY + 1.f - inpos.y) * deltaDistY;
 	}
 	if (raydir.z < 0) {
-		stepZ = -1;
+		stepZ	  = -1;
 		sideDistZ = (inpos.z - mapZ) * deltaDistZ;
 	} else {
-		stepZ = 1;
+		stepZ	  = 1;
 		sideDistZ = (mapZ + 1.f - inpos.z) * deltaDistZ;
 	}
 
@@ -58,26 +58,26 @@ bool Raycast_Cast(World* world, float3 inpos, float3 raydir, Raycast_Result* out
 			mapZ += stepZ;
 			side = 2;
 		}
-		if (World_GetBlock(world, mapX, mapY, mapZ) != Block_Air) hit = 1;
+		if (world->getBlock(mapX, mapY, mapZ) != Block_Air) hit = 1;
 		// if (world->errFlags & World_ErrUnloadedBlockRequested) break;
 
 		if (steps++ > INF) break;
 	}
 
 	switch (side) {
-		case 0:  // X Achse
+		case 0:	 // X Achse
 			if (raydir.x > 0.f)
 				out->direction = Direction_West;
 			else
 				out->direction = Direction_East;
 			break;
-		case 1:  // Y Achse
+		case 1:	 // Y Achse
 			if (raydir.y > 0.f)
 				out->direction = Direction_Bottom;
 			else
 				out->direction = Direction_Top;
 			break;
-		case 2:  // Z Achse
+		case 2:	 // Z Achse
 			if (raydir.z > 0.f)
 				out->direction = Direction_North;
 			else
@@ -88,11 +88,11 @@ bool Raycast_Cast(World* world, float3 inpos, float3 raydir, Raycast_Result* out
 			break;
 	}
 
-	float3 dist = f3_sub(f3_new(mapX, mapY, mapZ), inpos);
+	float3 dist	 = f3_sub(f3_new(mapX, mapY, mapZ), inpos);
 	out->distSqr = f3_magSqr(dist);
-	out->x = mapX;
-	out->y = mapY;
-	out->z = mapZ;
+	out->x		 = mapX;
+	out->y		 = mapY;
+	out->z		 = mapZ;
 
 	return hit;
 }
