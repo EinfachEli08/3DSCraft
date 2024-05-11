@@ -209,6 +209,7 @@ all: $(BUILD)
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@make cia
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...

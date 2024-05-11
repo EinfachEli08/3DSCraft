@@ -3,9 +3,12 @@
 #include <citro3d.h>
 #include <stdint.h>
 
-#define TEXTURE_MAPSIZE 128
-#define TEXTURE_TILESIZE 16
-#define TEXTURE_MAPTILES (TEXTURE_MAPSIZE / TEXTURE_TILESIZE)
+const u8 cTextureMapSize	= 128;
+const u8 cTextureTileSize	= 16;
+const u8 cTextureMapTileNum = (cTextureMapSize / cTextureTileSize);
+const u32 cTextureFlags		= GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) |
+						  GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) |
+						  GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO);
 
 class Texture {
 	public:
@@ -30,7 +33,7 @@ class TextureMap : public Texture {
 		MapIcon* getIcon(char* filename);
 
 	private:
-		MapIcon icons[TEXTURE_MAPTILES * TEXTURE_MAPTILES];
+		MapIcon icons[cTextureMapTileNum * cTextureMapTileNum];
 };
 
 void tileImage8(u8* src, u8* dst, s32 size);
