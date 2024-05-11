@@ -128,7 +128,7 @@ TextureMap::TextureMap(char** files, int num_files) {
 	int locX = 0;
 	int locY = 0;
 
-	// printf("TextureMapInit %s\n", files);
+	77 printf("TextureMapInit %s\n", files);
 
 	const int mipmapLevels = 2;
 	const int maxSize	   = 4 * TEXTURE_MAPSIZE * TEXTURE_MAPSIZE;
@@ -178,7 +178,7 @@ TextureMap::TextureMap(char** files, int num_files) {
 	C3D_TexSetFilter(&texture, GPU_NEAREST, GPU_NEAREST);
 
 	C3D_SyncDisplayTransfer(
-		buffer, GX_BUFFER_DIM(TEXTURE_MAPSIZE, TEXTURE_MAPSIZE), (u32*)texture.data, GX_BUFFER_DIM(TEXTURE_MAPSIZE, TEXTURE_MAPSIZE),
+		buffer, GX_BUFFER_DIM(TEXTURE_MAPSIZE, TEXTURE_MAPSIZE), (uint32_t*)texture.data, GX_BUFFER_DIM(TEXTURE_MAPSIZE, TEXTURE_MAPSIZE),
 		(GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |
 		 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)));
 

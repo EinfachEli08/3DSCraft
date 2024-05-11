@@ -216,6 +216,8 @@ clean:
 	@rm -fr $(OUTDIR)
 #---------------------------------------------------------------------------------
 
+dbgd: #debug dima
+	C:/clibs/devkitPro/devkitARM/bin/arm-none-eabi-gdb.exe 3DSCraft.elf
 rund: #run dima
 	@3dslink $(TARGET).3dsx -a 192.168.178.37
 run:
