@@ -151,7 +151,7 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 #define unpackP(x) (x).xyz[0], (x).xyz[1]
 		vec_push(&cmdList,
 				 ((Sprite){z, texture, unpackP(topLeft), unpackP(topRight), unpackP(bottomLeft), unpackP(bottomRight), iconUV[0] / 256,
-						   iconUV[1] / 256 + TEXTURE_TILESIZE, iconUV[0] / 256 + TEXTURE_TILESIZE, iconUV[1] / 256, color16}));
+						   iconUV[1] / 256 + cTextureTileSize, iconUV[0] / 256 + cTextureTileSize, iconUV[1] / 256, color16}));
 
 #undef unpackP
 	}
