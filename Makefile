@@ -13,6 +13,8 @@ VERSION_MAJOR	:= 1
 VERSION_MINOR	:= 0
 VERSION_MICRO	:= 0
 
+DEBUG			?=	1
+
 TARGET			:=	3DSCraft
 BUILD			:=	build
 DATA			:=	data
@@ -36,7 +38,6 @@ UNIQUE_ID		:=	0x181169
 PRODUCT_CODE	:=	CTR-3D-CRFT
 ICON_FLAGS		:=	nosavebackups,visible
 
-DEBUG			?=	1
 ifeq ($(DEBUG), 0)
 CFLAGS_ADD		:=	-fomit-frame-pointer -O2
 else
@@ -166,15 +167,15 @@ endif
 #---------------------------------------------------------------------------------
 all: cia
 
-3dsx:
-	@echo $(TARGET) Compilation for 3DS started!
+3dsx: greetings
 	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 cia: 3dsx
 	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
 	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
-	$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
-	@echo built ... $(TARGET).cia
+	@echo building $(TARGET).cia...
+	@$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
+	@echo built $(TARGET).cia
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
@@ -189,6 +190,17 @@ rund: #run dima
 run:
 	@echo running...
 	@3dslink $(TARGET).3dsx
+
+#---------------------------------------------------------------------------------
+
+greetings:
+	@echo $(TARGET) Compilation for 3DS started!
+	@echo made by $(APP_AUTHOR)
+ifeq ($(DEBUG), 1)
+	@echo Debug build
+else
+	@echo Release build v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_MICRO)
+endif
 
 #---------------------------------------------------------------------------------
 else

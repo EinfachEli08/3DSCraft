@@ -141,11 +141,11 @@ TextureMap::TextureMap(char** files, int num_files) {
 	int filei	   = 0;
 	char* filename = files[filei];
 	int c		   = 0;
-	while (filename != NULL && c < (cTextureMapTileNum * cTextureMapTileNum) && filei < num_files) {
-		u32* image;
+	while (filename && c < (cTextureMapTileNum * cTextureMapTileNum) && filei < num_files) {
+		u8* image;
 		unsigned int w, h;
-		uint32_t error = lodepng_decode32_file((uint8_t**)&image, &w, &h, filename);
-		if (w == cTextureTileSize && h == cTextureTileSize && image != NULL && !error) {
+		u32 hasLoadError = lodepng_decode32_file(&image, &w, &h, filename);
+		if (w == cTextureTileSize && h == cTextureTileSize && !image && !hasLoadError) {
 			for (int x = 0; x < cTextureTileSize; x++) {
 				for (int y = 0; y < cTextureTileSize; y++) {
 					buffer[(locX + x) + ((y + locY) * cTextureMapSize)] =
@@ -173,15 +173,16 @@ TextureMap::TextureMap(char** files, int num_files) {
 		c++;
 	}
 
+	mTexture = new C3D_Tex;
+
 	GSPGPU_FlushDataCache(buffer, maxSize);
 
-	const C3D_TexInitParams params = (C3D_TexInitParams){cTextureMapSize, cTextureMapSize, cMipmapLevels, GPU_RGBA8, GPU_TEX_2D, true};
-	if (!C3D_TexInitWithParams(&texture, NULL, params))
+	if (!C3D_TexInitWithParams(mTexture, NULL, cTextureMapParams))
 		printf("Couldn't alloc texture memory\n");
 
-	C3D_TexSetFilter(&texture, GPU_NEAREST, GPU_NEAREST);
+	C3D_TexSetFilter(mTexture, GPU_NEAREST, GPU_NEAREST);
 
-	C3D_SyncDisplayTransfer(buffer, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), (u32*)(texture.data),
+	C3D_SyncDisplayTransfer(buffer, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), (u32*)mTexture->data,
 							GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), cTextureFlags);
 
 	int size		 = cTextureMapSize / 2;
@@ -196,7 +197,7 @@ TextureMap::TextureMap(char** files, int num_files) {
 
 		GSPGPU_FlushDataCache(tiledImage, size * size * 4);
 
-		GX_RequestDma(tiledImage, ((u32*)&texture.data) + offset, size * size * 4);
+		GX_RequestDma(tiledImage, (u32*)mTexture->data + offset, size * size * 4);
 		gspWaitForAnyEvent();
 
 		offset += size * size;
