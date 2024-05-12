@@ -88,7 +88,7 @@ SFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 PICAFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.v.pica)))
 SHLISTFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.shlist)))
 BINFILES		:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
-$(info PICAFILES: $(PICAFILES))
+
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
 #---------------------------------------------------------------------------------
@@ -164,13 +164,17 @@ else
 endif
 
 #---------------------------------------------------------------------------------
-all: $(BUILD)
+all: cia
 
-$(BUILD):
-	$(info $(TARGET) Compilation for 3DS started!)
-	@[ -d $@ ] || mkdir -p $@
+3dsx:
+	@echo $(TARGET) Compilation for 3DS started!
+	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
-	@make cia
+cia: 3dsx
+	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
+	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
+	$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
+	@echo built ... $(TARGET).cia
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
@@ -178,18 +182,13 @@ clean:
 	@rm -fr $(OUTDIR)
 #---------------------------------------------------------------------------------
 
-dbgd: #debug dima
-	C:/clibs/devkitPro/devkitARM/bin/arm-none-eabi-gdb.exe 3DSCraft.elf
+dbg: #debug dima
+	$(DEVKITARM)/bin/arm-none-eabi-gdb.exe $(TARGET).elf
 rund: #run dima
 	@3dslink $(TARGET).3dsx -a 192.168.178.37
 run:
 	@echo running...
 	@3dslink $(TARGET).3dsx
-cia:
-	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
-	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
-	$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
-	@echo built ... $(TARGET).cia
 
 #---------------------------------------------------------------------------------
 else
@@ -243,7 +242,7 @@ endef
 #---------------------------------------------------------------------------------------
 endif
 #---------------------------------------------------------------------------------------
-AR := C:/clibs/devkitPro/devkitARM/bin/arm-none-eabi-ar.exe
+AR := $(DEVKITARM)/bin/arm-none-eabi-ar.exe
 
 LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
 LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
