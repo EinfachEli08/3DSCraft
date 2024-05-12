@@ -16,15 +16,19 @@
 #ifndef ABS
 #define ABS(v) ((v) < 0 ? -(v) : (v))
 #endif
-#ifndef BIT
+/*#ifndef BIT
 #define BIT(n) (1 << (n))
-#endif
+#endif*/
 #ifndef SIGN
 #define SIGN(x, y) ((x) < 0 ? -(y) : (y))
 #endif
 
-static inline int FastFloor(float x) { return (int)(x) - (int)(x < (int)(x)); }
-static inline float lerp(float start, float end, float t) { return start + ((end - start) * t); }
+static inline int FastFloor(float x) {
+	return (int)(x) - (int)(x < (int)(x));
+}
+static inline float lerp(float start, float end, float t) {
+	return start + ((end - start) * t);
+}
 static inline float bilerp(float q11, float q21, float q12, float q22, float x, float y) {
 	return lerp(lerp(q11, q21, x), lerp(q12, q22, x), y);
 }

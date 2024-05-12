@@ -44,12 +44,14 @@ void Player_Init(Player* player, World* world) {
 		player->inventory[l++] = (ItemStack){Block_Stone_Bricks, 0, 1};
 		player->inventory[l++] = (ItemStack){Block_Brick, 0, 1};
 		player->inventory[l++] = (ItemStack){Block_Planks, 0, 1};
-		for (int i = 0; i < 16; i++) player->inventory[l++] = (ItemStack){Block_Wool, i, 1};
+		for (u8 i = 0; i < 16; i++)
+			player->inventory[l++] = (ItemStack){Block_Wool, i, 1};
 		player->inventory[l++] = (ItemStack){Block_Wool, 0, 1};
 		player->inventory[l++] = (ItemStack){Block_Bedrock, 0, 1};
 		player->inventory[l++] = (ItemStack){Block_Smooth_Stone, 0, 64};
 		player->inventory[l++] = (ItemStack){Block_Smooth_Stone_Slab, 0, 64};
-		for (int i = 0; i < INVENTORY_QUICKSELECT_MAXSLOTS; i++) player->quickSelectBar[i] = (ItemStack){Block_Air, 0, 0};
+		for (int i = 0; i < INVENTORY_QUICKSELECT_MAXSLOTS; i++)
+			player->quickSelectBar[i] = (ItemStack){Block_Air, 0, 0};
 	}
 
 	player->autoJumpEnabled = true;
@@ -102,9 +104,11 @@ void Player_Move(Player* player, float dt, float3 accl) {
 	const float SimStep = 1.f / 60.f;
 	while (player->simStepAccum >= SimStep) {
 		player->velocity.y -= GravityPlusFriction * SimStep * 2.f;
-		if (player->velocity.y < MaxFallVelocity) player->velocity.y = MaxFallVelocity;
+		if (player->velocity.y < MaxFallVelocity)
+			player->velocity.y = MaxFallVelocity;
 
-		if (player->flying) player->velocity.y = 0.f;
+		if (player->flying)
+			player->velocity.y = 0.f;
 
 		float speedFactor = 1.f;
 		if (!player->grounded && !player->flying) {
@@ -154,7 +158,8 @@ void Player_Move(Player* player, float dt, float3 accl) {
 			if (!collision)
 				finalPos.v[i] = newPos.v[i];
 			else if (i == 1) {
-				if (player->velocity.y < 0.f || accl.y < 0.f) player->grounded = true;
+				if (player->velocity.y < 0.f || accl.y < 0.f)
+					player->grounded = true;
 				player->jumped	   = false;
 				player->velocity.x = 0.f;
 				player->velocity.y = 0.f;
@@ -170,7 +175,8 @@ void Player_Move(Player* player, float dt, float3 accl) {
 
 		float3 movDiff = f3_sub(finalPos, player->position);
 
-		if (player->grounded && player->flying) player->flying = false;
+		if (player->grounded && player->flying)
+			player->flying = false;
 
 		if (wallCollision && player->autoJumpEnabled) {
 			float3 nrmDiff	   = f3_nrm(f3_sub(newPos, player->position));
@@ -178,11 +184,14 @@ void Player_Move(Player* player, float dt, float3 accl) {
 														 FastFloor(finalPos.z + nrmDiff.z));
 			Block landingBlock = player->world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 1,
 														 FastFloor(finalPos.z + nrmDiff.z));
-			if (block == Block_Air && landingBlock != Block_Air) Player_Jump(player, accl);
+			if (block == Block_Air && landingBlock != Block_Air)
+				Player_Jump(player, accl);
 		}
 
-		if (player->crouching && player->crouchAdd > -0.3f) player->crouchAdd -= SimStep * 2.f;
-		if (!player->crouching && player->crouchAdd < 0.0f) player->crouchAdd += SimStep * 2.f;
+		if (player->crouching && player->crouchAdd > -0.3f)
+			player->crouchAdd -= SimStep * 2.f;
+		if (!player->crouching && player->crouchAdd < 0.0f)
+			player->crouchAdd += SimStep * 2.f;
 
 		if (player->crouching && !player->grounded && wasGrounded && finalPos.y < player->position.y && movDiff.x != 0.f &&
 			movDiff.z != 0.f) {
@@ -193,8 +202,10 @@ void Player_Move(Player* player, float dt, float3 accl) {
 
 		player->position = finalPos;
 		player->velocity = f3_new(player->velocity.x * 0.95f, player->velocity.y, player->velocity.z * 0.95f);
-		if (ABS(player->velocity.x) < 0.1f) player->velocity.x = 0.f;
-		if (ABS(player->velocity.z) < 0.1f) player->velocity.z = 0.f;
+		if (ABS(player->velocity.x) < 0.1f)
+			player->velocity.x = 0.f;
+		if (ABS(player->velocity.z) < 0.1f)
+			player->velocity.z = 0.f;
 
 		player->simStepAccum -= SimStep;
 	}
@@ -212,14 +223,16 @@ void Player_PlaceBlock(Player* player) {
 									   player->viewRayCast.z + offset[2], player->quickSelectBar[player->quickSelectBarSlot].block,
 									   player->quickSelectBar[player->quickSelectBarSlot].meta);
 	}
-	if (player->breakPlaceTimeout < 0.f) player->breakPlaceTimeout = PLAYER_PLACE_REPLACE_TIMEOUT;
+	if (player->breakPlaceTimeout < 0.f)
+		player->breakPlaceTimeout = PLAYER_PLACE_REPLACE_TIMEOUT;
 }
 
 void Player_BreakBlock(Player* player) {
 	if (player->world && player->blockInActionRange && player->breakPlaceTimeout < 0.f) {
 		player->world->setBlock(player->viewRayCast.x, player->viewRayCast.y, player->viewRayCast.z, Block_Air);
 	}
-	if (player->breakPlaceTimeout < 0.f) player->breakPlaceTimeout = PLAYER_PLACE_REPLACE_TIMEOUT;
+	if (player->breakPlaceTimeout < 0.f)
+		player->breakPlaceTimeout = PLAYER_PLACE_REPLACE_TIMEOUT;
 }
 
 void Player_Teleport(Player* player, float x, float y, float z) {

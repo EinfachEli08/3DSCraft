@@ -12,7 +12,7 @@ void FontLoader_Init(Font* font, const char* filename) {
 	uint32_t error = lodepng_decode32_file((uint8_t**)&image, &width, &height, filename);
 	if (error == 0 && image != NULL) {
 		uint16_t* imgInLinRam = (uint16_t*)linearAlloc(width * height * sizeof(uint16_t));
-		for (int i = 0; i < width * height; i++) {
+		for (unsigned int i = 0; i < width * height; i++) {
 			uint16_t r	   = (image[i] & 0xff) >> 3;
 			uint16_t g	   = ((image[i] >> 8) & 0xff) >> 3;
 			uint16_t b	   = ((image[i] >> 16) & 0xff) >> 3;
@@ -28,7 +28,8 @@ void FontLoader_Init(Font* font, const char* filename) {
 				for (int i = 2; i < 8 && foundPixel; i++) {
 					foundPixel = false;
 					length++;
-					for (int j = 0; j < 8; j++) foundPixel |= !!image[(y + j) * 128 + (x + i)];
+					for (int j = 0; j < 8; j++)
+						foundPixel |= !!image[(y + j) * 128 + (x + i)];
 				}
 
 				font->fontWidth[c++] = length;
