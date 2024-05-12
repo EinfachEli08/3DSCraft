@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <vec/vec.h>
 
-#include <misc/Xorshift.h>
-#include <world/Chunk.h>
+#include "util/Xorshift.h"
+#include "world/level/chunk/Chunk.h"
 
 namespace Enum {
 enum WorkerItemType {

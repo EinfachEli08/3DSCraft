@@ -2,9 +2,9 @@
 
 #include <vec/vec.h>
 
-#include "misc/NumberUtils.h"
-#include "misc/Xorshift.h"
-#include "world/Chunk.h"
+#include "level/chunk/Chunk.h"
+#include "util/NumberUtils.h"
+#include "util/Xorshift.h"
 #include "world/WorkQueue.h"
 
 #define WORLD_NAME_LIMIT 12
@@ -96,5 +96,9 @@ int World_GetHeight(World* world, int x, int z);
 */
 // util
 
-inline static int WorldToChunkCoord(int x) { return (x + (int)(x < 0)) / CHUNK_SIZE - (int)(x < 0); }
-inline static int WorldToLocalCoord(int x) { return x - WorldToChunkCoord(x) * CHUNK_SIZE; }
+inline static int WorldToChunkCoord(int x) {
+	return (x + (int)(x < 0)) / CHUNK_SIZE - (int)(x < 0);
+}
+inline static int WorldToLocalCoord(int x) {
+	return x - WorldToChunkCoord(x) * CHUNK_SIZE;
+}

@@ -1,12 +1,12 @@
-#include <world/World.h>
-
-#include "blocks/BlockEvent.h"
+#include "world/World.h"
 
 #include <string.h>
 
 #include <assert.h>
 #include <limits.h>
 #include <stdint.h>
+
+#include "world/level/blocks/BlockEvent.h"
 
 World::World(WorkQueue* workqueue) {
 	strcpy(name, "My World");
@@ -64,7 +64,9 @@ Chunk* World::loadChunk(int x, int z) {
 
 	return NULL;
 }
-void World::unloadChunk(int i, int j) { unloadChunk(chunkCache[i][j]); }
+void World::unloadChunk(int i, int j) {
+	unloadChunk(chunkCache[i][j]);
+}
 void World::unloadChunk(Chunk* chunk) {
 	workqueue->addItem((WorkerItem){Enum::WorkerItemType::Save, chunk});
 	vec_push(&freeChunks, chunk);
@@ -77,33 +79,40 @@ Chunk* World::getChunk(int x, int z) {
 	int lowZ  = cacheTranslationZ - halfS;
 	int highX = cacheTranslationX + halfS;
 	int highZ = cacheTranslationZ + halfS;
-	if (x >= lowX && z >= lowZ && x <= highX && z <= highZ) return chunkCache[x - lowX][z - lowZ];
+	if (x >= lowX && z >= lowZ && x <= highX && z <= highZ)
+		return chunkCache[x - lowX][z - lowZ];
 	return NULL;
 }
 
 Block World::getBlock(int x, int y, int z) {
-	if (y < 0 || y >= CHUNK_HEIGHT) return Block_Air;
+	if (y < 0 || y >= CHUNK_HEIGHT)
+		return Block_Air;
 	Chunk* chunk = getChunk(WorldToChunkCoord(x), WorldToChunkCoord(z));
-	if (chunk) return Chunk_GetBlock(chunk, WorldToLocalCoord(x), y, WorldToLocalCoord(z));
+	if (chunk)
+		return Chunk_GetBlock(chunk, WorldToLocalCoord(x), y, WorldToLocalCoord(z));
 	return Block_Air;
 }
 
-#define NOTIFY_NEIGHTBOR(axis, comp, xDiff, zDiff)                                       \
-	if (axis == comp) {                                                                  \
-		Chunk* neightborChunk = getChunk(cX + xDiff, cZ + zDiff);                        \
-		if (neightborChunk) Chunk_RequestGraphicsUpdate(neightborChunk, y / CHUNK_SIZE); \
+#define NOTIFY_NEIGHTBOR(axis, comp, xDiff, zDiff)                                                                                         \
+	if (axis == comp) {                                                                                                                    \
+		Chunk* neightborChunk = getChunk(cX + xDiff, cZ + zDiff);                                                                          \
+		if (neightborChunk)                                                                                                                \
+			Chunk_RequestGraphicsUpdate(neightborChunk, y / CHUNK_SIZE);                                                                   \
 	}
 
-#define NOTIFY_ALL_NEIGHTBORS                                                                                         \
-	NOTIFY_NEIGHTBOR(lX, 0, -1, 0)                                                                                    \
-	NOTIFY_NEIGHTBOR(lX, 15, 1, 0)                                                                                    \
-	NOTIFY_NEIGHTBOR(lZ, 0, 0, -1)                                                                                    \
-	NOTIFY_NEIGHTBOR(lZ, 15, 0, 1)                                                                                    \
-	if (WorldToLocalCoord(y) == 0 && y / CHUNK_SIZE - 1 >= 0) Chunk_RequestGraphicsUpdate(chunk, y / CHUNK_SIZE - 1); \
-	if (WorldToLocalCoord(y) == 15 && y / CHUNK_SIZE + 1 < CLUSTER_PER_CHUNK) Chunk_RequestGraphicsUpdate(chunk, y / CHUNK_SIZE + 1);
+#define NOTIFY_ALL_NEIGHTBORS                                                                                                              \
+	NOTIFY_NEIGHTBOR(lX, 0, -1, 0)                                                                                                         \
+	NOTIFY_NEIGHTBOR(lX, 15, 1, 0)                                                                                                         \
+	NOTIFY_NEIGHTBOR(lZ, 0, 0, -1)                                                                                                         \
+	NOTIFY_NEIGHTBOR(lZ, 15, 0, 1)                                                                                                         \
+	if (WorldToLocalCoord(y) == 0 && y / CHUNK_SIZE - 1 >= 0)                                                                              \
+		Chunk_RequestGraphicsUpdate(chunk, y / CHUNK_SIZE - 1);                                                                            \
+	if (WorldToLocalCoord(y) == 15 && y / CHUNK_SIZE + 1 < CLUSTER_PER_CHUNK)                                                              \
+		Chunk_RequestGraphicsUpdate(chunk, y / CHUNK_SIZE + 1);
 
 void World::setBlock(int x, int y, int z, Block block) {
-	if (y < 0 || y >= CHUNK_HEIGHT) return;
+	if (y < 0 || y >= CHUNK_HEIGHT)
+		return;
 	int cX		 = WorldToChunkCoord(x);
 	int cZ		 = WorldToChunkCoord(z);
 	Chunk* chunk = getChunk(cX, cZ);
@@ -117,7 +126,8 @@ void World::setBlock(int x, int y, int z, Block block) {
 }
 
 void World::setBlockAndMeta(int x, int y, int z, Block block, uint8_t metadata) {
-	if (y < 0 || y >= CHUNK_HEIGHT) return;
+	if (y < 0 || y >= CHUNK_HEIGHT)
+		return;
 	int cX		 = WorldToChunkCoord(x);
 	int cZ		 = WorldToChunkCoord(z);
 	Chunk* chunk = getChunk(cX, cZ);
@@ -131,14 +141,17 @@ void World::setBlockAndMeta(int x, int y, int z, Block block, uint8_t metadata) 
 }
 
 uint8_t World::getMetadata(int x, int y, int z) {
-	if (y < 0 || y >= CHUNK_HEIGHT) return 0;
+	if (y < 0 || y >= CHUNK_HEIGHT)
+		return 0;
 	Chunk* chunk = getChunk(WorldToChunkCoord(x), WorldToChunkCoord(z));
-	if (chunk) return Chunk_GetMetadata(chunk, WorldToLocalCoord(x), y, WorldToLocalCoord(z));
+	if (chunk)
+		return Chunk_GetMetadata(chunk, WorldToLocalCoord(x), y, WorldToLocalCoord(z));
 	return 0;
 }
 
 void World::setMetadata(int x, int y, int z, uint8_t metadata) {
-	if (y < 0 || y >= CHUNK_HEIGHT) return;
+	if (y < 0 || y >= CHUNK_HEIGHT)
+		return;
 	int cX		 = WorldToChunkCoord(x);
 	int cZ		 = WorldToChunkCoord(z);
 	Chunk* chunk = getChunk(cX, cZ);
@@ -191,7 +204,9 @@ void World::updateChunkCache(int orginX, int orginZ) {
 
 		for (int i = 0; i < CHUNKCACHE_SIZE; i++) {
 			for (int j = 0; j < CHUNKCACHE_SIZE; j++) {
-				if (tmpBuffer[i][j] != NULL) { unloadChunk(tmpBuffer[i][j]); }
+				if (tmpBuffer[i][j] != NULL) {
+					unloadChunk(tmpBuffer[i][j]);
+				}
 			}
 		}
 
@@ -214,9 +229,11 @@ void World::tick() {
 				for (int xOff = -1; xOff < 2 && clear; xOff++)
 					for (int zOff = -1; zOff < 2 && clear; zOff++) {
 						Chunk* borderChunk = chunkCache[x + xOff][z + zOff];
-						if (borderChunk->genProgress == ChunkGen_Empty || !borderChunk->tasksRunning) clear = false;
+						if (borderChunk->genProgress == ChunkGen_Empty || !borderChunk->tasksRunning)
+							clear = false;
 					}
-				if (clear) workqueue->addItem((WorkerItem){Enum::WorkerItemType::Decorate, chunk});
+				if (clear)
+					workqueue->addItem((WorkerItem){Enum::WorkerItemType::Decorate, chunk});
 
 				int xVals[RANDOMTICKS_PER_CHUNK];
 				int yVals[RANDOMTICKS_PER_CHUNK];
