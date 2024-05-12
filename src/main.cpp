@@ -6,21 +6,21 @@
 #include <3ds.h>
 
 #include "Project.h"
-#include "entity/PlayerController.h"
-#include "entity/player.h"
-#include "gui/DebugUI.h"
-#include "gui/Gui.h"
-#include "gui/screens/TitleScreen.h"
-#include "gui/screens/WorldSelectScreen.h"
-#include "rendering/PolyGen.h"
-#include "rendering/Renderer.h"
-#include "world/ChunkWorker.h"
+#include "client/gui/DebugUI.h"
+#include "client/gui/Gui.h"
+#include "client/gui/screens/TitleScreen.h"
+#include "client/gui/screens/WorldSelectScreen.h"
+#include "client/player/Player.h"
+#include "client/player/PlayerController.h"
+#include "client/renderer/PolyGen.h"
+#include "client/renderer/Renderer.h"
 #include "world/World.h"
-#include "world/savegame/SaveManager.h"
-#include "world/savegame/SuperChunk.h"
-#include "world/worldgen/CustomGen.h"
-#include "world/worldgen/NormalGen.h"
-#include "world/worldgen/SuperFlatGen.h"
+#include "world/level/chunk/ChunkWorker.h"
+#include "world/level/levelgen/CustomGen.h"
+#include "world/level/levelgen/NormalGen.h"
+#include "world/level/levelgen/SuperFlatGen.h"
+#include "world/level/saveddata/SaveManager.h"
+#include "world/level/saveddata/SuperChunk.h"
 
 #include <sino/sino.h>
 
@@ -31,7 +31,9 @@ const char* gVersion = "v0.3 Pre 2";
 
 void releaseWorld(ChunkWorker* chunkWorker, SaveManager* saveMgr, World* world) {
 	for (int i = 0; i < CHUNKCACHE_SIZE; i++) {
-		for (int j = 0; j < CHUNKCACHE_SIZE; j++) { world->unloadChunk(i, j); }
+		for (int j = 0; j < CHUNKCACHE_SIZE; j++) {
+			world->unloadChunk(i, j);
+		}
 	}
 	chunkWorker->finish();
 	world->reset();
@@ -189,7 +191,8 @@ int main() {
 					for (int x = -1; x < 1; x++) {
 						for (int z = -1; z < 1; z++) {
 							int height = world->getHeight(x, z);
-							if (height > highestBlock) highestBlock = height;
+							if (height > highestBlock)
+								highestBlock = height;
 						}
 					}
 					player->position.y = (float)highestBlock + 0.2f;
@@ -202,7 +205,8 @@ int main() {
 		Gui_InputData(inputData);
 	}
 
-	if (gamestate == GameState_Playing) releaseWorld(chunkWorker, saveMgr, world);
+	if (gamestate == GameState_Playing)
+		releaseWorld(chunkWorker, saveMgr, world);
 
 	delete saveMgr;
 

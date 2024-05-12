@@ -43,7 +43,7 @@ CFLAGS_ADD		:=	-fomit-frame-pointer -O2
 else
 CFLAGS_ADD		:=	-g -D_DEBUG
 endif
-LIBS			:= -lgame -lcitro3dd -lctru -lstdc++ -lm
+LIBS			:= -lgame -lcitro3dd -lctru -lstdc++ -lm -ljansson -lcurl #tex3ds
 
 #---------------------------------------------------------------------------------
 # options for code generation
