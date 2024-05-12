@@ -132,8 +132,7 @@ TextureMap::TextureMap(char** files, int num_files) {
 
 	// printf("TextureMapInit %s\n", files);
 
-	const int mipmapLevels = 2;
-	const int maxSize	   = 4 * cTextureMapSize * cTextureMapSize;
+	const int maxSize = 4 * cTextureMapSize * cTextureMapSize;
 
 	u32* buffer = (u32*)linearAlloc(maxSize);
 	for (int i = 0; i < maxSize; i++)
@@ -176,13 +175,13 @@ TextureMap::TextureMap(char** files, int num_files) {
 
 	GSPGPU_FlushDataCache(buffer, maxSize);
 
-	const C3D_TexInitParams params = (C3D_TexInitParams){cTextureMapSize, cTextureMapSize, mipmapLevels, GPU_RGBA8, GPU_TEX_2D, true};
+	const C3D_TexInitParams params = (C3D_TexInitParams){cTextureMapSize, cTextureMapSize, cMipmapLevels, GPU_RGBA8, GPU_TEX_2D, true};
 	if (!C3D_TexInitWithParams(&texture, NULL, params))
 		printf("Couldn't alloc texture memory\n");
 
 	C3D_TexSetFilter(&texture, GPU_NEAREST, GPU_NEAREST);
 
-	C3D_SyncDisplayTransfer(buffer, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), (u32*)&texture.data,
+	C3D_SyncDisplayTransfer(buffer, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), (u32*)(texture.data),
 							GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), cTextureFlags);
 
 	int size		 = cTextureMapSize / 2;
@@ -190,7 +189,7 @@ TextureMap::TextureMap(char** files, int num_files) {
 
 	u32* tiledImage = (u32*)linearAlloc(size * size * 4);
 
-	for (int i = 0; i < mipmapLevels; i++) {
+	for (int i = 0; i < cMipmapLevels; i++) {
 		downscaleImage((u8*)buffer, size);
 
 		tileImage32(buffer, (u8*)tiledImage, size, size);

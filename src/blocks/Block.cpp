@@ -6,10 +6,10 @@
 // PATH PREFIX
 #define PPRX "romfs:/textures/blocks/"
 
-#define TEXTURE_FILES                                                                                                                     \
-	A(dirt, "dirt.png"), A(grass_side, "grass_block_side.png"), A(grass_top, "grass_block_top.png"), A(stone, "stone.png"),               \
-		A(stone_bricks, "stone_bricks.png"), A(smooth_stone, "smooth_stone.png"), A(cobblestone, "cobblestone.png"), A(sand, "sand.png"), \
-		A(oaklog_side, "log_oak.png"), A(oaklog_top, "log_oak_top.png"), A(leaves_oak, "leaves_oak.png"), A(glass, "glass.png"),          \
+#define TEXTURE_FILES                                                                                                                      \
+	A(dirt, "dirt.png"), A(grass_side, "grass_block_side.png"), A(grass_top, "grass_block_top.png"), A(stone, "stone.png"),                \
+		A(stone_bricks, "stone_bricks.png"), A(smooth_stone, "smooth_stone.png"), A(cobblestone, "cobblestone.png"), A(sand, "sand.png"),  \
+		A(oaklog_side, "log_oak.png"), A(oaklog_top, "log_oak_top.png"), A(leaves_oak, "leaves_oak.png"), A(glass, "glass.png"),           \
 		A(brick, "brick.png"), A(oakplanks, "planks_oak.png"), A(wool, "wool.png"), A(bedrock, "bedrock.png")
 
 #define A(i, n) PPRX n
@@ -42,9 +42,13 @@ void Block_Init() {
 	TEXTURE_FILES;
 #undef A
 }
-void Block_Deinit() { C3D_TexDelete(textureMap->getTexture()); }
+void Block_Deinit() {
+	C3D_TexDelete(textureMap->getTexture());
+}
 
-C3D_Tex* Block_GetTextureMap() { return textureMap->getTexture(); }
+C3D_Tex* Block_GetTextureMap() {
+	return textureMap->getTexture();
+}
 
 void Block_GetTexture(Block block, int _direction, uint8_t metadata, int16_t* out_uv) {
 	int direction	   = (int)_direction;
@@ -146,7 +150,9 @@ void Block_GetColor(Block block, uint8_t metadata, int _direction, uint8_t out_r
 	}
 }
 
-bool Block_Opaque(Block block, uint8_t metadata) { return block != Block_Air && block != Block_Leaves && block != Block_Glass; }
+bool Block_Opaque(Block block, uint8_t metadata) {
+	return block != Block_Air && block != Block_Leaves && block != Block_Glass;
+}
 
 const char* BlockNames[Blocks_Count] = {"Air",	  "Smooth Stone", "Stone",		  "Dirt",	"Grass",  "Cobblestone", "Sand",   "Log",
 										"Leaves", "Glass",		  "Stone Bricks", "Bricks", "Planks", "Wool",		 "Bedrock"};

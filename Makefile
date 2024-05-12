@@ -9,79 +9,40 @@ endif
 TOPDIR ?= $(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
-#---------------------------------------------------------------------------------
-# TARGET is the name of the output
-# BUILD is the directory where object files & intermediate files will be placed
-# SOURCES is a list of directories containing source code
-# DATA is a list of directories containing data files
-# INCLUDES is a list of directories containing header files
-#
-# NO_SMDH: if set to anything, no SMDH file is generated.
-# ROMFS is the directory which contains the RomFS, relative to the Makefile (Optional)
-# APP_TITLE is the name of the app stored in the SMDH file (Optional)
-# APP_DESCRIPTION is the description of the app stored in the SMDH file (Optional)
-# APP_AUTHOR is the author of the app stored in the SMDH file (Optional)
-# ICON is the filename of the icon (.png), relative to the project folder.
-#   If not set, it attempts to use one of the following (in this order):
-#     - <Project name>.png
-#     - icon.png
-#     - <libctru folder>/default_icon.png
-#---------------------------------------------------------------------------------
+VERSION_MAJOR	:= 1
+VERSION_MINOR	:= 0
+VERSION_MICRO	:= 0
 
 TARGET			:=	3DSCraft
-SOURCES 		:=  source \
-					source/misc \
-					source/world \
-					source/world/worldgen \
-					source/world/savegame \
-					source/world/worldgen/artefacts \
-					source/blocks \
-					source/rendering \
-					source/gui \
-					source/gui/screens \
-					source/entity \
-					source/savegame \
-					dependencies/mpack \
-					dependencies/vec \
-					dependencies/sino \
-					dependencies/lodepng \
-					dependencies/miniz \
-					dependencies/ini
+BUILD			:=	build
 DATA			:=	data
-INCLUDES		:=	dependencies include
+META			:=	metadata
 ROMFS			:=	romfs
+INCLUDES		:=	include lib
+SOURCES 		:= $(wildcard $(shell find $(realpath src) -type d))
+SOURCES 		:= $(foreach dir,$(SOURCES),$(patsubst $(CURDIR)/%,%,$(dir)))
 
 # 3dsx
-APP_TITLE		:=	3DSCraft
 APP_DESCRIPTION :=  Re-reload of Craftus Reloaded
 APP_AUTHOR		:=  u/SomeRandoLameo
-ICON			:=	res/icon.png
+ICON			:=	$(META)/icon.png
 
 # CIA
-BANNER_AUDIO	:=	res/banner.wav
-BANNER_IMAGE	:=	res/banner.cgfx
-RSF_PATH		:=	res/app.rsf
-LOGO			:=	res/logo.bcma.lz
+BANNER_AUDIO	:=	$(META)/banner.wav
+BANNER_IMAGE	:=	$(META)/banner.cgfx
+RSF_PATH		:=	$(META)/app.rsf
+LOGO			:=	$(META)/logo.bcma.lz
 UNIQUE_ID		:=	0x181169
 PRODUCT_CODE	:=	CTR-3D-CRFT
 ICON_FLAGS		:=	nosavebackups,visible
 
-# Version
-VERSION_MAJOR	:=	1
-VERSION_MINOR	:=	0
-VERSION_MICRO	:=	0
-
-
-
 DEBUG			?=	1
 ifeq ($(DEBUG), 0)
-BUILD			:=	build
 CFLAGS_ADD		:=	-fomit-frame-pointer -O2
 else
-BUILD			:=	debug_build
 CFLAGS_ADD		:=	-g -D_DEBUG
 endif
-LIBS			:= -lcitro3dd -lctru -lstdc++ -lm
+LIBS			:= -lgame -lcitro3dd -lctru -lstdc++ -lm
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -104,7 +65,7 @@ LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(CURDIR)/libs $(PORTLIBS) $(CTRULIB)
+LIBDIRS	:= $(CURDIR) $(PORTLIBS) $(CTRULIB)
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -127,7 +88,7 @@ SFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 PICAFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.v.pica)))
 SHLISTFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.shlist)))
 BINFILES		:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
-
+$(info PICAFILES: $(PICAFILES))
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
 #---------------------------------------------------------------------------------
@@ -148,7 +109,7 @@ export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-			-I$(CURDIR)/$(BUILD)
+			-I$(CURDIR)/$(BUILD) $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
@@ -166,28 +127,27 @@ else
 endif
 
 ifeq ($(strip $(NO_SMDH)),)
-	export _3DSXFLAGS += --smdh=$(CURDIR)/$(TARGET).smdh
+	MAKEROM_ARGS += --smdh=$(CURDIR)/$(TARGET).smdh
 endif
 
-ifneq ($(ROMFS),)
-	export _3DSXFLAGS += --romfs=$(CURDIR)/$(ROMFS)
+ifneq ($(strip $(ROMFS)),)
+	MAKEROM_ARGS += --romfs=$(CURDIR)/$(ROMFS)
 endif
 
 .PHONY: $(BUILD) clean all
 
 #---------------------------------------------------------------------------------
-
 BANNERTOOL   ?= tools/bannertool.exe
 MAKEROM      ?= tools/makerom.exe
 
-MAKEROM_ARGS := -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(BUILD)/icon.icn" -DAPP_TITLE="$(APP_TITLE)" -DAPP_PRODUCT_CODE="$(PRODUCT_CODE)" -DAPP_UNIQUE_ID="$(UNIQUE_ID)"
+MAKEROM_ARGS := -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(BUILD)/icon.icn" -DAPP_TITLE="$(TARGET)" -DAPP_PRODUCT_CODE="$(PRODUCT_CODE)" -DAPP_UNIQUE_ID="$(UNIQUE_ID)"
 MAKEROM_ARGS += -major $(VERSION_MAJOR) -minor $(VERSION_MINOR) -micro $(VERSION_MICRO)
 
 ifneq ($(strip $(LOGO)),)
-	MAKEROM_ARGS	+=	 -logo "$(LOGO)"
+	MAKEROM_ARGS += -logo "$(LOGO)"
 endif
 ifneq ($(strip $(ROMFS)),)
-	MAKEROM_ARGS	+=	 -DAPP_ROMFS="$(ROMFS)"
+	MAKEROM_ARGS += -DAPP_ROMFS="$(ROMFS)"
 endif
 
 
@@ -207,6 +167,7 @@ endif
 all: $(BUILD)
 
 $(BUILD):
+	$(info $(TARGET) Compilation for 3DS started!)
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 	@make cia
@@ -226,7 +187,7 @@ run:
 	@3dslink $(TARGET).3dsx
 cia:
 	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
-	@$(BANNERTOOL) makesmdh -s "$(APP_TITLE)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
+	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
 	$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
 	@echo built ... $(TARGET).cia
 
@@ -282,3 +243,21 @@ endef
 #---------------------------------------------------------------------------------------
 endif
 #---------------------------------------------------------------------------------------
+AR := C:/clibs/devkitPro/devkitARM/bin/arm-none-eabi-ar.exe
+
+LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
+LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
+
+lib: lib/$(OUTPUT).a
+
+lib/$(OUTPUT).a: $(LIBOBJS)
+	$(AR) rcs lib/libgame.a $^
+
+lib/%.o: lib/%.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+
+lib/%.o: lib/%.c
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+clean-libs:
+	rm -f lib/**/*.o $(OUTPUT).a
