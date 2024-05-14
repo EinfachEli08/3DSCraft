@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vec/vec.h>
-
 #include "level/chunk/Chunk.h"
 #include "util/NumberUtils.h"
 #include "util/Xorshift.h"
@@ -64,36 +62,13 @@ class World {
 
 		Chunk chunkPool[CHUNKPOOL_SIZE];
 		Chunk* chunkCache[CHUNKCACHE_SIZE][CHUNKCACHE_SIZE];
-		vec_t(Chunk*) freeChunks;
+		std::vector<Chunk*>* freeChunks;
 
 		WorkQueue* workqueue;
 		BlockEvent* blockEvent;
 
 		Xorshift32 randomTickGen;
 };
-/*
-void World_Init(World* world, WorkQueue* workqueue);
-
-void World_Reset(World* world);
-
-void World_Tick(World* world);
-
-Chunk* World_LoadChunk(World* world, int x, int z);
-void World_UnloadChunk(World* world, Chunk* chunk);
-
-Chunk* World_GetChunk(World* world, int x, int z);
-
-Block World_GetBlock(World* world, int x, int y, int z);
-void World_SetBlock(World* world, int x, int y, int z, Block block);
-uint8_t World_GetMetadata(World* world, int x, int y, int z);
-void World_SetMetadata(World* world, int x, int y, int z, uint8_t metadata);
-
-void World_SetBlockAndMeta(World* world, int x, int y, int z, Block block, uint8_t metadata);
-
-void World_UpdateChunkCache(World* world, int orginX, int orginZ);
-
-int World_GetHeight(World* world, int x, int z);
-*/
 // util
 
 inline static int WorldToChunkCoord(int x) {

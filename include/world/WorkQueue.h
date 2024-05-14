@@ -2,7 +2,7 @@
 
 #include <3ds.h>
 #include <stdbool.h>
-#include <vec/vec.h>
+#include <vector>
 
 #include "util/Xorshift.h"
 #include "world/level/chunk/Chunk.h"
@@ -31,7 +31,7 @@ class WorkQueue {
 
 		void addItem(WorkerItem item);
 
-		vec_t(WorkerItem) queue;
+		std::vector<WorkerItem>* queue;
 		LightEvent itemAddedEvent;
 		LightLock listInUse;
 

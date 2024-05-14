@@ -180,7 +180,7 @@ int main() {
 				}
 
 				for (int i = 0; i < 3; i++) {
-					while (chunkWorker->working || chunkWorker->queue->queue.length > 0) {
+					while (chunkWorker->working || chunkWorker->queue->queue->size() > 0) {
 						svcSleepThread(50000000);  // 1 Tick
 					}
 					world->tick();

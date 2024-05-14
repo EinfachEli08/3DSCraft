@@ -2,30 +2,26 @@
 
 #include <3ds.h>
 #include <stdbool.h>
-#include <vec/vec.h>
 
 #include "client/gui/DebugUI.h"
 #include "client/renderer/CubeSidesTable.h"
 
 PolyGen::PolyGen(World* _world, Player* _player) : player(_player), world(_world) {
 	VBOCache_Init();
-	vec_init(floodFillQueue);
 	LightLock_Init(updateLock);
-	vec_init(vboUpdates);
 }
 PolyGen::~PolyGen() {
-	vec_deinit(vboUpdates);
 	VBOCache_Deinit();
-	vec_deinit(floodFillQueue);
 }
 
 void PolyGen::harvest() {
 	if (LightLock_TryLock(updateLock) == 0) {
-		DebugUI_Text("VBOUpdates %d", vboUpdates->length);
-		if (vboUpdates->length > 0) {
-			if (vboUpdates->data[0].delay++ > 2)
-				while (vboUpdates->length > 0) {
-					VBOUpdate update = vec_pop(vboUpdates);
+		DebugUI_Text("VBOUpdates %d", vboUpdates->size());
+		if (vboUpdates->size() > 0) {
+			if ((*vboUpdates)[0].delay++ > 2)
+				while (vboUpdates->size() > 0) {
+					VBOUpdate update = vboUpdates->back();
+					vboUpdates->pop_back();
 
 					Chunk* chunk = world->getChunk(update.x, update.z);
 					if (chunk) {
@@ -57,11 +53,12 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 		exitPoints[entrySide1] = true;
 	if (entrySide2 != Direction_Invalid)
 		exitPoints[entrySide2] = true;
-	vec_clear(floodFillQueue);
-	vec_push(floodFillQueue, ((QueueElement){x, y, z}));
+	floodFillQueue->clear();
+	floodFillQueue->push_back((QueueElement){x, y, z});
 
-	while (floodFillQueue->length > 0) {
-		QueueElement item = vec_pop(floodFillQueue);
+	while (floodFillQueue->size() > 0) {
+		QueueElement item = floodFillQueue->back();
+		floodFillQueue->pop_back();
 
 		for (int i = 0; i < 6; i++) {
 			const int* offset = DirectionToOffset[i];
@@ -71,7 +68,7 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 			} else {
 				if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf) && !(floodFillVisited[x][y][z] & 1)) {
 					floodFillVisited[x][y][z] |= 1;
-					vec_push(floodFillQueue, ((QueueElement){x, y, z}));
+					floodFillQueue->push_back((QueueElement){x, y, z});
 				}
 				if ((cluster->blocks[item.x][item.y][item.z] == Block_Air ||
 					 Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf)) &&
@@ -252,7 +249,7 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 			update.transparentVertices = transparentVertices;
 
 			LightLock_Lock(updateLock);
-			vec_push(vboUpdates, update);
+			vboUpdates->push_back(update);
 			LightLock_Unlock(updateLock);
 		}
 	}

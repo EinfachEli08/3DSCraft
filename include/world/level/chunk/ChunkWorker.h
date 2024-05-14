@@ -1,6 +1,7 @@
 #pragma once
 
 #include <3ds.h>
+#include <vector>
 
 #include "world/WorkQueue.h"
 #include "world/level/chunk/ChunkWorkerObjBase.h"
@@ -24,6 +25,6 @@ class ChunkWorker {
 		WorkQueue* queue;
 		volatile bool working;
 		Thread* thread;
-		vec_t(WorkerFuncObj) * handler[Enum::WorkerItemTypeCount];
+		std::vector<WorkerFuncObj>* handler[Enum::WorkerItemTypeCount];
 };
 void mainLoop(void* todo);
