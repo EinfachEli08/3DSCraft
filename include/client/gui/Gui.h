@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "util/InputData.h"
+#include "util/ButtonInput.h"
 
 void Gui_Init();
 void Gui_Deinit();

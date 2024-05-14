@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include "client/Crash.h"
+#include "client/Exception.h"
 
 ChunkWorker::ChunkWorker() {
 	queue = new WorkQueue();

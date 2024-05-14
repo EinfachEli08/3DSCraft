@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "client/Crash.h"
+#include "client/Exception.h"
 
 static const int SectorSize			   = 2048;
 static mpack_node_data_t* nodeDataPool = NULL;

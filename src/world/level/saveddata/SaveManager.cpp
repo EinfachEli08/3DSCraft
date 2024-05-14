@@ -5,7 +5,7 @@
 
 #include <mpack/mpack.h>
 
-#include "client/Crash.h"
+#include "client/Exception.h"
 #include "client/gui/DebugUI.h"
 #include "client/player/Player.h"
 #include "world/level/saveddata/SuperChunk.h"
