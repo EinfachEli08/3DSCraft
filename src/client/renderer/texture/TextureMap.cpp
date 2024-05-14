@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "client/Crash.h"
+#include "client/Exception.h"
 
 uint32_t hash(char* str) {
 	unsigned long hash = 5381;
@@ -25,7 +25,7 @@ Texture::Texture(C3D_Tex* result, char* filename) {
 		uint32_t* imgInLinRam = (uint32_t*)linearAlloc(width * height * sizeof(uint32_t));
 
 		if (width < 64 || height < 64) {
-			for (int j = 0; j < height; j++)
+			for (unsigned int j = 0; j < height; j++)
 				for (int i = 0; i < width; i++) {
 					image[i + j * width] = __builtin_bswap32(image[i + j * width]);
 				}
@@ -181,11 +181,11 @@ TextureMap::TextureMap(char** files, int num_files) {
 
 	C3D_TexSetFilter(mTexture, GPU_NEAREST, GPU_NEAREST);
 
-	C3D_SyncDisplayTransfer(
+	/*C3D_SyncDisplayTransfer(
 		buffer, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), (u32*)mTexture->data, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize),
 		{GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |
 		 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)});
-
+*/
 	int size		 = cTextureMapSize / 2;
 	ptrdiff_t offset = cTextureMapSize * cTextureMapSize;
 
@@ -198,8 +198,8 @@ TextureMap::TextureMap(char** files, int num_files) {
 
 		GSPGPU_FlushDataCache(tiledImage, size * size * 4);
 
-		GX_RequestDma(tiledImage, (u32*)mTexture->data + offset, size * size * 4);
-		gspWaitForAnyEvent();
+		// GX_RequestDma(tiledImage, (u32*)mTexture->data + offset, size * size * 4);
+		// gspWaitForAnyEvent();
 
 		offset += size * size;
 		size /= 2;

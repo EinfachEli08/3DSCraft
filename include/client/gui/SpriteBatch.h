@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "util/InputData.h"
+#include "util/ButtonInput.h"
 #include "world/World.h"
 
 #include <citro3d.h>
