@@ -11,9 +11,6 @@ ChunkWorker::ChunkWorker() {
 		Crash("Couldn't set AppCpuTimeLimit");
 	}
 
-	for (int i = 0; i < Enum::WorkerItemTypeCount; i++)
-		vec_init(handler[i]);
-
 	s32 priority;
 	bool isNew3ds = false;
 	APT_CheckNew3DS(&isNew3ds);
@@ -35,10 +32,6 @@ ChunkWorker::~ChunkWorker() {
 
 	threadFree(*thread);
 	delete queue;
-
-	for (int i = 0; i < Enum::WorkerItemTypeCount; i++) {
-		vec_deinit(handler[i]);
-	}
 }
 
 void ChunkWorker::finish() {

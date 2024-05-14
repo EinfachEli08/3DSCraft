@@ -1,8 +1,8 @@
 #pragma once
 
-#include "world/level/chunk/Chunk.h"
+#include <vector>
 
-#include <vec/vec.h>
+#include "world/level/chunk/Chunk.h"
 
 #define SUPERCHUNK_SIZE 8
 #define SUPERCHUNK_BLOCKSIZE (SUPERCHUNK_SIZE * CHUNK_SIZE)
@@ -19,7 +19,7 @@ typedef struct {
 		int x, z;
 		FILE* dataFile;
 		ChunkInfo grid[SUPERCHUNK_SIZE][SUPERCHUNK_SIZE];
-		vec_t(uint8_t) sectors;
+		std::vector<uint8_t>* sectors;
 } SuperChunk;
 
 inline static int ChunkToSuperChunkCoord(int x) {

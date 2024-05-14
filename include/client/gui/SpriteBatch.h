@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <vector>
 
 #include "util/ButtonInput.h"
 #include "world/World.h"

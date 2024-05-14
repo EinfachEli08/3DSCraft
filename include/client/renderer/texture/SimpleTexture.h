@@ -1,13 +1,13 @@
 #pragma once
 
-#include "resources/ResourceLocation.h"
+#include <citro3d.h>
+
+#include "resources/FileIO.h"
 
 class SimpleTexture {
 	public:
-		SimpleTexture(ResourceLocation location) : mLocation(location) {}
-
-		void load();
+		SimpleTexture(const char* location);
 
 	protected:
-		const ResourceLocation mLocation;
+		C3D_Tex* mTexture;
 };

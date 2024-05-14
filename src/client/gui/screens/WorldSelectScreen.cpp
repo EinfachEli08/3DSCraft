@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <vec/vec.h>
 
 #include <mpack/mpack.h>
 
@@ -20,10 +19,10 @@ typedef struct {
 		char path[256];
 } WorldInfo;
 
-static vec_t(WorldInfo) worlds;
+static std::vector<WorldInfo>* worlds;
 
 void WorldSelect_ScanWorlds() {
-	vec_clear(&worlds);
+	worlds->clear();
 
 	DIR* directory = opendir("sdmc:/craft/saves");
 
@@ -50,7 +49,7 @@ void WorldSelect_ScanWorlds() {
 			info.lastPlayed = 0;
 			strcpy(info.path, entry->d_name);
 
-			vec_push(&worlds, info);
+			worlds->push_back(info);
 		}
 	}
 
@@ -84,13 +83,10 @@ static void delete_folder(const char* path) {
 }
 
 void WorldSelect_Init() {
-	vec_init(&worlds);
-
 	WorldSelect_ScanWorlds();
 }
 
 void WorldSelect_Deinit() {
-	vec_deinit(&worlds);
 }
 
 typedef enum {
@@ -146,15 +142,14 @@ void WorldSelect_Render() {
 		if (ABS(velocity) < 0.001f)
 			velocity = 0.f;
 
-		int maximumSize = CHAR_HEIGHT * 2 * worlds.length;
+		int maximumSize = CHAR_HEIGHT * 2 * worlds->size();
 		if (scroll < -maximumSize)
 			scroll = -maximumSize;
 		if (scroll > 0)
 			scroll = 0;
 
-		WorldInfo info;
-		int i = 0;
-		vec_foreach (&worlds, info, i) {
+		int worldsMax = worlds->size();
+		for (int i = 0; i < worldsMax; i++) {
 			int y = i * (CHAR_HEIGHT + CHAR_HEIGHT) + 10 + scroll;
 			if (selectedWorld == i) {
 				SpriteBatch_PushSingleColorQuad(10, y - 3, -7, 140, 1, SHADER_RGB(20, 20, 20));
@@ -165,7 +160,7 @@ void WorldSelect_Render() {
 			if (Gui_EnteredCursorInside(10, y - 3, 140, CHAR_HEIGHT + 6) && y < 32 * 2) {
 				selectedWorld = i;
 			}
-			SpriteBatch_PushText(20, y, -6, INT16_MAX, true, INT_MAX, NULL, "%s", info.name, movementY);
+			SpriteBatch_PushText(20, y, -6, INT16_MAX, true, INT_MAX, NULL, "%s", (*worlds)[i].name, movementY);
 		}
 
 		Gui_Offset(0, 2 * 32 + 5 + BUTTON_TEXT_PADDING);
@@ -247,12 +242,12 @@ bool WorldSelect_Update(char* out_worldpath, char* out_name, Enum::WorldGenType*
 			}
 
 			while (true) {
-				int i;
-				WorldInfo* info;
 				bool alreadyExisting = false;
-				vec_foreach_ptr(&worlds, info, i) if (!strcmp(out_worldpath, info->path)) {
-					alreadyExisting = true;
-					break;
+				for (int i = 0; i < worlds->size(); i++) {
+					if (!strcmp(out_worldpath, (*worlds)[i].path)) {
+						alreadyExisting = true;
+						break;
+					}
 				}
 				if (!alreadyExisting)
 					break;
@@ -269,8 +264,8 @@ bool WorldSelect_Update(char* out_worldpath, char* out_name, Enum::WorldGenType*
 	}
 	if (clicked_play && selectedWorld != -1) {
 		clicked_play = false;
-		strcpy(out_name, worlds.data[selectedWorld].name);
-		strcpy(out_worldpath, worlds.data[selectedWorld].path);
+		strcpy(out_name, (*worlds)[selectedWorld].name);
+		strcpy(out_worldpath, (*worlds)[selectedWorld].path);
 
 		*newWorld = false;
 		menustate = MenuState_SelectWorld;
@@ -283,7 +278,7 @@ bool WorldSelect_Update(char* out_worldpath, char* out_name, Enum::WorldGenType*
 	if (confirmed_deletion) {
 		confirmed_deletion = false;
 		char buffer[512];
-		sprintf(buffer, "sdmc:/craft/saves/%s", worlds.data[selectedWorld].path);
+		sprintf(buffer, "sdmc:/craft/saves/%s", (*worlds)[selectedWorld].path);
 		delete_folder(buffer);
 
 		WorldSelect_ScanWorlds();

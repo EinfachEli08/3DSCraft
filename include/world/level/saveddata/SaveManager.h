@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdio.h>
-#include <vec/vec.h>
 
 #include "client/player/Player.h"
 #include "world/level/chunk/ChunkWorkerObjBase.h"
@@ -11,7 +10,7 @@ class SaveManager {
 	public:
 		Player* player;
 		World* world;
-		vec_t(SuperChunk*) superChunks;
+		std::vector<SuperChunk*>* superChunks;
 
 		SaveManager(Player* player);
 		~SaveManager();

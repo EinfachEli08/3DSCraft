@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "client/player/Player.h"
 #include "client/renderer/VBOCache.h"
 #include "client/renderer/VertexFmt.h"
@@ -60,8 +62,8 @@ class PolyGen : public ChunkWorkerObjBase {
 		World* world;
 		Player* player;
 
-		vec_t(VBOUpdate) * vboUpdates;
-		vec_t(QueueElement) * floodFillQueue;
+		std::vector<VBOUpdate>* vboUpdates;
+		std::vector<QueueElement>* floodFillQueue;
 
 		int currentFace;
 		int transparentFaces;
