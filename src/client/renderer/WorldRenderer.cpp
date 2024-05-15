@@ -1,6 +1,7 @@
 #include "client/renderer/WorldRenderer.h"
 
 #include <citro3d.h>
+#include <vector>
 
 #include "client/renderer/VertexFmt.h"
 
@@ -32,9 +33,9 @@ typedef struct {
 		Chunk* chunk;
 } TransparentRender;
 
-static vec_t(RenderStep) renderingQueue;
+static std::vector<RenderStep>* renderingQueue;
 static uint8_t chunkRendered[CHUNKCACHE_SIZE][CLUSTER_PER_CHUNK][CHUNKCACHE_SIZE];
-static vec_t(TransparentRender) transparentClusters;
+static std::vector<TransparentRender>* transparentClusters;
 
 static C3D_FogLut fogLut;
 
@@ -46,9 +47,6 @@ void WorldRenderer_Init(Player* player_, World* world_, WorkQueue* workqueue_, i
 	player			  = player_;
 	projectionUniform = projectionUniform_;
 	workqueue		  = workqueue_;
-
-	vec_init(&renderingQueue);
-	vec_init(&transparentClusters);
 
 	Camera_Init(&camera);
 
@@ -75,8 +73,6 @@ void WorldRenderer_Init(Player* player_, World* world_, WorkQueue* workqueue_, i
 	Clouds_Init();
 }
 void WorldRenderer_Deinit() {
-	vec_deinit(&renderingQueue);
-	vec_deinit(&transparentClusters);
 	Cursor_Deinit();
 
 	Hand_Deinit();
@@ -91,20 +87,21 @@ static void renderWorld() {
 
 	int polysTotal = 0, clustersDrawn = 0, steps = 0;
 
-	vec_clear(&renderingQueue);
-	vec_clear(&transparentClusters);
+	renderingQueue->clear();
+	transparentClusters->clear();
 
 	int pY		  = CLAMP(WorldToChunkCoord(FastFloor(player->position.y)), 0, CLUSTER_PER_CHUNK - 1);
 	Chunk* pChunk = world->getChunk(WorldToChunkCoord(FastFloor(player->position.x)), WorldToChunkCoord(FastFloor(player->position.z)));
-	vec_push(&renderingQueue, ((RenderStep){&pChunk->clusters[pY], pChunk, Direction_Invalid}));
+	renderingQueue->push_back((RenderStep){&pChunk->clusters[pY], pChunk, Direction_Invalid});
 	chunkRendered[CHUNKCACHE_SIZE / 2][pY][CHUNKCACHE_SIZE / 2] = 1;
 
 	float3 playerPos = player->position;
 
-	while (renderingQueue.length > 0) {
-		RenderStep step	 = vec_pop(&renderingQueue);
+	while (renderingQueue->size() > 0) {
+		RenderStep step	 = renderingQueue->back();
 		Chunk* chunk	 = step.chunk;
 		Cluster* cluster = step.cluster;
+		renderingQueue->pop_back();
 
 		if (cluster->vertices > 0 && cluster->vbo.size) {
 			clusterWasRendered(chunk->x, cluster->y, chunk->z) |= 2;
@@ -119,9 +116,9 @@ static void renderWorld() {
 
 			clustersDrawn++;
 		}
-		if (cluster->transparentVertices > 0 && cluster->transparentVBO.size) {
-			vec_push(&transparentClusters, ((TransparentRender){cluster, chunk}));
-		}
+		if (cluster->transparentVertices > 0 && cluster->transparentVBO.size)
+			transparentClusters->push_back((TransparentRender){cluster, chunk});
+
 		// if (polysTotal >= 150000) break;
 
 		for (int i = 0; i < 24; i++) {
@@ -155,7 +152,7 @@ static void renderWorld() {
 			Chunk* newChunk		= world->getChunk(newX, newZ);
 			RenderStep nextStep = (RenderStep){&newChunk->clusters[newY], newChunk, DirectionOpposite[dir]};
 			if (newChunk)
-				vec_push(&renderingQueue, nextStep);
+				renderingQueue->push_back(nextStep);
 		}
 	}
 
@@ -179,8 +176,9 @@ static void renderWorld() {
 	C3D_AlphaTest(true, GPU_GEQUAL, 255);
 
 	int i;
-	TransparentRender* render;
-	vec_foreach_ptr_rev(&transparentClusters, render, i) {
+	size_t sizeTransClusters = transparentClusters->size();
+	for (size_t i = 0; i < sizeTransClusters; i++) {
+		TransparentRender* render = &((*transparentClusters)[i]);
 		C3D_BufInfo bufInfo;
 		BufInfo_Init(&bufInfo);
 		BufInfo_Add(&bufInfo, render->cluster->transparentVBO.memory, sizeof(WorldVertex), 4, 0x3210);
@@ -193,7 +191,7 @@ static void renderWorld() {
 
 	DebugUI_Text("Clusters drawn %d with %d steps. %d vertices", clustersDrawn, steps, polysTotal);
 	DebugUI_Text("T: %u P: %u %d", world->chunkCache[CHUNKCACHE_SIZE / 2][CHUNKCACHE_SIZE / 2]->tasksRunning,
-				 world->chunkCache[CHUNKCACHE_SIZE / 2][CHUNKCACHE_SIZE / 2]->genProgress, workqueue->queue.length);
+				 world->chunkCache[CHUNKCACHE_SIZE / 2][CHUNKCACHE_SIZE / 2]->genProgress, workqueue->queue->size());
 }
 
 void WorldRenderer_Render(float iod) {

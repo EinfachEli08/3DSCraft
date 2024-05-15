@@ -4,14 +4,10 @@
 
 #include "client/player/Player.h"
 #include "world/level/chunk/ChunkWorkerObjBase.h"
-#include "world/level/saveddata/SuperChunk.h"
 
+class SuperChunk;
 class SaveManager {
 	public:
-		Player* player;
-		World* world;
-		std::vector<SuperChunk*>* superChunks;
-
 		SaveManager(Player* player);
 		~SaveManager();
 
@@ -38,4 +34,8 @@ class SaveManager {
 			private:
 				SaveManager* parent;
 		};
+
+		std::vector<SuperChunk*>* superChunks;
+		Player* player;
+		World* world;  // extern c would not work if private
 };

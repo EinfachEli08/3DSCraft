@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mpack/mpack.h>
 #include <vector>
 
 #include "world/level/chunk/Chunk.h"
@@ -7,20 +8,38 @@
 #define SUPERCHUNK_SIZE 8
 #define SUPERCHUNK_BLOCKSIZE (SUPERCHUNK_SIZE * CHUNK_SIZE)
 
-typedef struct {
-		uint32_t position;
-		uint32_t compressedSize;
-		uint32_t actualSize;
-		uint8_t blockSize;
-		uint32_t revision;
-} ChunkInfo;
+class SuperChunk {
+	public:
+		SuperChunk(int x, int z);
+		~SuperChunk();
 
-typedef struct {
-		int x, z;
-		FILE* dataFile;
-		ChunkInfo grid[SUPERCHUNK_SIZE][SUPERCHUNK_SIZE];
-		std::vector<uint8_t>* sectors;
-} SuperChunk;
+		static void poolsInit();
+		static void poolsDeinit();
+
+		void saveIndex();
+		void chunkSave(Chunk* chunk);
+		void chunkLoad(Chunk* chunk);
+
+		void freeSectors(u32 address, u8 size);
+		u32 reserveSectors(int amount);
+
+		struct ChunkInfo {
+				u32 position;
+				u32 compressedSize;
+				u32 actualSize;
+				u8 blockSize;
+				u32 revision;
+		};
+
+		int getX() { return mPosX; }
+		int getZ() { return mPosZ; }
+
+	private:
+		int mPosX, mPosZ;
+		FILE* mDataFile = nullptr;
+		ChunkInfo* mGrid[SUPERCHUNK_SIZE][SUPERCHUNK_SIZE];
+		std::vector<u8>* mSectors;
+};
 
 inline static int ChunkToSuperChunkCoord(int x) {
 	return (x + (int)(x < 0)) / SUPERCHUNK_SIZE - (int)(x < 0);
@@ -28,13 +47,3 @@ inline static int ChunkToSuperChunkCoord(int x) {
 inline static int ChunkToLocalSuperChunkCoord(int x) {
 	return x - ChunkToSuperChunkCoord(x) * SUPERCHUNK_SIZE;
 }
-
-void SuperChunk_InitPools();
-void SuperChunk_DeinitPools();
-
-void SuperChunk_Init(SuperChunk* superchunk, int x, int z);
-void SuperChunk_Deinit(SuperChunk* superchunk);
-void SuperChunk_SaveIndex(SuperChunk* superchunk);
-
-void SuperChunk_SaveChunk(SuperChunk* superchunk, Chunk* chunk);
-void SuperChunk_LoadChunk(SuperChunk* superchunk, Chunk* chunk);
