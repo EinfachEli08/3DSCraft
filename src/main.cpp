@@ -53,18 +53,14 @@ int main() {
 
 	SaveManager::initFileSystem();
 
-	ChunkWorker* chunkWorker = new ChunkWorker();
-
-	World* world = new World(chunkWorker->queue);
-	Player* player;
-	PlayerController* playerCtrl;
-	Player_Init(player, world);
-	PlayerController_Init(playerCtrl, player);
-
-	PolyGen* polyGen	  = new PolyGen(world, player);
-	SuperFlatGen* flatGen = new SuperFlatGen(world);
-	NormalGen* normalGen  = new NormalGen(world);
-	CustomGen* customGen  = new CustomGen(world);
+	ChunkWorker* chunkWorker	 = new ChunkWorker();
+	World* world				 = new World(chunkWorker->queue);
+	Player* player				 = new Player(world);
+	PlayerController* playerCtrl = new PlayerController(player);
+	PolyGen* polyGen			 = new PolyGen(world, player);
+	SuperFlatGen* flatGen		 = new SuperFlatGen(world);
+	NormalGen* normalGen		 = new NormalGen(world);
+	CustomGen* customGen		 = new CustomGen(world);
 
 	chunkWorker->addHandler(Enum::WorkerItemType::PolyGen, (ChunkWorkerObjBase*)polyGen);
 	chunkWorker->addHandler(Enum::WorkerItemType::BaseGen, (ChunkWorkerObjBase*)flatGen);
@@ -149,7 +145,7 @@ int main() {
 				timeAccum -= 1.f / 20.f;
 			}
 
-			PlayerController_Update(playerCtrl, inputData, dt);
+			playerCtrl->update(inputData, dt);
 
 			world->updateChunkCache(WorldToChunkCoord(FastFloor(player->position.x)), WorldToChunkCoord(FastFloor(player->position.z)));
 		} else if (gamestate == GameState_SelectWorld) {

@@ -35,7 +35,7 @@ class SaveManager {
 				SaveManager* parent;
 		};
 
-		std::vector<SuperChunk*>* superChunks;
+		std::vector<SuperChunk*> superChunks;
 		Player* player;
 		World* world;  // extern c would not work if private
 };

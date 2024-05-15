@@ -6,29 +6,33 @@
 #include "util/ButtonInput.h"
 
 typedef int KeyCombo;
-typedef struct {
-		KeyCombo forward, backward, strafeLeft, strafeRight;
-		KeyCombo lookLeft, lookRight, lookUp, lookDown;
+class PlayerController {
+	public:
+		PlayerController(Player* player);
 
-		KeyCombo placeBlock, breakBlock;
-		KeyCombo jump;
+		void update(InputData input, float dt);
 
-		KeyCombo switchBlockLeft;
-		KeyCombo switchBlockRight;
+		struct Scheme {
+				KeyCombo forward, backward, strafeLeft, strafeRight;
+				KeyCombo lookLeft, lookRight, lookUp, lookDown;
 
-		KeyCombo openCmd;
+				KeyCombo placeBlock, breakBlock;
+				KeyCombo jump;
 
-		KeyCombo crouch;
-} PlayerControlScheme;
-typedef struct {
+				KeyCombo switchBlockLeft;
+				KeyCombo switchBlockRight;
+
+				KeyCombo openCmd;
+
+				KeyCombo crouch;
+		};
+
+	private:
 		Player* player;
-		PlayerControlScheme controlScheme;
+		Scheme controlScheme;
 
 		float breakPlaceTimeout;
 		bool openedCmd;
 
 		float flyTimer;
-} PlayerController;
-
-void PlayerController_Init(PlayerController* ctrl, Player* player);
-void PlayerController_Update(PlayerController* ctrl, InputData input, float dt);
+};

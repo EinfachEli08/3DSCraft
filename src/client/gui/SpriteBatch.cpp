@@ -18,7 +18,7 @@ typedef struct {
 		int16_t color;
 } Sprite;
 
-static std::vector<Sprite*>* cmdList;
+static std::vector<Sprite*> cmdList;
 static C3D_Tex* currentTexture = NULL;
 static GuiVertex* vertexList[2];
 static int projUniform;

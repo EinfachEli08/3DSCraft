@@ -31,7 +31,7 @@ class WorkQueue {
 
 		void addItem(WorkerItem item);
 
-		std::vector<WorkerItem>* queue;
+		std::vector<WorkerItem> queue;
 		LightEvent itemAddedEvent;
 		LightLock listInUse;
 

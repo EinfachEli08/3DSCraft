@@ -41,37 +41,37 @@ enum {
 	K3DS_ZR
 };
 
-const PlayerControlScheme platform_default_scheme = {.forward		   = K3DS_X,
-													 .backward		   = K3DS_B,
-													 .strafeLeft	   = K3DS_Y,
-													 .strafeRight	   = K3DS_A,
-													 .lookLeft		   = K3DS_CPAD_LEFT,
-													 .lookRight		   = K3DS_CPAD_RIGHT,
-													 .lookUp		   = K3DS_CPAD_UP,
-													 .lookDown		   = K3DS_CPAD_DOWN,
-													 .placeBlock	   = K3DS_L,
-													 .breakBlock	   = K3DS_R,
-													 .jump			   = K3DS_DUP,
-													 .switchBlockLeft  = K3DS_DLEFT,
-													 .switchBlockRight = K3DS_DRIGHT,
-													 .openCmd		   = K3DS_SELECT,
-													 .crouch		   = K3DS_DDOWN};
+const PlayerController::Scheme platform_default_scheme = {.forward			= K3DS_X,
+														  .backward			= K3DS_B,
+														  .strafeLeft		= K3DS_Y,
+														  .strafeRight		= K3DS_A,
+														  .lookLeft			= K3DS_CPAD_LEFT,
+														  .lookRight		= K3DS_CPAD_RIGHT,
+														  .lookUp			= K3DS_CPAD_UP,
+														  .lookDown			= K3DS_CPAD_DOWN,
+														  .placeBlock		= K3DS_L,
+														  .breakBlock		= K3DS_R,
+														  .jump				= K3DS_DUP,
+														  .switchBlockLeft	= K3DS_DLEFT,
+														  .switchBlockRight = K3DS_DRIGHT,
+														  .openCmd			= K3DS_SELECT,
+														  .crouch			= K3DS_DDOWN};
 
-const PlayerControlScheme n3ds_default_scheme = {.forward		   = K3DS_CPAD_UP,
-												 .backward		   = K3DS_CPAD_DOWN,
-												 .strafeLeft	   = K3DS_CPAD_LEFT,
-												 .strafeRight	   = K3DS_CPAD_RIGHT,
-												 .lookLeft		   = K3DS_CSTICK_LEFT,
-												 .lookRight		   = K3DS_CSTICK_RIGHT,
-												 .lookUp		   = K3DS_CSTICK_UP,
-												 .lookDown		   = K3DS_CSTICK_DOWN,
-												 .placeBlock	   = K3DS_L,
-												 .breakBlock	   = K3DS_R,
-												 .jump			   = K3DS_A,
-												 .switchBlockLeft  = K3DS_DLEFT,
-												 .switchBlockRight = K3DS_DRIGHT,
-												 .openCmd		   = K3DS_SELECT,
-												 .crouch		   = K3DS_DDOWN};
+const PlayerController::Scheme n3ds_default_scheme = {.forward			= K3DS_CPAD_UP,
+													  .backward			= K3DS_CPAD_DOWN,
+													  .strafeLeft		= K3DS_CPAD_LEFT,
+													  .strafeRight		= K3DS_CPAD_RIGHT,
+													  .lookLeft			= K3DS_CSTICK_LEFT,
+													  .lookRight		= K3DS_CSTICK_RIGHT,
+													  .lookUp			= K3DS_CSTICK_UP,
+													  .lookDown			= K3DS_CSTICK_DOWN,
+													  .placeBlock		= K3DS_L,
+													  .breakBlock		= K3DS_R,
+													  .jump				= K3DS_A,
+													  .switchBlockLeft	= K3DS_DLEFT,
+													  .switchBlockRight = K3DS_DRIGHT,
+													  .openCmd			= K3DS_SELECT,
+													  .crouch			= K3DS_DDOWN};
 static void convertPlatformInput(InputData* input, float ctrls[], bool keysdown[], bool keysup[]) {
 #define reg_bin_key(i, k)                                                                                                                  \
 	ctrls[(i)]	  = (float)((input->keysdown & (k)) || (input->keysheld & (k)));                                                           \
@@ -144,21 +144,21 @@ static inline bool WasKeyPressed(KeyCombo combo, PlatformAgnosticInput* input) {
 	return input->keysdown[combo];
 }
 
-void PlayerController_Init(PlayerController* ctrl, Player* player) {
-	ctrl->breakPlaceTimeout = 0.f;
-	ctrl->player			= player;
+PlayerController::PlayerController(Player* player) {
+	breakPlaceTimeout = 0.f;
+	player			  = player;
 
 	bool isNew3ds = false;
 	APT_CheckNew3DS(&isNew3ds);
 	if (isNew3ds) {
-		ctrl->controlScheme			  = n3ds_default_scheme;
-		ctrl->player->autoJumpEnabled = false;
+		controlScheme			= n3ds_default_scheme;
+		player->autoJumpEnabled = false;
 	} else {
-		ctrl->controlScheme			  = platform_default_scheme;
-		ctrl->player->autoJumpEnabled = true;
+		controlScheme			= platform_default_scheme;
+		player->autoJumpEnabled = true;
 	}
 
-	ctrl->openedCmd = false;
+	openedCmd = false;
 
 	bool elementMissing = false;
 
@@ -172,7 +172,7 @@ void PlayerController_Init(PlayerController* ctrl, Player* player) {
 	if (ini_sget(cfg, "controls", #variable, "%s", buffer)) {                                                                              \
 		for (int i = 0; i < PLATFORM_BUTTONS; i++) {                                                                                       \
 			if (!strcmp(platform_key_names[i], buffer)) {                                                                                  \
-				ctrl->controlScheme.variable = i;                                                                                          \
+				controlScheme.variable = i;                                                                                                \
 				break;                                                                                                                     \
 			}                                                                                                                              \
 		}                                                                                                                                  \
@@ -196,7 +196,7 @@ void PlayerController_Init(PlayerController* ctrl, Player* player) {
 		loadKey(crouch);
 #undef loadKey
 
-		if (!ini_sget(cfg, "controls", "auto_jumping", "%d", &ctrl->player->autoJumpEnabled))
+		if (!ini_sget(cfg, "controls", "auto_jumping", "%d", &player->autoJumpEnabled))
 			elementMissing = true;
 
 		ini_free(cfg);
@@ -219,7 +219,7 @@ void PlayerController_Init(PlayerController* ctrl, Player* player) {
 		}
 		fprintf(f, "%s\n\n", platform_key_names[PLATFORM_BUTTONS - 1]);
 
-#define writeKey(key) fprintf(f, #key "=%s\n", platform_key_names[ctrl->controlScheme.key]);
+#define writeKey(key) fprintf(f, #key "=%s\n", platform_key_names[controlScheme.key]);
 
 		writeKey(forward);
 		writeKey(backward);
@@ -244,21 +244,21 @@ void PlayerController_Init(PlayerController* ctrl, Player* player) {
 		fclose(f);
 	}
 
-	ctrl->flyTimer = -1.f;
+	flyTimer = -1.f;
 }
 
-void PlayerController_Update(PlayerController* ctrl, InputData input, float dt) {
-	Player* player = ctrl->player;
+void PlayerController::update(InputData input, float dt) {
+	Player* player = player;
 	PlatformAgnosticInput agnosticInput;
 	convertPlatformInput(&input, agnosticInput.keys, agnosticInput.keysdown, agnosticInput.keysup);
 
-	float jump	 = IsKeyDown(ctrl->controlScheme.jump, &agnosticInput);
-	float crouch = IsKeyDown(ctrl->controlScheme.crouch, &agnosticInput);
+	float jump	 = IsKeyDown(controlScheme.jump, &agnosticInput);
+	float crouch = IsKeyDown(controlScheme.crouch, &agnosticInput);
 
-	float forward	  = IsKeyDown(ctrl->controlScheme.forward, &agnosticInput);
-	float backward	  = IsKeyDown(ctrl->controlScheme.backward, &agnosticInput);
-	float strafeLeft  = IsKeyDown(ctrl->controlScheme.strafeLeft, &agnosticInput);
-	float strafeRight = IsKeyDown(ctrl->controlScheme.strafeRight, &agnosticInput);
+	float forward	  = IsKeyDown(controlScheme.forward, &agnosticInput);
+	float backward	  = IsKeyDown(controlScheme.backward, &agnosticInput);
+	float strafeLeft  = IsKeyDown(controlScheme.strafeLeft, &agnosticInput);
+	float strafeRight = IsKeyDown(controlScheme.strafeRight, &agnosticInput);
 
 	float3 forwardVec = f3_new(-sinf(player->yaw), 0.f, -cosf(player->yaw));
 	float3 rightVec	  = f3_crs(forwardVec, f3_new(0, 1, 0));
@@ -278,57 +278,57 @@ void PlayerController_Update(PlayerController* ctrl, InputData input, float dt) 
 		movement = f3_scl(f3_nrm(movement), speed);
 	}
 
-	float lookLeft	= IsKeyDown(ctrl->controlScheme.lookLeft, &agnosticInput);
-	float lookRight = IsKeyDown(ctrl->controlScheme.lookRight, &agnosticInput);
-	float lookUp	= IsKeyDown(ctrl->controlScheme.lookUp, &agnosticInput);
-	float lookDown	= IsKeyDown(ctrl->controlScheme.lookDown, &agnosticInput);
+	float lookLeft	= IsKeyDown(controlScheme.lookLeft, &agnosticInput);
+	float lookRight = IsKeyDown(controlScheme.lookRight, &agnosticInput);
+	float lookUp	= IsKeyDown(controlScheme.lookUp, &agnosticInput);
+	float lookDown	= IsKeyDown(controlScheme.lookDown, &agnosticInput);
 
 	player->yaw += (lookLeft + -lookRight) * 160.f * DEG_TO_RAD * dt;
 	player->pitch += (-lookDown + lookUp) * 160.f * DEG_TO_RAD * dt;
 	player->pitch = CLAMP(player->pitch, -DEG_TO_RAD * 89.9f, DEG_TO_RAD * 89.9f);
 
-	float placeBlock = IsKeyDown(ctrl->controlScheme.placeBlock, &agnosticInput);
-	float breakBlock = IsKeyDown(ctrl->controlScheme.breakBlock, &agnosticInput);
+	float placeBlock = IsKeyDown(controlScheme.placeBlock, &agnosticInput);
+	float breakBlock = IsKeyDown(controlScheme.breakBlock, &agnosticInput);
 	if (placeBlock > 0.f)
-		Player_PlaceBlock(player);
+		player->blockPlace();
 	if (breakBlock > 0.f)
-		Player_BreakBlock(player);
+		player->blockBreak();
 
 	if (jump > 0.f)
-		Player_Jump(player, movement);
+		player->jump(movement);
 
-	bool releasedJump = WasKeyReleased(ctrl->controlScheme.jump, &agnosticInput);
-	if (ctrl->flyTimer >= 0.f) {
+	bool releasedJump = WasKeyReleased(controlScheme.jump, &agnosticInput);
+	if (flyTimer >= 0.f) {
 		if (jump > 0.f)
 			player->flying ^= true;
-		ctrl->flyTimer += dt;
-		if (ctrl->flyTimer > 0.25f)
-			ctrl->flyTimer = -1.f;
+		flyTimer += dt;
+		if (flyTimer > 0.25f)
+			flyTimer = -1.f;
 	} else if (releasedJump) {
-		ctrl->flyTimer = 0.f;
+		flyTimer = 0.f;
 	}
 
-	bool releasedCrouch = WasKeyReleased(ctrl->controlScheme.crouch, &agnosticInput);
+	bool releasedCrouch = WasKeyReleased(controlScheme.crouch, &agnosticInput);
 	player->crouching ^= !player->flying && releasedCrouch;
 
-	bool switchBlockLeft  = WasKeyPressed(ctrl->controlScheme.switchBlockLeft, &agnosticInput);
-	bool switchBlockRight = WasKeyPressed(ctrl->controlScheme.switchBlockRight, &agnosticInput);
+	bool switchBlockLeft  = WasKeyPressed(controlScheme.switchBlockLeft, &agnosticInput);
+	bool switchBlockRight = WasKeyPressed(controlScheme.switchBlockRight, &agnosticInput);
 	if (switchBlockLeft && --player->quickSelectBarSlot == -1)
 		player->quickSelectBarSlot = player->quickSelectBarSlots - 1;
 	if (switchBlockRight && ++player->quickSelectBarSlot == player->quickSelectBarSlots)
 		player->quickSelectBarSlot = 0;
 
-	if (ctrl->openedCmd) {
-		dt				= 0.f;
-		ctrl->openedCmd = false;
+	if (openedCmd) {
+		dt		  = 0.f;
+		openedCmd = false;
 	}
 
-	float cmdLine = WasKeyPressed(ctrl->controlScheme.openCmd, &agnosticInput);
+	float cmdLine = WasKeyPressed(controlScheme.openCmd, &agnosticInput);
 	if (cmdLine) {
 		CommandLine_Activate(player->world, player);
-		ctrl->openedCmd = true;
+		openedCmd = true;
 	}
 
-	Player_Move(player, dt, movement);
-	Player_Update(player);
+	player->move(dt, movement);
+	player->update();
 }

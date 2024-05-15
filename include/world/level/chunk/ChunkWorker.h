@@ -24,7 +24,7 @@ class ChunkWorker {
 
 		WorkQueue* queue;
 		volatile bool working;
-		Thread* thread;
-		std::vector<WorkerFuncObj>* handler[Enum::WorkerItemTypeCount];
+		Thread thread;
+		std::vector<WorkerFuncObj> handler[Enum::WorkerItemTypeCount];
 };
 void mainLoop(void* todo);

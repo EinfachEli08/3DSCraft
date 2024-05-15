@@ -17,8 +17,9 @@ ChunkWorker::ChunkWorker() {
 	APT_CheckNew3DS(&isNew3ds);
 	svcGetThreadPriority(&priority, CUR_THREAD_HANDLE);
 
-	*thread = threadCreate(&mainLoop, (void*)this, CHUNKWORKER_THREAD_STACKSIZE, priority - 1, isNew3ds ? 2 : 1, false);
-	if (!*thread) {
+	thread = threadCreate(&mainLoop, (void*)this, CHUNKWORKER_THREAD_STACKSIZE, priority - 1, isNew3ds ? 2 : 1, false);
+
+	if (thread == 0) {
 		Crash("Couldn't create worker thread");
 	}
 
@@ -29,9 +30,9 @@ static volatile ChunkWorker* workerToStop = NULL;
 ChunkWorker::~ChunkWorker() {
 	workerToStop = this;
 	LightEvent_Signal(&queue->itemAddedEvent);
-	threadJoin(*thread, UINT64_MAX);
+	threadJoin(thread, UINT64_MAX);
 
-	threadFree(*thread);
+	threadFree(thread);
 	delete queue;
 }
 
@@ -44,15 +45,15 @@ void ChunkWorker::finish() {
 void ChunkWorker::addHandler(Enum::WorkerItemType workerType, ChunkWorkerObjBase* obj) {
 	WorkerFuncObj newHandler;
 	newHandler.workerPtr = obj, newHandler.active = true;
-	handler[(int)workerType]->push_back(newHandler);
+	handler[(int)workerType].push_back(newHandler);
 }
 
 void ChunkWorker::setHandlerActive(Enum::WorkerItemType workerType, ChunkWorkerObjBase* worker, bool active) {
 	int typeIndex	   = (int)workerType;
-	size_t sizeHandler = handler[typeIndex]->size();
+	size_t sizeHandler = handler[typeIndex].size();
 	for (size_t i = 0; i < sizeHandler; i++) {
-		if ((*handler[typeIndex])[i].workerPtr == worker) {
-			(*handler[typeIndex])[i].active = active;
+		if (handler[typeIndex][i].workerPtr == worker) {
+			handler[typeIndex][i].active = active;
 			return;
 		}
 	}
@@ -60,7 +61,7 @@ void ChunkWorker::setHandlerActive(Enum::WorkerItemType workerType, ChunkWorkerO
 
 void mainLoop(void* todo_) {
 	ChunkWorker* todo = (ChunkWorker*)todo_;
-	std::vector<WorkerItem>* privateQueue;
+	std::vector<WorkerItem> privateQueue;
 	while (workerToStop != todo || todo->queue->queue->size() > 0) {
 		todo->working = false;
 
@@ -80,10 +81,10 @@ void mainLoop(void* todo_) {
 			privateQueue->pop_back();
 
 			if (item.uuid == item.chunk->uuid) {
-				size_t sizeHandler = todo->handler[itemType]->size();
+				size_t sizeHandler = todo->handler[itemType].size();
 				for (int i = 0; i < sizeHandler; i++) {
-					if ((*todo->handler[itemType])[i].active)
-						(*todo->handler[itemType])[i].workerPtr->chunkFunction(todo->queue, item);
+					if (todo->handler[itemType][i].active)
+						todo->handler[itemType][i].workerPtr->chunkFunction(todo->queue, item);
 					// call ChunkFunction
 					svcSleepThread(7000);
 				}

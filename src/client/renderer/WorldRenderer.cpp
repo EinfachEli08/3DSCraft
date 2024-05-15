@@ -33,9 +33,9 @@ typedef struct {
 		Chunk* chunk;
 } TransparentRender;
 
-static std::vector<RenderStep>* renderingQueue;
+static std::vector<RenderStep> renderingQueue;
 static uint8_t chunkRendered[CHUNKCACHE_SIZE][CLUSTER_PER_CHUNK][CHUNKCACHE_SIZE];
-static std::vector<TransparentRender>* transparentClusters;
+static std::vector<TransparentRender> transparentClusters;
 
 static C3D_FogLut fogLut;
 
