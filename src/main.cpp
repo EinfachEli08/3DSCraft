@@ -49,7 +49,7 @@ int main() {
 
 	romfsInit();
 
-	SuperChunk_InitPools();
+	SuperChunk::poolsInit();
 
 	SaveManager::initFileSystem();
 
@@ -210,7 +210,7 @@ int main() {
 
 	delete saveMgr;
 
-	SuperChunk_DeinitPools();
+	SuperChunk::poolsDeinit();
 
 	free(world);
 

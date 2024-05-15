@@ -1,13 +1,11 @@
 #include "world/WorkQueue.h"
 
 WorkQueue::WorkQueue() {
-	vec_init(&queue);
 	LightLock_Init(&listInUse);
 	LightEvent_Init(&itemAddedEvent, RESET_STICKY);
 }
 
 WorkQueue::~WorkQueue() {
-	vec_deinit(&queue);
 }
 
 void WorkQueue::addItem(WorkerItem item) {
@@ -16,7 +14,7 @@ void WorkQueue::addItem(WorkerItem item) {
 	if (item.type == Enum::WorkerItemType::PolyGen)
 		++item.chunk->graphicalTasksRunning;
 	LightLock_Lock(&listInUse);
-	vec_push(&queue, item);
+	queue->push_back(item);
 	LightLock_Unlock(&listInUse);
 
 	LightEvent_Signal(&itemAddedEvent);

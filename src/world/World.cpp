@@ -6,6 +6,7 @@
 #include <limits.h>
 #include <stdint.h>
 
+#include "util/VecUtil.h"
 #include "world/level/blocks/BlockEvent.h"
 
 World::World(WorkQueue* workqueue) {
@@ -16,8 +17,6 @@ World::World(WorkQueue* workqueue) {
 	genSettings.seed = 28112000;
 	genSettings.type = Enum::WorldGenType::SuperFlat;
 
-	vec_init(&freeChunks);
-
 	blockEvent = new BlockEvent(this);
 
 	reset();
@@ -27,32 +26,34 @@ void World::reset() {
 	cacheTranslationX = 0;
 	cacheTranslationZ = 0;
 
-	vec_clear(&freeChunks);
+	freeChunks->clear();
 
 	for (size_t i = 0; i < CHUNKPOOL_SIZE; i++) {
 		chunkPool[i].x = INT_MAX;
 		chunkPool[i].z = INT_MAX;
-		vec_push(&freeChunks, &chunkPool[i]);
+		freeChunks->push_back(&chunkPool[i]);
 	}
 
 	randomTickGen = Xorshift32_New();
 }
 
 Chunk* World::loadChunk(int x, int z) {
-	for (int i = 0; i < freeChunks.length; i++) {
-		if (freeChunks.data[i]->x == x && freeChunks.data[i]->z == z) {
-			Chunk* chunk = freeChunks.data[i];
-			vec_splice(&freeChunks, i, 1);
+	size_t sizeFreeChunks = freeChunks->size();
+	for (int i = 0; i < sizeFreeChunks; i++) {
+		if ((*freeChunks)[i]->x == x && (*freeChunks)[i]->z == z) {
+			Chunk* chunk = (*freeChunks)[i];
+			Vec::splice(*freeChunks, i, 1);
 
 			chunk->references++;
 			return chunk;
 		}
 	}
 
-	for (int i = 0; i < freeChunks.length; i++) {
-		if (!freeChunks.data[i]->tasksRunning) {
-			Chunk* chunk = freeChunks.data[i];
-			vec_splice(&freeChunks, i, 1);
+	sizeFreeChunks = freeChunks->size();
+	for (int i = 0; i < sizeFreeChunks; i++) {
+		if (!(*freeChunks)[i]->tasksRunning) {
+			Chunk* chunk = (*freeChunks)[i];
+			Vec::splice(*freeChunks, i, 1);
 
 			Chunk_Init(chunk, x, z);
 			workqueue->addItem((WorkerItem){Enum::WorkerItemType::Load, chunk});
@@ -69,7 +70,7 @@ void World::unloadChunk(int i, int j) {
 }
 void World::unloadChunk(Chunk* chunk) {
 	workqueue->addItem((WorkerItem){Enum::WorkerItemType::Save, chunk});
-	vec_push(&freeChunks, chunk);
+	freeChunks->push_back(chunk);
 	chunk->references--;
 }
 
