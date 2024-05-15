@@ -6,7 +6,7 @@
 
 #include "util/VecUtil.h"
 
-static std::vector<VBO_Block*>* freedBlocks;
+static std::vector<VBO_Block*> freedBlocks;
 
 static LightLock lock;
 

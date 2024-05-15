@@ -19,7 +19,7 @@ typedef struct {
 		char path[256];
 } WorldInfo;
 
-static std::vector<WorldInfo>* worlds;
+static std::vector<WorldInfo> worlds;
 
 void WorldSelect_ScanWorlds() {
 	worlds->clear();

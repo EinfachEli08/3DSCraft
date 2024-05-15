@@ -26,7 +26,7 @@ SOURCES 		:= $(foreach dir,$(SOURCES),$(patsubst $(CURDIR)/%,%,$(dir)))
 
 # 3dsx
 APP_DESCRIPTION :=  Re-reload of Craftus Reloaded
-APP_AUTHOR		:=  u/SomeRandoLameo
+APP_AUTHOR		:=  Omega
 ICON			:=	$(META)/icon.png
 
 # CIA

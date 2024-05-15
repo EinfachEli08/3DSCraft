@@ -38,7 +38,7 @@ class SuperChunk {
 		int mPosX, mPosZ;
 		FILE* mDataFile = nullptr;
 		ChunkInfo* mGrid[SUPERCHUNK_SIZE][SUPERCHUNK_SIZE];
-		std::vector<u8>* mSectors;
+		std::vector<u8> mSectors;
 };
 
 inline static int ChunkToSuperChunkCoord(int x) {

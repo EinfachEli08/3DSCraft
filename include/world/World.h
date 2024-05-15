@@ -62,7 +62,7 @@ class World {
 
 		Chunk chunkPool[CHUNKPOOL_SIZE];
 		Chunk* chunkCache[CHUNKCACHE_SIZE][CHUNKCACHE_SIZE];
-		std::vector<Chunk*>* freeChunks;
+		std::vector<Chunk*> freeChunks;
 
 		WorkQueue* workqueue;
 		BlockEvent* blockEvent;

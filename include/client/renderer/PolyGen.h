@@ -35,7 +35,7 @@ class PolyGen : public ChunkWorkerObjBase {
 		}
 		inline void addFace(int x, int y, int z, Direction dir, Block block, uint8_t metadata, int ao, bool transparent) {
 			if (x >= 0 && y >= 0 && z >= 0 && x < CHUNK_SIZE && y < CHUNK_SIZE && z < CHUNK_SIZE) {
-				*faceBuffer[currentFace++] = (Face){x, y, z, dir, block, ao, metadata, transparent};
+				faceBuffer[currentFace++] = (Face){x, y, z, dir, block, ao, metadata, transparent};
 				transparentFaces += transparent;
 			}
 		}
@@ -62,13 +62,13 @@ class PolyGen : public ChunkWorkerObjBase {
 		World* world;
 		Player* player;
 
-		std::vector<VBOUpdate>* vboUpdates;
-		std::vector<QueueElement>* floodFillQueue;
+		std::vector<VBOUpdate> vboUpdates;
+		std::vector<QueueElement> floodFillQueue;
 
 		int currentFace;
 		int transparentFaces;
-		uint8_t floodFillVisited[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+		u8 floodFillVisited[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
-		Face* faceBuffer[MAX_FACES_PER_CLUSTER];
-		LightLock* updateLock;
+		Face faceBuffer[MAX_FACES_PER_CLUSTER];
+		LightLock updateLock;
 };

@@ -8,20 +8,20 @@
 
 PolyGen::PolyGen(World* _world, Player* _player) : player(_player), world(_world) {
 	VBOCache_Init();
-	LightLock_Init(updateLock);
+	LightLock_Init(&updateLock);
 }
 PolyGen::~PolyGen() {
 	VBOCache_Deinit();
 }
 
 void PolyGen::harvest() {
-	if (LightLock_TryLock(updateLock) == 0) {
-		DebugUI_Text("VBOUpdates %d", vboUpdates->size());
-		if (vboUpdates->size() > 0) {
-			if ((*vboUpdates)[0].delay++ > 2)
-				while (vboUpdates->size() > 0) {
-					VBOUpdate update = vboUpdates->back();
-					vboUpdates->pop_back();
+	if (LightLock_TryLock(&updateLock) == 0) {
+		DebugUI_Text("VBOUpdates %d", vboUpdates.size());
+		if (vboUpdates.size() > 0) {
+			if (vboUpdates[0].delay++ > 2)
+				while (vboUpdates.size() > 0) {
+					VBOUpdate update = vboUpdates.back();
+					vboUpdates.pop_back();
 
 					Chunk* chunk = world->getChunk(update.x, update.z);
 					if (chunk) {
@@ -38,7 +38,7 @@ void PolyGen::harvest() {
 				}
 		}
 
-		LightLock_Unlock(updateLock);
+		LightLock_Unlock(&updateLock);
 	}
 }
 
@@ -53,12 +53,12 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 		exitPoints[entrySide1] = true;
 	if (entrySide2 != Direction_Invalid)
 		exitPoints[entrySide2] = true;
-	floodFillQueue->clear();
-	floodFillQueue->push_back((QueueElement){x, y, z});
+	floodFillQueue.clear();
+	floodFillQueue.push_back((QueueElement){x, y, z});
 
-	while (floodFillQueue->size() > 0) {
-		QueueElement item = floodFillQueue->back();
-		floodFillQueue->pop_back();
+	while (floodFillQueue.size() > 0) {
+		QueueElement item = floodFillQueue.back();
+		floodFillQueue.pop_back();
 
 		for (int i = 0; i < 6; i++) {
 			const int* offset = DirectionToOffset[i];
@@ -68,7 +68,7 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 			} else {
 				if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf) && !(floodFillVisited[x][y][z] & 1)) {
 					floodFillVisited[x][y][z] |= 1;
-					floodFillQueue->push_back((QueueElement){x, y, z});
+					floodFillQueue.push_back((QueueElement){x, y, z});
 				}
 				if ((cluster->blocks[item.x][item.y][item.z] == Block_Air ||
 					 Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf)) &&
@@ -201,23 +201,23 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 				WorldVertex* opaqueData		 = (WorldVertex*)memBlock.memory;
 				WorldVertex* transparentData = (WorldVertex*)transparentMem.memory;
 				for (int j = 0; j < currentFace; j++) {
-					Face* face = faceBuffer[j];
+					Face face = faceBuffer[j];
 
-					int offsetX = face->x + item.chunk->x * CHUNK_SIZE;
-					int offsetZ = face->z + item.chunk->z * CHUNK_SIZE;
-					int offsetY = face->y + i * CHUNK_SIZE;
+					int offsetX = face.x + item.chunk->x * CHUNK_SIZE;
+					int offsetZ = face.z + item.chunk->z * CHUNK_SIZE;
+					int offsetY = face.y + i * CHUNK_SIZE;
 
 					int16_t iconUV[2];
-					Block_GetTexture(face->block, face->direction, face->metadata, iconUV);
+					Block_GetTexture(face.block, face.direction, face.metadata, iconUV);
 
-					WorldVertex* data = face->transparent ? transparentData : opaqueData;
-					memcpy(data, &cube_sides_lut[face->direction * 6], sizeof(WorldVertex) * 6);
+					WorldVertex* data = face.transparent ? transparentData : opaqueData;
+					memcpy(data, &cube_sides_lut[face.direction * 6], sizeof(WorldVertex) * 6);
 
 #define oneDivIconsPerRow (32768 / 8)
 #define halfTexel (6)
 
 					uint8_t color[3];
-					Block_GetColor(face->block, face->metadata, face->direction, color);
+					Block_GetColor(face.block, face.metadata, face.direction, color);
 
 					for (int k = 0; k < 6; k++) {
 						data[k].xyz[0] += offsetX;
@@ -230,7 +230,7 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 						data[k].rgb[1] = color[1];
 						data[k].rgb[2] = color[2];
 					}
-					if (face->transparent)
+					if (face.transparent)
 						transparentData += 6;
 					else
 						opaqueData += 6;
@@ -248,9 +248,9 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 			update.visibility		   = visibility;
 			update.transparentVertices = transparentVertices;
 
-			LightLock_Lock(updateLock);
-			vboUpdates->push_back(update);
-			LightLock_Unlock(updateLock);
+			LightLock_Lock(&updateLock);
+			vboUpdates.push_back(update);
+			LightLock_Unlock(&updateLock);
 		}
 	}
 	item.chunk->displayRevision = item.chunk->revision;
