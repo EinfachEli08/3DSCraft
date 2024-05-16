@@ -17,17 +17,16 @@ class Texture {
 	public:
 		Texture(C3D_Tex* texture, char* filename);
 		Texture() {}
-		~Texture() { delete mTexture; }
 
 		struct MapIcon {
 				uint32_t textureHash;
 				int16_t u, v;
 		};
 
-		C3D_Tex* getTexture() { return mTexture; }
+		C3D_Tex* getTexture() { return &mTexture; }
 
 	protected:
-		C3D_Tex* mTexture;
+		C3D_Tex mTexture;
 };
 
 class TextureMap : public Texture {

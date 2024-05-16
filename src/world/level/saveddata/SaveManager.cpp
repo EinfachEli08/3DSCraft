@@ -36,7 +36,7 @@ extern "C" {
 		mkdir(buffer, mkdirFlags);
 		chdir(buffer);
 
-		mkdir("superchunks", mkdirFlags);
+		mkdir("superChunks", mkdirFlags);
 
 		if (access("level.mp", F_OK) != -1) {
 			mpack_tree_t levelTree;
@@ -117,22 +117,22 @@ void SaveManager::unload() {
 		Crash("Mpack error %d while saving world manifest", err);
 	}
 
-	size_t sizeSuperChunks = superChunks->size();
+	size_t sizeSuperChunks = superChunks.size();
 	for (int i = 0; i < sizeSuperChunks; i++) {
-		delete superChunks->data()[i];
+		delete superChunks.data()[i];
 	}
-	superChunks->clear();
+	superChunks.clear();
 }
 
 static SuperChunk* fetchSuperChunk(SaveManager* mgr, int x, int z) {
-	size_t sizeSuperChunks = mgr->superChunks->size();
+	size_t sizeSuperChunks = mgr->superChunks.size();
 	for (int i = 0; i < sizeSuperChunks; i++) {
-		if (mgr->superChunks->data()[i]->getX() == x && mgr->superChunks->data()[i]->getZ() == z) {
-			return mgr->superChunks->data()[i];
+		if (mgr->superChunks.data()[i]->getX() == x && mgr->superChunks.data()[i]->getZ() == z) {
+			return mgr->superChunks.data()[i];
 		}
 	}
 	SuperChunk* superchunk = new SuperChunk(x, z);
-	mgr->superChunks->push_back(superchunk);
+	mgr->superChunks.push_back(superchunk);
 	svcSleepThread(50000);
 	return superchunk;
 }

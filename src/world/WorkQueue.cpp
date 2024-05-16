@@ -14,7 +14,7 @@ void WorkQueue::addItem(WorkerItem item) {
 	if (item.type == Enum::WorkerItemType::PolyGen)
 		++item.chunk->graphicalTasksRunning;
 	LightLock_Lock(&listInUse);
-	queue->push_back(item);
+	queue.push_back(item);
 	LightLock_Unlock(&listInUse);
 
 	LightEvent_Signal(&itemAddedEvent);

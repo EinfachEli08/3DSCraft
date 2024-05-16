@@ -38,7 +38,7 @@ ChunkWorker::~ChunkWorker() {
 
 void ChunkWorker::finish() {
 	LightEvent_Signal(&queue->itemAddedEvent);
-	while (working || queue->queue->size() > 0)
+	while (working || queue->queue.size() > 0)
 		svcSleepThread(1000000);
 }
 
@@ -62,7 +62,7 @@ void ChunkWorker::setHandlerActive(Enum::WorkerItemType workerType, ChunkWorkerO
 void mainLoop(void* todo_) {
 	ChunkWorker* todo = (ChunkWorker*)todo_;
 	std::vector<WorkerItem> privateQueue;
-	while (workerToStop != todo || todo->queue->queue->size() > 0) {
+	while (workerToStop != todo || todo->queue->queue.size() > 0) {
 		todo->working = false;
 
 		LightEvent_Wait(&todo->queue->itemAddedEvent);
@@ -71,18 +71,18 @@ void mainLoop(void* todo_) {
 		todo->working = true;
 
 		LightLock_Lock(&todo->queue->listInUse);
-		Vec::push_array(*privateQueue, todo->queue->queue->data(), todo->queue->queue->size());
-		todo->queue->queue->clear();
+		Vec::push_array(privateQueue, todo->queue->queue.data(), todo->queue->queue.size());
+		todo->queue->queue.clear();
 		LightLock_Unlock(&todo->queue->listInUse);
 
-		while (privateQueue->size() > 0) {
-			WorkerItem item = privateQueue->back();
+		while (privateQueue.size() > 0) {
+			WorkerItem item = privateQueue.back();
 			int itemType	= (int)item.type;
-			privateQueue->pop_back();
+			privateQueue.pop_back();
 
 			if (item.uuid == item.chunk->uuid) {
 				size_t sizeHandler = todo->handler[itemType].size();
-				for (int i = 0; i < sizeHandler; i++) {
+				for (size_t i = 0; i < sizeHandler; i++) {
 					if (todo->handler[itemType][i].active)
 						todo->handler[itemType][i].workerPtr->chunkFunction(todo->queue, item);
 					// call ChunkFunction

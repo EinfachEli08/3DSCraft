@@ -172,17 +172,15 @@ TextureMap::TextureMap(char** files, int num_files) {
 		c++;
 	}
 
-	mTexture = new C3D_Tex;
-
 	GSPGPU_FlushDataCache(buffer, maxSize);
 
-	if (!C3D_TexInitWithParams(mTexture, NULL, cTextureMapParams))
+	if (!C3D_TexInitWithParams(&mTexture, NULL, cTextureMapParams))
 		printf("Couldn't alloc texture memory\n");
 
-	C3D_TexSetFilter(mTexture, GPU_NEAREST, GPU_NEAREST);
+	C3D_TexSetFilter(&mTexture, GPU_NEAREST, GPU_NEAREST);
 
 	/*C3D_SyncDisplayTransfer(
-		buffer, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), (u32*)mTexture->data, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize),
+		buffer, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), (u32*)mTexture.data, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize),
 		{GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |
 		 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)});
 */
