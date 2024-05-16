@@ -120,7 +120,7 @@ void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry
 						  rx + rw,
 						  ry + rh,
 						  color};
-	cmdList->push_back(&spr);
+	cmdList.push_back(&spr);
 }
 
 static float rot = 0.f;
@@ -173,7 +173,7 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 							  iconUV[0] / 256 + cTextureTileSize,
 							  iconUV[1] / 256,
 							  color16};
-		cmdList->push_back(&spr);
+		cmdList.push_back(&spr);
 
 #undef unpackP
 	}
@@ -288,7 +288,7 @@ void SpriteBatch_StartFrame(int width, int height) {
 
 void SpriteBatch_Render(gfxScreen_t screen) {
 	rot += M_PI / 60.f;
-	std::sort(cmdList->begin(), cmdList->end(), compareDrawCommands);
+	std::sort(cmdList.begin(), cmdList.end(), compareDrawCommands);
 
 	C3D_Mtx projMtx;
 	Mtx_OrthoTilt(&projMtx, 0.f, screenWidth, screenHeight, 0.f, 1.f, -1.f, false);
@@ -307,16 +307,16 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 	int verticesTotal = 0;
 
 	size_t vtx = 0;
-	while (cmdList->size() > 0) {
+	while (cmdList.size() > 0) {
 		size_t vtxStart = vtx;
 
-		C3D_Tex* texture = cmdList->back()->texture;
+		C3D_Tex* texture = cmdList.back()->texture;
 		float divW = 1.f / texture->width * INT16_MAX, divH = 1.f / texture->height * INT16_MAX;
 
-		while (cmdList->size() > 0 && cmdList->back()->texture == texture) {
-			Sprite* cmd	  = cmdList->back();
+		while (cmdList.size() > 0 && cmdList.back()->texture == texture) {
+			Sprite* cmd	  = cmdList.back();
 			int16_t color = cmd->color;
-			cmdList->pop_back();
+			cmdList.pop_back();
 
 			int16_t u0 = (int16_t)((float)cmd->u0 * divW), v0 = (int16_t)((float)cmd->v0 * divH);
 			int16_t u1 = (int16_t)((float)cmd->u1 * divW), v1 = (int16_t)((float)cmd->v1 * divH);

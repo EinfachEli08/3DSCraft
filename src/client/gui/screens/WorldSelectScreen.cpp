@@ -22,7 +22,7 @@ typedef struct {
 static std::vector<WorldInfo> worlds;
 
 void WorldSelect_ScanWorlds() {
-	worlds->clear();
+	worlds.clear();
 
 	DIR* directory = opendir("sdmc:/craft/saves");
 
@@ -49,7 +49,7 @@ void WorldSelect_ScanWorlds() {
 			info.lastPlayed = 0;
 			strcpy(info.path, entry->d_name);
 
-			worlds->push_back(info);
+			worlds.push_back(info);
 		}
 	}
 
@@ -142,13 +142,13 @@ void WorldSelect_Render() {
 		if (ABS(velocity) < 0.001f)
 			velocity = 0.f;
 
-		int maximumSize = CHAR_HEIGHT * 2 * worlds->size();
+		int maximumSize = CHAR_HEIGHT * 2 * worlds.size();
 		if (scroll < -maximumSize)
 			scroll = -maximumSize;
 		if (scroll > 0)
 			scroll = 0;
 
-		int worldsMax = worlds->size();
+		int worldsMax = worlds.size();
 		for (int i = 0; i < worldsMax; i++) {
 			int y = i * (CHAR_HEIGHT + CHAR_HEIGHT) + 10 + scroll;
 			if (selectedWorld == i) {
@@ -160,7 +160,7 @@ void WorldSelect_Render() {
 			if (Gui_EnteredCursorInside(10, y - 3, 140, CHAR_HEIGHT + 6) && y < 32 * 2) {
 				selectedWorld = i;
 			}
-			SpriteBatch_PushText(20, y, -6, INT16_MAX, true, INT_MAX, NULL, "%s", (*worlds)[i].name, movementY);
+			SpriteBatch_PushText(20, y, -6, INT16_MAX, true, INT_MAX, NULL, "%s", worlds[i].name, movementY);
 		}
 
 		Gui_Offset(0, 2 * 32 + 5 + BUTTON_TEXT_PADDING);
@@ -243,8 +243,8 @@ bool WorldSelect_Update(char* out_worldpath, char* out_name, Enum::WorldGenType*
 
 			while (true) {
 				bool alreadyExisting = false;
-				for (int i = 0; i < worlds->size(); i++) {
-					if (!strcmp(out_worldpath, (*worlds)[i].path)) {
+				for (int i = 0; i < worlds.size(); i++) {
+					if (!strcmp(out_worldpath, worlds[i].path)) {
 						alreadyExisting = true;
 						break;
 					}
@@ -264,8 +264,8 @@ bool WorldSelect_Update(char* out_worldpath, char* out_name, Enum::WorldGenType*
 	}
 	if (clicked_play && selectedWorld != -1) {
 		clicked_play = false;
-		strcpy(out_name, (*worlds)[selectedWorld].name);
-		strcpy(out_worldpath, (*worlds)[selectedWorld].path);
+		strcpy(out_name, worlds[selectedWorld].name);
+		strcpy(out_worldpath, worlds[selectedWorld].path);
 
 		*newWorld = false;
 		menustate = MenuState_SelectWorld;
@@ -278,7 +278,7 @@ bool WorldSelect_Update(char* out_worldpath, char* out_name, Enum::WorldGenType*
 	if (confirmed_deletion) {
 		confirmed_deletion = false;
 		char buffer[512];
-		sprintf(buffer, "sdmc:/craft/saves/%s", (*worlds)[selectedWorld].path);
+		sprintf(buffer, "sdmc:/craft/saves/%s", worlds[selectedWorld].path);
 		delete_folder(buffer);
 
 		WorldSelect_ScanWorlds();

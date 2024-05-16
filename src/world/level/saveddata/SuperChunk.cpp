@@ -46,21 +46,21 @@ SuperChunk::SuperChunk(int x, int z) : mPosX(x), mPosZ(z) {
 
 		mpack_node_t chunkIndices = mpack_node_map_cstr(root, "chunkIndices");
 		for (int i = 0; i < SUPERCHUNK_SIZE * SUPERCHUNK_SIZE; i++) {
-			mpack_node_t chunkInfo							   = mpack_node_array_at(chunkIndices, i);
-			(*mGrid)[i % SUPERCHUNK_SIZE][i / SUPERCHUNK_SIZE] = (ChunkInfo){
-				mpack_node_u32(mpack_node_map_cstr(chunkInfo, "position")),
-				mpack_node_u32(mpack_node_map_cstr(chunkInfo, "compressedSize")),
-				mpack_node_u32(mpack_node_map_cstr(chunkInfo, "actualSize")), mpack_node_u8(mpack_node_map_cstr(chunkInfo, "blockSize")),
-				mpack_node_u32(mpack_node_map_cstr(chunkInfo, "revision"))};
+			mpack_node_t chunkInfo							= mpack_node_array_at(chunkIndices, i);
+			mGrid[i % SUPERCHUNK_SIZE][i / SUPERCHUNK_SIZE] = (ChunkInfo){mpack_node_u32(mpack_node_map_cstr(chunkInfo, "position")),
+																		  mpack_node_u32(mpack_node_map_cstr(chunkInfo, "compressedSize")),
+																		  mpack_node_u32(mpack_node_map_cstr(chunkInfo, "actualSize")),
+																		  mpack_node_u8(mpack_node_map_cstr(chunkInfo, "blockSize")),
+																		  mpack_node_u32(mpack_node_map_cstr(chunkInfo, "revision"))};
 
 			{
-				ChunkInfo* chunkInfo = mGrid[i % SUPERCHUNK_SIZE][i / SUPERCHUNK_SIZE];
-				if (chunkInfo->actualSize > 0) {
-					while (chunkInfo->position + chunkInfo->blockSize > mSectors->size()) {
-						mSectors->push_back(false);
+				ChunkInfo chunkInfo = mGrid[i % SUPERCHUNK_SIZE][i / SUPERCHUNK_SIZE];
+				if (chunkInfo.actualSize > 0) {
+					while (chunkInfo.position + chunkInfo.blockSize > mSectors.size()) {
+						mSectors.push_back(false);
 					}
-					for (int j = 0; j < chunkInfo->blockSize; j++)
-						mSectors->data()[chunkInfo->position + j] = true;
+					for (int j = 0; j < chunkInfo.blockSize; j++)
+						mSectors.data()[chunkInfo.position + j] = true;
 				}
 			}
 		}
@@ -97,7 +97,7 @@ void SuperChunk::saveIndex() {
 	mpack_start_array(&writer, SUPERCHUNK_SIZE * SUPERCHUNK_SIZE);
 	for (int j = 0; j < SUPERCHUNK_SIZE; j++) {
 		for (int i = 0; i < SUPERCHUNK_SIZE; i++) {
-			ChunkInfo chunkInfo = *mGrid[i][j];
+			ChunkInfo chunkInfo = mGrid[i][j];
 			mpack_start_map(&writer, 5);
 
 			mpack_write_cstr(&writer, "position");
@@ -127,9 +127,9 @@ void SuperChunk::saveIndex() {
 u32 SuperChunk::reserveSectors(int amount) {
 	int amountFulfilled			 = 0;
 	int startValue				 = -1;
-	size_t sizeSuperChunkSectors = mSectors->size();
+	size_t sizeSuperChunkSectors = mSectors.size();
 	for (size_t i = 0; i < sizeSuperChunkSectors; i++) {
-		if (!mSectors->data()[i]) {
+		if (!mSectors.data()[i]) {
 			if (startValue == -1)
 				startValue = i;
 			amountFulfilled++;
@@ -139,17 +139,17 @@ u32 SuperChunk::reserveSectors(int amount) {
 		}
 		if (amountFulfilled == amount) {
 			for (int i = 0; i < amount; i++)
-				mSectors->data()[startValue + i] = true;
+				mSectors.data()[startValue + i] = true;
 			return startValue;
 		}
 	}
 	for (int i = 0; i < amount; i++)
-		mSectors->push_back(true);
-	return mSectors->size() - amount;
+		mSectors.push_back(true);
+	return mSectors.size() - amount;
 }
 void SuperChunk::freeSectors(u32 address, u8 size) {
 	for (size_t i = 0; i < size; i++) {
-		mSectors->data()[address + i] = false;
+		mSectors.data()[address + i] = false;
 	}
 }
 
@@ -157,7 +157,7 @@ void SuperChunk::chunkSave(Chunk* chunk) {
 	int x = ChunkToLocalSuperChunkCoord(chunk->x);
 	int z = ChunkToLocalSuperChunkCoord(chunk->z);
 
-	if (mGrid[x][z]->revision != chunk->revision) {
+	if (mGrid[x][z].revision != chunk->revision) {
 		mpack_writer_t writer;
 		mpack_writer_init(&writer, mDecompressBuffer, mDecompressBufferSize);
 
@@ -204,8 +204,8 @@ void SuperChunk::chunkSave(Chunk* chunk) {
 		if (compress((uint8_t*)mFileBuffer, &compressedSize, (uint8_t*)mDecompressBuffer, uncompressedSize) == Z_OK) {
 			size_t blockSize = compressedSize / mSectorsize + 1;
 
-			if (mGrid[x][z]->actualSize > 0)
-				freeSectors(mGrid[x][z]->position, mGrid[x][z]->blockSize);
+			if (mGrid[x][z].actualSize > 0)
+				freeSectors(mGrid[x][z].position, mGrid[x][z].blockSize);
 
 			size_t address = reserveSectors(blockSize);
 
@@ -213,22 +213,22 @@ void SuperChunk::chunkSave(Chunk* chunk) {
 			if (fwrite(mFileBuffer, compressedSize, 1, mDataFile) != 1)
 				Crash("Couldn't write complete chunk data to file");
 
-			*mGrid[x][z] = (ChunkInfo){address, compressedSize, uncompressedSize, blockSize, chunk->revision};
+			mGrid[x][z] = (ChunkInfo){address, compressedSize, uncompressedSize, blockSize, chunk->revision};
 		}
 	}
 }
 
 void SuperChunk::chunkLoad(Chunk* chunk) {
-	int x				 = ChunkToLocalSuperChunkCoord(chunk->x);
-	int z				 = ChunkToLocalSuperChunkCoord(chunk->z);
-	ChunkInfo* chunkInfo = mGrid[x][z];
-	if (chunkInfo->actualSize > 0) {
-		fseek(mDataFile, chunkInfo->position * mSectorsize, SEEK_SET);
-		if (fread(mFileBuffer, chunkInfo->compressedSize, 1, mDataFile) != 1)
+	int x				= ChunkToLocalSuperChunkCoord(chunk->x);
+	int z				= ChunkToLocalSuperChunkCoord(chunk->z);
+	ChunkInfo chunkInfo = mGrid[x][z];
+	if (chunkInfo.actualSize > 0) {
+		fseek(mDataFile, chunkInfo.position * mSectorsize, SEEK_SET);
+		if (fread(mFileBuffer, chunkInfo.compressedSize, 1, mDataFile) != 1)
 			Crash("Read chunk data size isn't equal to the expected size");
 		mz_ulong uncompressedSize = mDecompressBufferSize;
 
-		if (uncompress((uint8_t*)mDecompressBuffer, &uncompressedSize, (uint8_t*)mFileBuffer, chunkInfo->compressedSize) == Z_OK) {
+		if (uncompress((uint8_t*)mDecompressBuffer, &uncompressedSize, (uint8_t*)mFileBuffer, chunkInfo.compressedSize) == Z_OK) {
 			mpack_tree_t tree;
 			mpack_tree_init_pool(&tree, mDecompressBuffer, uncompressedSize, mNodeDataPool, mNodeDataPoolSize);
 			mpack_node_t root = mpack_tree_root(&tree);
@@ -261,7 +261,7 @@ void SuperChunk::chunkLoad(Chunk* chunk) {
 			mpack_node_t heightmapNode = mpack_node_map_cstr(root, "heightmap");
 			if (mpack_node_type(heightmapNode) != mpack_type_nil) {
 				memcpy(chunk->heightmap, mpack_node_data(heightmapNode), sizeof(chunk->heightmap));
-				chunk->heightmapRevision = chunkInfo->revision;
+				chunk->heightmapRevision = chunkInfo.revision;
 			} else
 				chunk->heightmapRevision = 0;
 
@@ -270,7 +270,7 @@ void SuperChunk::chunkLoad(Chunk* chunk) {
 				Crash("MPack error %d while loading chunk(%d %d) from superchunk", err, chunk->x, chunk->z);
 			}
 
-			chunk->revision = chunkInfo->revision;
+			chunk->revision = chunkInfo.revision;
 		}
 	}
 }

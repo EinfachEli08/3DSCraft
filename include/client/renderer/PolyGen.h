@@ -33,7 +33,7 @@ class PolyGen : public ChunkWorkerObjBase {
 					   ? world->getMetadata((chunk->x * CHUNK_SIZE) + x, (cluster->y * CHUNK_SIZE) + y, (chunk->z * CHUNK_SIZE) + z)
 					   : (cluster->metadataLight[x][y][z] & 0xf);
 		}
-		inline void addFace(int x, int y, int z, Direction dir, Block block, uint8_t metadata, int ao, bool transparent) {
+		inline void addFace(s8 x, s8 y, s8 z, Direction dir, Block block, uint8_t metadata, s8 ao, bool transparent) {
 			if (x >= 0 && y >= 0 && z >= 0 && x < CHUNK_SIZE && y < CHUNK_SIZE && z < CHUNK_SIZE) {
 				faceBuffer[currentFace++] = (Face){x, y, z, dir, block, ao, metadata, transparent};
 				transparentFaces += transparent;
