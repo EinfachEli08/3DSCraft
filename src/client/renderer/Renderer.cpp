@@ -161,8 +161,7 @@ void Renderer::render() {
 			Inventory_Draw(8, 0, player->inventory, sizeof(player->inventory) / sizeof(ItemStack));
 		}
 
-	// if (gIsDebug)
-	if (false)
+	if (gIsDebug)
 		DebugUI_Draw();
 
 	Gui_Frame();

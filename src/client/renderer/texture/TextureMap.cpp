@@ -179,11 +179,11 @@ TextureMap::TextureMap(char** files, int num_files) {
 
 	C3D_TexSetFilter(&mTexture, GPU_NEAREST, GPU_NEAREST);
 
-	/*C3D_SyncDisplayTransfer(
+	C3D_SyncDisplayTransfer(
 		buffer, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize), (u32*)mTexture.data, GX_BUFFER_DIM(cTextureMapSize, cTextureMapSize),
 		{GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |
 		 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)});
-*/
+
 	int size		 = cTextureMapSize / 2;
 	ptrdiff_t offset = cTextureMapSize * cTextureMapSize;
 
