@@ -143,8 +143,8 @@ TextureMap::TextureMap(char** files, int num_files) {
 	while (filename && c < (cTextureMapTileNum * cTextureMapTileNum) && filei < num_files) {
 		u8* image;
 		unsigned int w, h;
-		u32 hasLoadError = lodepng_decode32_file(&image, &w, &h, filename);
-		if (w == cTextureTileSize && h == cTextureTileSize && !image && !hasLoadError) {
+		u32 loadError = lodepng_decode32_file(&image, &w, &h, filename);
+		if (w == cTextureTileSize && h == cTextureTileSize && image && !loadError) {
 			for (int x = 0; x < cTextureTileSize; x++) {
 				for (int y = 0; y < cTextureTileSize; y++) {
 					buffer[(locX + x) + ((y + locY) * cTextureMapSize)] =
@@ -166,6 +166,10 @@ TextureMap::TextureMap(char** files, int num_files) {
 			}
 		} else {
 			printf("Image size(%d, %d) doesn't match or ptr null(internal error)\n'", w, h);
+			if (loadError == 78)
+				printf("Lodepng could not find/load file, return code 78");
+			else
+				printf("Lodepng return code: %s", loadError);
 		}
 		free(image);
 		filename = files[++filei];
@@ -196,8 +200,8 @@ TextureMap::TextureMap(char** files, int num_files) {
 
 		GSPGPU_FlushDataCache(tiledImage, size * size * 4);
 
-		// GX_RequestDma(tiledImage, (u32*)mTexture->data + offset, size * size * 4);
-		// gspWaitForAnyEvent();
+		GX_RequestDma(tiledImage, (u32*)mTexture.data + offset, size * size * 4);
+		gspWaitForAnyEvent();
 
 		offset += size * size;
 		size /= 2;
