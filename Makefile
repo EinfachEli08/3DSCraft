@@ -34,11 +34,9 @@ BANNER_AUDIO	:=	$(META)/banner.wav
 BANNER_IMAGE	:=	$(META)/banner.cgfx
 RSF_PATH		:=	$(META)/app.rsf
 LOGO			:=	$(META)/logo.bcma.lz
-UNIQUE_ID		:=	0x181169
-PRODUCT_CODE	:=	CTR-3D-CRFT
 ICON_FLAGS		:=	nosavebackups,visible
 
-LIBS			:= -lgame -lcitro3dd -lctru -lstdc++ -lm -ljansson -lcurl #tex3ds
+LIBS			:= `arm-none-eabi-pkg-config --libs vorbisidec libarchive jansson libpng` -lcitro3dd -lctru -lm -lz -lgame -lstdc++
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -142,7 +140,7 @@ endif
 BANNERTOOL   ?= tools/bannertool.exe
 MAKEROM      ?= tools/makerom.exe
 
-MAKEROM_ARGS := -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(BUILD)/icon.icn" -DAPP_TITLE="$(TARGET)" -DAPP_PRODUCT_CODE="$(PRODUCT_CODE)" -DAPP_UNIQUE_ID="$(UNIQUE_ID)"
+MAKEROM_ARGS := -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(BUILD)/icon.icn"
 MAKEROM_ARGS += -major $(VERSION_MAJOR) -minor $(VERSION_MINOR) -micro $(VERSION_MICRO)
 
 ifneq ($(strip $(LOGO)),)

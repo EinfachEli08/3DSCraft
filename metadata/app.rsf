@@ -1,37 +1,35 @@
 BasicInfo:
-  Title                   : $(APP_TITLE)
+  Title                   : 3DSCraft
   CompanyCode             : "00"
-  ProductCode             : $(PRODUCT_CODE)
+  ProductCode             : CTR-3D-CRFT
   ContentType             : Application
   Logo                    : Homebrew # Nintendo / Licensed / Distributed / iQue / iQueForSystem
 RomFs:
-  RootPath: "romfs"
+  RootPath: romfs
 
 TitleInfo:
-  UniqueId                : $(UNIQUE_ID)
+  UniqueId                : 0x000669F
 
   Category                : Application
 
 Option:
   UseOnSD                 : true # true if App is to be installed to SD
   FreeProductCode         : true # Removes limitations on ProductCode
+  EnableCompress          : true # Compresses where applicable (currently only exefs:/.code)
   MediaFootPadding        : false # If true CCI files are created with padding
   EnableCrypt             : false # Enables encryption for NCCH and CIA
-  EnableCompress          : true # Compresses where applicable (currently only exefs:/.code)
-  
-SystemControlInfo:
-  
+
 AccessControlInfo:
   # ExtData
-  UseExtSaveData                : true # enables ExtData       
+  UseExtSaveData                : true # enables ExtData
   ExtSaveDataId                : 0x421 # only set this when the ID is different to the UniqueId
 
   # FS:USER Archive Access Permissions
   # Uncomment as required
   FileSystemAccess:
-   #- CategorySystemApplication
-   #- CategoryHardwareCheck
-   #- CategoryFileSystemTool
+   - CategorySystemApplication
+   - CategoryHardwareCheck
+   - CategoryFileSystemTool
    - Debug
    #- TwlCardBackup
    #- TwlNandData
@@ -48,6 +46,15 @@ AccessControlInfo:
    #- Shell
    #- CategoryHomeMenu
    #- SeedDB
+  IoAccessControl:
+  - FsMountNand
+  - FsMountNandRoWrite
+  - FsMountTwln
+  - FsMountWnand
+  - FsMountCardSpi
+  - UseSdif3
+  - CreateSeed
+  - UseCardSpi
 
   # New3DS Exclusive Process Settings
   SystemModeExt                 : Legacy # Legacy(Default)/124MB/178MB  Legacy:Use Old3DS SystemMode
@@ -55,25 +62,26 @@ AccessControlInfo:
   EnableL2Cache                 : true # false(default)/true
   CanAccessCore2                : true
 
-  # do not edit below here, but starting at SystemControlInfo below.
-  
-  IdealProcessor                : 0
-  AffinityMask                  : 1
-  
-  Priority                      : 16
-   
-  MaxCpu                        : 0x9E # Default
   DisableDebug                  : false
   EnableForceDebug              : false
   CanWriteSharedPage            : false
   CanUsePrivilegedPriority      : false
   CanUseNonAlphabetAndNumber    : false
-  PermitMainFunctionArgument    : false
+  PermitMainFunctionArgument    : true
   CanShareDeviceMemory          : false
   RunnableOnSleep               : false
   SpecialMemoryArrange          : false
+
+  # do not edit below here, but starting at SystemControlInfo below.
   CoreVersion                   : 2
   DescVersion                   : 2
+
+  IdealProcessor                : 0
+  AffinityMask                  : 1
+
+  Priority                      : 16
+
+  MaxCpu                        : 0x9E # Default
   
   ReleaseKernelMajor            : "02"
   ReleaseKernelMinor            : "33" 
