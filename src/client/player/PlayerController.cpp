@@ -248,7 +248,6 @@ PlayerController::PlayerController(Player* player) {
 }
 
 void PlayerController::update(InputData input, float dt) {
-	Player* player = player;
 	PlatformAgnosticInput agnosticInput;
 	convertPlatformInput(&input, agnosticInput.keys, agnosticInput.keysdown, agnosticInput.keysup);
 

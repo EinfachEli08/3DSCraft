@@ -23,7 +23,7 @@ void Cursor_Deinit() {
 	linearFree(cursorVBO);
 }
 
-void Cursor_Draw(int projUniform, C3D_Mtx* projectionview, World* world, int x, int y, int z, Direction highlight) {
+void Cursor_Draw(int projUniform, C3D_Mtx* projectionview, World* world, int x, int y, int z, Direction::e highlight) {
 	C3D_Mtx model;
 	Mtx_Identity(&model);
 	Mtx_Translate(&model, x, y, z, true);
