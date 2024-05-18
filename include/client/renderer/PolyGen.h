@@ -2,10 +2,10 @@
 
 #include <vector>
 
+#include "../../core/Direction.h"
 #include "client/player/Player.h"
 #include "client/renderer/VBOCache.h"
 #include "client/renderer/VertexFmt.h"
-#include "world/Direction.h"
 #include "world/WorkQueue.h"
 #include "world/World.h"
 #include "world/level/chunk/ChunkWorkerObjBase.h"

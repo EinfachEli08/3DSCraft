@@ -257,6 +257,7 @@ endif
 AR := $(DEVKITARM)/bin/arm-none-eabi-ar.exe
 
 LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
+LIBSOURCES += $(wildcard lib/*/*/*.cpp lib/*/*/*.c)
 LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
 
 lib: lib/$(OUTPUT).a

@@ -64,10 +64,10 @@ void Block_GetTexture(Block block, int _direction, uint8_t metadata, int16_t* ou
 			break;
 		case Block_Grass:
 			switch (direction) {
-				case Direction_Top:
+				case Direction::Up:
 					i = icon.grass_top;
 					break;
-				case Direction_Bottom:
+				case Direction::Down:
 					i = icon.dirt;
 					break;
 				default:
@@ -83,8 +83,8 @@ void Block_GetTexture(Block block, int _direction, uint8_t metadata, int16_t* ou
 			break;
 		case Block_Log:
 			switch (direction) {
-				case Direction_Bottom:
-				case Direction_Top:
+				case Direction::Down:
+				case Direction::Up:
 					i = icon.oaklog_top;
 					break;
 				default:
@@ -130,7 +130,7 @@ void Block_GetTexture(Block block, int _direction, uint8_t metadata, int16_t* ou
 	{ extractR(c), extractG(c), extractB(c) }*/
 void Block_GetColor(Block block, uint8_t metadata, int _direction, uint8_t out_rgb[]) {
 	int direction = (int)_direction;
-	if ((block == Block_Grass && direction == Direction_Top) || block == Block_Leaves) {
+	if ((block == Block_Grass && direction == Direction::Up) || block == Block_Leaves) {
 		out_rgb[0] = 140;
 		out_rgb[1] = 214;
 		out_rgb[2] = 123;
