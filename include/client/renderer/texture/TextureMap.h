@@ -19,10 +19,10 @@ class Texture {
 		Texture() {}
 
 		struct MapIcon {
-				uint32_t textureHash;
-				int16_t u, v;
+				u32 textureHash;
+				s16 u, v;
 		};
-
+		
 		C3D_Tex* getTexture() { return &mTexture; }
 
 	protected:
@@ -33,7 +33,7 @@ class TextureMap : public Texture {
 	public:
 		TextureMap(char** files, int num_files);
 
-		MapIcon* getIcon(char* filename);
+		MapIcon getIcon(char* filename);
 
 	private:
 		MapIcon icons[cTextureMapTileNum * cTextureMapTileNum];

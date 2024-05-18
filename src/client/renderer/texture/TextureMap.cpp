@@ -207,12 +207,12 @@ TextureMap::TextureMap(char** files, int num_files) {
 	linearFree(buffer);
 }
 
-Texture::MapIcon* TextureMap::getIcon(char* filename) {
-	uint32_t h = hash(filename);
-	for (size_t i = 0; i < cTextureMapTileNum * cTextureMapTileNum; i++) {
+Texture::MapIcon TextureMap::getIcon(char* filename) {
+	u32 h = hash(filename);
+	for (u8 i = 0; i < cTextureMapTileNum * cTextureMapTileNum; i++) {
 		if (h == icons[i].textureHash) {
-			return &icons[i];
+			return icons[i];
 		}
 	}
-	return nullptr;
+	return icons[0];  // TODO: invalid texture?
 }

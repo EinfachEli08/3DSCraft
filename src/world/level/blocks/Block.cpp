@@ -38,7 +38,7 @@ static struct {
 } icon;
 
 void Block_Init() {
-#define A(i, n) icon.i = *textureMap->getIcon(PPRX n)
+#define A(i, n) icon.i = textureMap->getIcon(PPRX n)
 	TEXTURE_FILES;
 #undef A
 }

@@ -135,7 +135,7 @@ void Renderer::render() {
 		C3D_BindProgram(&gui_shader);
 		C3D_SetAttrInfo(&gui_vertexAttribs);
 
-		SpriteBatch_Render(GFX_TOP);
+		// SpriteBatch_Render(GFX_TOP);
 
 		if (iod <= 0.f)
 			break;
@@ -161,12 +161,13 @@ void Renderer::render() {
 			Inventory_Draw(8, 0, player->inventory, sizeof(player->inventory) / sizeof(ItemStack));
 		}
 
-	if (gIsDebug)
+	// if (gIsDebug)
+	if (false)
 		DebugUI_Draw();
 
 	Gui_Frame();
 
-	SpriteBatch_Render(GFX_BOTTOM);
+	// SpriteBatch_Render(GFX_BOTTOM);
 
 	C3D_FrameEnd(0);
 }
