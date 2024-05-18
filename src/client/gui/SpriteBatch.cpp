@@ -311,7 +311,8 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 		size_t vtxStart = vtx;
 
 		C3D_Tex* texture = cmdList.back()->texture;
-		float divW = 1.f / texture->width * INT16_MAX, divH = 1.f / texture->height * INT16_MAX;
+		float divW		 = 1.f / texture->width * INT16_MAX;
+		float divH		 = 1.f / texture->height * INT16_MAX;
 
 		while (cmdList.size() > 0 && cmdList.back()->texture == texture) {
 			Sprite* cmd	  = cmdList.back();
