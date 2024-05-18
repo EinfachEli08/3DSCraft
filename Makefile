@@ -38,11 +38,6 @@ UNIQUE_ID		:=	0x181169
 PRODUCT_CODE	:=	CTR-3D-CRFT
 ICON_FLAGS		:=	nosavebackups,visible
 
-ifeq ($(DEBUG), 0)
-CFLAGS_ADD		:=	-fomit-frame-pointer -O2
-else
-CFLAGS_ADD		:=	-g -D_DEBUG
-endif
 LIBS			:= -lgame -lcitro3dd -lctru -lstdc++ -lm -ljansson -lcurl #tex3ds
 
 #---------------------------------------------------------------------------------
@@ -57,10 +52,16 @@ CFLAGS	:=	-g -Wall -Wno-psabi -O2 -mword-relocations \
 
 CFLAGS	+=	$(INCLUDE) -D__3DS__ -D_GNU_SOURCE=1
 
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++17 $(CITRA)
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=c++17 $(CITRA)
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
+
+ifeq ($(DEBUG), 0)
+LDFLAGS		+=	-fomit-frame-pointer -O2
+else
+LDFLAGS		+=	-g -D_DEBUG
+endif
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
