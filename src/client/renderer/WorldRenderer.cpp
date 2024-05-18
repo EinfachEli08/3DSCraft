@@ -92,7 +92,7 @@ static void renderWorld() {
 
 	int pY		  = CLAMP(WorldToChunkCoord(FastFloor(player->position.y)), 0, CLUSTER_PER_CHUNK - 1);
 	Chunk* pChunk = world->getChunk(WorldToChunkCoord(FastFloor(player->position.x)), WorldToChunkCoord(FastFloor(player->position.z)));
-	renderingQueue.push_back((RenderStep){&pChunk->clusters[pY], pChunk, Direction_Invalid});
+	renderingQueue.push_back((RenderStep){&pChunk->clusters[pY], pChunk, Direction::Invalid});
 	chunkRendered[CHUNKCACHE_SIZE / 2][pY][CHUNKCACHE_SIZE / 2] = 1;
 
 	float3 playerPos = player->position;
@@ -140,7 +140,7 @@ static void renderWorld() {
 			if (clusterWasRendered(newX, newY, newZ) & 1)
 				continue;
 
-			if (!ChunkCanBeSeenThrough(cluster->seeThrough, step.enteredFrom, dir) && step.enteredFrom != Direction_Invalid)
+			if (!ChunkCanBeSeenThrough(cluster->seeThrough, step.enteredFrom, dir) && step.enteredFrom != Direction::Invalid)
 				continue;
 
 			C3D_FVec chunkPosition = FVec3_New(newX * CHUNK_SIZE, newY * CHUNK_SIZE, newZ * CHUNK_SIZE);

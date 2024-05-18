@@ -69,21 +69,21 @@ bool Raycast_Cast(World* world, float3 inpos, float3 raydir, Raycast_Result* out
 	switch (side) {
 		case 0:	 // X Achse
 			if (raydir.x > 0.f)
-				out->direction = Direction_West;
+				out->direction = Direction::West;
 			else
-				out->direction = Direction_East;
+				out->direction = Direction::East;
 			break;
 		case 1:	 // Y Achse
 			if (raydir.y > 0.f)
-				out->direction = Direction_Bottom;
+				out->direction = Direction::Down;
 			else
-				out->direction = Direction_Top;
+				out->direction = Direction::Up;
 			break;
 		case 2:	 // Z Achse
 			if (raydir.z > 0.f)
-				out->direction = Direction_North;
+				out->direction = Direction::North;
 			else
-				out->direction = Direction_South;
+				out->direction = Direction::South;
 			break;
 		default:
 			printf("Unknown axis! %d\n", side);

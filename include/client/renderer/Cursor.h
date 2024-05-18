@@ -1,6 +1,6 @@
 #pragma once
 
-#include "world/Direction.h"
+#include "../../core/Direction.h"
 #include "world/World.h"
 
 #include <citro3d.h>
