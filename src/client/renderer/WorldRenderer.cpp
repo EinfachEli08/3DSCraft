@@ -25,7 +25,7 @@ static int projectionUniform;
 typedef struct {
 		Cluster* cluster;
 		Chunk* chunk;
-		Direction enteredFrom;
+		Direction::e enteredFrom;
 } RenderStep;
 
 typedef struct {
@@ -122,8 +122,8 @@ static void renderWorld() {
 		// if (polysTotal >= 150000) break;
 
 		for (int i = 0; i < 24; i++) {
-			Direction dir	  = (Direction)i;
-			const int* offset = DirectionToOffset[dir];
+			Direction::e dir  = (Direction::e)i;
+			const int* offset = DirectionToOffset[i];
 
 			int newX = chunk->x + offset[0], newY = cluster->y + offset[1], newZ = chunk->z + offset[2];
 			if (newX < world->cacheTranslationX - CHUNKCACHE_SIZE / 2 + 1 || newX > world->cacheTranslationX + CHUNKCACHE_SIZE / 2 - 1 ||

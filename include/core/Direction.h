@@ -1,6 +1,7 @@
 #pragma once
 
-enum class Direction {
+namespace Direction {
+enum e {
 	Down,
 	Up,
 	North,
@@ -9,13 +10,16 @@ enum class Direction {
 	East,
 	Invalid
 };
+}  // namespace Direction
 
-enum class Axis {
+namespace Axis {
+enum e {
 	X,
 	Y,
 	Z
 };
+}  // namespace Axis
 
 extern int DirectionToOffset[7][3];
-extern Direction DirectionOpposite[7];
-extern Axis DirectionToAxis[7];
+extern Direction::e DirectionOpposite[7];
+extern Axis::e DirectionToAxis[7];
