@@ -11,7 +11,7 @@
 #include "client/renderer/Clouds.h"
 #include "client/renderer/Cursor.h"
 #include "client/renderer/WorldRenderer.h"
-#include "client/renderer/texture/TextureMap.h"
+#include "client/renderer/texture/Texture.h"
 #include "world/WorkQueue.h"
 #include "world/World.h"
 #include "world/level/blocks/Block.h"

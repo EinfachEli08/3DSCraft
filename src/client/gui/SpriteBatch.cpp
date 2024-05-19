@@ -7,7 +7,7 @@
 #include "client/gui/FontLoader.h"
 #include "client/renderer/CubeSidesTable.h"
 #include "client/renderer/VertexFmt.h"
-#include "client/renderer/texture/TextureMap.h"
+#include "client/renderer/texture/Texture.h"
 
 typedef struct {
 		int depth;
@@ -42,16 +42,16 @@ void SpriteBatch_Init(int projUniform_) {
 	projUniform = projUniform_;
 
 	font = (Font*)malloc(sizeof(Font));
-	FontLoader_Init(font, "romfs:/textures/font/ascii.png");
-	Texture(&widgetsTex, "romfs:/textures/gui/widgets.png");
+	FontLoader_Init(font, "romfs:/textures/font/ascii.t3x");
+	Texture(&widgetsTex, "romfs:/textures/gui/widgets.t3x");
 
 	uint8_t data[16 * 16];
 	memset(data, 0xff, 16 * 16 * sizeof(uint8_t));
 	C3D_TexInit(&whiteTex, 16, 16, GPU_L8);
 	C3D_TexLoadImage(&whiteTex, data, GPU_TEXFACE_2D, 0);
 
-	Texture(&menuBackgroundTex, "romfs:/textures/gui/options_background.png");
-	Texture(&supportQRTex, "romfs:/textures/others/support-image.png");
+	Texture(&menuBackgroundTex, "romfs:/textures/gui/options_background.t3x");
+	Texture(&supportQRTex, "romfs:/textures/others/support-image.t3x");
 
 	Mtx_Identity(&iconModelMtx);
 	Mtx_RotateY(&iconModelMtx, M_PI / 4.f, false);
@@ -153,7 +153,7 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 		WorldVertex topRight	= vertices[i * 6 + 2];
 		WorldVertex topLeft		= vertices[i * 6 + 4];
 
-		C3D_Tex* texture = Block_GetTextureMap();
+		C3D_Tex* texture = Block_GetTileSet();
 
 		int16_t color16 = SHADER_RGB(color[0] >> 3, color[1] >> 3, color[2] >> 3);
 		if (i == Direction::South)

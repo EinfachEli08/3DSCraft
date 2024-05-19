@@ -1,40 +1,40 @@
 #include "world/level/blocks/Block.h"
 
 #include "client/renderer/VertexFmt.h"
-#include "client/renderer/texture/TextureMap.h"
+#include "client/renderer/texture/Texture.h"
 
 // PATH PREFIX
 #define PPRX "romfs:/textures/blocks/"
 
 #define TEXTURE_FILES                                                                                                                      \
-	A(dirt, "dirt.png"), A(grass_side, "grass_block_side.png"), A(grass_top, "grass_block_top.png"), A(stone, "stone.png"),                \
-		A(stone_bricks, "stone_bricks.png"), A(smooth_stone, "smooth_stone.png"), A(cobblestone, "cobblestone.png"), A(sand, "sand.png"),  \
-		A(oaklog_side, "log_oak.png"), A(oaklog_top, "log_oak_top.png"), A(leaves_oak, "leaves_oak.png"), A(glass, "glass.png"),           \
-		A(brick, "brick.png"), A(oakplanks, "planks_oak.png"), A(wool, "wool.png"), A(bedrock, "bedrock.png")
+	A(dirt, "dirt.t3x"), A(grass_side, "grass_block_side.t3x"), A(grass_top, "grass_block_top.t3x"), A(stone, "stone.t3x"),                \
+		A(stone_bricks, "stone_bricks.t3x"), A(smooth_stone, "smooth_stone.t3x"), A(cobblestone, "cobblestone.t3x"), A(sand, "sand.t3x"),  \
+		A(oaklog_side, "log_oak.t3x"), A(oaklog_top, "log_oak_top.t3x"), A(leaves_oak, "leaves_oak.t3x"), A(glass, "glass.t3x"),           \
+		A(brick, "brick.t3x"), A(oakplanks, "planks_oak.t3x"), A(wool, "wool.t3x"), A(bedrock, "bedrock.t3x")
 
 #define A(i, n) PPRX n
 char* texture_files[] = {TEXTURE_FILES};
 #undef A
 
-static TextureMap* textureMap = new TextureMap(texture_files, sizeof(texture_files) / sizeof(texture_files[0]));
+static TileSet* textureMap = new TileSet(texture_files, sizeof(texture_files) / sizeof(texture_files[0]));
 
 static struct {
-		Texture::MapIcon stone;
-		Texture::MapIcon stone_bricks;
-		Texture::MapIcon smooth_stone;
-		Texture::MapIcon cobblestone;
-		Texture::MapIcon dirt;
-		Texture::MapIcon grass_side;
-		Texture::MapIcon grass_top;
-		Texture::MapIcon sand;
-		Texture::MapIcon oaklog_side;
-		Texture::MapIcon oaklog_top;
-		Texture::MapIcon leaves_oak;
-		Texture::MapIcon glass;
-		Texture::MapIcon brick;
-		Texture::MapIcon oakplanks;
-		Texture::MapIcon wool;
-		Texture::MapIcon bedrock;
+		Texture::Tile stone;
+		Texture::Tile stone_bricks;
+		Texture::Tile smooth_stone;
+		Texture::Tile cobblestone;
+		Texture::Tile dirt;
+		Texture::Tile grass_side;
+		Texture::Tile grass_top;
+		Texture::Tile sand;
+		Texture::Tile oaklog_side;
+		Texture::Tile oaklog_top;
+		Texture::Tile leaves_oak;
+		Texture::Tile glass;
+		Texture::Tile brick;
+		Texture::Tile oakplanks;
+		Texture::Tile wool;
+		Texture::Tile bedrock;
 } icon;
 
 void Block_Init() {
@@ -46,13 +46,13 @@ void Block_Deinit() {
 	delete textureMap;
 }
 
-C3D_Tex* Block_GetTextureMap() {
+C3D_Tex* Block_GetTileSet() {
 	return textureMap->getTexture();
 }
 
 void Block_GetTexture(Block block, int _direction, uint8_t metadata, int16_t* out_uv) {
-	int direction	   = (int)_direction;
-	Texture::MapIcon i = {0, 0, 0};
+	int direction	= (int)_direction;
+	Texture::Tile i = {0, 0, 0};
 	switch (block) {
 		case Block_Air:
 			return;

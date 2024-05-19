@@ -198,7 +198,7 @@ void WorldRenderer_Render(float iod) {
 	Camera_Update(&camera, player, iod);
 
 	Hand_Draw(projectionUniform, &camera.projection, player->quickSelectBar[player->quickSelectBarSlot], player);
-	C3D_TexBind(0, (C3D_Tex*)Block_GetTextureMap());
+	C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
 
 	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projectionUniform, &camera.vp);
 
