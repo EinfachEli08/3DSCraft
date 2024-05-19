@@ -43,7 +43,7 @@ void Block_Init() {
 #undef A
 }
 void Block_Deinit() {
-	C3D_TexDelete(textureMap->getTexture());
+	delete textureMap;
 }
 
 C3D_Tex* Block_GetTextureMap() {
