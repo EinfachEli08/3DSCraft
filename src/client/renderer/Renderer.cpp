@@ -49,7 +49,7 @@ Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* ga
 
 	Block_Init();
 
-	Texture(&logoTex, "romfs:/textures/gui/title/minecraft.png");
+	Texture(&logoTex, "romfs:/textures/gui/title/minecraft.t3x");
 }
 
 Renderer::~Renderer() {
@@ -95,7 +95,7 @@ void Renderer::render() {
 		C3D_SetAttrInfo(&world_vertexAttribs);
 
 		if (*gamestate == GameState_Playing) {
-			C3D_TexBind(0, (C3D_Tex*)Block_GetTextureMap());
+			C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
 
 			WorldRenderer_Render(!i ? -iod : iod);
 
