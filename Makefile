@@ -5,6 +5,9 @@
 ifeq ($(strip $(DEVKITARM)),)
 $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
 endif
+ifeq ($(strip $(DEVKITPRO)),)
+$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>devkitPRO")
+endif
 
 TOPDIR ?= $(CURDIR)
 include $(DEVKITARM)/3ds_rules
@@ -20,9 +23,10 @@ BUILD			:=	build
 DATA			:=	data
 META			:=	metadata
 ROMFS			:=	romfs
+ASSETS			:=  assets
 INCLUDES		:=	include lib
-SOURCES 		:= $(wildcard $(shell find $(realpath src) -type d))
-SOURCES 		:= $(foreach dir,$(SOURCES),$(patsubst $(CURDIR)/%,%,$(dir)))
+SOURCES 		:=  $(wildcard $(shell find $(realpath src) -type d))
+SOURCES 		:=  $(foreach dir,$(SOURCES),$(patsubst $(CURDIR)/%,%,$(dir)))
 
 # 3dsx
 APP_DESCRIPTION :=  Re-reload of Craftus Reloaded
@@ -36,7 +40,7 @@ RSF_PATH		:=	$(META)/app.rsf
 LOGO			:=	$(META)/logo.bcma.lz
 ICON_FLAGS		:=	nosavebackups,visible
 
-LIBS			:= -lgame -lcitro3dd -lctru -lstdc++ -lm -ljansson -lcurl
+LIBS			:= -lgame -lcitro3dd -lctru -lstdc++ -lm -ljansson -lcurl #tex3ds
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -101,7 +105,10 @@ else
 	export LD	:=	$(CXX)
 #---------------------------------------------------------------------------------
 endif
-#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------------
+# File searching
+#---------------------------------------------------------------------------------------
 
 export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 			$(PICAFILES:.v.pica=.shbin.o) $(SHLISTFILES:.shlist=.shbin.o) \
@@ -136,7 +143,10 @@ endif
 
 .PHONY: $(BUILD) clean all
 
-#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------------
+# Cia building preparation
+#---------------------------------------------------------------------------------------
 BANNERTOOL   ?= tools/bannertool.exe
 MAKEROM      ?= tools/makerom.exe
 
@@ -163,25 +173,28 @@ else
 	BANNER_AUDIO_ARG := -a
 endif
 
-#---------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------
+# Main targets
+#---------------------------------------------------------------------------------------
 all: cia
 
-3dsx: greetings
+3dsx: greetings lib pack
 	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
-	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 cia: 3dsx
+	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
 	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
 	@echo building $(TARGET).cia...
 	@$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
 	@echo built $(TARGET).cia
 #---------------------------------------------------------------------------------
-clean:
-	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).elf
-	@rm -fr $(OUTDIR)
-#---------------------------------------------------------------------------------
+clean: clean-libs clean-pack
+	rm -rf $(BUILD)/
+	rm -f $(TARGET).elf
 
+#---------------------------------------------------------------------------------------
+# Testing
+#---------------------------------------------------------------------------------------
 dbg: #debug dima
 	$(DEVKITARM)/bin/arm-none-eabi-gdb.exe $(TARGET).elf
 rund: #run dima
@@ -190,8 +203,9 @@ run:
 	@echo running...
 	@3dslink $(TARGET).3dsx
 
-#---------------------------------------------------------------------------------
-
+#---------------------------------------------------------------------------------------
+# Greetings
+#---------------------------------------------------------------------------------------
 greetings:
 	@echo $(TARGET) Compilation for 3DS started!
 	@echo made by $(APP_AUTHOR)
@@ -200,6 +214,19 @@ ifeq ($(DEBUG), 1)
 else
 	@echo Release build v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_MICRO)
 endif
+
+#---------------------------------------------------------------------------------------
+# Library files
+#---------------------------------------------------------------------------------------
+LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
+LIBSOURCES += $(wildcard lib/*/*/*.cpp lib/*/*/*.c)
+LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
+
+#---------------------------------------------------------------------------------------
+# Texture files
+#---------------------------------------------------------------------------------------
+PNG_FILES := $(shell find $(ASSETS) -name '*.png')
+T3X_FILES := $(patsubst $(ASSETS)/%.png, $(ROMFS)/%.t3x, $(PNG_FILES))
 
 #---------------------------------------------------------------------------------
 else
@@ -252,23 +279,46 @@ endef
 
 #---------------------------------------------------------------------------------------
 endif
+
 #---------------------------------------------------------------------------------------
+# Library
+#---------------------------------------------------------------------------------------
+
 AR := $(DEVKITARM)/bin/arm-none-eabi-ar.exe
 
-LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
-LIBSOURCES += $(wildcard lib/*/*/*.cpp lib/*/*/*.c)
-LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
+lib: lib/libgame.a
 
-lib: lib/$(OUTPUT).a
-
-lib/$(OUTPUT).a: $(LIBOBJS)
-	$(AR) rcs lib/libgame.a $^
+lib/libgame.a: $(LIBOBJS)
+	@echo Building library file...
+	@$(AR) rcs lib/libgame.a $^
 
 lib/%.o: lib/%.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+	@echo $@...
+	@$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
 lib/%.o: lib/%.c
-	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 clean-libs:
-	rm -f lib/**/*.o $(OUTPUT).a
+	rm -f lib/**/*.o
+	rm -f lib/libgame.o
+
+#---------------------------------------------------------------------------------------
+# Textures
+#---------------------------------------------------------------------------------------
+
+TEX3DS      := $(DEVKITPRO)/tools/bin/tex3ds.exe
+
+
+# Texture conversion target
+pack: $(T3X_FILES)
+
+$(ROMFS)/%.t3x: $(ASSETS)/%.png
+	@echo Convert $@
+	@mkdir -p $(CURDIR)/$(dir $@)
+	@$(TEX3DS) -o "$@" "$<" -m point
+
+# Clean target
+clean-pack:
+	#rm -f $(shell find $(ROMFS)/textures -name '*.t3x')
+	rm -rf $(ROMFS)/textures
