@@ -36,8 +36,10 @@ class TileSet : public Texture {
 		Tile getIcon(char* filename);
 
 	private:
-		Tile* tiles;
-		s32 tileNum;
+		Tile* mTiles;
+		s16 mTileNum;
+		u8 mTexTileSize;
+		s32 mTexSizeMax;
 };
 
 void tileImage8(u8* src, u8* dst, s32 size);
