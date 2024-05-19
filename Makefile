@@ -174,6 +174,13 @@ else
 endif
 
 #---------------------------------------------------------------------------------------
+ifeq ($(DEBUG), 1)
+	VERSION_BUILD := Debug build
+else
+	VERSION_BUILD := Release build v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_MICRO)
+endif
+
+#---------------------------------------------------------------------------------------
 # Main targets
 #---------------------------------------------------------------------------------------
 all: cia
@@ -186,7 +193,7 @@ cia: 3dsx
 	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
 	@echo building $(TARGET).cia...
 	@$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
-	@echo built $(TARGET).cia
+	@echo Built cia package for $(TARGET), $(VERSION_BUILD).
 #---------------------------------------------------------------------------------
 clean: clean-libs clean-pack
 	rm -rf $(BUILD)/
@@ -206,14 +213,14 @@ run:
 #---------------------------------------------------------------------------------------
 # Greetings
 #---------------------------------------------------------------------------------------
+
+
 greetings:
 	@echo $(TARGET) Compilation for 3DS started!
 	@echo made by $(APP_AUTHOR)
-ifeq ($(DEBUG), 1)
-	@echo Debug build
-else
-	@echo Release build v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_MICRO)
-endif
+	@echo $(VERSION_BUILD)
+	@echo
+
 
 #---------------------------------------------------------------------------------------
 # Library files

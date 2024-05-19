@@ -156,31 +156,31 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 	int locY = 0;
 
 	// printf("TileSetInit %s\n", files);
-	// const int texSizeMax = 4 * cTileSetSize * cTileSetSize;
-	tileNum = next_power_of_two(numFiles * numFiles);
-	tiles	= (Tile*)linearAlloc(texTileSize * texTileSize);
+	mTexTileSize = texTileSize;
+	mTexSizeMax	 = texTileSize * texTileSize * numFiles;
+	mTileNum	 = next_power_of_two(numFiles);
+	mTiles		 = new Tile[mTileNum];
 
 	int filei	   = 0;
 	char* filename = files[filei];
 	int c		   = 0;
-	while (filename && c < tileNum && filei < numFiles) {
-		unsigned int w, h;
+	while (filename && c < mTileNum && filei < numFiles) {
 		loadTextureFromFile(&mTexture, NULL, filename);
-		if (w == texTileSize && h == texTileSize && mTexture.data != nullptr) {
-			Texture::Tile* icon = &tiles[c];
+		if (mTexture.data != nullptr) {
+			Texture::Tile* icon = &mTiles[c];
 			icon->textureHash	= hash(filename);
 			icon->u				= 256 * locX;
 			icon->v				= 256 * locY;
 
 			// printf("Stiched texture %s(hash: %u) at %d, %d\n", filename, icon->textureHash, locX, locY);
 
-			locX += texTileSize;
+			locX += mTexTileSize;
 			if (locX == cTileSetSize) {
-				locY += texTileSize;
+				locY += mTexTileSize;
 				locX = 0;
 			}
 		} else {
-			printf("Image size(%d, %d) doesn't match or ptr null(internal error)\n'", w, h);
+			printf("ERROR loading texture: %s", filename);
 		}
 		filename = files[++filei];
 		c++;
@@ -188,8 +188,13 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 
 	C3D_TexSetFilter(&mTexture, GPU_NEAREST, GPU_NEAREST);
 
-	int size		 = cTileSetSize / 2;
-	ptrdiff_t offset = cTileSetSize * cTileSetSize;
+	C3D_SyncDisplayTransfer(
+		(u32*)mTexture.data, GX_BUFFER_DIM(mTexSizeMax, mTexSizeMax), (u32*)mTexture.data, GX_BUFFER_DIM(mTexSizeMax, mTexSizeMax),
+		{GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |
+		 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)});
+
+	int size		 = mTexSizeMax / 2;
+	ptrdiff_t offset = mTexSizeMax * mTexSizeMax;
 
 	u32* tiledImage = (u32*)linearAlloc(size * size * 4);
 
@@ -212,10 +217,10 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 
 Texture::Tile TileSet::getIcon(char* filename) {
 	u32 h = hash(filename);
-	for (u8 i = 0; i < tileNum; i++) {
-		if (h == tiles[i].textureHash) {
-			return tiles[i];
+	for (u8 i = 0; i < mTileNum; i++) {
+		if (h == mTiles[i].textureHash) {
+			return mTiles[i];
 		}
 	}
-	return tiles[0];  // TODO: invalid texture?
+	return mTiles[0];  // TODO: invalid texture?
 }
