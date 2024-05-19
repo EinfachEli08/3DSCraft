@@ -1,6 +1,7 @@
 *.3dsx
 *.elf
 *.smdh
+*.o
 build
 debug_build
 .vscode/*
@@ -8,3 +9,5 @@ debug_build
 *.cia
 .idea
 desktop.ini
+romfs/textures
+lib/libgame.a

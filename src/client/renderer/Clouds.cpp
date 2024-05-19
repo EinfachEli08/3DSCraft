@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 #include "client/renderer/VertexFmt.h"
-#include "client/renderer/texture/TextureMap.h"
+#include "client/renderer/texture/Texture.h"
 
 static WorldVertex vertices[] = {{{-1, 0, -1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
 								 {{1, 0, -1}, {INT16_MAX, 0}, {255, 255, 255}, {0, 0, 0}},
