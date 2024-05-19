@@ -36,7 +36,7 @@ RSF_PATH		:=	$(META)/app.rsf
 LOGO			:=	$(META)/logo.bcma.lz
 ICON_FLAGS		:=	nosavebackups,visible
 
-LIBS			:= `arm-none-eabi-pkg-config --libs vorbisidec libarchive jansson libpng` -lcitro3dd -lctru -lm -lz -lgame -lstdc++
+LIBS			:= -lgame -lcitro3dd -lctru -lstdc++ -lm -ljansson -lcurl
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -127,11 +127,11 @@ else
 endif
 
 ifeq ($(strip $(NO_SMDH)),)
-	MAKEROM_ARGS += --smdh=$(CURDIR)/$(TARGET).smdh
+	export _3DSXFLAGS += --smdh="$(CURDIR)/$(TARGET).smdh"
 endif
 
 ifneq ($(strip $(ROMFS)),)
-	MAKEROM_ARGS += --romfs=$(CURDIR)/$(ROMFS)
+	export _3DSXFLAGS += --romfs=$(CURDIR)/$(ROMFS)
 endif
 
 .PHONY: $(BUILD) clean all
@@ -140,7 +140,7 @@ endif
 BANNERTOOL   ?= tools/bannertool.exe
 MAKEROM      ?= tools/makerom.exe
 
-MAKEROM_ARGS := -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(BUILD)/icon.icn"
+MAKEROM_ARGS += -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(BUILD)/icon.icn"
 MAKEROM_ARGS += -major $(VERSION_MAJOR) -minor $(VERSION_MINOR) -micro $(VERSION_MICRO)
 
 ifneq ($(strip $(LOGO)),)
@@ -168,10 +168,10 @@ all: cia
 
 3dsx: greetings
 	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
+	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 cia: 3dsx
 	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
-	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
 	@echo building $(TARGET).cia...
 	@$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
 	@echo built $(TARGET).cia

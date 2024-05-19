@@ -144,7 +144,7 @@ TextureMap::TextureMap(char** files, int num_files) {
 		u8* image;
 		unsigned int w, h;
 		u32 loadError = lodepng_decode32_file(&image, &w, &h, filename);
-		if (w == cTextureTileSize && h == cTextureTileSize && image && !loadError) {
+		if (w == cTextureTileSize && h == cTextureTileSize && image != nullptr && loadError == 0) {
 			for (int x = 0; x < cTextureTileSize; x++) {
 				for (int y = 0; y < cTextureTileSize; y++) {
 					buffer[(locX + x) + ((y + locY) * cTextureMapSize)] =
