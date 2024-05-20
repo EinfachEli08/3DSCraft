@@ -4,7 +4,8 @@
 #include "client/renderer/texture/Texture.h"
 
 // PATH PREFIX
-#define PPRX "romfs:/textures/blocks/"
+// #define PPRX "romfs:/textures/blocks/"
+#define PPRX "sdmc:/craft/assets/textures/blocks/"
 
 #define TEXTURE_FILES                                                                                                                      \
 	A(dirt, "dirt.t3x"), A(grass_side, "grass_block_side.t3x"), A(grass_top, "grass_block_top.t3x"), A(stone, "stone.t3x"),                \
