@@ -161,12 +161,25 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 	mTileNum	 = next_power_of_two(numFiles);
 	mTiles		 = new Tile[mTileNum];
 
+	u32* buffer = (u32*)linearAlloc(mTexSizeMax);
+	for (int i = 0; i < mTexSizeMax; i++)
+		buffer[i] = 0x000000FF;
+
 	int filei	   = 0;
 	char* filename = files[filei];
 	int c		   = 0;
 	while (filename && c < mTileNum && filei < numFiles) {
-		loadTextureFromFile(&mTexture, NULL, filename);
-		if (mTexture.data != nullptr) {
+		C3D_Tex tex;
+		if (loadTextureFromFile(&tex, NULL, filename)) {
+			// Append temporary texture to buffer
+			u32* image = (u32*)tex.data;
+			for (int x = 0; x < mTexTileSize; x++) {
+				for (int y = 0; y < mTexTileSize; y++) {
+					buffer[(locX + x) + ((y + locY) * mTexTileSize)] =
+						__builtin_bswap32(image[x + ((mTexTileSize - y - 1) * mTexTileSize)]);
+				}
+			}
+
 			Texture::Tile* icon = &mTiles[c];
 			icon->textureHash	= hash(filename);
 			icon->u				= 256 * locX;
@@ -184,14 +197,21 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 		}
 		filename = files[++filei];
 		c++;
+
+		C3D_TexDelete(&tex);
 	}
 
+	GSPGPU_FlushDataCache(buffer, mTexSizeMax);
+	if (!C3D_TexInitWithParams(&mTexture, NULL,
+							   (C3D_TexInitParams){cTileSetSize, cTileSetSize, cMipmapLevels, GPU_RGBA8, GPU_TEX_2D, true})) {
+		printf("Couldn't alloc texture memory\n");
+	}
 	C3D_TexSetFilter(&mTexture, GPU_NEAREST, GPU_NEAREST);
 
 	C3D_SyncDisplayTransfer(
-		(u32*)mTexture.data, GX_BUFFER_DIM(mTexSizeMax, mTexSizeMax), (u32*)mTexture.data, GX_BUFFER_DIM(mTexSizeMax, mTexSizeMax),
-		{GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |
-		 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)});
+		buffer, GX_BUFFER_DIM(cTileSetSize, cTileSetSize), (u32*)mTexture.data, GX_BUFFER_DIM(cTileSetSize, cTileSetSize),
+		(GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |
+		 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)));
 
 	int size		 = mTexSizeMax / 2;
 	ptrdiff_t offset = mTexSizeMax * mTexSizeMax;
@@ -199,9 +219,9 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 	u32* tiledImage = (u32*)linearAlloc(size * size * 4);
 
 	for (int i = 0; i < cMipmapLevels; i++) {
-		downscaleImage((u8*)mTexture.data, size);
+		downscaleImage((u8*)buffer, size);
 
-		tileImage32((u32*)mTexture.data, (u8*)tiledImage, size, size);
+		tileImage32(buffer, (u8*)tiledImage, size, size);
 
 		GSPGPU_FlushDataCache(tiledImage, size * size * 4);
 
