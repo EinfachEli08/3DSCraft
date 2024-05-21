@@ -40,7 +40,7 @@ RSF_PATH		:=	$(META)/app.rsf
 LOGO			:=	$(META)/logo.bcma.lz
 ICON_FLAGS		:=	nosavebackups,visible
 
-LIBS			:= -lgame -lcitro3dd -lctru -lstdc++ -lm -ljansson -lcurl #tex3ds
+LIBS			:= -lgame -lcitro3dd -lcitro2dd -lctru -lstdc++ -lm -ljansson -lcurl #tex3ds
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -183,21 +183,23 @@ endif
 #---------------------------------------------------------------------------------------
 # Main targets
 #---------------------------------------------------------------------------------------
-all: cia
+all: 3dsx cia
 
 3dsx: greetings lib pack
 	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
-cia: 3dsx
+cia:
 	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
 	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
 	@echo building $(TARGET).cia...
 	@$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
 	@echo Built cia package for $(TARGET), $(VERSION_BUILD).
 #---------------------------------------------------------------------------------
-clean: clean-libs clean-pack
+clean:
 	rm -rf $(BUILD)/
 	rm -f $(TARGET).elf
+
+clean-all: clean-libs clean-pack clean
 
 #---------------------------------------------------------------------------------------
 # Testing
@@ -232,8 +234,8 @@ LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
 #---------------------------------------------------------------------------------------
 # Texture files
 #---------------------------------------------------------------------------------------
-PNG_FILES := $(shell find $(ASSETS) -name '*.png')
-T3X_FILES := $(patsubst $(ASSETS)/%.png, $(ROMFS)/%.t3x, $(PNG_FILES))
+DIRS := $(shell find $(ASSETS)/textures -type d)
+T3X_FILES := $(foreach dir,$(DIRS),$(patsubst $(ASSETS)/textures/%, $(ROMFS)/textures/%.t3x, $(dir)))
 
 #---------------------------------------------------------------------------------
 else
@@ -316,16 +318,21 @@ clean-libs:
 
 TEX3DS      := $(DEVKITPRO)/tools/bin/tex3ds.exe
 
+$(ROMFS)/textures/%.t3x: $(ASSETS)/textures/%
+	@mkdir -p $(dir $@)
+	@echo Creating $@
+	@$(TEX3DS) -o "$@" $(shell find "$<" -type f -name '*.png') -m point --atlas -f rgba8888 -z auto
+	@cd $(ROMFS)/textures && \
+	for subdir in $$(find * -type d); do \
+		cd "$$subdir" && \
+		for file in *.t3x; do \
+			mv "$$file" ../"$$subdir"_$$file; \
+		done && \
+		cd .. && \
+		rm -rf "$$subdir"; \
+	done
 
-# Texture conversion target
 pack: $(T3X_FILES)
 
-$(ROMFS)/%.t3x: $(ASSETS)/%.png
-	@echo Convert $@
-	@mkdir -p $(CURDIR)/$(dir $@)
-	@$(TEX3DS) -o "$@" "$<" -m point
-
-# Clean target
 clean-pack:
-	#rm -f $(shell find $(ROMFS)/textures -name '*.t3x')
 	rm -rf $(ROMFS)/textures

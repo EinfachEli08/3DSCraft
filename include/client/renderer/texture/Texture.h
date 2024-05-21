@@ -31,15 +31,15 @@ class Texture {
 
 class TileSet : public Texture {
 	public:
-		TileSet(char** files, int num_files, u8 tileSize = 16);
+		TileSet(int num_files, u8 tileSize = 16);
 
 		Tile getIcon(char* filename);
 
 	private:
 		Tile* mTiles;
 		s16 mTileNum;
-		u8 mTexTileSize;
-		s32 mTexSizeMax;
+		u8 mTileSize;
+		s32 mTexSize;
 };
 
 void tileImage8(u8* src, u8* dst, s32 size);

@@ -1,23 +1,12 @@
-#include "world/level/blocks/Block.h"
+#include "world/level/block/Block.h"
 
 #include "client/renderer/VertexFmt.h"
 #include "client/renderer/texture/Texture.h"
 
-// PATH PREFIX
-// #define PPRX "romfs:/textures/blocks/"
-#define PPRX "sdmc:/craft/assets/textures/blocks/"
+#define cPATH "romfs:/textures/"
+// #define PPRX "sdmc:/craft/assets/textures/"
 
-#define TEXTURE_FILES                                                                                                                      \
-	A(dirt, "dirt.t3x"), A(grass_side, "grass_block_side.t3x"), A(grass_top, "grass_block_top.t3x"), A(stone, "stone.t3x"),                \
-		A(stone_bricks, "stone_bricks.t3x"), A(smooth_stone, "smooth_stone.t3x"), A(cobblestone, "cobblestone.t3x"), A(sand, "sand.t3x"),  \
-		A(oaklog_side, "log_oak.t3x"), A(oaklog_top, "log_oak_top.t3x"), A(leaves_oak, "leaves_oak.t3x"), A(glass, "glass.t3x"),           \
-		A(brick, "brick.t3x"), A(oakplanks, "planks_oak.t3x"), A(wool, "wool.t3x"), A(bedrock, "bedrock.t3x")
-
-#define A(i, n) PPRX n
-char* texture_files[] = {TEXTURE_FILES};
-#undef A
-
-static TileSet* textureMap = new TileSet(texture_files, sizeof(texture_files) / sizeof(texture_files[0]));
+TileSet* textureMap = new TileSet(0);
 
 static struct {
 		Texture::Tile stone;
@@ -39,9 +28,6 @@ static struct {
 } icon;
 
 void Block_Init() {
-#define A(i, n) icon.i = textureMap->getIcon(PPRX n)
-	TEXTURE_FILES;
-#undef A
 }
 void Block_Deinit() {
 	delete textureMap;
