@@ -11,6 +11,6 @@ build
 lib/libgame.a
 romfs/textures
 
-.vscode/*
+.vscode
 .vs
 .idea

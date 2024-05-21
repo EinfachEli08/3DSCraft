@@ -1,4 +1,4 @@
-#include "world/level/blocks/BlockEvent.h"
+#include "world/level/block/BlockEvent.h"
 
 void BlockEvent::randomTick(Chunk* chunk, int x[], int y[], int z[]) {
 	int k = 0;

@@ -151,18 +151,18 @@ static u32 next_power_of_two(u32 v) {
 }
 // TileSet
 
-TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
-	int locX = 0;
+TileSet::TileSet(int numFiles, u8 texTileSize) {
+	/*int locX = 0;
 	int locY = 0;
 
 	// printf("TileSetInit %s\n", files);
-	mTexTileSize = texTileSize;
-	mTexSizeMax	 = texTileSize * texTileSize * numFiles;
-	mTileNum	 = next_power_of_two(numFiles);
-	mTiles		 = new Tile[mTileNum];
+	mTexSize  = texTileSize * texTileSize * numFiles;
+	mTileSize = texTileSize;
+	mTileNum  = next_power_of_two(numFiles);
+	mTiles	  = new Tile[mTileNum];
 
-	u32* buffer = (u32*)linearAlloc(mTexSizeMax);
-	for (int i = 0; i < mTexSizeMax; i++)
+	u32* buffer = (u32*)linearAlloc(mTexSize);
+	for (int i = 0; i < mTexSize; i++)
 		buffer[i] = 0x000000FF;
 
 	int filei	   = 0;
@@ -172,11 +172,11 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 		C3D_Tex tex;
 		if (loadTextureFromFile(&tex, NULL, filename)) {
 			// Append temporary texture to buffer
-			u32* image = (u32*)tex.data;
-			for (int x = 0; x < mTexTileSize; x++) {
-				for (int y = 0; y < mTexTileSize; y++) {
-					buffer[(locX + x) + ((y + locY) * mTexTileSize)] =
-						__builtin_bswap32(image[x + ((mTexTileSize - y - 1) * mTexTileSize)]);
+			u32* image	   = (u32*)tex.data;
+			size_t imgSize = sizeof(*image);
+			for (int x = 0; x < mTileSize; x++) {
+				for (int y = 0; y < mTileSize; y++) {
+					buffer[(locX + x) + ((y + locY) * mTileSize)] = __builtin_bswap32(image[x + ((mTileSize - y - 1) * mTileSize)]);
 				}
 			}
 
@@ -187,9 +187,9 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 
 			// printf("Stiched texture %s(hash: %u) at %d, %d\n", filename, icon->textureHash, locX, locY);
 
-			locX += mTexTileSize;
+			locX += mTileSize;
 			if (locX == cTileSetSize) {
-				locY += mTexTileSize;
+				locY += mTileSize;
 				locX = 0;
 			}
 		} else {
@@ -200,8 +200,8 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 
 		C3D_TexDelete(&tex);
 	}
-
-	GSPGPU_FlushDataCache(buffer, mTexSizeMax);
+	size_t bufSize = sizeof(*buffer);
+	GSPGPU_FlushDataCache(buffer, mTexSize);
 	if (!C3D_TexInitWithParams(&mTexture, NULL,
 							   (C3D_TexInitParams){cTileSetSize, cTileSetSize, cMipmapLevels, GPU_RGBA8, GPU_TEX_2D, true})) {
 		printf("Couldn't alloc texture memory\n");
@@ -213,8 +213,8 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 		(GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |
 		 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)));
 
-	int size		 = mTexSizeMax / 2;
-	ptrdiff_t offset = mTexSizeMax * mTexSizeMax;
+	int size		 = mTexSize / 2;
+	ptrdiff_t offset = mTexSize * mTexSize;
 
 	u32* tiledImage = (u32*)linearAlloc(size * size * 4);
 
@@ -232,7 +232,7 @@ TileSet::TileSet(char** files, int numFiles, u8 texTileSize) {
 		size /= 2;
 	}
 
-	linearFree(tiledImage);
+	linearFree(tiledImage);*/
 }
 
 Texture::Tile TileSet::getIcon(char* filename) {

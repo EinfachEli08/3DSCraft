@@ -40,7 +40,7 @@ void releaseWorld(ChunkWorker* chunkWorker, SaveManager* saveMgr, World* world) 
 	saveMgr->unload();
 }
 
-int main() {
+int mainNew() {
 	GameState gamestate = GameState_TitleScreen;
 
 	gfxInitDefault();

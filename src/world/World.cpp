@@ -7,7 +7,7 @@
 #include <stdint.h>
 
 #include "util/VecUtil.h"
-#include "world/level/blocks/BlockEvent.h"
+#include "world/level/block/BlockEvent.h"
 
 World::World(WorkQueue* _workqueue) : workqueue(_workqueue) {
 	strcpy(name, "My World");
