@@ -185,7 +185,7 @@ endif
 #---------------------------------------------------------------------------------------
 all: 3dsx cia
 
-3dsx: greetings lib pack
+3dsx: greetings lib
 	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 cia:
@@ -234,8 +234,9 @@ LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
 #---------------------------------------------------------------------------------------
 # Texture files
 #---------------------------------------------------------------------------------------
-DIRS := $(shell find $(ASSETS)/textures -type d)
+DIRS := $(shell find $(ASSETS)/textures/* -type d)
 T3X_FILES := $(foreach dir,$(DIRS),$(patsubst $(ASSETS)/textures/%, $(ROMFS)/textures/%.t3x, $(dir)))
+#T3X_FILES := $(foreach dir,$(DIRS),$(ROMFS)/textures/$(subst /,_,$(subst $(ASSETS)/textures/,,$(dir))).t3x)
 
 #---------------------------------------------------------------------------------
 else
@@ -320,8 +321,9 @@ TEX3DS      := $(DEVKITPRO)/tools/bin/tex3ds.exe
 
 $(ROMFS)/textures/%.t3x: $(ASSETS)/textures/%
 	@mkdir -p $(dir $@)
+	@mkdir -p $(ASSETS)/texheaders/
 	@echo Creating $@
-	@$(TEX3DS) -o "$@" $(shell find "$<" -type f -name '*.png') -m point --atlas -f rgba8888 -z auto
+	@$(TEX3DS) -o "$@" $(shell find "$<" -type f -name '*.png') -m point --atlas -f rgba8888 -z auto -H $(ASSETS)/texheaders/$(shell basename $(@:t3x=h))
 	@cd $(ROMFS)/textures && \
 	for subdir in $$(find * -type d); do \
 		cd "$$subdir" && \
@@ -331,6 +333,7 @@ $(ROMFS)/textures/%.t3x: $(ASSETS)/textures/%
 		cd .. && \
 		rm -rf "$$subdir"; \
 	done
+	@echo PLEASE PREFIX EXPORTED HEADER NAMES, WHICH WERE IN A SUBDIRECTORY, WITH ITS PARENT.
 
 pack: $(T3X_FILES)
 
