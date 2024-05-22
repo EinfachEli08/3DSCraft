@@ -1,48 +1,33 @@
 #pragma once
 
-#include <algorithm>
 #include <cstring>
 #include <string>
 
 class ResourceLocation {
 	public:
-		std::string mNamespace;
-		std::string mPath;
+		char mNamespace[64];
+		char mPath[256];
 
-		ResourceLocation(const char* path) { ResourceLocation("minecraft", path); }
-		ResourceLocation(const char* namespace_, const char* path) : mNamespace(namespace_), mPath(path) {
-			if (!isValidNamespace(mNamespace.c_str())) {
-				printf("Non [a-z0-9_.-] character in namespace of location");
-			}
-			if (!isValidPath(mPath.c_str())) {
-				printf("Non [a-z0-9/._-] character in path of location");
-			}
+		ResourceLocation(const char* path) {
+			strncpy(mNamespace, "minecraft", sizeof(mNamespace));
+			strncpy(mPath, path, sizeof(mPath));
 		}
 
-		const char* getNamespace() const { return mNamespace.c_str(); }
-		const char* getPath() const { return mPath.c_str(); }
-
-		std::string toString() const { return mNamespace + ":" + mPath; }
-
-		static bool isValidResourceLocation(const char* location) {
-			auto separator = std::find(location, location + strlen(location), ':');
-			if (separator == location || separator == location + strlen(location) - 1) {
-				return false;  // Missing namespace separator
-			}
-			auto namespace_ = std::string(location, separator);
-			auto path		= std::string(separator + 1, location + strlen(location));
-			return isValidNamespace(namespace_.c_str()) && isValidPath(path.c_str());
+		ResourceLocation(const char* namespace_, const char* path) {
+			strncpy(mNamespace, namespace_, sizeof(mNamespace));
+			strncpy(mPath, path, sizeof(mPath));
 		}
 
-	private:
-		static bool isValidPath(const char* path) {
-			return std::all_of(path, path + strlen(path), [](char c) {
-				return c == '_' || c == '-' || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '/' || c == '.' || c == '-';
-			});
+		const char* getNamespace() const { return mNamespace; }
+		const char* getPath() const { return mPath; }
+
+		bool operator==(const ResourceLocation& other) const {
+			return strcmp(mNamespace, other.mNamespace) == 0 && strcmp(mPath, other.mPath) == 0;
 		}
 
-		static bool isValidNamespace(const char* namespace_) {
-			return std::all_of(namespace_, namespace_ + strlen(namespace_),
-							   [](char c) { return c == '_' || c == '-' || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '.'; });
-		}
+		struct Hash {
+				size_t operator()(const ResourceLocation& key) const {
+					return std::hash<std::string>()(key.mNamespace) ^ std::hash<std::string>()(key.mPath);
+				}
+		};
 };
