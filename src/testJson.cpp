@@ -1,45 +1,55 @@
-#include "core/registries/Registry.h"
+#include "resources/JsonUtil.h"	 // Include your JSON classes here
 #include <3ds.h>
-#include <cstdio>
-#include <jansson.h>
+#include <iostream>
+#include <string>
 
 int main() {
+	// Initialize screen
 	gfxInitDefault();
 	consoleInit(GFX_TOP, NULL);
 
-	// Create a registry for blocks
-	Registry<const char*> blockRegistry("block");
+	// Create a JSONObject and set some values
+	JSONObject obj;
+	obj.set("name", "John");
+	obj.set("age", 30);
+	obj.set("is_student", false);
 
-	ResourceLocation* STONE = new ResourceLocation("strone");
+	// Print original JSON Object
+	printf("Original JSON Object:");
+	std::cout << obj << std::endl;
 
-	// Register a block (for example purposes)
-	blockRegistry.registerEntry(STONE, "Stone");
+	// Write JSON Object to file
+	std::string filePath = "new_file.json";
+	JSONFileHandler::writeToFile(obj.toJSON(), filePath);
 
-	// Serialize registry data to a file
-	blockRegistry.serialize("blocks.json");
+	// Read JSON Object from file
+	JSONObject newObj;
+	filePath = "new_file.json";
+	newObj.fromJSON(JSONFileHandler::readFromFile(filePath));
 
-	// Deserialize registry data from a file
-	Registry<const char*> loadedBlockRegistry("block");
-	loadedBlockRegistry.deserialize("blocks.json");
-
-	// Access a registry entry
-	const char** stoneBlock = loadedBlockRegistry.getEntry(STONE);
-	if (stoneBlock && *stoneBlock) {
-		printf("Loaded block: %s\n", *stoneBlock);
-	}
+	// Print JSON Object after reading from file
+	printf("\nJSON Object after reading from file:");
+	std::cout << newObj << std::endl;
 
 	// Main loop
 	while (aptMainLoop()) {
+		// Scan input
 		hidScanInput();
 		u32 kDown = hidKeysDown();
-		if (kDown & KEY_START)
-			break;	// Break in order to return to hbmenu
 
+		// Break the loop if Start button is pressed
+		if (kDown & KEY_START)
+			break;
+
+		// Flush and swap framebuffers
 		gfxFlushBuffers();
 		gfxSwapBuffers();
+
+		// Wait for VBlank
 		gspWaitForVBlank();
 	}
 
+	// Deinitialize graphics and return
 	gfxExit();
 	return 0;
 }
