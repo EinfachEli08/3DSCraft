@@ -3,27 +3,31 @@
 #include <cstring>
 #include <string>
 
+// Used to point to anything, like files, item names...
 class ResourceLocation {
+		std::string mNamespace;
+		std::string mPath;
+
 	public:
-		char mNamespace[64];
-		char mPath[256];
-
-		ResourceLocation(const char* path) {
-			strncpy(mNamespace, "minecraft", sizeof(mNamespace));
-			strncpy(mPath, path, sizeof(mPath));
+		ResourceLocation(std::string path) {
+			mNamespace = "minecraft";
+			mPath	   = path;
 		}
 
-		ResourceLocation(const char* namespace_, const char* path) {
-			strncpy(mNamespace, namespace_, sizeof(mNamespace));
-			strncpy(mPath, path, sizeof(mPath));
+		ResourceLocation(std::string namespace_, std::string path) {
+			mNamespace = namespace_;
+			mPath	   = path;
 		}
 
-		const char* getNamespace() const { return mNamespace; }
-		const char* getPath() const { return mPath; }
+		const char* getNamespace() const { return mNamespace.c_str(); }
+		const char* getPath() const { return mPath.c_str(); }
 
-		bool operator==(const ResourceLocation& other) const {
-			return strcmp(mNamespace, other.mNamespace) == 0 && strcmp(mPath, other.mPath) == 0;
-		}
+		ResourceLocation* withPrefix(const char* prefix) { return new ResourceLocation(mNamespace, prefix + mPath); }
+		ResourceLocation* withSuffix(const char* suffix) { return new ResourceLocation(mNamespace, mPath + suffix); }
+
+		const char* toString() const { return std::string(mNamespace + ":" + mPath).c_str(); }
+
+		bool operator==(const ResourceLocation& other) const { return mNamespace == other.mNamespace && mPath == other.mPath; }
 
 		struct Hash {
 				size_t operator()(const ResourceLocation& key) const {
