@@ -2,28 +2,21 @@
 
 #include <fstream>
 #include <iostream>
-#include <nlohmann/json.hpp>
+#include <memory>
 #include <string>
+#include <unordered_map>
 
-using json = nlohmann::json;
+#include "resources/JsonSerializable.h"
 
 const char* cPathRoot = "sdmc:/craft/";
 
-// JSONSerializable interface
-class JSONSerializable {
-	public:
-		virtual ~JSONSerializable() {}
-		virtual json toJSON() const					= 0;
-		virtual void fromJSON(const json& jsonData) = 0;
-};
-
-// JSONFileHandler for reading/writing JSON files
 class JSONFileHandler {
 	public:
 		static json readFromFile(const std::string& filename) {
 			std::ifstream inputFile(cPathRoot + filename);
 			if (!inputFile.is_open()) {
-				printf("Unable to open file: %s", filename.c_str());
+				printf("Unable to open file: %s\n", filename.c_str());
+				return json();
 			}
 
 			json jsonData;
@@ -36,7 +29,8 @@ class JSONFileHandler {
 		static void writeToFile(const json& jsonData, const std::string& filename) {
 			std::ofstream outputFile(cPathRoot + filename);
 			if (!outputFile.is_open()) {
-				printf("Unable to write file: %s", filename.c_str());
+				printf("Unable to write file: %s\n", filename.c_str());
+				return;
 			}
 
 			outputFile << std::setw(4) << jsonData << std::endl;
@@ -44,7 +38,6 @@ class JSONFileHandler {
 		}
 };
 
-// JSONObject class for handling JSON objects
 class JSONObject : public JSONSerializable {
 	private:
 		json data;
@@ -68,7 +61,7 @@ class JSONObject : public JSONSerializable {
 			return data.at(key).get<T>();
 		}
 
-		bool hasKey(const std::string& key) const { return true /*data.find(key) != data.end()*/; }
+		bool hasKey(const std::string& key) const { return /*data.find(key) != data.end()*/ true; }
 
 		friend std::ostream& operator<<(std::ostream& os, const JSONObject& obj) {
 			os << obj.data.dump(4);
