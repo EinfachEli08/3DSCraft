@@ -57,7 +57,7 @@ CFLAGS	+=	$(INCLUDE) -D__3DS__ -D_GNU_SOURCE=1
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=c++17 $(CITRA)
 
 ASFLAGS	:=	-g $(ARCH)
-LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
+LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map) -include -$(DEVKITPRO)/libctru/include/3ds/types.h
 
 ifeq ($(DEBUG), 0)
 LDFLAGS		+=	-fomit-frame-pointer -O2

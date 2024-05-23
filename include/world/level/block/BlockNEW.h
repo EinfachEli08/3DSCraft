@@ -1,3 +1,3 @@
 #pragma once
 
-class Block /*: public ItemLike */ {};
+class Block {};
