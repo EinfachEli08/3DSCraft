@@ -1,32 +1,37 @@
 #pragma once
+#pragma once
 
-#include <functional>
-#include <string>
+#include <cstring>
 
 class ResourceLocation {
 	private:
-		std::string mNamespace;
-		std::string mPath;
+		const char* mNamespace;
+		const char* mPath;
 
 	public:
-		ResourceLocation(const std::string& path) : mNamespace("minecraft"), mPath(path) {}
+		ResourceLocation(const char* path) : mNamespace("minecraft"), mPath(path) {}
 
-		ResourceLocation(const std::string& namespace_, const std::string& path) : mNamespace(namespace_), mPath(path) {}
+		ResourceLocation(const char* namespace_, const char* path) : mNamespace(namespace_), mPath(path) {}
 
-		std::string getNamespace() const { return mNamespace; }
-		std::string getPath() const { return mPath; }
+		const char* getNamespace() const { return mNamespace; }
+		const char* getPath() const { return mPath; }
 
-		std::string toString() const { return mNamespace + ":" + mPath; }
-
-		bool operator==(const ResourceLocation& other) const { return mNamespace == other.mNamespace && mPath == other.mPath; }
-
-		ResourceLocation withPrefix(const std::string& prefix) const { return ResourceLocation(mNamespace, prefix + mPath); }
-
-		ResourceLocation withPath(const std::string& path) const {
-			return ResourceLocation(mNamespace, path);
+		bool operator==(const ResourceLocation& other) const {
+			return strcmp(mNamespace, other.mNamespace) == 0 && strcmp(mPath, other.mPath) == 0;
 		}
 
 		struct HashFunction {
-				size_t operator()(const ResourceLocation& location) const { return std::hash<std::string>()(location.toString()); }
+				size_t operator()(const ResourceLocation& key) const {
+					size_t res		= 17;
+					const char* str = key.getNamespace();
+					while (*str) {
+						res = res * 31 + *str++;
+					}
+					str = key.getPath();
+					while (*str) {
+						res = res * 31 + *str++;
+					}
+					return res;
+				}
 		};
 };

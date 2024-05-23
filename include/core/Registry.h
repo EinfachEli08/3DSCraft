@@ -1,20 +1,25 @@
 #pragma once
 
-#include "resources/ResourceLocation.h"
 #include <string>
 #include <unordered_map>
+
+#include "resources/ResourceLocation.h"
 
 template <typename T>
 class Registry {
 	private:
 		std::unordered_map<T, ResourceLocation*> registry;
-		std::unordered_map<std::string, T> keyRegistry;
 
 	public:
-		void registerItem(const T& item, const std::string& name) {
-			ResourceLocation* location = new ResourceLocation(name);
-			registry[item]			   = location;
-			keyRegistry[name]		   = item;
+		~Registry() {
+			for (auto& pair : registry) {
+				delete pair.second;
+			}
+		}
+
+		void registerItem(const T& item, const char* name) {
+			auto location  = new ResourceLocation(name);
+			registry[item] = location;
 		}
 
 		ResourceLocation* getKey(const T& item) const {
@@ -25,20 +30,10 @@ class Registry {
 			return nullptr;
 		}
 
-		T getItem(const std::string& name) const {
-			auto it = keyRegistry.find(name);
-			if (it != keyRegistry.end()) {
-				return it->second;
+		void clear() {
+			for (auto& pair : registry) {
+				delete pair.second;
 			}
-			throw std::runtime_error("Item not found in registry");
+			registry.clear();
 		}
 };
-
-class BuiltInRegistries {
-	public:
-		static Registry<int> BLOCK;
-		static Registry<int> ITEM;
-};
-
-Registry<int> BuiltInRegistries::BLOCK;
-Registry<int> BuiltInRegistries::ITEM;
