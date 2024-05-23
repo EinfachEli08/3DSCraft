@@ -6,8 +6,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "resources/JsonSerializable.h"
-
 const char* cPathRoot = "sdmc:/craft/";
 
 class JSONFileHandler {
@@ -35,36 +33,5 @@ class JSONFileHandler {
 
 			outputFile << std::setw(4) << jsonData << std::endl;
 			outputFile.close();
-		}
-};
-
-class JSONObject : public JSONSerializable {
-	private:
-		json data;
-
-	public:
-		JSONObject() {}
-
-		JSONObject(const json& jsonData) : data(jsonData) {}
-
-		json toJSON() const override { return data; }
-
-		void fromJSON(const json& jsonData) override { data = jsonData; }
-
-		template <typename T>
-		void set(const std::string& key, const T& value) {
-			data[key] = value;
-		}
-
-		template <typename T>
-		T get(const std::string& key) const {
-			return data.at(key).get<T>();
-		}
-
-		bool hasKey(const std::string& key) const { return /*data.find(key) != data.end()*/ true; }
-
-		friend std::ostream& operator<<(std::ostream& os, const JSONObject& obj) {
-			os << obj.data.dump(4);
-			return os;
 		}
 };
