@@ -14,8 +14,8 @@ class Registry {
 		ResourceLocation mDefaultKey;
 
 	public:
-		Registry(ResourceKey<Registry<T>>& key) : mKey(key), mDefaultKey("") {}
-		Registry(ResourceKey<Registry<T>>& key, const char* defaultKey, const T* defaultValue)
+		Registry(const ResourceKey<Registry<T>>& key) : mKey(key), mDefaultKey("") {}
+		Registry(const ResourceKey<Registry<T>>& key, const char* defaultKey, const T* defaultValue)
 			: mKey(key), mDefaultValue(defaultValue), mDefaultKey(defaultKey) {}
 
 		~Registry() {
@@ -24,9 +24,9 @@ class Registry {
 			}
 		}
 
-		void register_(ResourceLocation& loc, const T* item) { register_(*ResourceKey<T>::createRegistryKey(loc), item); }
+		void register_(const ResourceLocation& loc, const T* item) { register_(*ResourceKey<T>::createRegistryKey(loc), item); }
 
-		void register_(ResourceKey<T>& key, const T* item) { registry[key] = item; }
+		void register_(const ResourceKey<T>& key, const T* item) { registry[key] = item; }
 
 		ResourceLocation getKey(const T* item) const {
 			auto it = std::find_if(registry.begin(), registry.end(),
@@ -34,18 +34,18 @@ class Registry {
 			return (it != registry.end()) ? it->first.getLocation() : mDefaultKey;
 		}
 
-		ResourceKey<T>* getResourceKey(const T* item) const {
+		const ResourceKey<T>* getResourceKey(const T* item) const {
 			auto it = std::find_if(registry.begin(), registry.end(),
 								   [item](const std::pair<ResourceKey<T>, const T*>& pair) { return pair.second == item; });
 			return (it != registry.end()) ? &it->first : nullptr;
 		}
 
-		const T* get(ResourceKey<T>& key) const {
+		const T* get(const ResourceKey<T>& key) const {
 			auto it = registry.find(key);
 			return (it != registry.end()) ? it->second : mDefaultValue;
 		}
 
-		const T* get(ResourceLocation& location) const {
+		const T* get(const ResourceLocation& location) const {
 			auto it = std::find_if(registry.begin(), registry.end(), [&location](const std::pair<ResourceKey<T>, const T*>& pair) {
 				return pair.first.getLocation() == location;
 			});

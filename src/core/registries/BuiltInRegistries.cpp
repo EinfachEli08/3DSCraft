@@ -18,3 +18,5 @@ template <typename T>
 static Registry<T>* registerDefaulted(ResourceKey<Registry<T>> regKey, const char* defaultKey, const T* defaultValue) {
 	return internalRegister(regKey, new Registry<T>(regKey, defaultKey, defaultValue));
 }
+
+Registry<Block>* BuiltInRegistries::BLOCK = registerDefaulted(Registries::BLOCK, "air", Blocks::TEST);
