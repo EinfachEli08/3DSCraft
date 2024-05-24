@@ -21,13 +21,13 @@ class ResourceLocation {
 		}
 
 		struct HashFunction {
-				size_t operator()(ResourceLocation* key) const {
+				size_t operator()(const ResourceLocation& key) const {
 					size_t res		= 17;
-					const char* str = key->getNamespace();
+					const char* str = key.getNamespace();
 					while (*str) {
 						res = res * 31 + *str++;
 					}
-					str = key->getPath();
+					str = key.getPath();
 					while (*str) {
 						res = res * 31 + *str++;
 					}
