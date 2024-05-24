@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <string>
 #include <unordered_map>
 
 #include "core/registries/BuiltInRegistries.h"
@@ -68,3 +70,12 @@ class ResourceKey {
 // Initialize the static member
 template <typename T>
 std::unordered_map<InternKey, ResourceKey<T>, InternKey::HashFunction> ResourceKey<T>::VALUES;
+
+namespace std {
+template <typename T>
+struct hash<ResourceKey<T>> {
+		std::size_t operator()(const ResourceKey<T>& key) const {
+			return std::hash<std::string>{}(key.getLocation().getNamespace()) ^ std::hash<std::string>{}(key.getLocation().getPath());
+		}
+};
+}  // namespace std
