@@ -4,5 +4,5 @@
 
 class Block;
 struct Registries {
-		static const ResourceKey<Registry<Block>>* BLOCK;
+		static const ResourceKey<Registry<Block>> BLOCK;
 };
