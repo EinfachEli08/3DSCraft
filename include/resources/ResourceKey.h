@@ -29,13 +29,13 @@ class Registry;
 template <typename T>
 class ResourceKey {
 	private:
-		ResourceLocation registryName;
-		ResourceLocation location;
+		ResourceLocation mRegistryName;
+		ResourceLocation mLocation;
 
 		static std::unordered_map<InternKey, ResourceKey<T>, InternKey::HashFunction> VALUES;
 
 	public:
-		ResourceKey(const ResourceLocation& registry, const ResourceLocation& loc) : registryName(registry), location(loc) {}
+		ResourceKey(const ResourceLocation& registry, const ResourceLocation& loc) : mRegistryName(registry), mLocation(loc) {}
 
 		static ResourceKey<T>* create(const ResourceLocation& registry, const ResourceLocation& location) {
 			InternKey key(registry, location);
@@ -56,15 +56,17 @@ class ResourceKey {
 			return create(/*BuiltInRegistries::ROOT_REGISTRY_NAME*/ ResourceLocation("root"), location);
 		}
 
-		bool isFor(const ResourceKey<Registry<T>>& other) const { return this->registryName == other.registryName; }
+		bool isFor(const ResourceKey<Registry<T>>& other) const { return mRegistryName == other.mRegistryName; }
 
 		template <typename E>
 		ResourceKey<E>* cast(const ResourceKey<Registry<E>>& other) {
 			return isFor(other) ? reinterpret_cast<ResourceKey<E>*>(this) : nullptr;
 		}
 
-		ResourceLocation getLocation() const { return location; }
-		ResourceLocation getRegistry() const { return registryName; }
+		bool operator==(const ResourceKey<T>& key) const { return key.mLocation == mLocation && key.mRegistryName == mRegistryName; }
+
+		ResourceLocation getLocation() const { return mLocation; }
+		ResourceLocation getRegistry() const { return mRegistryName; }
 };
 
 // Initialize the static member
