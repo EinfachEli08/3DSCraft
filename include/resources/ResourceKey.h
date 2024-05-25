@@ -4,10 +4,10 @@
 #include <string>
 #include <unordered_map>
 
-// #include "core/registries/BuiltInRegistries.h"
+#include "core/registries/BuiltInRegistries.h"
 #include "resources/ResourceLocation.h"
 
-class InternKey {
+/*class InternKey {
 	public:
 		const ResourceLocation registry;
 		const ResourceLocation location;
@@ -21,7 +21,7 @@ class InternKey {
 					return ResourceLocation::HashFunction()(key.registry) ^ ResourceLocation::HashFunction()(key.location);
 				}
 		};
-};
+};*/
 
 template <typename T>
 class Registry;
@@ -32,20 +32,21 @@ class ResourceKey {
 		ResourceLocation mRegistryName;
 		ResourceLocation mLocation;
 
-		static std::unordered_map<InternKey, ResourceKey<T>, InternKey::HashFunction> VALUES;
+		// static std::unordered_map<InternKey, ResourceKey<T>, InternKey::HashFunction> VALUES;
 
 	public:
 		ResourceKey(const ResourceLocation& registry, const ResourceLocation& loc) : mRegistryName(registry), mLocation(loc) {}
 
 		static ResourceKey<T>* create(const ResourceLocation& registry, const ResourceLocation& location) {
-			InternKey key(registry, location);
+			/*InternKey key(registry, location);
 			auto it = VALUES.find(key);
 			if (it != VALUES.end()) {
 				return &it->second;
 			} else {
 				auto result = VALUES.emplace(key, ResourceKey<T>(registry, location));
 				return &result.first->second;
-			}
+			}*/
+			return new ResourceKey<T>(registry, location);
 		}
 
 		static ResourceKey<T>* create(const ResourceKey<Registry<T>>& regKey, const ResourceLocation& location) {
@@ -53,7 +54,7 @@ class ResourceKey {
 		}
 
 		static ResourceKey<T>* createRegistryKey(const ResourceLocation& location) {
-			return create(/*BuiltInRegistries::ROOT_REGISTRY_NAME*/ ResourceLocation("root"), location);
+			return create(BuiltInRegistries::ROOT_REGISTRY_NAME, location);
 		}
 
 		bool isFor(const ResourceKey<Registry<T>>& other) const { return mRegistryName == other.mRegistryName; }
@@ -70,9 +71,9 @@ class ResourceKey {
 };
 
 // Initialize the static member
-template <typename T>
+/*template <typename T>
 std::unordered_map<InternKey, ResourceKey<T>, InternKey::HashFunction> ResourceKey<T>::VALUES;
-
+*/
 namespace std {
 template <typename T>
 struct hash<ResourceKey<T>> {

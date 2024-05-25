@@ -8,4 +8,4 @@ const Block* reg(const char* name, const Block* block) {
 	return block;
 }
 
-const Block* Blocks::GRASS = reg("grass", new Block({TileSetGroup::BLOCKS, blocks_grass_block_top_idx}));
+const Block* Blocks::GRASS = reg("grass_block", new Block({TileSetGroup::BLOCKS, blocks_grass_block_top_idx}));
