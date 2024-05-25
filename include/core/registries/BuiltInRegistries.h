@@ -1,7 +1,9 @@
 #pragma once
 
-#include "core/Registry.h"
 #include <vector>
+
+template <typename T>
+class Registry;
 
 class ResourceLocation;
 class Block;

@@ -15,6 +15,7 @@
 #include "client/renderer/PolyGen.h"
 #include "client/renderer/Renderer.h"
 #include "client/renderer/texture/TileSetMan.h"
+#include "core/Init.h"
 #include "world/World.h"
 #include "world/level/chunk/ChunkWorker.h"
 #include "world/level/levelgen/CustomGen.h"
@@ -49,6 +50,8 @@ int main() {
 	gfxSet3D(true);
 
 	romfsInit();
+
+	init();
 
 	SuperChunk::poolsInit();
 
