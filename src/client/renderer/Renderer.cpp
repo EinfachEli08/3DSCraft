@@ -6,6 +6,8 @@
 #include "client/gui/screens/TitleScreen.h"
 #include "client/gui/screens/WorldSelectScreen.h"
 #include "client/renderer/PolyGen.h"
+#include "client/renderer/texture/TileSetMan.h"
+#include "texheaders/gui_title.h"
 
 Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* gamestate, PolyGen* polyGen)
 	: world(world), player(player), workqueue(workqueue), gamestate(gamestate), polyGen(polyGen) {
@@ -49,7 +51,7 @@ Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* ga
 
 	Block_Init();
 
-	Texture(&logoTex, "romfs:/textures/gui/title/minecraft.t3x");
+	logoTex = *TileSetMan::getTexture({TileSetGroup::GUI_TITLE, title_minecraft_idx});
 }
 
 Renderer::~Renderer() {

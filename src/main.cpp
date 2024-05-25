@@ -214,6 +214,8 @@ int main() {
 
 	SuperChunk::poolsDeinit();
 
+	TileSetMan::deinit();
+
 	delete world;
 
 	sino_exit();

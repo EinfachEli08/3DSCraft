@@ -1,5 +1,6 @@
 #pragma once
 
+#include "client/Exception.h"
 #include <citro2d.h>
 #include <string>
 
@@ -9,10 +10,13 @@ class TileSetNew {
 
 	public:
 		TileSetNew(const char* fileName) {
-			const char* path = std::string(cPathRoot + std::string(cPath) + fileName + ".t3x").c_str();
-			mTileSet		 = C2D_SpriteSheetLoad(path);
+			char path[256];
+			snprintf(path, sizeof(path), "%s%s%s.t3x", cPathRoot, cPath, fileName);
+
+			mTileSet = C2D_SpriteSheetLoad(path);
+
 			if (!mTileSet)
-				printf("ERROR: could not load Texture atlas \'%s\'", path);
+				Crash("ERROR: could not load Texture atlas \'%s\'", path);
 		}
 
 		~TileSetNew() { C2D_SpriteSheetFree(mTileSet); }
@@ -21,7 +25,7 @@ class TileSetNew {
 			C2D_Image img = C2D_SpriteSheetGetImage(mTileSet, id);
 			C3D_Tex* tex  = img.tex;
 			if (!tex)
-				printf("ERROR: could not get Tile from Texture Atlas");
+				Crash("ERROR: could not get Tile from Texture Atlas");
 
 			return tex;
 		}

@@ -17,7 +17,6 @@ extern const WorldVertex cube_sides_lut[6 * 6];
 
 void Hand_Init() {
 	handVBO = (WorldVertex*)linearAlloc(sizeof(cube_sides_lut));
-	// Texture(&steveTexture, "romfs:/textures/entity/steve.t3x");
 	steveTexture = *TileSetMan::getTexture({TileSetGroup::ENTITY, entity_steve_idx});
 }
 void Hand_Deinit() {
