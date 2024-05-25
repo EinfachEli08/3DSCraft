@@ -1,12 +1,10 @@
 #pragma once
 
+#include "core/Registry.h"
 #include <vector>
 
-template <typename T>
-class Registry;
-
-class Block;
 class ResourceLocation;
+class Block;
 
 struct BuiltInRegistries {
 		static ResourceLocation ROOT_REGISTRY_NAME;

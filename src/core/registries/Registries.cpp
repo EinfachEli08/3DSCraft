@@ -1,4 +1,5 @@
 #include "core/registries/Registries.h"
+#include "resources/ResourceLocation.h"
 
 template <typename T>
 static ResourceKey<Registry<T>> createRegistryKey(const char* name) {

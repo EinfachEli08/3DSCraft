@@ -3,8 +3,11 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <unordered_map>
+
+using json = nlohmann::json;
 
 const char* cPathRoot = "sdmc:/craft/";
 

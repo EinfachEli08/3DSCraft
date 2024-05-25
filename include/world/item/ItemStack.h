@@ -2,7 +2,7 @@
 
 #include <stdbool.h>
 
-#include "world/level/block/Block.h"
+#include "world/level/block/BlockOld.h"
 
 #include "util/NumberUtils.h"
 

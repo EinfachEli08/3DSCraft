@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "world/level/block/Block.h"
+#include "world/level/block/BlockOld.h"
 
 #include "client/renderer/VBOCache.h"
 #include "util/Xorshift.h"
