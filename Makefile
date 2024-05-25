@@ -24,7 +24,7 @@ DATA			:=	data
 META			:=	metadata
 ROMFS			:=	romfs
 ASSETS			:=  assets
-INCLUDES		:=	include lib
+INCLUDES		:=	include lib assets
 SOURCES 		:=  $(wildcard $(shell find $(realpath src) -type d))
 SOURCES 		:=  $(foreach dir,$(SOURCES),$(patsubst $(CURDIR)/%,%,$(dir)))
 
@@ -40,7 +40,7 @@ RSF_PATH		:=	$(META)/app.rsf
 LOGO			:=	$(META)/logo.bcma.lz
 ICON_FLAGS		:=	nosavebackups,visible
 
-LIBS			:= -lgame -lcitro3dd -lcitro2dd -lctru -lstdc++ -lm -ljansson -lcurl #tex3ds
+LIBS			:= -lgame -lcitro2dd -lcitro3dd -lctru -lstdc++ -lm -ljansson -lcurl #tex3ds
 
 #---------------------------------------------------------------------------------
 # options for code generation

@@ -6,7 +6,7 @@
 #include "client/renderer/VertexFmt.h"
 
 #include "client/renderer/Cursor.h"
-#include "world/level/block/Block.h"
+#include "world/level/block/BlockOld.h"
 
 #include "client/gui/DebugUI.h"
 

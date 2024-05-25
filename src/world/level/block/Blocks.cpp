@@ -1,7 +1,11 @@
 #include "world/level/block/Blocks.h"
+#include "core/Registry.h"
+#include "core/registries/BuiltInRegistries.h"
+#include "texheaders/blocks.h"
 
-Block* reg(const char* name, Block block) {
-	return nullptr;
+const Block* reg(const char* name, const Block* block) {
+	BuiltInRegistries::BLOCK->register_(ResourceLocation(name), block);
+	return block;
 }
 
-const Block* Blocks::TEST = new Block();
+const Block* Blocks::GRASS = reg("grass", new Block({TileSetGroup::BLOCKS, blocks_grass_block_top_idx}));

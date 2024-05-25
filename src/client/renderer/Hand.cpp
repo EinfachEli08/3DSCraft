@@ -7,6 +7,8 @@
 
 #include "client/renderer/CubeSidesTable.h"
 #include "client/renderer/texture/Texture.h"
+#include "client/renderer/texture/TileSetMan.h"
+#include "texheaders/entity.h"
 
 static WorldVertex* handVBO;
 static C3D_Tex steveTexture;
@@ -15,7 +17,8 @@ extern const WorldVertex cube_sides_lut[6 * 6];
 
 void Hand_Init() {
 	handVBO = (WorldVertex*)linearAlloc(sizeof(cube_sides_lut));
-	Texture(&steveTexture, "romfs:/textures/entity/steve.t3x");
+	// Texture(&steveTexture, "romfs:/textures/entity/steve.t3x");
+	steveTexture = *TileSetMan::getTexture({TileSetGroup::ENTITY, entity_steve_idx});
 }
 void Hand_Deinit() {
 	linearFree(handVBO);

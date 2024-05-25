@@ -3,6 +3,7 @@ desktop.ini
 *.cia
 *.elf
 *.smdh
+*.lst
 *.o
 *.png
 *.t3x

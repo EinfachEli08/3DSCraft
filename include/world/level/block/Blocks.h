@@ -1,8 +1,8 @@
 #pragma once
 
-#include "world/level/block/BlockNEW.h"
+#include "world/level/block/Block.h"
 
 class Blocks {
 	public:
-		static const Block* TEST;
+		static const Block* GRASS;
 };

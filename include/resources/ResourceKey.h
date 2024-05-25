@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "core/registries/BuiltInRegistries.h"
+// #include "core/registries/BuiltInRegistries.h"
 #include "resources/ResourceLocation.h"
 
 class InternKey {
@@ -53,7 +53,7 @@ class ResourceKey {
 		}
 
 		static ResourceKey<T>* createRegistryKey(const ResourceLocation& location) {
-			return create(BuiltInRegistries::ROOT_REGISTRY_NAME, location);
+			return create(/*BuiltInRegistries::ROOT_REGISTRY_NAME*/ ResourceLocation("root"), location);
 		}
 
 		bool isFor(const ResourceKey<Registry<T>>& other) const { return this->registryName == other.registryName; }

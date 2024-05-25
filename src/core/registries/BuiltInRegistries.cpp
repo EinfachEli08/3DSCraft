@@ -1,9 +1,7 @@
 #include "core/registries/BuiltInRegistries.h"
-
 #include "core/Registry.h"
 #include "core/registries/Registries.h"
 #include "resources/ResourceLocation.h"
-
 #include "world/level/block/Blocks.h"
 
 ResourceLocation BuiltInRegistries::ROOT_REGISTRY_NAME("root");
@@ -19,4 +17,4 @@ static Registry<T>* registerDefaulted(ResourceKey<Registry<T>> regKey, const cha
 	return internalRegister(regKey, new Registry<T>(regKey, defaultKey, defaultValue));
 }
 
-Registry<Block>* BuiltInRegistries::BLOCK = registerDefaulted(Registries::BLOCK, "air", Blocks::TEST);
+Registry<Block>* BuiltInRegistries::BLOCK = registerDefaulted(Registries::BLOCK, "air", Blocks::GRASS);
