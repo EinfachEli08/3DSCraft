@@ -5,8 +5,8 @@
 #include <citro3d.h>
 
 typedef struct {
-	uint8_t fontWidth[1 << 8];
-	C3D_Tex texture;
+		uint8_t fontWidth[1 << 8];
+		C3D_Tex texture;
 } Font;
 
-void FontLoader_Init(Font* font, const char* filename);
+void FontLoader_Init(Font* font);

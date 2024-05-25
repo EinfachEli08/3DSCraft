@@ -8,6 +8,9 @@
 #include "client/renderer/CubeSidesTable.h"
 #include "client/renderer/VertexFmt.h"
 #include "client/renderer/texture/Texture.h"
+#include "client/renderer/texture/TileSetMan.h"
+#include "texheaders/gui.h"
+#include "texheaders/others.h"
 
 typedef struct {
 		int depth;
@@ -42,16 +45,16 @@ void SpriteBatch_Init(int projUniform_) {
 	projUniform = projUniform_;
 
 	font = (Font*)malloc(sizeof(Font));
-	FontLoader_Init(font, "romfs:/textures/font/ascii.t3x");
-	Texture(&widgetsTex, "romfs:/textures/gui/widgets.t3x");
+	FontLoader_Init(font);
+	widgetsTex = *TileSetMan::getTexture({TileSetGroup::GUI, gui_widgets_idx});
 
 	uint8_t data[16 * 16];
-	memset(data, 0xff, 16 * 16 * sizeof(uint8_t));
+	memset(data, 0xFF, 16 * 16 * sizeof(uint8_t));
 	C3D_TexInit(&whiteTex, 16, 16, GPU_L8);
 	C3D_TexLoadImage(&whiteTex, data, GPU_TEXFACE_2D, 0);
 
-	Texture(&menuBackgroundTex, "romfs:/textures/gui/options_background.t3x");
-	Texture(&supportQRTex, "romfs:/textures/others/support-image.t3x");
+	menuBackgroundTex = *TileSetMan::getTexture({TileSetGroup::GUI, gui_options_background_idx});
+	supportQRTex	  = *TileSetMan::getTexture({TileSetGroup::OTHERS, others_support_image_idx});
 
 	Mtx_Identity(&iconModelMtx);
 	Mtx_RotateY(&iconModelMtx, M_PI / 4.f, false);
@@ -307,12 +310,14 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 	int verticesTotal = 0;
 
 	size_t vtx = 0;
-	while (cmdList.size() > 0) {
+	while (!cmdList.empty()) {
 		size_t vtxStart = vtx;
 
 		C3D_Tex* texture = cmdList.back()->texture;
-		float divW		 = 1.f / texture->width * INT16_MAX;
-		float divH		 = 1.f / texture->height * INT16_MAX;
+		if (!texture)
+			Crash("SpriteBatch has no texture, internal error.");
+		float divW = 1.f / texture->width * INT16_MAX;
+		float divH = 1.f / texture->height * INT16_MAX;
 
 		while (cmdList.size() > 0 && cmdList.back()->texture == texture) {
 			Sprite* cmd	  = cmdList.back();
