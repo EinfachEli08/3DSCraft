@@ -108,22 +108,22 @@ void SpriteBatch_PushQuad(int x, int y, int z, int w, int h, int rx, int ry, int
 	SpriteBatch_PushQuadColor(x, y, z, w, h, rx, ry, rw, rh, INT16_MAX);
 }
 void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry, int rw, int rh, int16_t color) {
-	Sprite spr = (Sprite){z,
-						  currentTexture,
-						  x * guiScale,
-						  y * guiScale,
-						  (x + w) * guiScale,
-						  y * guiScale,
-						  x * guiScale,
-						  (y + h) * guiScale,
-						  (x + w) * guiScale,
-						  (y + h) * guiScale,
-						  rx,
-						  ry,
-						  rx + rw,
-						  ry + rh,
-						  color};
-	cmdList.push_back(&spr);
+	Sprite* spr = new Sprite{z,
+							 currentTexture,
+							 x * guiScale,
+							 y * guiScale,
+							 (x + w) * guiScale,
+							 y * guiScale,
+							 x * guiScale,
+							 (y + h) * guiScale,
+							 (x + w) * guiScale,
+							 (y + h) * guiScale,
+							 rx,
+							 ry,
+							 rx + rw,
+							 ry + rh,
+							 color};
+	cmdList.push_back(spr);
 }
 
 static float rot = 0.f;
@@ -165,18 +165,18 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 			color16 = SHADER_RGB_DARKEN(color16, 10);
 
 #define unpackP(x) (x).xyz[0], (x).xyz[1]
-		Sprite spr = (Sprite){z,
-							  texture,
-							  unpackP(topLeft),
-							  unpackP(topRight),
-							  unpackP(bottomLeft),
-							  unpackP(bottomRight),
-							  iconUV[0] / 256,
-							  iconUV[1] / 256 + cTextureTileSize,
-							  iconUV[0] / 256 + cTextureTileSize,
-							  iconUV[1] / 256,
-							  color16};
-		cmdList.push_back(&spr);
+		Sprite* spr = new Sprite{z,
+								 texture,
+								 unpackP(topLeft),
+								 unpackP(topRight),
+								 unpackP(bottomLeft),
+								 unpackP(bottomRight),
+								 iconUV[0] / 256,
+								 iconUV[1] / 256 + cTextureTileSize,
+								 iconUV[0] / 256 + cTextureTileSize,
+								 iconUV[1] / 256,
+								 color16};
+		cmdList.push_back(spr);
 
 #undef unpackP
 	}
@@ -266,8 +266,11 @@ int SpriteBatch_CalcTextWidthVargs(const char* text, va_list args) {
 	return maxLength;
 }
 
-static int compareDrawCommands(Sprite* ga, Sprite* gb) {
-	return ga->depth == gb->depth ? gb->texture - ga->texture : gb->depth - ga->depth;
+bool compareDrawCommands(const Sprite* ga, const Sprite* gb) {
+	if (ga->depth != gb->depth) {
+		return ga->depth < gb->depth;  // Sort by depth ascending
+	}
+	return ga->texture < gb->texture;  // Sort by texture pointer ascending if depth is equal
 }
 
 int SpriteBatch_GetWidth() {
@@ -291,6 +294,7 @@ void SpriteBatch_StartFrame(int width, int height) {
 
 void SpriteBatch_Render(gfxScreen_t screen) {
 	rot += M_PI / 60.f;
+	cmdList.erase(std::remove(cmdList.begin(), cmdList.end(), nullptr), cmdList.end());
 	std::sort(cmdList.begin(), cmdList.end(), compareDrawCommands);
 
 	C3D_Mtx projMtx;
@@ -314,7 +318,7 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 		size_t vtxStart = vtx;
 
 		C3D_Tex* texture = cmdList.back()->texture;
-		if (!texture)
+		if (texture == nullptr)
 			Crash("SpriteBatch has no texture, internal error.");
 		float divW = 1.f / texture->width * INT16_MAX;
 		float divH = 1.f / texture->height * INT16_MAX;
@@ -334,6 +338,7 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 			usedVertexList[vtx++] = (GuiVertex){{cmd->x0, cmd->y0, 0}, {u0, v0, color}};
 			usedVertexList[vtx++] = (GuiVertex){{cmd->x2, cmd->y2, 0}, {u0, v1, color}};
 			usedVertexList[vtx++] = (GuiVertex){{cmd->x3, cmd->y3, 0}, {u1, v1, color}};
+			delete cmd;
 		}
 
 		C3D_TexBind(0, texture);
