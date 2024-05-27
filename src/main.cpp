@@ -14,7 +14,6 @@
 #include "client/player/PlayerController.h"
 #include "client/renderer/PolyGen.h"
 #include "client/renderer/Renderer.h"
-#include "client/renderer/texture/TileSetMan.h"
 #include "core/Init.h"
 #include "world/World.h"
 #include "world/level/chunk/ChunkWorker.h"
@@ -56,8 +55,6 @@ int main() {
 	SuperChunk::poolsInit();
 
 	SaveManager::initFileSystem();
-
-	TileSetMan::init();
 
 	ChunkWorker* chunkWorker	 = new ChunkWorker();
 	World* world				 = new World(chunkWorker->queue);
@@ -213,8 +210,6 @@ int main() {
 	delete saveMgr;
 
 	SuperChunk::poolsDeinit();
-
-	TileSetMan::deinit();
 
 	delete world;
 

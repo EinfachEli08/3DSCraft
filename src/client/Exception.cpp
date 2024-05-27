@@ -5,6 +5,7 @@
 #include <3ds.h>
 
 #include "client/Exception.h"
+#include "util/Paths.h"
 
 void Crash(const char* reason, ...) {
 	consoleInit(GFX_TOP, NULL);
@@ -13,7 +14,7 @@ void Crash(const char* reason, ...) {
 	va_start(vl, reason);
 	vprintf(reason, vl);
 
-	FILE* f = fopen("sdmc:/craft/crash.txt", "w");
+	FILE* f = fopen(string(Path::root + "crash.txt").c_str(), "w");
 	vfprintf(f, reason, vl);
 	fclose(f);
 

@@ -8,13 +8,14 @@
 #include "client/Exception.h"
 #include "client/gui/DebugUI.h"
 #include "client/player/Player.h"
+#include "util/Paths.h"
 #include "world/level/saveddata/SuperChunk.h"
 
 #define mkdirFlags S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH
 
 void SaveManager::initFileSystem() {
-	mkdir("sdmc:/craft", mkdirFlags);
-	mkdir("sdmc:/craft/saves", mkdirFlags);
+	mkdir(Path::root.c_str(), mkdirFlags);
+	mkdir(Path::saves.c_str(), mkdirFlags);
 }
 
 SaveManager::SaveManager(Player* player) : player(player), world(player->world) {
@@ -32,7 +33,7 @@ extern "C" {
 		// Replace "SaveManager::" with "manager->"
 		char buffer[256];
 
-		sprintf(buffer, "sdmc:/craft/saves/%s", path);
+		sprintf(buffer, "%s%s", Path::saves, path);
 		mkdir(buffer, mkdirFlags);
 		chdir(buffer);
 

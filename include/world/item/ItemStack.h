@@ -2,8 +2,6 @@
 
 #include <stdbool.h>
 
-#include "world/level/block/BlockOld.h"
-
 #include "util/NumberUtils.h"
 
 typedef struct {
