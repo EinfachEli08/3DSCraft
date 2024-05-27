@@ -6,7 +6,7 @@
 
 typedef struct {
 		uint8_t fontWidth[1 << 8];
-		C3D_Tex texture;
+		C3D_Tex* texture;
 } Font;
 
 void FontLoader_Init(Font* font);

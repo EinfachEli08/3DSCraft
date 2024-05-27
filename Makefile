@@ -22,7 +22,7 @@ TARGET			:=	3DSCraft
 BUILD			:=	build
 DATA			:=	data
 META			:=	metadata
-ROMFS			:=	assets/romfs
+ROMFS			:=	romfs
 ASSETS			:=  assets
 INCLUDES		:=	include lib assets
 SOURCES 		:=  $(wildcard $(shell find $(realpath src) -type d))
@@ -157,7 +157,7 @@ ifneq ($(strip $(LOGO)),)
 	MAKEROM_ARGS += -logo "$(LOGO)"
 endif
 ifneq ($(strip $(ROMFS)),)
-	MAKEROM_ARGS += -DAPP_ROMFS="$(ROMFS)"
+	MAKEROM_ARGS += -DAPP_ROMFS="$(CURDIR)/$(ROMFS)"
 endif
 
 
