@@ -231,13 +231,6 @@ LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
 LIBSOURCES += $(wildcard lib/*/*/*.cpp lib/*/*/*.c)
 LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
 
-#---------------------------------------------------------------------------------------
-# Texture files
-#---------------------------------------------------------------------------------------
-DIRS := $(shell find $(ASSETS)/textures/* -type d)
-T3X_FILES := $(foreach dir,$(DIRS),$(patsubst $(ASSETS)/textures/%, $(ASSETS)/OUTPUT/textures/%.t3x, $(dir)))
-#T3X_FILES := $(foreach dir,$(DIRS),$(ROMFS)/textures/$(subst /,_,$(subst $(ASSETS)/textures/,,$(dir))).t3x)
-
 #---------------------------------------------------------------------------------
 else
 
@@ -312,31 +305,3 @@ lib/%.o: lib/%.c
 clean-libs:
 	rm -f lib/**/*.o
 	rm -f lib/libgame.o
-
-#---------------------------------------------------------------------------------------
-# Textures
-#---------------------------------------------------------------------------------------
-
-TEX3DS      := $(DEVKITPRO)/tools/bin/tex3ds.exe
-
-$(ASSETS)/OUTPUT/textures/%.t3x: $(ASSETS)/textures/%
-	@mkdir -p $(dir $@)
-	@mkdir -p $(ASSETS)/texheaders/
-	@echo Creating $@
-	@$(TEX3DS) -o "$@" $(shell find "$<" -type f -name '*.png') -m point --atlas -f rgba8888 -z auto -H $(ASSETS)/texheaders/$(shell basename $(@:t3x=h))
-	@cd $(ASSETS)/OUTPUT/textures && \
-	for subdir in $$(find * -type d); do \
-		cd "$$subdir" && \
-		for file in *.t3x; do \
-			mv "$$file" ../"$$subdir"_$$file; \
-		done && \
-		cd .. && \
-		rm -rf "$$subdir"; \
-	done
-
-pack: $(T3X_FILES)
-	@echo PLEASE PREFIX EXPORTED HEADER NAMES, WHICH WERE IN A SUBDIRECTORY, WITH ITS PARENT FOLDER NAME.
-	@echo Example: gui/title.h = gui_title.h
-
-clean-pack:
-	rm -rf $(ASSETS)/OUTPUT/textures

@@ -12,6 +12,7 @@
 #include "client/gui/Gui.h"
 #include "client/gui/SpriteBatch.h"
 #include "client/renderer/VertexFmt.h"
+#include "util/Paths.h"
 
 typedef struct {
 		uint32_t lastPlayed;
@@ -24,14 +25,14 @@ static std::vector<WorldInfo> worlds;
 void WorldSelect_ScanWorlds() {
 	worlds.clear();
 
-	DIR* directory = opendir("sdmc:/craft/saves");
+	DIR* directory = opendir(Path::saves.c_str());
 
 	char buffer[512];
 
 	struct dirent* entry;
 
 	while ((entry = readdir(directory))) {
-		sprintf(buffer, "sdmc:/craft/saves/%s/level.mp", entry->d_name);
+		sprintf(buffer, "%s%s/level.mp", Path::saves.c_str(), entry->d_name);
 		if (access(buffer, F_OK) != -1) {
 			mpack_tree_t tree;
 			mpack_tree_init_file(&tree, buffer, 0);
@@ -278,7 +279,7 @@ bool WorldSelect_Update(char* out_worldpath, char* out_name, Enum::WorldGenType*
 	if (confirmed_deletion) {
 		confirmed_deletion = false;
 		char buffer[512];
-		sprintf(buffer, "sdmc:/craft/saves/%s", worlds[selectedWorld].path);
+		sprintf(buffer, "%s%s", Path::saves.c_str(), worlds[selectedWorld].path);
 		delete_folder(buffer);
 
 		WorldSelect_ScanWorlds();

@@ -7,14 +7,14 @@
 #include <string>
 #include <unordered_map>
 
-using json = nlohmann::json;
+#include "util/Paths.h"
 
-const char* cPathRoot = "sdmc:/craft/";
+using json = nlohmann::json;
 
 class JSONFileHandler {
 	public:
 		static json readFromFile(const std::string& filename) {
-			std::ifstream inputFile(cPathRoot + filename);
+			std::ifstream inputFile(Path::root + filename);
 			if (!inputFile.is_open()) {
 				printf("Unable to open file: %s\n", filename.c_str());
 				return json();
@@ -28,7 +28,7 @@ class JSONFileHandler {
 		}
 
 		static void writeToFile(const json& jsonData, const std::string& filename) {
-			std::ofstream outputFile(cPathRoot + filename);
+			std::ofstream outputFile(Path::root + filename);
 			if (!outputFile.is_open()) {
 				printf("Unable to write file: %s\n", filename.c_str());
 				return;

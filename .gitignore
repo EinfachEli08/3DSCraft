@@ -1,4 +1,3 @@
-desktop.ini
 *.3dsx
 *.cia
 *.elf
@@ -10,9 +9,12 @@ desktop.ini
 
 build
 lib/libgame.a
-assets/OUTPUT/
-assets/assets
+resources/OUTPUT
+resources/assets
+resources/assets.*
+!resources/patch
 
 .vscode
 .vs
 .idea
+desktop.ini

@@ -4,10 +4,10 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "world/level/block/BlockOld.h"
-
 #include "client/renderer/VBOCache.h"
+#include "core/Direction.h"
 #include "util/Xorshift.h"
+#include "world/level/block/Block.h"
 
 #define CHUNK_SIZE (16)
 #define CHUNK_HEIGHT (384)

@@ -8,9 +8,6 @@
 #include "client/renderer/CubeSidesTable.h"
 #include "client/renderer/VertexFmt.h"
 #include "client/renderer/texture/Texture.h"
-#include "client/renderer/texture/TileSetMan.h"
-#include "texheaders/gui.h"
-#include "texheaders/others.h"
 
 typedef struct {
 		int depth;
@@ -28,10 +25,10 @@ static int projUniform;
 
 static Font* font;
 static C3D_Tex whiteTex;
-static C3D_Tex* widgetsTex;
-static C3D_Tex* iconsTex;
-static C3D_Tex* menuBackgroundTex;
-static C3D_Tex* supportQRTex;
+static Texture* widgetsTex;
+static Texture* iconsTex;
+static Texture* menuBackgroundTex;
+static Texture* supportQRTex;
 
 static C3D_Mtx iconModelMtx;
 
@@ -46,17 +43,20 @@ void SpriteBatch_Init(int projUniform_) {
 
 	font = (Font*)malloc(sizeof(Font));
 	FontLoader_Init(font);
-	widgetsTex = TileSetMan::getTexture({TileSetGroup::GUI, gui_widgets_idx});
+	// widgetsTex = TileSetMan::getTexture({TileSetGroup::GUI, gui_widgets_idx});
+	widgetsTex = new Texture("gui/widgets.t3x", true);
 
 	uint8_t data[16 * 16];
 	memset(data, 0xFF, 16 * 16 * sizeof(uint8_t));
 	C3D_TexInit(&whiteTex, 16, 16, GPU_L8);
 	C3D_TexLoadImage(&whiteTex, data, GPU_TEXFACE_2D, 0);
 
-	menuBackgroundTex = TileSetMan::getTexture({TileSetGroup::GUI, gui_options_background_idx});
-	supportQRTex	  = TileSetMan::getTexture({TileSetGroup::OTHERS, others_support_image_idx});
+	menuBackgroundTex = new Texture("gui/options/background.t3x", true);
+	supportQRTex	  = new Texture("")
+		// menuBackgroundTex = TileSetMan::getTexture({TileSetGroup::GUI, gui_options_background_idx});
+		// supportQRTex	  = TileSetMan::getTexture({TileSetGroup::OTHERS, others_support_image_idx});
 
-	Mtx_Identity(&iconModelMtx);
+		Mtx_Identity(&iconModelMtx);
 	Mtx_RotateY(&iconModelMtx, M_PI / 4.f, false);
 	Mtx_RotateX(&iconModelMtx, M_PI / 6.f, false);
 }

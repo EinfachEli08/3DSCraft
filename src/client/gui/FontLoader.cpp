@@ -4,14 +4,13 @@
 #include <stdlib.h>
 
 #include "client/Exception.h"
-#include "client/renderer/texture/TileSetMan.h"
-#include "texheaders/font.h"
+#include "client/renderer/texture/Texture.h"
 
 void FontLoader_Init(Font* font) {
-	font->texture = TileSetMan::getTexture({TileSetGroup::FONT, font_ascii_idx});
+	font->texture = new Texture(ResourceLocation("font/ascii.t3x"), true);
 	int c		  = 0;
 
-	u32* image = (u32*)font->texture->data;
+	u32* image = (u32*)font->texture->getTexture()->data;
 	for (int y = 0; y < 128; y += 8) {
 		for (int x = 0; x < 128; x += 8) {
 			int length		= 2;

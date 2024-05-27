@@ -5,6 +5,7 @@
 
 #include "commands/CommandLine.h"
 #include "util/NumberUtils.h"
+#include "util/Paths.h"
 
 #include "client/gui/DebugUI.h"
 
@@ -162,8 +163,8 @@ PlayerController::PlayerController(Player* player) {
 
 	bool elementMissing = false;
 
-	const char path[] = "sdmc:/craft/options.ini";
-	if (access(path, F_OK) != -1) {
+	std::string = Path::root + "options.ini";
+	if (access(path.c_str(), F_OK) != -1) {
 		ini_t* cfg = ini_load(path);
 
 		char buffer[64];
