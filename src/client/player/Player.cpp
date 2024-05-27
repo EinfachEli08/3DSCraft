@@ -83,7 +83,7 @@ bool Player::canMove(float newX, float newY, float newZ) {
 	return true;
 }
 
-void Player::jump(float3 accl) {
+void Player::jump(Vector3f accl) {
 	if (grounded && !flying) {
 		velocity.x = accl.x * 1.1f;
 		velocity.z = accl.z * 1.1f;
@@ -97,7 +97,7 @@ void Player::jump(float3 accl) {
 const float MaxWalkVelocity		= 4.3f;
 const float MaxFallVelocity		= -50.f;
 const float GravityPlusFriction = 10.f;
-void Player::move(float dt, float3 accl) {
+void Player::move(float dt, Vector3f accl) {
 	breakPlaceTimeout -= dt;
 	simStepAccum += dt;
 	const float SimStep = 1.f / 60.f;
@@ -119,8 +119,8 @@ void Player::move(float dt, float3 accl) {
 			speedFactor = 2.f;
 		else if (crouching)
 			speedFactor = 0.5f;
-		float3 newPos	= f3_add(position, f3_add(f3_scl(velocity, SimStep), f3_scl(accl, SimStep * speedFactor)));
-		float3 finalPos = position;
+		Vector3f newPos	= f3_add(position, f3_add(f3_scl(velocity, SimStep), f3_scl(accl, SimStep * speedFactor)));
+		Vector3f finalPos = position;
 
 		bool wallCollision = false, wasGrounded = grounded;
 
@@ -128,7 +128,7 @@ void Player::move(float dt, float3 accl) {
 		for (int j = 0; j < 3; j++) {
 			int i			= (int[]){0, 2, 1}[j];
 			bool collision	= false;
-			float3 axisStep = /*f3_new(i == 0 ? newPos.x : position.x, i == 1 ? newPos.y : position.y,
+			Vector3f axisStep = /*f3_new(i == 0 ? newPos.x : position.x, i == 1 ? newPos.y : position.y,
 						 i == 2 ? newPos.z : position.z)*/
 				finalPos;
 			axisStep.v[i] = newPos.v[i];
@@ -144,7 +144,7 @@ void Player::move(float dt, float3 accl) {
 						if (world->getBlock(pX, pY, pZ) != Block_Air) {
 							Box blockBox = Box_Create(pX, pY, pZ, 1, 1, 1);
 
-							float3 normal = f3_new(0.f, 0.f, 0.f);
+							Vector3f normal = f3_new(0.f, 0.f, 0.f);
 							float depth	  = 0.f;
 							int face	  = 0;
 
@@ -172,13 +172,13 @@ void Player::move(float dt, float3 accl) {
 			}
 		}
 
-		float3 movDiff = f3_sub(finalPos, position);
+		Vector3f movDiff = f3_sub(finalPos, position);
 
 		if (grounded && flying)
 			flying = false;
 
 		if (wallCollision && autoJumpEnabled) {
-			float3 nrmDiff	   = f3_nrm(f3_sub(newPos, position));
+			Vector3f nrmDiff	   = f3_nrm(f3_sub(newPos, position));
 			Block block		   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 2,
 												 FastFloor(finalPos.z + nrmDiff.z));
 			Block landingBlock = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 1,

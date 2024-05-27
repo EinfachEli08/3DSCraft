@@ -260,10 +260,10 @@ void PlayerController::update(InputData input, float dt) {
 	float strafeLeft  = IsKeyDown(controlScheme.strafeLeft, &agnosticInput);
 	float strafeRight = IsKeyDown(controlScheme.strafeRight, &agnosticInput);
 
-	float3 forwardVec = f3_new(-sinf(player->yaw), 0.f, -cosf(player->yaw));
-	float3 rightVec	  = f3_crs(forwardVec, f3_new(0, 1, 0));
+	Vector3f forwardVec = f3_new(-sinf(player->yaw), 0.f, -cosf(player->yaw));
+	Vector3f rightVec	  = f3_crs(forwardVec, f3_new(0, 1, 0));
 
-	float3 movement = f3_new(0, 0, 0);
+	Vector3f movement = f3_new(0, 0, 0);
 	movement		= f3_add(movement, f3_scl(forwardVec, forward));
 	movement		= f3_sub(movement, f3_scl(forwardVec, backward));
 	movement		= f3_add(movement, f3_scl(rightVec, strafeRight));

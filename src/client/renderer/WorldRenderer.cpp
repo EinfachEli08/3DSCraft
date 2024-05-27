@@ -94,7 +94,7 @@ static void renderWorld() {
 	renderingQueue.push_back((RenderStep){&pChunk->clusters[pY], pChunk, Direction::Invalid});
 	chunkRendered[CHUNKCACHE_SIZE / 2][pY][CHUNKCACHE_SIZE / 2] = 1;
 
-	float3 playerPos = player->position;
+	Vector3f playerPos = player->position;
 
 	while (renderingQueue.size() > 0) {
 		RenderStep step	 = renderingQueue.back();
@@ -129,7 +129,7 @@ static void renderWorld() {
 				newZ < world->cacheTranslationZ - CHUNKCACHE_SIZE / 2 + 1 || newZ > world->cacheTranslationZ + CHUNKCACHE_SIZE / 2 - 1 ||
 				newY < 0 || newY >= CLUSTER_PER_CHUNK)
 				continue;
-			float3 dist =
+			Vector3f dist =
 				f3_sub(f3_new(newX * CHUNK_SIZE + CHUNK_SIZE / 2, newY * CHUNK_SIZE + CHUNK_SIZE / 2, newZ * CHUNK_SIZE + CHUNK_SIZE / 2),
 					   playerPos);
 			if (f3_dot(dist, dist) > (3.f * CHUNK_SIZE) * (3.f * CHUNK_SIZE)) {

@@ -33,7 +33,7 @@ enum FrustumCorners {
 typedef struct {
 		C3D_Mtx projection, view, vp;
 		C3D_FVec frustumPlanes[FrustumPlanes_Count];
-		float3 frustumCorners[FrustumCorners_Count];
+		Vector3f frustumCorners[FrustumCorners_Count];
 
 		float near, far, fov;
 } Camera;

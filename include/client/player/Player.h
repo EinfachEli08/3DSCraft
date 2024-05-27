@@ -21,27 +21,27 @@ class Player {
 		Player(World* world);
 
 		void update();
-		void move(float dt, float3 accl);
+		void move(float dt, Vector3f accl);
 		void blockPlace();
 		void blockBreak();
-		void jump(float3 accl);
+		void jump(Vector3f accl);
 		void teleport(float x, float y, float z);
 
 		bool canMove(float newX, float newY, float newZ);
 
 		World* world;
-		float3 position;
+		Vector3f position;
 		float pitch, yaw;
 		float bobbing, fovAdd, crouchAdd;
 		bool grounded, jumped, sprinting, flying, crouching;
 		bool autoJumpEnabled;
 
-		float3 view;
+		Vector3f view;
 
 		int quickSelectBarSlot;
 		int quickSelectBarSlots;
 
-		float3 velocity;
+		Vector3f velocity;
 		float simStepAccum;
 
 		float breakPlaceTimeout;

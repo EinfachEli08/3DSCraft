@@ -8,7 +8,7 @@
 
 #define INF (CHUNKCACHE_SIZE / 2 * CHUNK_SIZE)
 
-bool Raycast_Cast(World* world, float3 inpos, float3 raydir, Raycast_Result* out) {
+bool Raycast_Cast(World* world, Vector3f inpos, Vector3f raydir, Raycast_Result* out) {
 	int mapX = FastFloor(inpos.x), mapY = FastFloor(inpos.y), mapZ = FastFloor(inpos.z);
 
 	float xSqr = raydir.x * raydir.x;
@@ -90,7 +90,7 @@ bool Raycast_Cast(World* world, float3 inpos, float3 raydir, Raycast_Result* out
 			break;
 	}
 
-	float3 dist	 = f3_sub(f3_new(mapX, mapY, mapZ), inpos);
+	Vector3f dist	 = f3_sub(f3_new(mapX, mapY, mapZ), inpos);
 	out->distSqr = f3_magSqr(dist);
 	out->x		 = mapX;
 	out->y		 = mapY;
