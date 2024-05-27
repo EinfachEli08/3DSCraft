@@ -8,10 +8,10 @@
 #include "texheaders/font.h"
 
 void FontLoader_Init(Font* font) {
-	font->texture = *TileSetMan::getTexture({TileSetGroup::FONT, font_ascii_idx});
+	font->texture = TileSetMan::getTexture({TileSetGroup::FONT, font_ascii_idx});
 	int c		  = 0;
 
-	u32* image = (u32*)font->texture.data;
+	u32* image = (u32*)font->texture->data;
 	for (int y = 0; y < 128; y += 8) {
 		for (int x = 0; x < 128; x += 8) {
 			int length		= 2;

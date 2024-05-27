@@ -10,7 +10,8 @@ desktop.ini
 
 build
 lib/libgame.a
-romfs/textures
+assets/OUTPUT/
+assets/assets
 
 .vscode
 .vs

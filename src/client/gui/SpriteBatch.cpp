@@ -22,16 +22,16 @@ typedef struct {
 } Sprite;
 
 static std::vector<Sprite*> cmdList;
-static C3D_Tex* currentTexture = NULL;
+static C3D_Tex* currentTexture = nullptr;
 static GuiVertex* vertexList[2];
 static int projUniform;
 
 static Font* font;
 static C3D_Tex whiteTex;
-static C3D_Tex widgetsTex;
-static C3D_Tex iconsTex;
-static C3D_Tex menuBackgroundTex;
-static C3D_Tex supportQRTex;
+static C3D_Tex* widgetsTex;
+static C3D_Tex* iconsTex;
+static C3D_Tex* menuBackgroundTex;
+static C3D_Tex* supportQRTex;
 
 static C3D_Mtx iconModelMtx;
 
@@ -46,15 +46,15 @@ void SpriteBatch_Init(int projUniform_) {
 
 	font = (Font*)malloc(sizeof(Font));
 	FontLoader_Init(font);
-	widgetsTex = *TileSetMan::getTexture({TileSetGroup::GUI, gui_widgets_idx});
+	widgetsTex = TileSetMan::getTexture({TileSetGroup::GUI, gui_widgets_idx});
 
 	uint8_t data[16 * 16];
 	memset(data, 0xFF, 16 * 16 * sizeof(uint8_t));
 	C3D_TexInit(&whiteTex, 16, 16, GPU_L8);
 	C3D_TexLoadImage(&whiteTex, data, GPU_TEXFACE_2D, 0);
 
-	menuBackgroundTex = *TileSetMan::getTexture({TileSetGroup::GUI, gui_options_background_idx});
-	supportQRTex	  = *TileSetMan::getTexture({TileSetGroup::OTHERS, others_support_image_idx});
+	menuBackgroundTex = TileSetMan::getTexture({TileSetGroup::GUI, gui_options_background_idx});
+	supportQRTex	  = TileSetMan::getTexture({TileSetGroup::OTHERS, others_support_image_idx});
 
 	Mtx_Identity(&iconModelMtx);
 	Mtx_RotateY(&iconModelMtx, M_PI / 4.f, false);
@@ -64,12 +64,12 @@ void SpriteBatch_Deinit() {
 	linearFree(vertexList[0]);
 	linearFree(vertexList[1]);
 
-	C3D_TexDelete(&font->texture);
+	C3D_TexDelete(font->texture);
 	free(font);
 
 	C3D_TexDelete(&whiteTex);
-	C3D_TexDelete(&widgetsTex);
-	C3D_TexDelete(&menuBackgroundTex);
+	C3D_TexDelete(widgetsTex);
+	C3D_TexDelete(menuBackgroundTex);
 }
 
 void SpriteBatch_BindTexture(C3D_Tex* texture) {
@@ -81,19 +81,19 @@ void SpriteBatch_BindGuiTexture(GuiTexture texture) {
 			currentTexture = &whiteTex;
 			break;
 		case GuiTexture_Font:
-			currentTexture = &font->texture;
+			currentTexture = font->texture;
 			break;
 		case GuiTexture_Widgets:
-			currentTexture = &widgetsTex;
+			currentTexture = widgetsTex;
 			break;
 		case GuiTexture_Icons:
-			currentTexture = &iconsTex;
+			currentTexture = iconsTex;
 			break;
 		case GuiTexture_MenuBackground:
-			currentTexture = &menuBackgroundTex;
+			currentTexture = menuBackgroundTex;
 			break;
 		case GuiTexture_SupportQR:
-			currentTexture = &supportQRTex;
+			currentTexture = supportQRTex;
 			break;
 		default:
 			break;
@@ -191,7 +191,7 @@ int SpriteBatch_PushText(int x, int y, int z, int16_t color, bool shadow, int wr
 }
 
 int SpriteBatch_PushTextVargs(int x, int y, int z, int16_t color, bool shadow, int wrap, int* ySize, const char* fmt, va_list arg) {
-	SpriteBatch_BindTexture(&font->texture);
+	SpriteBatch_BindTexture(font->texture);
 
 #define CHAR_WIDTH 0
 #define TAB_SIZE 0
@@ -323,7 +323,7 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 		float divW = 1.f / texture->width * INT16_MAX;
 		float divH = 1.f / texture->height * INT16_MAX;
 
-		while (cmdList.size() > 0 && cmdList.back()->texture == texture) {
+		while (!cmdList.empty() && cmdList.back()->texture == texture) {
 			Sprite* cmd	  = cmdList.back();
 			int16_t color = cmd->color;
 			cmdList.pop_back();
