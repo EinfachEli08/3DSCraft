@@ -10,4 +10,4 @@ typedef struct {
 		Direction::e direction;
 } Raycast_Result;
 
-bool Raycast_Cast(World* world, float3 inpos, float3 raydir, Raycast_Result* out);
+bool Raycast_Cast(World* world, Vector3f inpos, Vector3f raydir, Raycast_Result* out);

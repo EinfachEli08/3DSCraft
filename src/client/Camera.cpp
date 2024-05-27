@@ -16,7 +16,7 @@ void Camera_Update(Camera* cam, Player* player, float iod) {
 	float fov = cam->fov + C3D_AngleFromDegrees(12.f) * player->fovAdd;
 	Mtx_PerspStereoTilt(&cam->projection, fov, ((400.f) / (240.f)), cam->near, cam->far, iod, 1.f, false);
 
-	float3 playerHead = f3_new(player->position.x, player->position.y + PLAYER_EYEHEIGHT + sinf(player->bobbing) * 0.1f + player->crouchAdd,
+	Vector3f playerHead = f3_new(player->position.x, player->position.y + PLAYER_EYEHEIGHT + sinf(player->bobbing) * 0.1f + player->crouchAdd,
 							   player->position.z);
 
 	Mtx_Identity(&cam->view);
@@ -40,9 +40,9 @@ void Camera_Update(Camera* cam, Player* player, float iod) {
 	cam->frustumPlanes[Frustum_Bottom] = FVec4_Normalize(FVec4_Subtract(rowW, rowY));
 	cam->frustumPlanes[Frustum_Far]	   = FVec4_Normalize(FVec4_Add(rowW, rowZ));
 
-	float3 forward = player->view;
-	float3 right   = f3_crs(f3_new(0, 1, 0), f3_new(sinf(player->yaw), 0.f, cosf(player->yaw)));
-	float3 up	   = f3_crs(forward, right);
+	Vector3f forward = player->view;
+	Vector3f right   = f3_crs(f3_new(0, 1, 0), f3_new(sinf(player->yaw), 0.f, cosf(player->yaw)));
+	Vector3f up	   = f3_crs(forward, right);
 
 	float ar = 400.f / 240.f;
 
@@ -54,8 +54,8 @@ void Camera_Update(Camera* cam, Player* player, float iod) {
 	float hFar = tan2halffov * cam->far;
 	float wFar = hFar * ar;
 
-	float3 cNear = f3_add(playerHead, f3_scl(forward, cam->near));
-	float3 cFar	 = f3_add(playerHead, f3_scl(forward, cam->far));
+	Vector3f cNear = f3_add(playerHead, f3_scl(forward, cam->near));
+	Vector3f cFar	 = f3_add(playerHead, f3_scl(forward, cam->far));
 
 	cam->frustumCorners[Frustum_NearBottomLeft]	 = f3_sub(f3_sub(cNear, f3_scl(up, hNear * 0.5f)), f3_scl(right, wNear * 0.5f));
 	cam->frustumCorners[Frustum_NearBottomRight] = f3_add(f3_sub(cNear, f3_scl(up, hNear * 0.5f)), f3_scl(right, wNear * 0.5f));
@@ -76,8 +76,8 @@ bool Camera_IsPointVisible(Camera* cam, C3D_FVec point) {
 }
 
 bool Camera_IsAABBVisible(Camera* cam, C3D_FVec orgin, C3D_FVec size) {
-	float3 min = f3_new(orgin.x, orgin.y, orgin.z);
-	float3 max = f3_new(orgin.x + size.x, orgin.y + size.y, orgin.z + size.z);
+	Vector3f min = f3_new(orgin.x, orgin.y, orgin.z);
+	Vector3f max = f3_new(orgin.x + size.x, orgin.y + size.y, orgin.z + size.z);
 	for (int i = 0; i < 6; i++) {
 		int out = 0;
 		out += ((FVec4_Dot(cam->frustumPlanes[i], FVec4_New(min.x, min.y, min.z, 1.0f)) < 0.0));
