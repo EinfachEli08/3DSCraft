@@ -4,10 +4,10 @@
 
 #include "util/NumberUtils.h"
 
-typedef struct {
-		Block block;
-		uint8_t meta, amount;
-} ItemStack;
+struct ItemStack {
+		Block* block;
+		u8 meta, amount;
+};
 
 #define ITEMSTACK_MAX (64)
 

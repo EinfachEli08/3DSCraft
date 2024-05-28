@@ -200,6 +200,10 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 
 				WorldVertex* opaqueData		 = (WorldVertex*)memBlock.memory;
 				WorldVertex* transparentData = (WorldVertex*)transparentMem.memory;
+
+				s16 iconUV[2];
+				u8 color[3];
+
 				for (int j = 0; j < currentFace; j++) {
 					Face face = faceBuffer[j];
 
@@ -207,7 +211,6 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 					int offsetZ = face.z + item.chunk->z * CHUNK_SIZE;
 					int offsetY = face.y + i * CHUNK_SIZE;
 
-					int16_t iconUV[2];
 					Block_GetTexture(face.block, face.direction, face.metadata, iconUV);
 
 					WorldVertex* data = face.transparent ? transparentData : opaqueData;
@@ -216,7 +219,6 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 #define oneDivIconsPerRow (32768 / 8)
 #define halfTexel (6)
 
-					uint8_t color[3];
 					Block_GetColor(face.block, face.metadata, face.direction, color);
 
 					for (int k = 0; k < 6; k++) {

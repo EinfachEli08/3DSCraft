@@ -31,6 +31,7 @@ inline Vector3f f3_scl(Vector3f a, float b) {
 }
 
 inline float f3_dot(Vector3f a, Vector3f b) {
+	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 inline Vector3f f3_crs(Vector3f a, Vector3f b) {
 	return f3_new(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
