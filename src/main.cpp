@@ -90,7 +90,8 @@ int main() {
 	while (aptMainLoop()) {
 		DebugUI_Text("%d FPS  Usage: CPU: %5.2f%% GPU: %5.2f%% Buf: %5.2f%% Lin: %d", fps, C3D_GetProcessingTime() * 6.f,
 					 C3D_GetDrawingTime() * 6.f, C3D_GetCmdBufUsage() * 100.f, linearSpaceFree());
-		DebugUI_Text("Player: %f, %f, %f P: %f Y: %f", f3_unpack(player->position), player->pitch, player->yaw);
+		DebugUI_Text("Player: %f, %f, %f P: %f Y: %f", player->position.x, player->position.y, player->position.z, player->pitch,
+					 player->yaw);
 
 		renderer->render();
 
