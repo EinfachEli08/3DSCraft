@@ -10,3 +10,13 @@ constexpr int INVERSE_START_BITS_Z = NUM_Y_BITS;
 constexpr int INVERSE_START_BITS_X = NUM_Y_BITS + NUM_Z_BITS;
 
 const BlockPos* BlockPos::ZERO = new BlockPos(0, 0, 0);
+
+int BlockPos::getX() {
+	return pos.x;
+}
+int BlockPos::getY() {
+	return pos.y;
+}
+int BlockPos::getZ() {
+	return pos.z;
+}
