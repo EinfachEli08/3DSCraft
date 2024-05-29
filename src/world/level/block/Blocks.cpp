@@ -3,7 +3,7 @@
 #include "core/registries/BuiltInRegistries.h"
 
 const Block* reg(const char* name, const Block* block) {
-	BuiltInRegistries::BLOCK->register_(ResourceLocation(name), block);
+	BuiltInRegistries::BLOCK->registr(ResourceLocation(name), block);
 	return block;
 }
 

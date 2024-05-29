@@ -24,7 +24,7 @@ static int projectionUniform;
 typedef struct {
 		Cluster* cluster;
 		Chunk* chunk;
-		Direction::e enteredFrom;
+		Direction::_ enteredFrom;
 } RenderStep;
 
 typedef struct {
@@ -94,7 +94,7 @@ static void renderWorld() {
 	renderingQueue.push_back((RenderStep){&pChunk->clusters[pY], pChunk, Direction::Invalid});
 	chunkRendered[CHUNKCACHE_SIZE / 2][pY][CHUNKCACHE_SIZE / 2] = 1;
 
-	Vector3f playerPos = player->position;
+	Vector3<float> playerPos = player->position;
 
 	while (renderingQueue.size() > 0) {
 		RenderStep step	 = renderingQueue.back();
@@ -121,7 +121,7 @@ static void renderWorld() {
 		// if (polysTotal >= 150000) break;
 
 		for (int i = 0; i < 24; i++) {
-			Direction::e dir  = (Direction::e)i;
+			Direction::_ dir  = (Direction::_)i;
 			const int* offset = DirectionToOffset[i];
 
 			int newX = chunk->x + offset[0], newY = cluster->y + offset[1], newZ = chunk->z + offset[2];
@@ -129,10 +129,10 @@ static void renderWorld() {
 				newZ < world->cacheTranslationZ - CHUNKCACHE_SIZE / 2 + 1 || newZ > world->cacheTranslationZ + CHUNKCACHE_SIZE / 2 - 1 ||
 				newY < 0 || newY >= CLUSTER_PER_CHUNK)
 				continue;
-			Vector3f dist =
-				f3_sub(f3_new(newX * CHUNK_SIZE + CHUNK_SIZE / 2, newY * CHUNK_SIZE + CHUNK_SIZE / 2, newZ * CHUNK_SIZE + CHUNK_SIZE / 2),
-					   playerPos);
-			if (f3_dot(dist, dist) > (3.f * CHUNK_SIZE) * (3.f * CHUNK_SIZE)) {
+			Vector3<float> dist =
+				Vector3<float>(newX * CHUNK_SIZE + CHUNK_SIZE / 2, newY * CHUNK_SIZE + CHUNK_SIZE / 2, newZ * CHUNK_SIZE + CHUNK_SIZE / 2) -
+				playerPos;
+			if (dist.dot() > (3.f * CHUNK_SIZE) * (3.f * CHUNK_SIZE)) {
 				continue;
 			}
 

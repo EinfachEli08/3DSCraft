@@ -1,9 +1,10 @@
 #include "client/player/Player.h"
 
 #include "world/level/Collision.h"
+#include "world/level/block/Blocks.h"
 
 Player::Player(World* _world) {
-	position = f3_new(0.f, 0.f, 0.f);
+	position = Vector3<float>(0.f, 0.f, 0.f);
 
 	bobbing = 0.f;
 	pitch	= 0.f;
@@ -16,7 +17,7 @@ Player::Player(World* _world) {
 	fovAdd	  = 0.f;
 	crouchAdd = 0.f;
 
-	view = f3_new(0, 0, -1);
+	view = Vector3<float>(0, 0, -1);
 
 	crouching = false;
 	flying	  = false;
@@ -24,7 +25,7 @@ Player::Player(World* _world) {
 	blockInSeight	   = false;
 	blockInActionRange = false;
 
-	velocity	 = f3_new(0, 0, 0);
+	velocity	 = Vector3<float>(0, 0, 0);
 	simStepAccum = 0.f;
 
 	breakPlaceTimeout = 0.f;
@@ -51,16 +52,16 @@ Player::Player(World* _world) {
 		inventory[l++] = (ItemStack){Block_Smooth_Stone, 0, 64};
 		inventory[l++] = (ItemStack){Block_Smooth_Stone_Slab, 0, 64};
 		for (int i = 0; i < INVENTORY_QUICKSELECT_MAXSLOTS; i++)
-			quickSelectBar[i] = (ItemStack){Block_Air, 0, 0};
+			quickSelectBar[i] = (ItemStack){Blocks::AIR, 0, 0};
 	}
 
 	autoJumpEnabled = true;
 }
 
 void Player::update() {
-	view = f3_new(-sinf(yaw) * cosf(pitch), sinf(pitch), -cosf(yaw) * cosf(pitch));
+	view = Vector3<float>(-sinf(yaw) * cosf(pitch), sinf(pitch), -cosf(yaw) * cosf(pitch));
 
-	blockInSeight	   = Raycast_Cast(world, f3_new(position.x, position.y + PLAYER_EYEHEIGHT, position.z), view, &viewRayCast);
+	blockInSeight	   = Raycast_Cast(world, Vector3<float>(position.x, position.y + PLAYER_EYEHEIGHT, position.z), view, &viewRayCast);
 	blockInActionRange = blockInSeight && viewRayCast.distSqr < 5.f * 5.f * 5.f;
 }
 
@@ -71,7 +72,7 @@ bool Player::canMove(float newX, float newY, float newZ) {
 				int pX = FastFloor(newX) + x;
 				int pY = FastFloor(newY) + y;
 				int pZ = FastFloor(newZ) + z;
-				if (world->getBlock(pX, pY, pZ) != Block_Air) {
+				if (world->getBlock(pX, pY, pZ) != Blocks::AIR) {
 					if (AABB_Overlap(newX - PLAYER_COLLISIONBOX_SIZE / 2.f, newY, newZ - PLAYER_COLLISIONBOX_SIZE / 2.f,
 									 PLAYER_COLLISIONBOX_SIZE, PLAYER_HEIGHT, PLAYER_COLLISIONBOX_SIZE, pX, pY, pZ, 1.f, 1.f, 1.f)) {
 						return false;
@@ -83,7 +84,7 @@ bool Player::canMove(float newX, float newY, float newZ) {
 	return true;
 }
 
-void Player::jump(Vector3f accl) {
+void Player::jump(Vector3<float> accl) {
 	if (grounded && !flying) {
 		velocity.x = accl.x * 1.1f;
 		velocity.z = accl.z * 1.1f;
@@ -97,7 +98,7 @@ void Player::jump(Vector3f accl) {
 const float MaxWalkVelocity		= 4.3f;
 const float MaxFallVelocity		= -50.f;
 const float GravityPlusFriction = 10.f;
-void Player::move(float dt, Vector3f accl) {
+void Player::move(float dt, Vector3<float> accl) {
 	breakPlaceTimeout -= dt;
 	simStepAccum += dt;
 	const float SimStep = 1.f / 60.f;
@@ -119,16 +120,16 @@ void Player::move(float dt, Vector3f accl) {
 			speedFactor = 2.f;
 		else if (crouching)
 			speedFactor = 0.5f;
-		Vector3f newPos	= f3_add(position, f3_add(f3_scl(velocity, SimStep), f3_scl(accl, SimStep * speedFactor)));
-		Vector3f finalPos = position;
+		Vector3<float> newPos	= position + velocity * SimStep + accl * (SimStep * speedFactor);
+		Vector3<float> finalPos = position;
 
 		bool wallCollision = false, wasGrounded = grounded;
 
 		grounded = false;
 		for (int j = 0; j < 3; j++) {
-			int i			= (int[]){0, 2, 1}[j];
-			bool collision	= false;
-			Vector3f axisStep = /*f3_new(i == 0 ? newPos.x : position.x, i == 1 ? newPos.y : position.y,
+			int i					= (int[]){0, 2, 1}[j];
+			bool collision			= false;
+			Vector3<float> axisStep = /*Vector3<float>(i == 0 ? newPos.x : position.x, i == 1 ? newPos.y : position.y,
 						 i == 2 ? newPos.z : position.z)*/
 				finalPos;
 			axisStep.v[i] = newPos.v[i];
@@ -141,12 +142,12 @@ void Player::move(float dt, Vector3f accl) {
 						int pX = FastFloor(axisStep.x) + x;
 						int pY = FastFloor(axisStep.y) + y;
 						int pZ = FastFloor(axisStep.z) + z;
-						if (world->getBlock(pX, pY, pZ) != Block_Air) {
+						if (world->getBlock(pX, pY, pZ) != Blocks::AIR) {
 							Box blockBox = Box_Create(pX, pY, pZ, 1, 1, 1);
 
-							Vector3f normal = f3_new(0.f, 0.f, 0.f);
-							float depth	  = 0.f;
-							int face	  = 0;
+							Vector3<float> normal = Vector3<float>(0.f, 0.f, 0.f);
+							float depth			  = 0.f;
+							int face			  = 0;
 
 							bool intersects = Collision_BoxIntersect(blockBox, playerBox, 0, &normal, &depth, &face);
 							collision |= intersects;
@@ -172,18 +173,18 @@ void Player::move(float dt, Vector3f accl) {
 			}
 		}
 
-		Vector3f movDiff = f3_sub(finalPos, position);
+		Vector3<float> movDiff = finalPos - position;
 
 		if (grounded && flying)
 			flying = false;
 
 		if (wallCollision && autoJumpEnabled) {
-			Vector3f nrmDiff	   = f3_nrm(f3_sub(newPos, position));
-			Block block		   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 2,
-												 FastFloor(finalPos.z + nrmDiff.z));
-			Block landingBlock = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 1,
-												 FastFloor(finalPos.z + nrmDiff.z));
-			if (block == Block_Air && landingBlock != Block_Air)
+			Vector3<float> nrmDiff = (newPos - position).normal();
+			Block block			   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 2,
+													 FastFloor(finalPos.z + nrmDiff.z));
+			Block landingBlock	   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 1,
+													 FastFloor(finalPos.z + nrmDiff.z));
+			if (block == Blocks::AIR && landingBlock != Blocks::AIR)
 				jump(accl);
 		}
 
@@ -199,7 +200,7 @@ void Player::move(float dt, Vector3f accl) {
 		}
 
 		position = finalPos;
-		velocity = f3_new(velocity.x * 0.95f, velocity.y, velocity.z * 0.95f);
+		velocity = Vector3<float>(velocity.x * 0.95f, velocity.y, velocity.z * 0.95f);
 		if (ABS(velocity.x) < 0.1f)
 			velocity.x = 0.f;
 		if (ABS(velocity.z) < 0.1f)
@@ -225,7 +226,7 @@ void Player::blockPlace() {
 
 void Player::blockBreak() {
 	if (world && blockInActionRange && breakPlaceTimeout < 0.f) {
-		world->setBlock(viewRayCast.x, viewRayCast.y, viewRayCast.z, Block_Air);
+		world->setBlock(viewRayCast.x, viewRayCast.y, viewRayCast.z, Blocks::AIR);
 	}
 	if (breakPlaceTimeout < 0.f)
 		breakPlaceTimeout = PLAYER_PLACE_REPLACE_TIMEOUT;
@@ -236,6 +237,6 @@ void Player::teleport(float x, float y, float z) {
 	position.y = y;
 	position.z = z;
 
-	velocity = f3_new(0, 0, 0);
+	velocity = Vector3<float>(0, 0, 0);
 	update();
 }

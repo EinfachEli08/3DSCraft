@@ -68,7 +68,7 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 		} else {
 			C3D_TexBind(0, &steveTexture);
 
-			if (i == Direction::East || i == Direction::West) {	 // eines der dümmsten Dinge, die ich jemals in meinem Leben getan habe
+			if (i == Direction::_ast || i == Direction::West) {	 // eines der dümmsten Dinge, die ich jemals in meinem Leben getan habe
 				const int16_t uvRotationTable[2][2][2][2] = {
 					{{{0, 1}, {0, 0}}, {{1, 1}, {1, 0}}},
 					{{{1, 0}, {1, 1}}, {{0, 0}, {0, 1}}},
@@ -78,7 +78,7 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 					int u			   = handVBO[idx].uv[0];
 					int v			   = handVBO[idx].uv[1];
 					handVBO[idx].uv[0] = uvRotationTable[(i == Direction::West) ? 1 : 0][v][u][0];
-					handVBO[idx].uv[1] = uvRotationTable[(i == Direction::East) ? 1 : 0][v][u][1];
+					handVBO[idx].uv[1] = uvRotationTable[(i == Direction::_ast) ? 1 : 0][v][u][1];
 				}
 			}
 			for (int j = 0; j < 6; j++) {

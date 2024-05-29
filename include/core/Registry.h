@@ -10,11 +10,11 @@ class Registry {
 		std::unordered_map<ResourceKey<T>, const T*> registry;
 		ResourceKey<Registry<T>> mKey;
 
-		const T* mDefaultValue = nullptr;
+		const T* mDefaultValue;
 		ResourceLocation mDefaultKey;
 
 	public:
-		Registry(const ResourceKey<Registry<T>>& key) : mKey(key), mDefaultKey("") {}
+		Registry(const ResourceKey<Registry<T>>& key, const T* defaultValue) : mKey(key), mDefaultKey(""), mDefaultValue(defaultVale) {}
 		Registry(const ResourceKey<Registry<T>>& key, const char* defaultKey, const T* defaultValue)
 			: mKey(key), mDefaultValue(defaultValue), mDefaultKey(defaultKey) {}
 
@@ -24,9 +24,15 @@ class Registry {
 			}
 		}
 
-		void register_(const ResourceLocation& loc, const T* item) { register_(*ResourceKey<T>::createRegistryKey(loc), item); }
+		const T* registr(const ResourceLocation& loc, const T* item) {
+			registr(*ResourceKey<T>::createRegistryKey(loc), item);
+			return item;
+		}
 
-		void register_(const ResourceKey<T>& key, const T* item) { registry[key] = item; }
+		const T* registr(const ResourceKey<T>& key, const T* item) {
+			registry[key] = item;
+			return item;
+		}
 
 		ResourceLocation getKey(const T* item) const {
 			auto it = std::find_if(registry.begin(), registry.end(),

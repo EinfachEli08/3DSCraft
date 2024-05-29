@@ -18,8 +18,8 @@ class PolyGen : public ChunkWorkerObjBase {
 		~PolyGen();
 
 		void harvest();
-		uint16_t floodFill(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z, Direction::e entrySide0,
-						   Direction::e entrySide1, Direction::e entrySide2);
+		uint16_t floodFill(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z, Direction::_ entrySide0,
+						   Direction::_ entrySide1, Direction::_ entrySide2);
 
 		void chunkFunction(WorkQueue* queue, WorkerItem item) override;
 
@@ -33,7 +33,7 @@ class PolyGen : public ChunkWorkerObjBase {
 					   ? world->getMetadata((chunk->x * CHUNK_SIZE) + x, (cluster->y * CHUNK_SIZE) + y, (chunk->z * CHUNK_SIZE) + z)
 					   : (cluster->metadataLight[x][y][z] & 0xf);
 		}
-		inline void addFace(s8 x, s8 y, s8 z, Direction::e dir, Block block, uint8_t metadata, s8 ao, bool transparent) {
+		inline void addFace(s8 x, s8 y, s8 z, Direction::_ dir, Block block, uint8_t metadata, s8 ao, bool transparent) {
 			if (x >= 0 && y >= 0 && z >= 0 && x < CHUNK_SIZE && y < CHUNK_SIZE && z < CHUNK_SIZE) {
 				faceBuffer[currentFace++] = (Face){x, y, z, dir, block, ao, metadata, transparent};
 				transparentFaces += transparent;
@@ -51,7 +51,7 @@ class PolyGen : public ChunkWorkerObjBase {
 		};
 		struct Face {
 				int8_t x, y, z;
-				Direction::e direction;
+				Direction::_ direction;
 				Block block;
 				int8_t ao;
 				uint8_t metadata;

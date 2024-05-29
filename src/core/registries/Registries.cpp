@@ -6,4 +6,5 @@ static ResourceKey<Registry<T>> createRegistryKey(const char* name) {
 	return *ResourceKey<Registry<T>>::createRegistryKey(ResourceLocation(name));
 }
 
-const ResourceKey<Registry<Block>> Registries::BLOCK = createRegistryKey<Block>("block");
+const ResourceKey<Registry<Block>> Registries::BLOCK			= createRegistryKey<Block>("block");
+const ResourceKey<Registry<SoundEvent>> Registries::SOUND_EVENT = createRegistryKey<SoundEvent>("sound_event");
