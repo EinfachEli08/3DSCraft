@@ -14,4 +14,5 @@ struct BuiltInRegistries {
 		static std::vector<Registry<T>> ROOT_REGISTRY;
 
 		static Registry<Block>* BLOCK;
+		static Registry<SoundEvent>* SOUND_EVENT;
 };

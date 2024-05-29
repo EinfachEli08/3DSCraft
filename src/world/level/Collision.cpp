@@ -5,13 +5,13 @@
 #include "util/NumberUtils.h"
 
 bool Collision_BoxIntersect(Box a, Box b, int ignore_faces,
-							Vector3f* ncoll,	// normal of collision.
-							float* dcoll,	// depth of intersection.
-							int* fcoll)		// face intersected.
+							Vector3<float>* ncoll,	// normal of collision.
+							float* dcoll,			// depth of intersection.
+							int* fcoll)				// face intersected.
 
 {
 	// the normal of each face.
-	static const Vector3f faces[6] = {
+	static const Vector3<float> faces[6] = {
 		{{-1, 0, 0}},  // 'left' face normal (-x direction)
 		{{1, 0, 0}},   // 'right' face normal (+x direction)
 		{{0, -1, 0}},  // 'bottom' face normal (-y direction)

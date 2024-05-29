@@ -42,8 +42,8 @@ void PolyGen::harvest() {
 	}
 }
 
-uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z, Direction::e entrySide0,
-							Direction::e entrySide1, Direction::e entrySide2) {
+uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z, Direction::_ entrySide0,
+							Direction::_ entrySide1, Direction::_ entrySide2) {
 	if (floodFillVisited[x][y][z] & 1)
 		return 0;
 	uint8_t exitPoints[6] = {false};
@@ -103,15 +103,15 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 
 			memset(floodFillVisited, 0, sizeof(floodFillVisited));
 			for (int x = 0; x < CHUNK_SIZE; x += CHUNK_SIZE - 1) {
-				Direction::e xDir = !x ? Direction::West : Direction::East;
+				Direction::_ xDir = !x ? Direction::West : Direction::_ast;
 				for (int z = 0; z < CHUNK_SIZE; z++) {
-					Direction::e zDir = Direction::Invalid;
+					Direction::_ zDir = Direction::Invalid;
 					if (z == 0)
 						zDir = Direction::North;
 					else if (z == CHUNK_SIZE - 1)
 						zDir = Direction::South;
 					for (int y = 0; y < CHUNK_SIZE; y++) {
-						Direction::e yDir = Direction::Invalid;
+						Direction::_ yDir = Direction::Invalid;
 						if (y == 0)
 							yDir = Direction::Down;
 						else if (y == CHUNK_SIZE - 1)
@@ -129,15 +129,15 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 				}
 			}
 			for (int y = 0; y < CHUNK_SIZE; y += CHUNK_SIZE - 1) {
-				Direction::e yDir = !y ? Direction::Down : Direction::Up;
+				Direction::_ yDir = !y ? Direction::Down : Direction::Up;
 				for (int x = 0; x < CHUNK_SIZE; x++) {
-					Direction::e xDir = Direction::Invalid;
+					Direction::_ xDir = Direction::Invalid;
 					if (x == 0)
 						xDir = Direction::West;
 					else if (x == CHUNK_SIZE - 1)
-						xDir = Direction::East;
+						xDir = Direction::_ast;
 					for (int z = 0; z < CHUNK_SIZE; z++) {
-						Direction::e zDir = Direction::Invalid;
+						Direction::_ zDir = Direction::Invalid;
 						if (z == 0)
 							zDir = Direction::South;
 						else if (z == CHUNK_SIZE - 1)
@@ -154,15 +154,15 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 				}
 			}
 			for (int z = 0; z < CHUNK_SIZE; z += CHUNK_SIZE - 1) {
-				Direction::e zDir = !z ? Direction::North : Direction::South;
+				Direction::_ zDir = !z ? Direction::North : Direction::South;
 				for (int x = 0; x < CHUNK_SIZE; x++) {
-					Direction::e xDir = Direction::Invalid;
+					Direction::_ xDir = Direction::Invalid;
 					if (x == 0)
 						xDir = Direction::West;
 					else if (x == CHUNK_SIZE - 1)
-						xDir = Direction::East;
+						xDir = Direction::_ast;
 					for (int y = 0; y < CHUNK_SIZE; y++) {
-						Direction::e yDir = Direction::Invalid;
+						Direction::_ yDir = Direction::Invalid;
 						if (y == 0)
 							yDir = Direction::Down;
 						else if (y == CHUNK_SIZE - 1)

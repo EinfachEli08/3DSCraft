@@ -8,7 +8,7 @@
 
 #define INF (CHUNKCACHE_SIZE / 2 * CHUNK_SIZE)
 
-bool Raycast_Cast(World* world, Vector3f inpos, Vector3f raydir, Raycast_Result* out) {
+bool Raycast_Cast(World* world, Vector3<float> inpos, Vector3<float> raydir, Raycast_Result* out) {
 	int mapX = FastFloor(inpos.x), mapY = FastFloor(inpos.y), mapZ = FastFloor(inpos.z);
 
 	float xSqr = raydir.x * raydir.x;
@@ -71,7 +71,7 @@ bool Raycast_Cast(World* world, Vector3f inpos, Vector3f raydir, Raycast_Result*
 			if (raydir.x > 0.f)
 				out->direction = Direction::West;
 			else
-				out->direction = Direction::East;
+				out->direction = Direction::_ast;
 			break;
 		case 1:	 // Y Achse
 			if (raydir.y > 0.f)
@@ -90,11 +90,11 @@ bool Raycast_Cast(World* world, Vector3f inpos, Vector3f raydir, Raycast_Result*
 			break;
 	}
 
-	Vector3f dist	 = f3_sub(f3_new(mapX, mapY, mapZ), inpos);
-	out->distSqr = f3_magSqr(dist);
-	out->x		 = mapX;
-	out->y		 = mapY;
-	out->z		 = mapZ;
+	Vector3<float> dist = Vector3<float>(mapX, mapY, mapZ) - inpos;
+	out->distSqr		= dist.magnitudeSqr();
+	out->x				= mapX;
+	out->y				= mapY;
+	out->z				= mapZ;
 
 	return hit;
 }

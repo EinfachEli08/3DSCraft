@@ -260,22 +260,22 @@ void PlayerController::update(InputData input, float dt) {
 	float strafeLeft  = IsKeyDown(controlScheme.strafeLeft, &agnosticInput);
 	float strafeRight = IsKeyDown(controlScheme.strafeRight, &agnosticInput);
 
-	Vector3f forwardVec = f3_new(-sinf(player->yaw), 0.f, -cosf(player->yaw));
-	Vector3f rightVec	  = f3_crs(forwardVec, f3_new(0, 1, 0));
+	Vector3<float> forwardVec = Vector3<float>(-sinf(player->yaw), 0.f, -cosf(player->yaw));
+	Vector3<float> rightVec	  = forwardVec.cross(Vector3<float>(0, 1, 0));
 
-	Vector3f movement = f3_new(0, 0, 0);
-	movement		= f3_add(movement, f3_scl(forwardVec, forward));
-	movement		= f3_sub(movement, f3_scl(forwardVec, backward));
-	movement		= f3_add(movement, f3_scl(rightVec, strafeRight));
-	movement		= f3_sub(movement, f3_scl(rightVec, strafeLeft));
+	Vector3<float> movement = Vector3<float>(0, 0, 0);
+	movement				= movement + forwardVec * forward;
+	movement				= movement - forwardVec * backward;
+	movement				= movement + rightVec * strafeRight;
+	movement				= movement - rightVec * strafeLeft;
 	if (player->flying) {
-		movement = f3_add(movement, f3_new(0.f, jump, 0.f));
-		movement = f3_sub(movement, f3_new(0.f, crouch, 0.f));
+		movement = movement + Vector3<float>(0.f, jump, 0.f);
+		movement = movement - Vector3<float>(0.f, crouch, 0.f);
 	}
-	if (f3_magSqr(movement) > 0.f) {
-		float speed = 4.3f * f3_mag(f3_new(-strafeLeft + strafeRight, -crouch + jump, -forward + backward));
+	if (movement.magnitudeSqr() > 0.f) {
+		float speed = 4.3f * Vector3<float>(-strafeLeft + strafeRight, -crouch + jump, -forward + backward).magnitude();
 		player->bobbing += speed * 1.5f * dt;
-		movement = f3_scl(f3_nrm(movement), speed);
+		movement = movement.normal() * speed;
 	}
 
 	float lookLeft	= IsKeyDown(controlScheme.lookLeft, &agnosticInput);

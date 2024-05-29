@@ -5,7 +5,7 @@
 #include "client/gui/Inventory.h"
 #include "world/item/ItemStack.h"
 
-#include "util/VecMath.h"
+#include "util/Vector3.h"
 #include "world/Raycast.h"
 
 #define PLAYER_EYEHEIGHT (1.65f)
@@ -21,27 +21,27 @@ class Player {
 		Player(World* world);
 
 		void update();
-		void move(float dt, Vector3f accl);
+		void move(float dt, Vector3<float> accl);
 		void blockPlace();
 		void blockBreak();
-		void jump(Vector3f accl);
+		void jump(Vector3<float> accl);
 		void teleport(float x, float y, float z);
 
 		bool canMove(float newX, float newY, float newZ);
 
 		World* world;
-		Vector3f position;
+		Vector3<float> position;
 		float pitch, yaw;
 		float bobbing, fovAdd, crouchAdd;
 		bool grounded, jumped, sprinting, flying, crouching;
 		bool autoJumpEnabled;
 
-		Vector3f view;
+		Vector3<float> view;
 
 		int quickSelectBarSlot;
 		int quickSelectBarSlots;
 
-		Vector3f velocity;
+		Vector3<float> velocity;
 		float simStepAccum;
 
 		float breakPlaceTimeout;
