@@ -18,19 +18,24 @@ class BlockPos {
 
 		static const BlockPos* ZERO;
 
-		static long offset(long packOffset, Direction::_ dir);
-		static long offset(long packOffset, int offX, int offY, int offZ);
 		static int getX(long packPos);
 		static int getY(long packPos);
 		static int getZ(long packPos);
-		static BlockPos containing(double x, double y, double z);
-		static BlockPos containing(const Vector3<double>& position);
+		static long offset(long packOffset, Direction::_ dir);
+		static long offset(long packOffset, int offX, int offY, int offZ);
 		static long toLong(int x, int y, int z);
 		static long getFlatIndex(long packPos);
+		static BlockPos containing(double x, double y, double z);
+		static BlockPos containing(const Vector3<double>& position);
 		static BlockPos* withinManhattan(BlockPos blockPos, int distanceX, int distanceY, int distanceZ);
 
 		template <typename Predicate>
 		static BlockPos* findClosestMatch(BlockPos p_121931_, int p_121932_, int p_121933_, Predicate p_121934);
+
+		long toLong();
+		int getX();
+		int getY();
+		int getZ();
 
 		template <typename T>
 		Vector3<T> getCenter();
@@ -57,7 +62,6 @@ class BlockPos {
 		BlockPos rotate(Rotation::_ rot);
 		BlockPos cross(Vector3<int> vec);
 		BlockPos atY(int y);
-		long toLong();
 
 		BlockPos set(int x, int y, int z);
 		BlockPos set(double x, double y, double z);
