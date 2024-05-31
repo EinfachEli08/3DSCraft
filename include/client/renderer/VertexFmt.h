@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#include "util/NumberUtils.h"
+#include "util/math/NumberUtils.h"
 
 typedef struct {
 		int16_t xyz[3];

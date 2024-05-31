@@ -1,39 +1,30 @@
 #pragma once
 
+#include "vector/vector.h"	// Assuming this is your custom vector implementation
+#include "world/level/block/state/properties/Property.h"
 #include <cstdio>
 #include <string>
-#include <vector>
-
-template <typename T>
-class Property {
-	public:
-		Property(const std::string& name, T* allowedValues, size_t allowedValueCount);
-
-		const std::string& getName() const;
-		const T* getAllowedValues() const;
-		size_t getAllowedValueCount() const;
-
-	private:
-		std::string name;
-		T* allowedValues;
-		size_t allowedValueCount;
-};
 
 template <typename O, typename S>
 class StateHolder {
 	public:
-		StateHolder(O instance, Property<int>** properties, size_t propertyCount);
+		template <typename T>
+		StateHolder(O instance, const vector<Property<T>>& properties);
+
 		~StateHolder();
 
-		void setProperty(Property<int>& property, int value);
-		int getProperty(Property<int>& property) const;
-		void toString(char* buffer, size_t bufferSize) const;
+		template <typename T>
+		void setValue(const Property<T>& property, T value);
+
+		template <typename T>
+		T getValue(const Property<T>& property) const;
+
+		std::string toString() const;
 
 	private:
 		O instance;
-		Property<int>** properties;
-		int* propertyValues;
-		size_t propertyCount;
+		vector<void*> properties;	   // vector of void pointers to handle different types
+		vector<void*> propertyValues;  // vector of void pointers to handle different types
 
-		bool isAllowedValue(const Property<int>& property, int value) const;
+		bool isAllowedValue(void* property, void* value) const;	 // Compare pointers directly
 };

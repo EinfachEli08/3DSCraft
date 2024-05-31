@@ -2,7 +2,7 @@
 
 #include <stdbool.h>
 
-#include "util/NumberUtils.h"
+#include "util/math/NumberUtils.h"
 
 struct ItemStack {
 		Block* block;

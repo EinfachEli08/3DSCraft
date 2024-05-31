@@ -6,7 +6,7 @@
 
 #include "client/renderer/VBOCache.h"
 #include "core/Direction.h"
-#include "util/Xorshift.h"
+#include "util/math/Xorshift.h"
 #include "world/level/block/Block.h"
 
 #define CHUNK_SIZE (16)

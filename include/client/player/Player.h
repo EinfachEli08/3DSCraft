@@ -5,7 +5,7 @@
 #include "client/gui/Inventory.h"
 #include "world/item/ItemStack.h"
 
-#include "util/Vector3.h"
+#include "util/math/Vector3.h"
 #include "world/Raycast.h"
 
 #define PLAYER_EYEHEIGHT (1.65f)

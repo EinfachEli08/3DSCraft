@@ -1,8 +1,8 @@
 #pragma once
 
 #include "level/chunk/Chunk.h"
-#include "util/NumberUtils.h"
-#include "util/Xorshift.h"
+#include "util/math/NumberUtils.h"
+#include "util/math/Xorshift.h"
 #include "world/WorkQueue.h"
 
 #define WORLD_NAME_LIMIT 12

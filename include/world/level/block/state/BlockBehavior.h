@@ -6,6 +6,7 @@
 #include "world/level/material/MapColor.h"
 #include "world/level/material/PushReaction.h"
 
+class Block;
 class SoundType;
 class BlockBehavior {
 	public:
@@ -22,7 +23,13 @@ class BlockBehavior {
 				bool requiredCorrectToolForDrops;
 				bool canOcclude;
 		};
-		class Properties {};
+
+		static class Properties {};
+
+		template <typename A>
+		class StateArgumentPredicate {};
+
+		class StatePrediate {};
 
 	protected:
 		static constexpr Direction::_ cUpdateShapeOrder[] = {Direction::West, Direction::East, Direction::North, Direction::South};

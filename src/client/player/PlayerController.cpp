@@ -4,8 +4,8 @@
 #include <unistd.h>
 
 #include "commands/CommandLine.h"
-#include "util/NumberUtils.h"
 #include "util/Paths.h"
+#include "util/math/NumberUtils.h"
 
 #include "client/gui/DebugUI.h"
 

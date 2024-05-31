@@ -1,5 +1,5 @@
 #include "world/level/ChunkPos.h"
-#include "util/NumberUtils.h"
+#include "util/math/NumberUtils.h"
 
 const ChunkPos* ChunkPos::ZERO		   = new ChunkPos(0, 0);
 const long ChunkPos::INVALID_CHUNK_POS = ChunkPos::asLong(1875066, 1875066);

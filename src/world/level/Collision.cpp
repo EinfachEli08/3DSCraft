@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-#include "util/NumberUtils.h"
+#include "util/math/NumberUtils.h"
 
 bool Collision_BoxIntersect(Box a, Box b, int ignore_faces,
 							Vector3<float>* ncoll,	// normal of collision.

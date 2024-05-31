@@ -2,7 +2,7 @@
 
 #include "world/World.h"
 
-#include "util/Vector3.h"
+#include "util/math/Vector3.h"
 
 typedef struct {
 		int x, y, z;
