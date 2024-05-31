@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "client/renderer/VertexFmt.h"
-#include "util/NumberUtils.h"
+#include "util/math/NumberUtils.h"
 
 #include "client/renderer/CubeSidesTable.h"
 #include "client/renderer/texture/Texture.h"

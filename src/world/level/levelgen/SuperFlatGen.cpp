@@ -1,6 +1,6 @@
 #include "world/level/levelgen/SuperFlatGen.h"
 
-#include "util/NumberUtils.h"
+#include "util/math/NumberUtils.h"
 #include "world/WorkQueue.h"
 
 void SuperFlatGen::chunkFunction(WorkQueue* queue, WorkerItem item) {

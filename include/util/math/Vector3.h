@@ -3,7 +3,7 @@
 #include <3ds/types.h>
 #include <math.h>
 
-#include "util/NumberUtils.h"
+#include "util/math/NumberUtils.h"
 
 template <typename T>
 union Vector3 {

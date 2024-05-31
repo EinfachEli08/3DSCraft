@@ -2,7 +2,7 @@
 
 #include <stdbool.h>
 
-#include "util/Vector3.h"
+#include "util/math/Vector3.h"
 
 struct Box {
 		Vector3<float> min, max;

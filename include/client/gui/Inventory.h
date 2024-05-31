@@ -2,7 +2,7 @@
 
 #include "world/item/ItemStack.h"
 
-#include "util/NumberUtils.h"
+#include "util/math/NumberUtils.h"
 
 #define INVENTORY_QUICKSELECT_MAXSLOTS 9
 #define INVENTORY_QUICKSELECT_HEIGHT (22 + 1)  // + 1 wegen dem Selector

@@ -2,7 +2,7 @@
 
 #include "client/renderer/CubeSidesTable.h"
 #include "client/renderer/VertexFmt.h"
-#include "util/NumberUtils.h"
+#include "util/math/NumberUtils.h"
 
 static WorldVertex* cursorVBO;
 

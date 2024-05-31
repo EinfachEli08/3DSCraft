@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <vector>
 
-#include "util/Xorshift.h"
+#include "util/math/Xorshift.h"
 #include "world/level/chunk/Chunk.h"
 
 namespace Enum {

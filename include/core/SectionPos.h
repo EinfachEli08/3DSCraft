@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/BlockPos.h"
-#include "util/Vector3.h"
+#include "util/math/Vector3.h"
 
 constexpr static int SECTION_BITS	   = 4;
 constexpr static int SECTION_SIZE	   = 16;

@@ -1,50 +1,35 @@
 #include "world/level/block/state/StateHolder.h"
 
-// Property member functions
-template <typename T>
-Property<T>::Property(const std::string& name, T* allowedValues, size_t allowedValueCount)
-	: name(name), allowedValues(allowedValues), allowedValueCount(allowedValueCount) {
-}
-
-template <typename T>
-const std::string& Property<T>::getName() const {
-	return name;
-}
-
-template <typename T>
-const T* Property<T>::getAllowedValues() const {
-	return allowedValues;
-}
-
-template <typename T>
-size_t Property<T>::getAllowedValueCount() const {
-	return allowedValueCount;
-}
-
-// StateHolder member functions
 template <typename O, typename S>
-StateHolder<O, S>::StateHolder(O instance, Property<int>** properties, size_t propertyCount)
-	: instance(instance), properties(properties), propertyCount(propertyCount) {
-	propertyValues = new int[propertyCount];
-	for (size_t i = 0; i < propertyCount; ++i) {
-		propertyValues[i] = properties[i]->getAllowedValues()[0];
+template <typename T>
+StateHolder<O, S>::StateHolder(O instance, const vector<Property<T>>& properties)
+	: instance(instance), properties(properties.size()), propertyValues(properties.size()) {
+	for (size_t i = 0; i < properties.size(); ++i) {
+		this->properties[i] = static_cast<void*>(const_cast<Property<T>*>(&properties[i]));
+		// Initialize propertyValues with default values based on Property<T>
+		// For simplicity, let's assume Property<T> has a method called getDefault() to get the default value
+		this->propertyValues[i] = static_cast<void*>(new T(properties[i].getDefault()));
 	}
 }
 
 template <typename O, typename S>
 StateHolder<O, S>::~StateHolder() {
-	delete[] propertyValues;
+	// Deallocate memory for propertyValues
+	for (void* value : propertyValues) {
+		delete value;
+	}
 }
 
 template <typename O, typename S>
-void StateHolder<O, S>::setProperty(Property<int>& property, int value) {
-	for (size_t i = 0; i < propertyCount; ++i) {
-		if (properties[i] == &property) {
-			if (isAllowedValue(property, value)) {
-				propertyValues[i] = value;
+template <typename T>
+void StateHolder<O, S>::setValue(const Property<T>& property, T value) {
+	for (size_t i = 0; i < properties.size(); ++i) {
+		if (properties[i] == static_cast<void*>(const_cast<Property<T>*>(&property))) {
+			if (isAllowedValue(properties[i], static_cast<void*>(&value))) {
+				*static_cast<T*>(propertyValues[i]) = value;
 				return;
 			} else {
-				printf("Invalid property value: %d for property %s\n", value, property.getName().c_str());
+				printf("Invalid property value for property %s\n", property.getName().c_str());
 				return;
 			}
 		}
@@ -53,33 +38,30 @@ void StateHolder<O, S>::setProperty(Property<int>& property, int value) {
 }
 
 template <typename O, typename S>
-int StateHolder<O, S>::getProperty(Property<int>& property) const {
-	for (size_t i = 0; i < propertyCount; ++i) {
-		if (properties[i] == &property) {
-			return propertyValues[i];
+template <typename T>
+T StateHolder<O, S>::getValue(const Property<T>& property) const {
+	for (size_t i = 0; i < properties.size(); ++i) {
+		if (properties[i] == static_cast<void*>(const_cast<Property<T>*>(&property))) {
+			return *static_cast<T*>(propertyValues[i]);
 		}
 	}
 	printf("Property not found: %s\n", property.getName().c_str());
-	return -1;	// Return a default error value
+	return T{};	 // Return a default value for T
 }
 
 template <typename O, typename S>
-void StateHolder<O, S>::toString(char* buffer, size_t bufferSize) const {
+std::string StateHolder<O, S>::toString() const {
 	std::string result = "Instance: " + std::to_string(instance) + "\nProperties:\n";
-	for (size_t i = 0; i < propertyCount; ++i) {
-		result += properties[i]->getName() + " = " + std::to_string(propertyValues[i]) + "\n";
+	for (size_t i = 0; i < properties.size(); ++i) {
+		// Assuming Property<T> has a method called toString() to convert the property value to string
+		result += static_cast<PropertyBase*>(properties[i])->getName() + " = " +
+				  static_cast<PropertyBase*>(properties[i])->toString(*propertyValues[i]) + "\n";
 	}
-	std::snprintf(buffer, bufferSize, "%s", result.c_str());
+	return result;
 }
 
 template <typename O, typename S>
-bool StateHolder<O, S>::isAllowedValue(const Property<int>& property, int value) const {
-	const int* allowedValues = property.getAllowedValues();
-	size_t allowedValueCount = property.getAllowedValueCount();
-	for (size_t i = 0; i < allowedValueCount; ++i) {
-		if (allowedValues[i] == value) {
-			return true;
-		}
-	}
-	return false;
+bool StateHolder<O, S>::isAllowedValue(void* property, void* value) const {
+	// Implement this function to check if the value is allowed for the given property
+	return true;  // Placeholder implementation
 }
