@@ -10,7 +10,7 @@ void FontLoader_Init(Font* font) {
 	font->texture = new Texture(ResourceLocation("font/ascii.t3x"), true);
 	int c		  = 0;
 
-	u32* image = (u32*)font->texture->getTexture()->data;
+	u32* image = (u32*)font->texture->mTex.data;
 	for (int y = 0; y < 128; y += 8) {
 		for (int x = 0; x < 128; x += 8) {
 			int length		= 2;

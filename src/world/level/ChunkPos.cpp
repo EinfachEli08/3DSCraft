@@ -1,4 +1,4 @@
-#include "world/level/ChunkPos.h"
+/*#include "world/level/ChunkPos.h"
 #include "util/math/NumberUtils.h"
 
 const ChunkPos* ChunkPos::ZERO		   = new ChunkPos(0, 0);
@@ -89,4 +89,4 @@ BlockPos* ChunkPos::getWorldPosition() {
 }
 int ChunkPos::getChessboardDistance(ChunkPos* other) {
 	MAX(ABS(x - other->x), ABS(z - other->z));
-}
+}*/

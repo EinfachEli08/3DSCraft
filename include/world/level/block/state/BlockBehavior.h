@@ -32,7 +32,7 @@ class BlockBehavior {
 		class StatePrediate {};
 
 	protected:
-		static constexpr Direction::_ cUpdateShapeOrder[] = {Direction::West, Direction::East, Direction::North, Direction::South};
+		static const Direction::_ cUpdateShapeOrder[];
 
 		bool hasCollision;
 		bool isRandomlyTicking;
@@ -43,4 +43,7 @@ class BlockBehavior {
 		SoundType* mSoundType;
 		Properties* mProperties;
 		ResourceLocation drops;
+
+	public:
+		BlockBehavior(Properties properties) {}
 };

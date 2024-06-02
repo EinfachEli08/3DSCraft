@@ -4,14 +4,14 @@
 #include "core/Direction.h"
 #include <cstdarg>
 
-class DirectionProperty : public Property<Direction> {
+class DirectionProperty : public Property<Direction::_> {
 	public:
-		DirectionProperty(const char* name, ...) : Property<Direction>(name) {
+		DirectionProperty(const char* name, ...) : Property<Direction::_>(name) {
 			va_list args;
 			va_start(args, name);
 			while (true) {
-				const Direction enm = va_arg(args, Direction);
-				if (enm == Direction::INVALID)
+				const Direction::_ enm = va_arg(args, Direction::_);
+				if (enm == Direction::NONE)
 					break;
 				mValues.push_back(enm);
 			}

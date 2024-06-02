@@ -23,7 +23,7 @@ class PolyGen : public ChunkWorkerObjBase {
 
 		void chunkFunction(WorkQueue* queue, WorkerItem item) override;
 
-		inline Block fastBlockFetch(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z) {
+		inline Block* fastBlockFetch(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z) {
 			return (x < 0 || y < 0 || z < 0 || x >= CHUNK_SIZE || y >= CHUNK_SIZE || z >= CHUNK_SIZE)
 					   ? world->getBlock((chunk->x * CHUNK_SIZE) + x, (cluster->y * CHUNK_SIZE) + y, (chunk->z * CHUNK_SIZE) + z)
 					   : cluster->blocks[x][y][z];

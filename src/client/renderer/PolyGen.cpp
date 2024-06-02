@@ -23,7 +23,7 @@ void PolyGen::harvest() {
 					VBOUpdate update = vboUpdates.back();
 					vboUpdates.pop_back();
 
-					Chunk* chunk = world->getChunk(update.x, update.z);
+					/*Chunk* chunk = world->getChunk(update.x, update.z);
 					if (chunk) {
 						if (chunk->clusters[update.y].vertices > 0)
 							VBO_Free(chunk->clusters[update.y].vbo);
@@ -34,7 +34,7 @@ void PolyGen::harvest() {
 						chunk->clusters[update.y].transparentVBO	  = update.transparentVBO;
 						chunk->clusters[update.y].transparentVertices = update.transparentVertices;
 						chunk->clusters[update.y].seeThrough		  = update.visibility;
-					}
+					}*/
 				}
 		}
 
@@ -47,11 +47,11 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 	if (floodFillVisited[x][y][z] & 1)
 		return 0;
 	uint8_t exitPoints[6] = {false};
-	if (entrySide0 != Direction::Invalid)
+	if (entrySide0 != Direction::NONE)
 		exitPoints[entrySide0] = true;
-	if (entrySide1 != Direction::Invalid)
+	if (entrySide1 != Direction::NONE)
 		exitPoints[entrySide1] = true;
-	if (entrySide2 != Direction::Invalid)
+	if (entrySide2 != Direction::NONE)
 		exitPoints[entrySide2] = true;
 	floodFillQueue.clear();
 	floodFillQueue.push_back((QueueElement){x, y, z});
@@ -60,7 +60,7 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 		QueueElement item = floodFillQueue.back();
 		floodFillQueue.pop_back();
 
-		for (int i = 0; i < 6; i++) {
+		/*for (int i = 0; i < 6; i++) {
 			const int* offset = DirectionToOffset[i];
 			int x = item.x + offset[0], y = item.y + offset[1], z = item.z + offset[2];
 			if (x < 0 || y < 0 || z < 0 || x >= CHUNK_SIZE || y >= CHUNK_SIZE || z >= CHUNK_SIZE) {
@@ -77,7 +77,7 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 							!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
 				}
 			}
-		}
+		}*/
 	}
 	uint16_t visiblity = 0;
 	for (int i = 0; i < 6; i++)
@@ -89,7 +89,7 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 }
 
 void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
-	for (int i = 0; i < CLUSTER_PER_CHUNK; i++) {
+	/*for (int i = 0; i < CLUSTER_PER_CHUNK; i++) {
 		Cluster* cluster = &item.chunk->clusters[i];
 
 		if (cluster->revision != cluster->vboRevision || cluster->forceVBOUpdate) {
@@ -103,19 +103,19 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 
 			memset(floodFillVisited, 0, sizeof(floodFillVisited));
 			for (int x = 0; x < CHUNK_SIZE; x += CHUNK_SIZE - 1) {
-				Direction::_ xDir = !x ? Direction::West : Direction::_ast;
+				Direction::_ xDir = !x ? Direction::WEST : Direction::EAST;
 				for (int z = 0; z < CHUNK_SIZE; z++) {
-					Direction::_ zDir = Direction::Invalid;
+					Direction::_ zDir = Direction::NONE;
 					if (z == 0)
-						zDir = Direction::North;
+						zDir = Direction::NORTH;
 					else if (z == CHUNK_SIZE - 1)
-						zDir = Direction::South;
+						zDir = Direction::SOUTH;
 					for (int y = 0; y < CHUNK_SIZE; y++) {
-						Direction::_ yDir = Direction::Invalid;
+						Direction::_ yDir = Direction::NONE;
 						if (y == 0)
-							yDir = Direction::Down;
+							yDir = Direction::DOWN;
 						else if (y == CHUNK_SIZE - 1)
-							yDir = Direction::Up;
+							yDir = Direction::UP;
 
 						if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf))
 							visibility |= floodFill(world, item.chunk, cluster, x, y, z, xDir, yDir, zDir);
@@ -129,19 +129,19 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 				}
 			}
 			for (int y = 0; y < CHUNK_SIZE; y += CHUNK_SIZE - 1) {
-				Direction::_ yDir = !y ? Direction::Down : Direction::Up;
+				Direction::_ yDir = !y ? Direction::DOWN : Direction::UP;
 				for (int x = 0; x < CHUNK_SIZE; x++) {
-					Direction::_ xDir = Direction::Invalid;
+					Direction::_ xDir = Direction::NONE;
 					if (x == 0)
-						xDir = Direction::West;
+						xDir = Direction::WEST;
 					else if (x == CHUNK_SIZE - 1)
-						xDir = Direction::_ast;
+						xDir = Direction::EAST;
 					for (int z = 0; z < CHUNK_SIZE; z++) {
-						Direction::_ zDir = Direction::Invalid;
+						Direction::_ zDir = Direction::NONE;
 						if (z == 0)
-							zDir = Direction::South;
+							zDir = Direction::SOUTH;
 						else if (z == CHUNK_SIZE - 1)
-							zDir = Direction::North;
+							zDir = Direction::NORTH;
 						if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf))
 							visibility |= floodFill(world, item.chunk, cluster, x, y, z, xDir, yDir, zDir);
 						Block block	 = fastBlockFetch(world, item.chunk, cluster, x, y + (!y ? -1 : 1), z);
@@ -154,19 +154,19 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 				}
 			}
 			for (int z = 0; z < CHUNK_SIZE; z += CHUNK_SIZE - 1) {
-				Direction::_ zDir = !z ? Direction::North : Direction::South;
+				Direction::_ zDir = !z ? Direction::NORTH : Direction::SOUTH;
 				for (int x = 0; x < CHUNK_SIZE; x++) {
-					Direction::_ xDir = Direction::Invalid;
+					Direction::_ xDir = Direction::NONE;
 					if (x == 0)
-						xDir = Direction::West;
+						xDir = Direction::WEST;
 					else if (x == CHUNK_SIZE - 1)
-						xDir = Direction::_ast;
+						xDir = Direction::EAST;
 					for (int y = 0; y < CHUNK_SIZE; y++) {
-						Direction::_ yDir = Direction::Invalid;
+						Direction::_ yDir = Direction::NONE;
 						if (y == 0)
-							yDir = Direction::Down;
+							yDir = Direction::DOWN;
 						else if (y == CHUNK_SIZE - 1)
-							yDir = Direction::Up;
+							yDir = Direction::UP;
 						if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf))
 							visibility |= floodFill(world, item.chunk, cluster, x, y, z, xDir, yDir, zDir);
 						Block block	 = fastBlockFetch(world, item.chunk, cluster, x, y, z + (!z ? -1 : 1));
@@ -183,7 +183,7 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 			int pz = FastFloor(player->position.z);
 			if (WorldToChunkCoord(px) == item.chunk->x && WorldToChunkCoord(pz) == item.chunk->z && WorldToChunkCoord(py) == i) {
 				floodFill(world, item.chunk, cluster, WorldToLocalCoord(px), WorldToLocalCoord(py), WorldToLocalCoord(pz),
-						  Direction::Invalid, Direction::Invalid, Direction::Invalid);
+						  Direction::NONE, Direction::NONE, Direction::NONE);
 			}
 
 			int transparentVertices = transparentFaces * 6;
@@ -214,7 +214,7 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 					Block_GetTexture(face.block, face.direction, face.metadata, iconUV);
 
 					WorldVertex* data = face.transparent ? transparentData : opaqueData;
-					memcpy(data, &cube_sides_lut[face.direction * 6], sizeof(WorldVertex) * 6);
+					memcpy(data, &cube_sides_lut[face.Direction::_ * 6], sizeof(WorldVertex) * 6);
 
 #define oneDivIconsPerRow (32768 / 8)
 #define halfTexel (6)
@@ -256,5 +256,5 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 		}
 	}
 	item.chunk->displayRevision = item.chunk->revision;
-	item.chunk->forceVBOUpdate	= false;
+	item.chunk->forceVBOUpdate	= false;*/
 }

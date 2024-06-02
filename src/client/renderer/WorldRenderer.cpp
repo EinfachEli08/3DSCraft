@@ -16,16 +16,15 @@ static Player* player;
 static World* world;
 
 static WorkQueue* workqueue;
-
-static Camera camera;
+static Camera* camera;
 
 static int projectionUniform;
 
-typedef struct {
+struct RenderStep {
 		Cluster* cluster;
 		Chunk* chunk;
 		Direction::_ enteredFrom;
-} RenderStep;
+};
 
 typedef struct {
 		Cluster* cluster;
@@ -47,7 +46,7 @@ void WorldRenderer_Init(Player* player_, World* world_, WorkQueue* workqueue_, i
 	projectionUniform = projectionUniform_;
 	workqueue		  = workqueue_;
 
-	Camera_Init(&camera);
+	Camera_Init(camera);
 
 	Cursor_Init();
 	Hand_Init();
@@ -91,7 +90,7 @@ static void renderWorld() {
 
 	int pY		  = CLAMP(WorldToChunkCoord(FastFloor(player->position.y)), 0, CLUSTER_PER_CHUNK - 1);
 	Chunk* pChunk = world->getChunk(WorldToChunkCoord(FastFloor(player->position.x)), WorldToChunkCoord(FastFloor(player->position.z)));
-	renderingQueue.push_back((RenderStep){&pChunk->clusters[pY], pChunk, Direction::Invalid});
+	renderingQueue.push_back((RenderStep){&pChunk->clusters[pY], pChunk, Direction::NONE});
 	chunkRendered[CHUNKCACHE_SIZE / 2][pY][CHUNKCACHE_SIZE / 2] = 1;
 
 	Vector3<float> playerPos = player->position;
@@ -102,12 +101,12 @@ static void renderWorld() {
 		Cluster* cluster = step.cluster;
 		renderingQueue.pop_back();
 
-		if (cluster->vertices > 0 && cluster->vbo.size) {
+		if (cluster->vertices > 0 && cluster->vbo->size) {
 			clusterWasRendered(chunk->x, cluster->y, chunk->z) |= 2;
 
 			C3D_BufInfo bufInfo;
 			BufInfo_Init(&bufInfo);
-			BufInfo_Add(&bufInfo, cluster->vbo.memory, sizeof(WorldVertex), 4, 0x3210);
+			BufInfo_Add(&bufInfo, cluster->vbo->memory, sizeof(WorldVertex), 4, 0x3210);
 			C3D_SetBufInfo(&bufInfo);
 			C3D_DrawArrays(GPU_TRIANGLES, 0, cluster->vertices);
 
@@ -120,9 +119,8 @@ static void renderWorld() {
 
 		// if (polysTotal >= 150000) break;
 
-		for (int i = 0; i < 24; i++) {
-			Direction::_ dir  = (Direction::_)i;
-			const int* offset = DirectionToOffset[i];
+		for (u8 i = 0; i < 24; i++) {
+			const int* offset = Direction::byIndex(i).getOffset().toArray();
 
 			int newX = chunk->x + offset[0], newY = cluster->y + offset[1], newZ = chunk->z + offset[2];
 			if (newX < world->cacheTranslationX - CHUNKCACHE_SIZE / 2 + 1 || newX > world->cacheTranslationX + CHUNKCACHE_SIZE / 2 - 1 ||
@@ -139,17 +137,18 @@ static void renderWorld() {
 			if (clusterWasRendered(newX, newY, newZ) & 1)
 				continue;
 
-			if (!ChunkCanBeSeenThrough(cluster->seeThrough, step.enteredFrom, dir) && step.enteredFrom != Direction::Invalid)
+			if (!ChunkCanBeSeenThrough(cluster->seeThrough, step.enteredFrom, (Direction::_)i) && step.enteredFrom != Direction::NONE)
 				continue;
 
 			C3D_FVec chunkPosition = FVec3_New(newX * CHUNK_SIZE, newY * CHUNK_SIZE, newZ * CHUNK_SIZE);
-			if (!Camera_IsAABBVisible(&camera, chunkPosition, FVec3_New(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE)))
+			if (!Camera_IsAABBVisible(camera, chunkPosition, FVec3_New(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE)))
 				continue;
 
 			clusterWasRendered(newX, newY, newZ) |= 1;
 
-			Chunk* newChunk		= world->getChunk(newX, newZ);
-			RenderStep nextStep = (RenderStep){&newChunk->clusters[newY], newChunk, DirectionOpposite[dir]};
+			Chunk* newChunk				   = world->getChunk(newX, newZ);
+			Direction::_ oppositeDirection = Direction::byIndex(i).getOppositeIdx();
+			RenderStep nextStep			   = {&newChunk->clusters[newY], newChunk, oppositeDirection};
 			if (newChunk)
 				renderingQueue.push_back(nextStep);
 		}
@@ -194,18 +193,18 @@ static void renderWorld() {
 }
 
 void WorldRenderer_Render(float iod) {
-	Camera_Update(&camera, player, iod);
+	Camera_Update(camera, player, iod);
 
-	Hand_Draw(projectionUniform, &camera.projection, player->quickSelectBar[player->quickSelectBarSlot], player);
-	C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
+	Hand_Draw(projectionUniform, &camera->projection, player->quickSelectBar[player->quickSelectBarSlot], player);
+	// C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
 
-	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projectionUniform, &camera.vp);
+	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projectionUniform, &camera->vp);
 
 	renderWorld();
 
-	Clouds_Render(projectionUniform, &camera.vp, world, player->position.x, player->position.z);
+	Clouds_Render(projectionUniform, &camera->vp, world, player->position.x, player->position.z);
 
 	if (player->blockInActionRange)
-		Cursor_Draw(projectionUniform, &camera.vp, world, player->viewRayCast.x, player->viewRayCast.y, player->viewRayCast.z,
+		Cursor_Draw(projectionUniform, &camera->vp, world, player->viewRayCast.x, player->viewRayCast.y, player->viewRayCast.z,
 					player->viewRayCast.direction);
 }

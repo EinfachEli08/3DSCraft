@@ -83,13 +83,14 @@ Chunk* World::getChunk(int x, int z) {
 	return NULL;
 }
 
-Block World::getBlock(int x, int y, int z) {
-	if (y < 0 || y >= CHUNK_HEIGHT)
+Block* World::getBlock(int x, int y, int z) {
+	/*if (y < 0 || y >= CHUNK_HEIGHT)
 		return Block_Air;
 	Chunk* chunk = getChunk(WorldToChunkCoord(x), WorldToChunkCoord(z));
 	if (chunk)
 		return Chunk_GetBlock(chunk, WorldToLocalCoord(x), y, WorldToLocalCoord(z));
-	return Block_Air;
+	return Block_Air;*/
+	return nullptr;
 }
 
 #define NOTIFY_NEIGHTBOR(axis, comp, xDiff, zDiff)                                                                                         \
@@ -109,7 +110,7 @@ Block World::getBlock(int x, int y, int z) {
 	if (WorldToLocalCoord(y) == 15 && y / CHUNK_SIZE + 1 < CLUSTER_PER_CHUNK)                                                              \
 		Chunk_RequestGraphicsUpdate(chunk, y / CHUNK_SIZE + 1);
 
-void World::setBlock(int x, int y, int z, Block block) {
+void World::setBlock(int x, int y, int z, Block* block) {
 	if (y < 0 || y >= CHUNK_HEIGHT)
 		return;
 	int cX		 = WorldToChunkCoord(x);
@@ -124,7 +125,7 @@ void World::setBlock(int x, int y, int z, Block block) {
 	}
 }
 
-void World::setBlockAndMeta(int x, int y, int z, Block block, uint8_t metadata) {
+void World::setBlockAndMeta(int x, int y, int z, Block* block, uint8_t metadata) {
 	if (y < 0 || y >= CHUNK_HEIGHT)
 		return;
 	int cX		 = WorldToChunkCoord(x);

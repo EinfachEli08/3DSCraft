@@ -58,9 +58,9 @@ bool Raycast_Cast(World* world, Vector3<float> inpos, Vector3<float> raydir, Ray
 			mapZ += stepZ;
 			side = 2;
 		}
-		if (world->getBlock(mapX, mapY, mapZ) != Block_Air)
-			hit = 1;
-		// if (world->errFlags & World_ErrUnloadedBlockRequested) break;
+		// if (world->getBlock(mapX, mapY, mapZ) != Block_Air)
+		//	hit = 1;
+		//  if (world->errFlags & World_ErrUnloadedBlockRequested) break;
 
 		if (steps++ > INF)
 			break;
@@ -69,21 +69,21 @@ bool Raycast_Cast(World* world, Vector3<float> inpos, Vector3<float> raydir, Ray
 	switch (side) {
 		case 0:	 // X Achse
 			if (raydir.x > 0.f)
-				out->direction = Direction::West;
+				out->direction = Direction::WEST;
 			else
-				out->direction = Direction::_ast;
+				out->direction = Direction::EAST;
 			break;
 		case 1:	 // Y Achse
 			if (raydir.y > 0.f)
-				out->direction = Direction::Down;
+				out->direction = Direction::DOWN;
 			else
-				out->direction = Direction::Up;
+				out->direction = Direction::UP;
 			break;
 		case 2:	 // Z Achse
 			if (raydir.z > 0.f)
-				out->direction = Direction::North;
+				out->direction = Direction::NORTH;
 			else
-				out->direction = Direction::South;
+				out->direction = Direction::SOUTH;
 			break;
 		default:
 			printf("Unknown axis! %d\n", side);

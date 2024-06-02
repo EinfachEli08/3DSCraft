@@ -1,7 +1,6 @@
 #include "client/renderer/texture/Texture.h"
 
 #include <3ds.h>
-#include <lodepng/lodepng.h>
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +15,7 @@ Texture::Texture(ResourceLocation location, bool vram) {
 	if (!f)
 		Crash("File could not be opened for texture: %s", path.c_str());
 
-	Tex3DS_Texture t3x = Tex3DS_TextureImportStdio(f, &mTexture, nullptr, vram);
+	Tex3DS_Texture t3x = Tex3DS_TextureImportStdio(f, &mTex, nullptr, vram);
 	if (!t3x)
 		Crash("Texture could not be loaded: %s", path.c_str());
 

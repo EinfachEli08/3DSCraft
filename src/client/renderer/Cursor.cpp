@@ -34,7 +34,7 @@ void Cursor_Draw(int projUniform, C3D_Mtx* projectionview, World* world, int x, 
 	size_t vertices	 = 0;
 	WorldVertex* vtx = cursorVBO;
 	for (int i = 0; i < 6; i++) {
-		const int* offset = DirectionToOffset[i];
+		/*const int* offset = Direction::byIndex(i).getOffset().toArray();
 		if (world->getBlock(x + offset[0], y + offset[1], z + offset[2]) == Block_Air) {
 			memcpy(vtx, &cube_sides_lut[i * 6], sizeof(WorldVertex) * 6);
 			uint8_t color = i == highlight ? 65 : 32;
@@ -45,7 +45,7 @@ void Cursor_Draw(int projUniform, C3D_Mtx* projectionview, World* world, int x, 
 			}
 			vtx += 6;
 			vertices += 6;
-		}
+		}*/
 	}
 
 	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projUniform, &mvp);

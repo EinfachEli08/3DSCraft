@@ -3,36 +3,27 @@
 #include "world/level/Collision.h"
 #include "world/level/block/Blocks.h"
 
-Player::Player(World* _world) {
-	position = Vector3<float>(0.f, 0.f, 0.f);
-
-	bobbing = 0.f;
-	pitch	= 0.f;
-	yaw		= 0.f;
-
-	grounded  = false;
-	sprinting = false;
-	world	  = _world;
-
-	fovAdd	  = 0.f;
-	crouchAdd = 0.f;
-
-	view = Vector3<float>(0, 0, -1);
-
-	crouching = false;
-	flying	  = false;
-
-	blockInSeight	   = false;
-	blockInActionRange = false;
-
-	velocity	 = Vector3<float>(0, 0, 0);
-	simStepAccum = 0.f;
-
-	breakPlaceTimeout = 0.f;
-
-	quickSelectBarSlots = INVENTORY_QUICKSELECT_MAXSLOTS;
-	quickSelectBarSlot	= 0;
-	{
+Player::Player(World* _world)
+	: position(0.f, 0.f, 0.f),
+	  bobbing(0.f),
+	  pitch(0.f),
+	  yaw(0.f),
+	  grounded(false),
+	  sprinting(false),
+	  world(_world),
+	  fovAdd(0.f),
+	  crouchAdd(0.f),
+	  view(0.f, 0.f, -1.f),
+	  crouching(false),
+	  flying(false),
+	  blockInSeight(false),
+	  blockInActionRange(false),
+	  velocity(0, 0, 0),
+	  simStepAccum(0.f),
+	  quickSelectBarSlots(INVENTORY_QUICKSELECT_MAXSLOTS),
+	  quickSelectBarSlot(0),
+	  autoJumpEnabled(true) {
+	/*{
 		int l		   = 0;
 		inventory[l++] = (ItemStack){Block_Stone, 0, 1};
 		inventory[l++] = (ItemStack){Block_Dirt, 0, 1};
@@ -53,9 +44,7 @@ Player::Player(World* _world) {
 		inventory[l++] = (ItemStack){Block_Smooth_Stone_Slab, 0, 64};
 		for (int i = 0; i < INVENTORY_QUICKSELECT_MAXSLOTS; i++)
 			quickSelectBar[i] = (ItemStack){Blocks::AIR, 0, 0};
-	}
-
-	autoJumpEnabled = true;
+	}*/
 }
 
 void Player::update() {
@@ -72,12 +61,12 @@ bool Player::canMove(float newX, float newY, float newZ) {
 				int pX = FastFloor(newX) + x;
 				int pY = FastFloor(newY) + y;
 				int pZ = FastFloor(newZ) + z;
-				if (world->getBlock(pX, pY, pZ) != Blocks::AIR) {
+				/*if (world->getBlock(pX, pY, pZ) != Blocks::AIR) {
 					if (AABB_Overlap(newX - PLAYER_COLLISIONBOX_SIZE / 2.f, newY, newZ - PLAYER_COLLISIONBOX_SIZE / 2.f,
 									 PLAYER_COLLISIONBOX_SIZE, PLAYER_HEIGHT, PLAYER_COLLISIONBOX_SIZE, pX, pY, pZ, 1.f, 1.f, 1.f)) {
 						return false;
 					}
-				}
+				}*/
 			}
 		}
 	}
@@ -142,7 +131,7 @@ void Player::move(float dt, Vector3<float> accl) {
 						int pX = FastFloor(axisStep.x) + x;
 						int pY = FastFloor(axisStep.y) + y;
 						int pZ = FastFloor(axisStep.z) + z;
-						if (world->getBlock(pX, pY, pZ) != Blocks::AIR) {
+						/*if (world->getBlock(pX, pY, pZ) != Blocks::AIR) {
 							Box blockBox = Box_Create(pX, pY, pZ, 1, 1, 1);
 
 							Vector3<float> normal = Vector3<float>(0.f, 0.f, 0.f);
@@ -151,7 +140,7 @@ void Player::move(float dt, Vector3<float> accl) {
 
 							bool intersects = Collision_BoxIntersect(blockBox, playerBox, 0, &normal, &depth, &face);
 							collision |= intersects;
-						}
+						}*/
 					}
 				}
 			}
@@ -180,12 +169,12 @@ void Player::move(float dt, Vector3<float> accl) {
 
 		if (wallCollision && autoJumpEnabled) {
 			Vector3<float> nrmDiff = (newPos - position).normal();
-			Block block			   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 2,
+			Block* block		   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 2,
 													 FastFloor(finalPos.z + nrmDiff.z));
-			Block landingBlock	   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 1,
+			Block* landingBlock	   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 1,
 													 FastFloor(finalPos.z + nrmDiff.z));
-			if (block == Blocks::AIR && landingBlock != Blocks::AIR)
-				jump(accl);
+			// if (block == Blocks::AIR && landingBlock != Blocks::AIR)
+			//	jump(accl);
 		}
 
 		if (crouching && crouchAdd > -0.3f)
@@ -212,7 +201,7 @@ void Player::move(float dt, Vector3<float> accl) {
 
 void Player::blockPlace() {
 	if (world && blockInActionRange && breakPlaceTimeout < 0.f) {
-		const int* offset = DirectionToOffset[viewRayCast.direction];
+		const int* offset = Direction::byIndex(viewRayCast.direction).getOffset().toArray();
 		if (AABB_Overlap(position.x - PLAYER_COLLISIONBOX_SIZE / 2.f, position.y, position.z - PLAYER_COLLISIONBOX_SIZE / 2.f,
 						 PLAYER_COLLISIONBOX_SIZE, PLAYER_HEIGHT, PLAYER_COLLISIONBOX_SIZE, viewRayCast.x + offset[0],
 						 viewRayCast.y + offset[1], viewRayCast.z + offset[2], 1.f, 1.f, 1.f))
@@ -225,13 +214,12 @@ void Player::blockPlace() {
 }
 
 void Player::blockBreak() {
-	if (world && blockInActionRange && breakPlaceTimeout < 0.f) {
-		world->setBlock(viewRayCast.x, viewRayCast.y, viewRayCast.z, Blocks::AIR);
-	}
+	// if (world && blockInActionRange && breakPlaceTimeout < 0.f) {
+	//	world->setBlock(viewRayCast.x, viewRayCast.y, viewRayCast.z, Blocks::AIR);
+	//}
 	if (breakPlaceTimeout < 0.f)
 		breakPlaceTimeout = PLAYER_PLACE_REPLACE_TIMEOUT;
 }
-
 void Player::teleport(float x, float y, float z) {
 	position.x = x;
 	position.y = y;

@@ -44,10 +44,10 @@ class World {
 		void unloadChunk(Chunk* chunk);
 		Chunk* getChunk(int x, int y);
 
-		Block getBlock(int x, int y, int z);
-		void setBlock(int x, int y, int z, Block block);
+		Block* getBlock(int x, int y, int z);
+		void setBlock(int x, int y, int z, Block* block);
 
-		void setBlockAndMeta(int x, int y, int z, Block block, uint8_t metadata);
+		void setBlockAndMeta(int x, int y, int z, Block* block, uint8_t metadata);
 		uint8_t getMetadata(int x, int y, int z);
 		void setMetadata(int x, int y, int z, uint8_t metadata);
 

@@ -163,9 +163,9 @@ PlayerController::PlayerController(Player* player) {
 
 	bool elementMissing = false;
 
-	std::string = Path::root + "options.ini";
+	std::string path = Path::root + "options.ini";
 	if (access(path.c_str(), F_OK) != -1) {
-		ini_t* cfg = ini_load(path);
+		ini_t* cfg = ini_load(path.c_str());
 
 		char buffer[64];
 
@@ -206,7 +206,7 @@ PlayerController::PlayerController(Player* player) {
 		elementMissing = true;
 
 	if (elementMissing) {
-		FILE* f = fopen(path, "w");
+		FILE* f = fopen(path.c_str(), "w");
 
 		fprintf(f, "[controls]\n");
 		fprintf(f, "; The allowed key values are: \n; ");

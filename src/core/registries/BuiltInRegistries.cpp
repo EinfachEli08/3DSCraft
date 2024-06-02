@@ -6,6 +6,8 @@
 #include "sounds/SoundEvents.h"
 #include "world/level/block/Blocks.h"
 
+#include "sounds/SoundEvent.h"
+
 ResourceLocation BuiltInRegistries::ROOT_REGISTRY_NAME("root");
 
 template <typename T>

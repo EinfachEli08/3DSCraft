@@ -52,6 +52,11 @@ union Vector3 {
 		Vector3 max(const Vector3& other) const { return Vector3{MAX(x, other.x), MAX(y, other.y), MAX(z, other.z)}; }
 
 		Vector3 negate() const { return Vector3{-x, -y, -z}; }
+
+		const T* toArray() const {
+			const T newMe[3] = {x, y, z};
+			return newMe;
+		}
 };
 
 /*
