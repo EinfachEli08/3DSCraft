@@ -13,7 +13,7 @@ level.mpack
 |--/string  name:   Name of World
 |--/list    players # Players, only one entry for now
     |--/float   x, y, z:    Position of player
-    |--/float   yaw, pitch: Direction of player
+    |--/float   yaw, pitch: Direction::_ of player
     |--/bool    flying:     Whether player is flying
 
 

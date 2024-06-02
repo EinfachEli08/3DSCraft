@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stdarg.h>
 
+#include "client/Exception.h"
 #include "client/gui/DebugUI.h"
 #include "client/gui/FontLoader.h"
 #include "client/renderer/CubeSidesTable.h"
@@ -52,11 +53,9 @@ void SpriteBatch_Init(int projUniform_) {
 	C3D_TexLoadImage(&whiteTex, data, GPU_TEXFACE_2D, 0);
 
 	menuBackgroundTex = new Texture("gui/options/background.t3x", true);
-	supportQRTex	  = new Texture("")
-		// menuBackgroundTex = TileSetMan::getTexture({TileSetGroup::GUI, gui_options_background_idx});
-		// supportQRTex	  = TileSetMan::getTexture({TileSetGroup::OTHERS, others_support_image_idx});
+	supportQRTex	  = new Texture("misc/support_image.t3x", true);
 
-		Mtx_Identity(&iconModelMtx);
+	Mtx_Identity(&iconModelMtx);
 	Mtx_RotateY(&iconModelMtx, M_PI / 4.f, false);
 	Mtx_RotateX(&iconModelMtx, M_PI / 6.f, false);
 }
@@ -64,39 +63,43 @@ void SpriteBatch_Deinit() {
 	linearFree(vertexList[0]);
 	linearFree(vertexList[1]);
 
-	C3D_TexDelete(font->texture);
+	C3D_TexDelete(&font->texture->mTex);
 	free(font);
 
 	C3D_TexDelete(&whiteTex);
-	C3D_TexDelete(widgetsTex);
-	C3D_TexDelete(menuBackgroundTex);
+	delete widgetsTex;
+	delete menuBackgroundTex;
 }
 
 void SpriteBatch_BindTexture(C3D_Tex* texture) {
 	currentTexture = texture;
 }
 void SpriteBatch_BindGuiTexture(GuiTexture texture) {
+	Texture* mTmp = nullptr;
 	switch (texture) {
 		case GuiTexture_Blank:
 			currentTexture = &whiteTex;
 			break;
 		case GuiTexture_Font:
-			currentTexture = font->texture;
+			mTmp = font->texture;
 			break;
 		case GuiTexture_Widgets:
-			currentTexture = widgetsTex;
+			mTmp = widgetsTex;
 			break;
 		case GuiTexture_Icons:
-			currentTexture = iconsTex;
+			mTmp = iconsTex;
 			break;
 		case GuiTexture_MenuBackground:
-			currentTexture = menuBackgroundTex;
+			mTmp = menuBackgroundTex;
 			break;
 		case GuiTexture_SupportQR:
-			currentTexture = supportQRTex;
+			mTmp = supportQRTex;
 			break;
 		default:
 			break;
+
+			if (mTmp != nullptr)
+				currentTexture = &mTmp->mTex;
 	}
 }
 
@@ -128,11 +131,11 @@ void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry
 
 static float rot = 0.f;
 extern const WorldVertex cube_sides_lut[6 * 6];
-void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
-	WorldVertex vertices[6 * 6];
+void SpriteBatch_PushIcon(Block* block, uint8_t metadata, int x, int y, int z) {
+	/*WorldVertex vertices[6 * 6];
 	memcpy(vertices, cube_sides_lut, sizeof(cube_sides_lut));
 	for (int i = 0; i < 6; i++) {
-		if (i != Direction::Up && i != Direction::South && i != Direction::West)
+		if (i != Direction::UP && i != Direction::SOUTH && i != Direction::WEST)
 			continue;
 		int16_t iconUV[2];
 		Block_GetTexture(block, i, metadata, iconUV);
@@ -159,9 +162,9 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 		C3D_Tex* texture = Block_GetTileSet();
 
 		int16_t color16 = SHADER_RGB(color[0] >> 3, color[1] >> 3, color[2] >> 3);
-		if (i == Direction::South)
+		if (i == Direction::SOUTH)
 			color16 = SHADER_RGB_DARKEN(color16, 14);
-		else if (i == Direction::West)
+		else if (i == Direction::WEST)
 			color16 = SHADER_RGB_DARKEN(color16, 10);
 
 #define unpackP(x) (x).xyz[0], (x).xyz[1]
@@ -179,7 +182,7 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 		cmdList.push_back(spr);
 
 #undef unpackP
-	}
+	}*/
 }
 
 int SpriteBatch_PushText(int x, int y, int z, int16_t color, bool shadow, int wrap, int* ySize, const char* fmt, ...) {
@@ -191,7 +194,7 @@ int SpriteBatch_PushText(int x, int y, int z, int16_t color, bool shadow, int wr
 }
 
 int SpriteBatch_PushTextVargs(int x, int y, int z, int16_t color, bool shadow, int wrap, int* ySize, const char* fmt, va_list arg) {
-	SpriteBatch_BindTexture(font->texture);
+	SpriteBatch_BindTexture(&font->texture->mTex);
 
 #define CHAR_WIDTH 0
 #define TAB_SIZE 0

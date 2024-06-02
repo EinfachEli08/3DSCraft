@@ -21905,7 +21905,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/erase/
     size_type erase(const typename object_t::key_type& key)
     {
-        // the indirection via erase_internal() is added to avoid making this
+        // the inDirection::_ via erase_internal() is added to avoid making this
         // function a template and thus de-rank it during overload resolution
         return erase_internal(key);
     }

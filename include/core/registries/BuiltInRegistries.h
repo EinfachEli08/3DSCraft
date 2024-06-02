@@ -4,9 +4,10 @@
 
 template <typename T>
 class Registry;
-
 class ResourceLocation;
+
 class Block;
+class SoundEvent;
 
 struct BuiltInRegistries {
 		static ResourceLocation ROOT_REGISTRY_NAME;

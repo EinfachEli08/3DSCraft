@@ -1,7 +1,7 @@
 #include "world/level/block/BlockEvent.h"
 
 void BlockEvent::randomTick(Chunk* chunk, int x[], int y[], int z[]) {
-	int k = 0;
+	/*int k = 0;
 	for (int i = 0; i < CLUSTER_PER_CHUNK; i++) {
 		for (int j = 0; j < RANDOMTICKS_PER_CLUSTER; j++) {
 			int px		= x[k];
@@ -25,4 +25,5 @@ void BlockEvent::randomTick(Chunk* chunk, int x[], int y[], int z[]) {
 			k++;
 		}
 	}
+	*/
 }

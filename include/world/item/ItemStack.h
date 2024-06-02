@@ -4,6 +4,7 @@
 
 #include "util/math/NumberUtils.h"
 
+class Block;
 struct ItemStack {
 		Block* block;
 		u8 meta, amount;

@@ -6,5 +6,5 @@ typedef enum {
 	GameState_TitleScreen
 } GameState;  // TODO: remove
 
-extern const char* gVersion;
-extern bool gIsDebug;
+static bool gIsDebug		= false;
+static const char* gVersion = "v0.4";

@@ -47,7 +47,7 @@ Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* ga
 
 	C3D_CullFace(GPU_CULL_BACK_CCW);
 
-	Block_Init();
+	// Block_Init();
 
 	// logoTex = *TileSetMan::getTexture({TileSetGroup::GUI_TITLE, title_minecraft_idx});
 }
@@ -55,7 +55,7 @@ Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* ga
 Renderer::~Renderer() {
 	C3D_TexDelete(&logoTex);
 
-	Block_Deinit();
+	// Block_Deinit();
 
 	WorldRenderer_Deinit();
 
@@ -95,7 +95,7 @@ void Renderer::render() {
 		C3D_SetAttrInfo(&world_vertexAttribs);
 
 		if (*gamestate == GameState_Playing) {
-			C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
+			// C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
 
 			WorldRenderer_Render(!i ? -iod : iod);
 

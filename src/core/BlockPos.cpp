@@ -1,4 +1,4 @@
-#include "core/BlockPos.h"
+/*#include "core/BlockPos.h"
 
 constexpr int NUM_X_BITS		   = 1 + log2(30000000);
 constexpr int NUM_Z_BITS		   = NUM_X_BITS;
@@ -19,4 +19,4 @@ int BlockPos::getY() {
 }
 int BlockPos::getZ() {
 	return pos.z;
-}
+}*/

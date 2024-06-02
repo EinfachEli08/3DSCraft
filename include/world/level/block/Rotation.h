@@ -17,6 +17,5 @@ static Rotation::_ getRotated(Rotation::_ base, Rotation::_ rotation);
 static Rotation::_ getRandom();
 static int rotate(Rotation::_ rotation, int value, int modulus);
 static std::array<Rotation::_, 4> getShuffled();
-m,
 
 }  // namespace Rotation

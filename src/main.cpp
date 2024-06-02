@@ -27,9 +27,6 @@
 
 #include <citro3d.h>
 
-bool gIsDebug		 = false;
-const char* gVersion = "v0.4";
-
 void releaseWorld(ChunkWorker* chunkWorker, SaveManager* saveMgr, World* world) {
 	for (int i = 0; i < CHUNKCACHE_SIZE; i++) {
 		for (int j = 0; j < CHUNKCACHE_SIZE; j++) {

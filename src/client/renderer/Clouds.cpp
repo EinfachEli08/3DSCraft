@@ -32,8 +32,7 @@ void Clouds_Init() {
 	}
 	C3D_TexInit(&texture, TEXTURE_SIZE, TEXTURE_SIZE, GPU_LA4);
 	C3D_TexSetWrap(&texture, GPU_REPEAT, GPU_REPEAT);
-	tileImage8(map, (uint8_t*)texture.data, TEXTURE_SIZE);
-
+	memcpy(texture.data, map, TEXTURE_SIZE * TEXTURE_SIZE);
 	free(map);
 
 	cloudVBO = (WorldVertex*)linearAlloc(sizeof(vertices));

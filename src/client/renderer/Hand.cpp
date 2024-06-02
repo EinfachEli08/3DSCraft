@@ -44,7 +44,7 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 
 	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projUniform, &pm);
 
-	memcpy(handVBO, cube_sides_lut, sizeof(cube_sides_lut));
+	/*memcpy(handVBO, cube_sides_lut, sizeof(cube_sides_lut));
 	for (int i = 0; i < 6; i++) {
 		if (stack.amount > 0) {
 			int16_t iconUV[2];
@@ -68,7 +68,7 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 		} else {
 			C3D_TexBind(0, &steveTexture);
 
-			if (i == Direction::_ast || i == Direction::West) {	 // eines der dümmsten Dinge, die ich jemals in meinem Leben getan habe
+			if (i == Direction::EAST || i == Direction::WEST) {	 // eines der dümmsten Dinge, die ich jemals in meinem Leben getan habe
 				const int16_t uvRotationTable[2][2][2][2] = {
 					{{{0, 1}, {0, 0}}, {{1, 1}, {1, 0}}},
 					{{{1, 0}, {1, 1}}, {{0, 0}, {0, 1}}},
@@ -77,8 +77,8 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 					int idx			   = i * 6 + j;
 					int u			   = handVBO[idx].uv[0];
 					int v			   = handVBO[idx].uv[1];
-					handVBO[idx].uv[0] = uvRotationTable[(i == Direction::West) ? 1 : 0][v][u][0];
-					handVBO[idx].uv[1] = uvRotationTable[(i == Direction::_ast) ? 1 : 0][v][u][1];
+					handVBO[idx].uv[0] = uvRotationTable[(i == Direction::WEST) ? 1 : 0][v][u][0];
+					handVBO[idx].uv[1] = uvRotationTable[(i == Direction::EAST) ? 1 : 0][v][u][1];
 				}
 			}
 			for (int j = 0; j < 6; j++) {
@@ -97,7 +97,7 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 				handVBO[idx].uv[1] = uvLookUp[i][handVBO[idx].uv[1] + 2];
 			}
 		}
-	}
+	}*/
 
 	C3D_AlphaTest(true, GPU_GEQUAL, 255);
 

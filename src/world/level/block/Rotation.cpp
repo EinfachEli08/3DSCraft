@@ -1,7 +1,7 @@
 #include "world/level/block/Rotation.h"
 
 inline Rotation::_ Rotation::getRotated(Rotation::_ base, Rotation::_ rotation) {
-	switch (Rotation::_) {
+	switch (rotation) {
 		case Rotation::_::CLOCKWISE_180:
 			switch (base) {
 				case Rotation::_::NONE:
@@ -70,7 +70,7 @@ inline int Rotation::rotate(Rotation::_ rotation, int value, int modulus) {
 		case Rotation::_::COUNTERCLOCKWISE_90:
 			return (value + modulus * 3 / 4) % modulus;
 		default:
-			return Rotation::_;
+			return rotation;
 	}
 }
 

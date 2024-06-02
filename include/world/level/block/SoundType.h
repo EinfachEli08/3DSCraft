@@ -28,7 +28,6 @@ class SoundType {
 		float getPitch() const { return mPitch; }
 		const SoundEvent* getBreakSound() const { return mBreakSound; }
 		const SoundEvent* getStepSound() const { return mStepSound; }
-		const SoundEvent* getStepSound() const { return mStepSound; }
 		const SoundEvent* getPlaceSound() const { return mPlaceSound; }
 		const SoundEvent* getHitSound() const { return mHitSound; }
 		const SoundEvent* getFallSounds() const { return mFallSound; }

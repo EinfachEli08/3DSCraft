@@ -14,7 +14,7 @@ class Registry {
 		ResourceLocation mDefaultKey;
 
 	public:
-		Registry(const ResourceKey<Registry<T>>& key, const T* defaultValue) : mKey(key), mDefaultKey(""), mDefaultValue(defaultVale) {}
+		Registry(const ResourceKey<Registry<T>>& key, const T* defaultValue) : mKey(key), mDefaultKey(""), mDefaultValue(defaultValue) {}
 		Registry(const ResourceKey<Registry<T>>& key, const char* defaultKey, const T* defaultValue)
 			: mKey(key), mDefaultValue(defaultValue), mDefaultKey(defaultKey) {}
 
