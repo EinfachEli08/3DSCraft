@@ -9,9 +9,8 @@
 #include "util/Paths.h"
 
 Texture::Texture(ResourceLocation location, bool vram) {
-	const std::string path =
-		std::string(std::string(Path::assets) + "textures/" + location.getNamespace() + '/' + location.getPath()).c_str();
-	FILE* f = fopen(path.c_str(), "rb");
+	const std::string path = std::string(std::string(Path::assets) + location.getNamespace() + "/textures/" + location.getPath());
+	FILE* f				   = fopen(path.c_str(), "rb");	 // maybe inline "filename get" somewhere?
 	if (!f)
 		Crash("File could not be opened for texture: %s", path.c_str());
 

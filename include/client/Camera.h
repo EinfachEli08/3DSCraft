@@ -30,16 +30,19 @@ enum FrustumCorners {
 	FrustumCorners_Count
 };
 
-struct Camera {
-		C3D_Mtx projection, view, vp;
+class Camera {
 		C3D_FVec frustumPlanes[FrustumPlanes_Count];
 		Vector3<float> frustumCorners[FrustumCorners_Count];
 
 		float near, far, fov;
+
+	public:
+		Camera();
+
+		void update(Player* player, float iod);
+
+		bool isPointVisible(C3D_FVec point);
+		bool isAABBVisible(C3D_FVec origin, C3D_FVec size);
+
+		C3D_Mtx projection, view, vp;
 };
-
-void Camera_Init(Camera* cam);
-void Camera_Update(Camera* cam, Player* player, float iod);
-
-bool Camera_IsPointVisible(Camera* cam, C3D_FVec point);
-bool Camera_IsAABBVisible(Camera* cam, C3D_FVec orgin, C3D_FVec size);

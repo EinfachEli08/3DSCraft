@@ -46,7 +46,7 @@ void WorldRenderer_Init(Player* player_, World* world_, WorkQueue* workqueue_, i
 	projectionUniform = projectionUniform_;
 	workqueue		  = workqueue_;
 
-	Camera_Init(camera);
+	camera = new Camera();
 
 	Cursor_Init();
 	Hand_Init();
@@ -141,7 +141,7 @@ static void renderWorld() {
 				continue;
 
 			C3D_FVec chunkPosition = FVec3_New(newX * CHUNK_SIZE, newY * CHUNK_SIZE, newZ * CHUNK_SIZE);
-			if (!Camera_IsAABBVisible(camera, chunkPosition, FVec3_New(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE)))
+			if (!camera->isAABBVisible(chunkPosition, FVec3_New(CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE)))
 				continue;
 
 			clusterWasRendered(newX, newY, newZ) |= 1;
@@ -193,7 +193,7 @@ static void renderWorld() {
 }
 
 void WorldRenderer_Render(float iod) {
-	Camera_Update(camera, player, iod);
+	camera->update(player, iod);
 
 	Hand_Draw(projectionUniform, &camera->projection, player->quickSelectBar[player->quickSelectBarSlot], player);
 	// C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
