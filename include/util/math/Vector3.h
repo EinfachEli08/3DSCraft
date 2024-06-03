@@ -11,6 +11,7 @@ union Vector3 {
 		struct {
 				T x, y, z;
 		};
+		Vector3() : x(0), y(0), z(0) {}
 		Vector3(T x, T y, T z) : x(x), y(y), z(z) {}
 		template <typename U>
 		Vector3(const Vector3<U>& vec) : x(vec.x), y(vec.y), z(vec.z) {}
