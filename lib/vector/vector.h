@@ -4,100 +4,112 @@
 
 #include <cassert>
 #include <cstdlib>
-#include <cstring>	// std::memcpy()
+#include <cstring>    // std::memcpy()
 #include <new>
 #include <type_traits>
 #include <utility>
+#include <algorithm>  // std::swap, std::reverse, std::qsort
 
 // Helper functions
 
 template <class T>
 inline void construct_range(T* begin, T* end) {
-	while (begin != end) {
-		new (begin) T;
-		begin++;
-	}
+    while (begin != end) {
+        new (begin) T;
+        begin++;
+    }
 }
 
 template <class T>
 inline void copy_range(T* begin, T* end, T* dest) {
-	while (begin != end) {
-		new (dest) T(*begin);
-		begin++;
-		dest++;
-	}
+    while (begin != end) {
+        new (dest) T(*begin);
+        begin++;
+        dest++;
+    }
 }
 
 template <class T>
 inline void destruct_range(T* begin, T* end) {
-	while (begin != end) {
-		begin->~T();
-		begin++;
-	}
+    while (begin != end) {
+        begin->~T();
+        begin++;
+    }
 }
 
 template <class T>
 class vector {
-	public:
-		using size_type = std::size_t;
+    public:
+        using size_type = std::size_t;
 
-		vector() = default;
-		vector(const vector& other);
-		vector(vector&& other) noexcept;
-		vector& operator=(const vector& other);
-		vector& operator=(vector&& other) noexcept;
-		~vector();
+        vector() = default;
+        vector(const vector& other);
+        vector(vector&& other) noexcept;
+        vector& operator=(const vector& other);
+        vector& operator=(vector&& other) noexcept;
+        ~vector();
 
-		// Element access
+        // Element access
 
-		T& operator[](size_type pos);
-		const T& operator[](size_type pos) const;
+        T& operator[](size_type pos);
+        const T& operator[](size_type pos) const;
 
-		T& front();
-		const T& front() const;
+        T& front();
+        const T& front() const;
 
-		T& back();
-		const T& back() const;
+        T& back();
+        const T& back() const;
 
-		T* data() noexcept;
-		const T* data() const noexcept;
+        T* data() noexcept;
+        const T* data() const noexcept;
 
-		// Iterators
+        // Iterators
 
-		T* begin() noexcept;
-		const T* begin() const noexcept;
+        T* begin() noexcept;
+        const T* begin() const noexcept;
 
-		T* end() noexcept;
-		const T* end() const noexcept;
+        T* end() noexcept;
+        const T* end() const noexcept;
 
-		// Capacity
+        // Capacity
 
-		bool empty() const noexcept;
-		size_type size() const noexcept;
-		void reserve(size_type new_cap);
-		size_type capacity() const noexcept;
-		void shrink_to_fit();
+        bool empty() const noexcept;
+        size_type size() const noexcept;
+        void reserve(size_type new_cap);
+        size_type capacity() const noexcept;
+        void shrink_to_fit();
 
-		// Modifiers
+        // Modifiers
 
-		void clear() noexcept;
+        void clear() noexcept;
 
-		void push_back(const T& value);
-		void push_back(T&& value);
+        void push_back(const T& value);
+        void push_back(T&& value);
 
-		template <class... Args>
-		void emplace_back(Args&&... args);
+        template <class... Args>
+        void emplace_back(Args&&... args);
 
-		void pop_back();
-		void resize(size_type count);
+        void pop_back();
+        void resize(size_type count);
 
-		static constexpr size_type grow_factor = 2;
+        void splice(size_type start, size_type count);
+        void swapsplice(size_type start, size_type count);
+        void insert(size_type idx, const T& value);
+        void sort(int (*compare)(const void*, const void*));
+        void swap(size_type idx1, size_type idx2);
+        void reverse();
 
-	private:
-		T* m_data			 = nullptr;
-		size_type m_size	 = 0;
-		size_type m_capacity = 0;
+        void push_array(const T* arr, size_type count);
+        void extend(const vector& other);
+
+        static constexpr size_type grow_factor = 2;
+
+    private:
+        T* m_data             = nullptr;
+        size_type m_size      = 0;
+        size_type m_capacity  = 0;
 };
+
 
 template <class T>
 vector<T>::vector(const vector& other) : m_size(other.m_size), m_capacity(other.m_capacity) {
@@ -363,4 +375,80 @@ void vector<T>::resize(size_type count) {
 	}
 
 	m_size = count;
+}
+
+// Modifiers
+
+template <class T>
+void vector<T>::splice(size_type start, size_type count) {
+    assert(start + count <= m_size && "splice range is out of bounds");
+    if (count > 0) {
+        if constexpr (!std::is_trivial_v<T>) {
+            destruct_range(m_data + start, m_data + start + count);
+        }
+        std::memmove(m_data + start, m_data + start + count, (m_size - start - count) * sizeof(T));
+        m_size -= count;
+    }
+}
+
+template <class T>
+void vector<T>::swapsplice(size_type start, size_type count) {
+    assert(start + count <= m_size && "swapsplice range is out of bounds");
+    if (count > 0) {
+        if constexpr (!std::is_trivial_v<T>) {
+            destruct_range(m_data + start, m_data + start + count);
+        }
+        std::memmove(m_data + start, m_data + m_size - count, count * sizeof(T));
+        m_size -= count;
+    }
+}
+
+template <class T>
+void vector<T>::insert(size_type idx, const T& value) {
+    assert(idx <= m_size && "insert position is out of range");
+    if (m_size == m_capacity) {
+        reserve(m_capacity * vector::grow_factor + 1);
+    }
+    std::memmove(m_data + idx + 1, m_data + idx, (m_size - idx) * sizeof(T));
+    if constexpr (std::is_trivial_v<T>) {
+        m_data[idx] = value;
+    } else {
+        new (m_data + idx) T(value);
+    }
+    m_size++;
+}
+
+template <class T>
+void vector<T>::sort(int (*compare)(const void*, const void*)) {
+    std::qsort(m_data, m_size, sizeof(T), compare);
+}
+
+template <class T>
+void vector<T>::swap(size_type idx1, size_type idx2) {
+    assert(idx1 < m_size && idx2 < m_size && "swap indices are out of range");
+    if (idx1 != idx2) {
+        std::swap(m_data[idx1], m_data[idx2]);
+    }
+}
+
+template <class T>
+void vector<T>::reverse() {
+    std::reverse(m_data, m_data + m_size);
+}
+
+// Extension methods
+
+template <class T>
+void vector<T>::push_array(const T* arr, size_type count) {
+    if (m_size + count > m_capacity) {
+        reserve((m_size + count) * vector::grow_factor);
+    }
+    for (size_type i = 0; i < count; ++i) {
+        push_back(arr[i]);
+    }
+}
+
+template <class T>
+void vector<T>::extend(const vector& other) {
+    push_array(other.data(), other.size());
 }
