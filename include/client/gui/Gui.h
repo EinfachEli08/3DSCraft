@@ -33,3 +33,4 @@ bool Gui_IsCursorInside(int x, int y, int w, int h);
 bool Gui_WasCursorInside(int x, int y, int w, int h);
 void Gui_GetCursorMovement(int* x, int* y);
 bool Gui_EnteredCursorInside(int x, int y, int w, int h);
+void Gui_DrawDefaultBG(int shadowMode);
