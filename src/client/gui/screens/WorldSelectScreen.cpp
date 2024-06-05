@@ -122,14 +122,7 @@ bool clicked_Back		  = false;
 void WorldSelect_Render() {
 	SpriteBatch_SetScale(2);
 
-	SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
-	for (int i = 0; i < 160 / 32 + 1; i++) {
-		for (int j = 0; j < 120 / 32 + 1; j++) {
-			bool overlay = j >= 2 && menustate == MenuState_SelectWorld;
-			SpriteBatch_PushQuadColor(i * 32, j * 32, overlay ? -4 : -10, 32, 32, 0, 0, 32, 32,
-									  overlay ? INT16_MAX : SHADER_RGB(12, 12, 12));
-		}
-	}
+	Gui_DrawDefaultBG(2);
 
 	if (menustate == MenuState_SelectWorld) {
 		int movementX = 0, movementY = 0;
