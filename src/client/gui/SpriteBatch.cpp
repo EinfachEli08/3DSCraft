@@ -54,7 +54,7 @@ void SpriteBatch_Init(int projUniform_) {
 	C3D_TexLoadImage(&whiteTex, data, GPU_TEXFACE_2D, 0);
 
 	menuBackgroundTex = new Texture("gui/options_background.t3x", true);
-	supportQRTex	  = new Texture("misc/support-image.t3x", true);
+	supportQRTex	  = new Texture("misc/support_image.t3x", true);
 
 	Mtx_Identity(&iconModelMtx);
 	Mtx_RotateY(&iconModelMtx, M_PI / 4.f, false);
