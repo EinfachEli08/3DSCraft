@@ -19,7 +19,7 @@ isDelete=false
 
 delete() {
     if [ "$isDelete" = true ]; then
-        echo "Breaking $1..."
+        echo "Deleting $1..."
         rm -rf "$1"
     fi
 }
@@ -34,7 +34,7 @@ convert_to_t3x_single() {
     if [ ! -e "$output_file" ]; then
         flipped_file="$TMP_DIR/${input_file#$ASSETS_DIR/}"
         python "$PYTHON_SCRIPT" "$input_file" "$flipped_file"  # Flip the image and save to TMP directory
-        output_filename="$(basename "$output_file")"  # Extract just the filename
+        output_filename="${output_file#*textures/}.t3x"  # Extract just the filename without the root
         echo "Crafting ${output_filename}..."  # Adjusted echo statement
         "$TEX3DS" -o "$output_file" "$flipped_file" -m point -f rgba8 -z auto >/dev/null 2>&1
     fi
@@ -43,35 +43,44 @@ convert_to_t3x_single() {
 # Function to convert a directory into one atlas
 convert_to_atlas() {
     input_dir="$1"
-    output_dir="$2"
+    output_file="$OUTPUT_DIR/$(basename "$1").t3x"
     mkdir -p "$output_dir"
-    
-    png_files=""
-    find "$input_dir" -type f -name "*.png" | while read -r file; do
-        flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
-        python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
-        png_files="$png_files $flipped_file"  # Add flipped image to png_files list
-    done
-    
-    output_filename="$(basename "$output_dir").t3x"  # Extract just the filename
-    echo "Crafting ${output_filename}..."  # Adjusted echo statement
-    "$TEX3DS" -o "$output_dir/$output_filename" $png_files -m point --atlas -f rgba8 -z auto >/dev/null 2>&1
+	
+	output_filename="${output_dir#*textures/}"
+
+    if [ ! -e "$output_dir.t3x" ]; then
+		echo "Breaking ${output_filename}..."
+		png_files=""
+		find "$input_dir" -type f -name "*.png" | while read -r file; do
+			flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
+            if [ ! -e "${flipped_file%.*}*" ]; then
+			    python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
+			fi
+			png_files="$png_files $flipped_file"  # Add flipped image to png_files list
+		done
+		
+		echo "Crafting ${output_filename}..."
+		"$TEX3DS" -o "$output_dir/$output_filename" $png_files -m point --atlas -f rgba8 -z auto >/dev/null 2>&1
+	else
+	    echo "Skipping ${output_filename}..."
+	fi
 }
 
 pack_single_t3x() {
-    for png_file in "$1"/*.png; do
+    for png_file in "$1"*.png; do
         convert_to_t3x_single "$png_file"
     done
 }
 
 pack_textures() {
     for dir in "$1"/*/; do
-        output_dir="$2/$(basename "$dir")"
         if [ "$(basename "$dir")" = "block" ]; then
+            output_dir="$2/$(basename "$dir")"
             convert_to_atlas "$dir" "$output_dir"
             continue
         fi
         if [ "$(basename "$dir")" = "item" ]; then
+            output_dir="$2/$(basename "$dir")"
             convert_to_atlas "$dir" "$output_dir"
             continue
         fi
