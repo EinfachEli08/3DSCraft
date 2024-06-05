@@ -23,6 +23,9 @@
 #include "world/level/saveddata/SaveManager.h"
 #include "world/level/saveddata/SuperChunk.h"
 
+#include "client/gui/screens/system/ScreenManager.h"
+#include "client/gui/screens/SampleScreen.h"
+
 #include <sino/sino.h>
 
 #include <citro3d.h>
@@ -84,7 +87,14 @@ int main() {
 	uint64_t lastTime = svcGetSystemTick();
 	float dt = 0.f, timeAccum = 0.f, fpsClock = 0.f;
 	int frameCounter = 0, fps = 0;
+
+	ScreenManager manager;
+	std::shared_ptr<Screen> sampleScreen = std::make_shared<SampleScreen>();
+	manager.setScreen(sampleScreen);
+
 	while (aptMainLoop()) {
+
+
 		DebugUI_Text("%d FPS  Usage: CPU: %5.2f%% GPU: %5.2f%% Buf: %5.2f%% Lin: %d", fps, C3D_GetProcessingTime() * 6.f,
 					 C3D_GetDrawingTime() * 6.f, C3D_GetCmdBufUsage() * 100.f, linearSpaceFree());
 		DebugUI_Text("Player: %f, %f, %f P: %f Y: %f", player->position.x, player->position.y, player->position.z, player->pitch,
@@ -130,6 +140,9 @@ int main() {
 
 		InputData inputData =
 			(InputData){keysheld, keysdown, hidKeysUp(), circlePos.dx, circlePos.dy, touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy};
+
+
+		manager.update();
 
 		// TODO: Fix da shit, need better scene management
 		if (WorldSelectScreen_Previous()) {
