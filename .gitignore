@@ -10,6 +10,7 @@
 build
 lib/libgame.a
 resources/OUTPUT
+resources/TMP
 resources/assets
 resources/assets.*
 !resources/patch

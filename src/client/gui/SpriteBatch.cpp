@@ -73,10 +73,17 @@ void SpriteBatch_Deinit() {
 }
 
 void SpriteBatch_BindTexture(C3D_Tex* texture) {
+	if (texture == nullptr)
+		Crash("SpriteBatch was given a null texture to bind, internal error. Current SpriteStack size: %i", cmdList.size());
+
 	currentTexture = texture;
+}
+void SpriteBatch_BindTexture(Texture* tex) {
+	SpriteBatch_BindTexture(&tex->mTex);
 }
 void SpriteBatch_BindGuiTexture(GuiTexture texture) {
 	Texture* mTmp = nullptr;
+
 	switch (texture) {
 		case GuiTexture_Blank:
 			currentTexture = &whiteTex;
@@ -98,10 +105,8 @@ void SpriteBatch_BindGuiTexture(GuiTexture texture) {
 			break;
 		default:
 			break;
-
-			if (mTmp != nullptr)
-				currentTexture = &mTmp->mTex;
 	}
+	SpriteBatch_BindTexture(&mTmp->mTex);
 }
 
 void SpriteBatch_PushSingleColorQuad(int x, int y, int z, int w, int h, int16_t color) {
@@ -112,6 +117,9 @@ void SpriteBatch_PushQuad(int x, int y, int z, int w, int h, int rx, int ry, int
 	SpriteBatch_PushQuadColor(x, y, z, w, h, rx, ry, rw, rh, INT16_MAX);
 }
 void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry, int rw, int rh, int16_t color) {
+	if (currentTexture == nullptr)
+		Crash("SpriteBatch has null texture as current, internal error. Current SpriteStack size: %i", cmdList.size());
+
 	Sprite* spr = new Sprite{z,
 							 currentTexture,
 							 x * guiScale,
@@ -317,7 +325,7 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 	int verticesTotal = 0;
 
 	size_t vtx = 0;
-	while (!cmdList.empty() && cmdList.back()->texture != nullptr) {
+	while (!cmdList.empty()) {
 		size_t vtxStart = vtx;
 
 		C3D_Tex* texture = cmdList.back()->texture;

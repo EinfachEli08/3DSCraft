@@ -15,8 +15,11 @@ Texture::Texture(ResourceLocation location, bool vram) {
 		Crash("File could not be opened for texture: %s", path.c_str());
 
 	Tex3DS_Texture t3x = Tex3DS_TextureImportStdio(f, &mTex, nullptr, vram);
+	const char* msg	   = "Texture could not be loaded, ";
 	if (!t3x)
-		Crash("Texture could not be loaded: %s", path.c_str());
+		Crash("%st3x null: %s", msg, path.c_str());
+	if (!&mTex)
+		Crash("%st3x null: %s", msg, path.c_str());
 
 	Tex3DS_TextureFree(t3x);
 }
