@@ -5,21 +5,23 @@ echo "by ChatGPT + Moddimation"
 
 # Set variables
 TEX3DS="$DEVKITPRO/tools/bin/tex3ds.exe"
-PYTHON_SCRIPT="flip.py"  # Name of the Python script to flip images
-ASSETS_DIR="assets"  # Main assets directory
-OUTPUT_DIR="OUTPUT"  # Final output directory
-TMP_DIR="TMP"  # Temporary directory for flipped images
+PYTHON_SCRIPT="flip.py" 
+ASSETS_DIR="assets" 
+PATCH_DIR="patch"
+OUTPUT_DIR="OUTPUT"
+TMP_DIR="TMP" 
 
 SUBDIR="minecraft/textures"
 
 ASSETS_DIR="$ASSETS_DIR/$SUBDIR"
+PATCH_DIR="$PATCH_DIR/$SUBDIR"
 OUTPUT_DIR="$OUTPUT_DIR/$SUBDIR"
 TMP_DIR="$TMP_DIR/$SUBDIR"
 
 # Function to convert PNG to .t3x
 convert_to_t3x_single() {
     input_file="$1"
-    output_file="$OUTPUT_DIR/${1#$ASSETS_DIR/}"
+    output_file="$OUTPUT_DIR/${1#$2}"
     output_file="${output_file%.png}.t3x"
     mkdir -p "$(dirname "$output_file")"
     
@@ -76,12 +78,12 @@ pack_textures() {
         fi
         if [ "$(basename "$dir")" = "entity" ]; then
             find "$dir" -mindepth 1 -maxdepth 4 -type f -name "*.png" | while read -r png_file; do
-                convert_to_t3x_single "$png_file" "etc1"
+                convert_to_t3x_single "$png_file" "$1" "etc1"
             done
             continue
         fi
         find "$dir" -mindepth 1 -maxdepth 4 -type f -name "*.png" | while read -r png_file; do
-            convert_to_t3x_single "$png_file" "rgba8"
+            convert_to_t3x_single "$png_file" "$1" "rgba8"
         done
     done
     rm -f textures.t3s
@@ -106,8 +108,11 @@ fi
 echo 
 
 # Pack textures
-pack_textures "$ASSETS_DIR" "$TMP_DIR"  # Flip images and store in temporary directory
-pack_textures "$TMP_DIR" "$OUTPUT_DIR"  # Convert flipped images to t3x and store in output directory
+pack_textures "$ASSETS_DIR"
+echo 
+echo Complete. Patching...
+pack_textures "$PATCH_DIR"
+echo 
 
 echo "Now place the content inside of 'OUTPUT/' in 'sdcard:/craft/assets/'."
 echo "If further issues arise, join the discord for further support."
