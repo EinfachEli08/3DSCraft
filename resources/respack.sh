@@ -16,15 +16,6 @@ ASSETS_DIR="$ASSETS_DIR/$SUBDIR"
 OUTPUT_DIR="$OUTPUT_DIR/$SUBDIR"
 TMP_DIR="$TMP_DIR/$SUBDIR"
 
-isDelete=false
-
-delete() {
-    if [ "$isDelete" = true ]; then
-        echo "Deleting $1..."
-        rm -rf "$1"
-    fi
-}
-
 # Function to convert PNG to .t3x
 convert_to_t3x_single() {
     input_file="$1"
@@ -36,7 +27,7 @@ convert_to_t3x_single() {
         flipped_file="$TMP_DIR/${input_file#$ASSETS_DIR/}"
         python "$PYTHON_SCRIPT" "$input_file" "$flipped_file"  # Flip the image and save to TMP directory
         output_filename="${output_file#*textures/}"  # Extract just the filename without the root
-        echo "Crafting ${output_filename}..."  # Adjusted echo statement
+        echo "Crafting ${output_filename#$TMP_DIR}..."  # Adjusted echo statement
         "$TEX3DS" -o "$output_file" "$flipped_file" -m point -f rgba8 -z auto >/dev/null 2>&1
     fi
 }
@@ -50,11 +41,11 @@ convert_to_atlas() {
 
     if [ ! -e "$output_dir.t3x" ]; then
 	    rm "textures.t3s"
-        echo "Breaking ${output_filename#OUTPUT/}/..."
+        echo "Breaking ${output_filename#$OUTPUT_DIR}/..."
 		echo "-m point --atlas -f rgba8 -z auto" >> "textures.t3s"
 		echo "" >> "textures.t3s"
 		
-        find "$ASSETS_DIR/${output_filename#OUTPUT/}" -type f -name "*.png" | while read -r file; do
+        find "$ASSETS_DIR/${output_filename#$OUTPUT_DIR}" -type f -name "*.png" | while read -r file; do
             flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
             if ! ls "${flipped_file%.*}"* >/dev/null 2>&1; then
                 python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
@@ -64,11 +55,11 @@ convert_to_atlas() {
            echo "${file}" >> "textures.t3s"
 		done
         
-        echo "Crafting ${output_filename#OUTPUT/}/..."
+        echo "Crafting ${output_filename#$OUTPUT_DIR}/..."
         "$TEX3DS" -o "$output_dir.t3x" -i "textures.t3s" #>/dev/null 2>&1
         echo "$TEX3DS -o $output_dir.t3x -i "textures.t3s" -m point --atlas -f rgba8 -z auto #>/dev/null 2>&1"
     else
-        echo "Skipping ${output_filename#OUTPUT/}/..."
+        echo "Skipping ${output_filename#$OUTPUT_DIR}/..."
     fi
 }
 
@@ -79,20 +70,22 @@ pack_single_t3x() {
 }
 
 pack_textures() {
-    for dir in "$1"/*/; do
+    find "$1" -mindepth 1 -maxdepth 1 -type d | while read -r dir; do
         if [ "$(basename "$dir")" = "block" ]; then
             output_dir="$2/$(basename "$dir")"
-            convert_to_atlas "$dir" "$output_dir"
+            #convert_to_atlas "$dir" "$output_dir"
             continue
         fi
         if [ "$(basename "$dir")" = "item" ]; then
             output_dir="$2/$(basename "$dir")"
-            convert_to_atlas "$dir" "$output_dir"
+            #convert_to_atlas "$dir" "$output_dir"
             continue
         fi
-        pack_single_t3x "$dir"
+        find "$dir" -mindepth 1 -maxdepth 4 -type f -name "*.png" | while read -r png_file; do
+            convert_to_t3x_single "$png_file"
+        done
     done
-	rm -f textures.t3s
+    rm -f textures.t3s
 }
 
 clean() {
@@ -110,17 +103,7 @@ if [ ! -d "$ASSETS_DIR" ]; then
     echo "Place the assets in the directory named 'assets', containing the modName/minecraft as subfolder."
     exit 1
 fi
-    
-# Prompt for confirmation to delete original assets
-read -p "Delete original assets afterwards? (y/n): " confirm
-case "$confirm" in
-    [yY])
-        isDelete=true
-        ;;
-    *)
-        isDelete=false
-        ;;
-esac
+
 echo 
 
 # Pack textures
