@@ -13,6 +13,7 @@ resources/OUTPUT
 resources/TMP
 resources/assets
 resources/assets.*
+resources/textures.t3s
 !resources/patch
 
 .vscode
