@@ -35,7 +35,7 @@ convert_to_t3x_single() {
     if [ ! -e "$output_file" ]; then
         flipped_file="$TMP_DIR/${input_file#$ASSETS_DIR/}"
         python "$PYTHON_SCRIPT" "$input_file" "$flipped_file"  # Flip the image and save to TMP directory
-        output_filename="${output_file#*textures/}.t3x"  # Extract just the filename without the root
+        output_filename="${output_file#*textures/}"  # Extract just the filename without the root
         echo "Crafting ${output_filename}..."  # Adjusted echo statement
         "$TEX3DS" -o "$output_file" "$flipped_file" -m point -f rgba8 -z auto >/dev/null 2>&1
     fi
