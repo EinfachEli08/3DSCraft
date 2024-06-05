@@ -43,27 +43,27 @@ convert_to_t3x_single() {
 # Function to convert a directory into one atlas
 convert_to_atlas() {
     input_dir="$1"
-    output_file="$OUTPUT_DIR/$(basename "$1").t3x"
+    output_dir="$OUTPUT_DIR/$(basename "$1")"
     mkdir -p "$output_dir"
-	
-	output_filename="${output_dir#*textures/}"
+    
+    output_filename="${output_dir#*textures/}"
 
     if [ ! -e "$output_dir.t3x" ]; then
-		echo "Breaking ${output_filename}..."
-		png_files=""
-		find "$input_dir" -type f -name "*.png" | while read -r file; do
-			flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
-            if [ ! -e "${flipped_file%.*}*" ]; then
-			    python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
-			fi
-			png_files="$png_files $flipped_file"  # Add flipped image to png_files list
-		done
-		
-		echo "Crafting ${output_filename}..."
-		"$TEX3DS" -o "$output_dir/$output_filename" $png_files -m point --atlas -f rgba8 -z auto >/dev/null 2>&1
-	else
-	    echo "Skipping ${output_filename}..."
-	fi
+        echo "Breaking ${output_filename#OUTPUT/}/..."
+        png_files=""
+        find "$input_dir" -type f -name "*.png" | while read -r file; do
+            flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
+            if ! ls "${flipped_file%.*}"* >/dev/null 2>&1; then
+                python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
+            fi
+            png_files="$png_files $flipped_file"  # Add flipped image to png_files list
+        done
+        
+        echo "Crafting ${output_filename#OUTPUT/}..."
+        "$TEX3DS" -o "$output_dir/$(basename "$output_dir").t3x" $png_files -m point --atlas -f rgba8 -z auto >/dev/null 2>&1
+    else
+        echo "Skipping ${output_filename#OUTPUT/}..."
+    fi
 }
 
 pack_single_t3x() {
