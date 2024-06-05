@@ -46,14 +46,14 @@ convert_to_atlas() {
     output_file="$OUTPUT_DIR/$(basename "$1").t3x"
     mkdir -p "$output_dir"
 	
-	output_filename="${output_dir#*textures/}.t3x"
+	output_filename="${output_dir#*textures/}"
 
     if [ ! -e "$output_dir.t3x" ]; then
 		echo "Breaking ${output_filename}..."
 		png_files=""
 		find "$input_dir" -type f -name "*.png" | while read -r file; do
 			flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
-            if [ ! -e "$flipped_file" ]; then
+            if [ ! -e "${flipped_file%.*}*" ]; then
 			    python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
 			fi
 			png_files="$png_files $flipped_file"  # Add flipped image to png_files list
