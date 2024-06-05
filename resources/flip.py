@@ -60,7 +60,10 @@ if __name__ == "__main__":
     if len(path_parts) > 1:
         print(f"Flipping {path_parts[-1]}...")
     else:
-        print(f"Flipping {input_file}...")
+        print(f"Error flipping {input_file}!")
+        
+    #print(f"{input_file}")
+    #print(f"{output_dir}")
 
     # Ensure output directory exists and is a directory
     if not os.path.exists(output_dir):
