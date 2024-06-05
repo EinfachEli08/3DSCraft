@@ -11,9 +11,10 @@ OUTPUT_DIR="OUTPUT"  # Final output directory
 TMP_DIR="TMP"  # Temporary directory for flipped images
 
 SUBDIR="minecraft/textures"
-ASSETS_SUBDIR="$ASSETS_DIR/$SUBDIR"
-OUTPUT_SUBDIR="$OUTPUT_DIR/$SUBDIR"
-TMP_SUBDIR="$TMP_DIR/$SUBDIR"
+
+ASSETS_DIR="$ASSETS_DIR/$SUBDIR"
+OUTPUT_DIR="$OUTPUT_DIR/$SUBDIR"
+TMP_DIR="$TMP_DIR/$SUBDIR"
 
 isDelete=false
 
@@ -44,25 +45,30 @@ convert_to_t3x_single() {
 convert_to_atlas() {
     input_dir="$1"
     output_dir="$OUTPUT_DIR/$(basename "$1")"
-    mkdir -p "$output_dir"
     
     output_filename="${output_dir#*textures/}"
 
     if [ ! -e "$output_dir.t3x" ]; then
+	    rm "textures.t3s"
         echo "Breaking ${output_filename#OUTPUT/}/..."
-        png_files=""
-        find "$input_dir" -type f -name "*.png" | while read -r file; do
+		echo "-m point --atlas -f rgba8 -z auto" >> "textures.t3s"
+		echo "" >> "textures.t3s"
+		
+        find "$ASSETS_DIR/${output_filename#OUTPUT/}" -type f -name "*.png" | while read -r file; do
             flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
             if ! ls "${flipped_file%.*}"* >/dev/null 2>&1; then
                 python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
             fi
-            png_files="$png_files $flipped_file"  # Add flipped image to png_files list
         done
+        find "$TMP_DIR/${output_dir#$OUTPUT_DIR/}" -type f -name "*.png" | while read -r file; do
+           echo "${file}" >> "textures.t3s"
+		done
         
-        echo "Crafting ${output_filename#OUTPUT/}..."
-        "$TEX3DS" -o "$output_dir/$(basename "$output_dir").t3x" $png_files -m point --atlas -f rgba8 -z auto >/dev/null 2>&1
+        echo "Crafting ${output_filename#OUTPUT/}/..."
+        "$TEX3DS" -o "$output_dir.t3x" -i "textures.t3s" #>/dev/null 2>&1
+        echo "$TEX3DS -o $output_dir.t3x -i "textures.t3s" -m point --atlas -f rgba8 -z auto #>/dev/null 2>&1"
     else
-        echo "Skipping ${output_filename#OUTPUT/}..."
+        echo "Skipping ${output_filename#OUTPUT/}/..."
     fi
 }
 
@@ -86,6 +92,7 @@ pack_textures() {
         fi
         pack_single_t3x "$dir"
     done
+	rm -f textures.t3s
 }
 
 clean() {
@@ -117,8 +124,8 @@ esac
 echo 
 
 # Pack textures
-pack_textures "$ASSETS_DIR/$SUBDIR" "$TMP_DIR/$SUBDIR"  # Flip images and store in temporary directory
-pack_textures "$TMP_DIR/$SUBDIR" "$OUTPUT_DIR/$SUBDIR"  # Convert flipped images to t3x and store in output directory
+pack_textures "$ASSETS_DIR" "$TMP_DIR"  # Flip images and store in temporary directory
+pack_textures "$TMP_DIR" "$OUTPUT_DIR"  # Convert flipped images to t3x and store in output directory
 
 echo "Now place the content inside of 'OUTPUT/' in 'sdcard:/craft/assets/'."
 echo "If further issues arise, join the discord for further support."
