@@ -5,11 +5,15 @@ echo "by ChatGPT + Moddimation"
 
 # Set variables
 TEX3DS="$DEVKITPRO/tools/bin/tex3ds.exe"
+PYTHON_SCRIPT="flip.py"  # Name of the Python script to flip images
+ASSETS_DIR="assets"  # Main assets directory
+OUTPUT_DIR="OUTPUT"  # Final output directory
+TMP_DIR="TMP"  # Temporary directory for flipped images
+
 SUBDIR="minecraft/textures"
-ASSETS_DIR="assets/$SUBDIR"
-PATCH_DIR="patch/$SUBDIR"
-OUTPUT_DIR="OUTPUT/$SUBDIR"
-TEXHEADERS_DIR="../include/texheaders"
+ASSETS_SUBDIR="$ASSETS_DIR/$SUBDIR"
+OUTPUT_SUBDIR="$OUTPUT_DIR/$SUBDIR"
+TMP_SUBDIR="$TMP_DIR/$SUBDIR"
 
 isDelete=false
 
@@ -21,49 +25,62 @@ delete() {
 }
 
 # Function to convert PNG to .t3x
-convert_to_t3x() {
-    output_file="$OUTPUT_DIR/${1#$2/}"
+convert_to_t3x_single() {
+    input_file="$1"
+    output_file="$OUTPUT_DIR/${1#$ASSETS_DIR/}"
     output_file="${output_file%.png}.t3x"
     mkdir -p "$(dirname "$output_file")"
     
     if [ ! -e "$output_file" ]; then
-        echo "Placing $output_file..."
-        "$TEX3DS" -o "$output_file" "$1" -m point -f etc1 -z auto >/dev/null 2>&1
-        delete "$1"
+        flipped_file="$TMP_DIR/${input_file#$ASSETS_DIR/}"
+        python3 "$PYTHON_SCRIPT" "$input_file" "$flipped_file"  # Flip the image and save to TMP directory
+        output_filename="$(basename "$output_file")"  # Extract just the filename
+        echo "Crafting ${output_filename}..."  # Adjusted echo statement
+        "$TEX3DS" -o "$output_file" "$flipped_file" -m point -f rgba8 -z auto >/dev/null 2>&1
     fi
 }
 
 # Function to convert a directory into one atlas
 convert_to_atlas() {
-    output_file="$OUTPUT_DIR/${1#$2/}"
-    output_file="${output_file%.png}.t3x"
-    mkdir -p "$(dirname "$output_file")"
+    input_dir="$1"
+    output_dir="$2"
+    mkdir -p "$output_dir"
     
-    if [ ! -e "$output_file" ]; then
-        echo "Placing $output_file..."
-        "$TEX3DS" -o "$output_file" "$1"/*.png -m point --atlas -f etc1 -z auto -H "$TEXHEADERS_DIR/$(basename "$output_file" .t3x).h" >/dev/null 2>&1
-        delete "$1"
-    fi
+    png_files=""
+    find "$input_dir" -type f -name "*.png" | while read -r file; do
+        flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
+        python3 "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
+        png_files="$png_files $flipped_file"  # Add flipped image to png_files list
+    done
+    
+    output_filename="$(basename "$output_dir").t3x"  # Extract just the filename
+    echo "Crafting ${output_filename}..."  # Adjusted echo statement
+    "$TEX3DS" -o "$output_dir/$output_filename" $png_files -m point --atlas -f rgba8 -z auto >/dev/null 2>&1
+}
+
+pack_single_t3x() {
+    for png_file in "$1"/*.png; do
+        convert_to_t3x_single "$png_file"
+    done
 }
 
 pack_textures() {
-    mkdir -p "$TEXHEADERS_DIR"
-    find "$1" -mindepth 1 -maxdepth 1 -type d | while read -r dir; do
-        echo "Entering $dir..."
-        if [ "$(basename "$dir")" = "block" ] || [ "$(basename "$dir")" = "item" ]; then
-            convert_to_atlas "$dir" "$1"
-        else
-            find "$dir" -type f -name '*.png' | while read -r png_file; do
-                convert_to_t3x "$png_file" "$1"
-            done
+    for dir in "$1"/*/; do
+        output_dir="$2/$(basename "$dir")"
+        if [ "$(basename "$dir")" = "block" ]; then
+            convert_to_atlas "$dir" "$output_dir"
+            continue
         fi
-        echo "Leaving $dir..."
+        if [ "$(basename "$dir")" = "item" ]; then
+            convert_to_atlas "$dir" "$output_dir"
+            continue
+        fi
+        pack_single_t3x "$dir"
     done
 }
 
 clean() {
-    rm -rf "$OUTPUT_DIR"
-    rm -rf "$TEXHEADERS_DIR"
+    rm -rf "$OUTPUT_DIR" "$TMP_DIR" "$TEXHEADERS_DIR" "$DIR_FILE"
     echo "Clean..."
 }
 
@@ -72,9 +89,9 @@ if [ "$1" = "clean" ]; then
     exit
 fi
 
-if [ ! -d "assets" ]; then
+if [ ! -d "$ASSETS_DIR" ]; then
     echo "Error: No assets found."
-    echo "Place the assets in this directory, containing the modName/minecraft as subfolder."
+    echo "Place the assets in the directory named 'assets', containing the modName/minecraft as subfolder."
     exit 1
 fi
     
@@ -90,12 +107,9 @@ case "$confirm" in
 esac
 echo 
 
-pack_textures "$ASSETS_DIR"
-echo 
-echo "Patching..."
-echo
-pack_textures "$PATCH_DIR"
+# Pack textures
+pack_textures "$ASSETS_DIR/$SUBDIR" "$TMP_DIR/$SUBDIR"  # Flip images and store in temporary directory
+pack_textures "$TMP_DIR/$SUBDIR" "$OUTPUT_DIR/$SUBDIR"  # Convert flipped images to t3x and store in output directory
 
-echo
 echo "Now place the content inside of 'OUTPUT/' in 'sdcard:/craft/assets/'."
 echo "If further issues arise, join the discord for further support."
