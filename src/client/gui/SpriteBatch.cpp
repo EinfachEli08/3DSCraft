@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <stdarg.h>
+#include <vector/vector.h>
 
 #include "client/Exception.h"
 #include "client/gui/DebugUI.h"
@@ -19,7 +20,7 @@ typedef struct {
 		int16_t color;
 } Sprite;
 
-static std::vector<Sprite*> cmdList;
+static vector<Sprite*> cmdList;
 static C3D_Tex* currentTexture = nullptr;
 static GuiVertex* vertexList[2];
 static int projUniform;
@@ -269,11 +270,11 @@ int SpriteBatch_CalcTextWidthVargs(const char* text, va_list args) {
 	return maxLength;
 }
 
-bool compareDrawCommands(const Sprite* ga, const Sprite* gb) {
-	if (ga->depth != gb->depth) {
-		return ga->depth < gb->depth;  // Sort by depth ascending
-	}
-	return ga->texture < gb->texture;  // Sort by texture pointer ascending if depth is equal
+static int compareDrawCommands(const void* a, const void* b) {
+	Sprite* ga = ((Sprite*)a);
+	Sprite* gb = ((Sprite*)b);
+
+	return ga->depth == gb->depth ? gb->texture - ga->texture : gb->depth - ga->depth;
 }
 
 int SpriteBatch_GetWidth() {
@@ -297,8 +298,7 @@ void SpriteBatch_StartFrame(int width, int height) {
 
 void SpriteBatch_Render(gfxScreen_t screen) {
 	rot += M_PI / 60.f;
-	cmdList.erase(std::remove(cmdList.begin(), cmdList.end(), nullptr), cmdList.end());
-	std::sort(cmdList.begin(), cmdList.end(), compareDrawCommands);
+	cmdList.sort(compareDrawCommands);
 
 	C3D_Mtx projMtx;
 	Mtx_OrthoTilt(&projMtx, 0.f, screenWidth, screenHeight, 0.f, 1.f, -1.f, false);
@@ -317,7 +317,7 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 	int verticesTotal = 0;
 
 	size_t vtx = 0;
-	while (!cmdList.empty()) {
+	while (!cmdList.empty() && cmdList.back()->texture != nullptr) {
 		size_t vtxStart = vtx;
 
 		C3D_Tex* texture = cmdList.back()->texture;
