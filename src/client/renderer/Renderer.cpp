@@ -49,11 +49,11 @@ Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* ga
 
 	// Block_Init();
 
-	// logoTex = *TileSetMan::getTexture({TileSetGroup::GUI_TITLE, title_minecraft_idx});
+	logoTex = new Texture(ResourceLocation("gui/title/minecraft.t3x"));
 }
 
 Renderer::~Renderer() {
-	C3D_TexDelete(&logoTex);
+	delete logoTex;
 
 	// Block_Deinit();
 
@@ -118,7 +118,7 @@ void Renderer::render() {
 
 			Clouds_Render(world_shader_uLocProjection, &vp, world, 0.f, 0.f);
 
-			SpriteBatch_BindTexture(&logoTex);
+			SpriteBatch_BindTexture(logoTex);
 
 			SpriteBatch_SetScale(2);
 			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0, 0, 1024, 256);

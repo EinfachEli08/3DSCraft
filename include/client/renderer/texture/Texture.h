@@ -7,7 +7,7 @@
 
 class Texture {
 	public:
-		Texture(ResourceLocation filename, bool vram);
+		Texture(ResourceLocation filename, bool vram = true);
 		~Texture() { C3D_TexDelete(&mTex); }
 
 		C3D_Tex mTex;

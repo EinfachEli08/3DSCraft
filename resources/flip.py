@@ -19,25 +19,32 @@ def split_and_flip_image(input_path, output_dir):
     # Open the image
     image = Image.open(input_path)
     
-    # Check if the image height exceeds 16 pixels
-    if image.height > 16:
-        # Calculate the number of slices needed
-        num_slices = image.height // 16
-        remainder = image.height % 16
-        if remainder > 0:
-            num_slices += 1
+    # Check if the file is inside the "block/" directory
+    if "block/" in input_path:
+        # Check if the image height exceeds 16 pixels
+        if image.height > 16:
+            # Calculate the number of slices needed
+            num_slices = image.height // 16
+            remainder = image.height % 16
+            if remainder > 0:
+                num_slices += 1
+            print(f"...detected animation of {num_slices} frames...") 
 
-        # Iterate over each slice
-        for i in range(num_slices):
-            # Define the slice bounds
-            top = i * 16
-            bottom = min((i + 1) * 16, image.height)
+            # Iterate over each slice
+            for i in range(num_slices):
+                # Define the slice bounds
+                top = i * 16
+                bottom = min((i + 1) * 16, image.height)
 
-            # Extract the slice
-            slice_image = image.crop((0, top, image.width, bottom))
+                # Extract the slice
+                slice_image = image.crop((0, top, image.width, bottom))
 
-            # Flip and save the slice
-            flip_image(slice_image, input_path, output_dir, slice_number=i)
+                # Flip and save the slice
+                flip_image(slice_image, input_path, output_dir, slice_number=i)
+        else:
+            # Save the original image
+            flip_image(image, input_path, output_dir)
+
     else:
         # Save the original image
         flip_image(image, input_path, output_dir)
@@ -48,6 +55,7 @@ if __name__ == "__main__":
     output_dir = sys.argv[2]
     output_dir = os.path.dirname(output_dir)
 
+    # Print the filename without the root directory
     path_parts = input_file.split('textures/')
     if len(path_parts) > 1:
         print(f"Flipping {path_parts[-1]}...")

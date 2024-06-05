@@ -23,6 +23,7 @@
 #define CLEAR_COLOR_BLACK 0x000000ff
 
 class PolyGen;
+class Texture;
 
 // Der Renderer ist ein Singleton, weil die darunterliegende Graphik API es auch ist
 class Renderer {
@@ -42,7 +43,7 @@ class Renderer {
 
 		C3D_AttrInfo world_vertexAttribs, gui_vertexAttribs;
 
-		C3D_Tex logoTex;
+		Texture* logoTex;
 
 		World* world;
 		Player* player;

@@ -10,6 +10,8 @@
 
 #include <citro3d.h>
 
+class Texture;
+
 void SpriteBatch_Init(int projUniform_);
 void SpriteBatch_Deinit();
 
@@ -24,6 +26,7 @@ typedef enum {
 
 void SpriteBatch_BindGuiTexture(GuiTexture texture);
 void SpriteBatch_BindTexture(C3D_Tex* texture);
+void SpriteBatch_BindTexture(Texture* tex);
 
 void SpriteBatch_PushSingleColorQuad(int x, int y, int z, int w, int h, int16_t color);
 void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry, int rw, int rh, int16_t color);
