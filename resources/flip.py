@@ -58,7 +58,7 @@ if __name__ == "__main__":
     # Print the filename without the root directory
     path_parts = input_file.split('textures/')
     if len(path_parts) > 1:
-        print(f"Flipping {path_parts[-1]}...")
+        print(f"Mining   {path_parts[-1]}...")
     else:
         print(f"Error flipping {input_file}!")
         
