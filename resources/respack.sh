@@ -49,7 +49,7 @@ convert_to_atlas() {
     png_files=""
     find "$input_dir" -type f -name "*.png" | while read -r file; do
         flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
-        py "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
+        python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
         png_files="$png_files $flipped_file"  # Add flipped image to png_files list
     done
     
