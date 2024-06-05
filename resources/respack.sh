@@ -33,7 +33,7 @@ convert_to_t3x_single() {
     
     if [ ! -e "$output_file" ]; then
         flipped_file="$TMP_DIR/${input_file#$ASSETS_DIR/}"
-        p "$PYTHON_SCRIPT" "$input_file" "$flipped_file"  # Flip the image and save to TMP directory
+        python "$PYTHON_SCRIPT" "$input_file" "$flipped_file"  # Flip the image and save to TMP directory
         output_filename="${output_file#*textures/}.t3x"  # Extract just the filename without the root
         echo "Crafting ${output_filename}..."  # Adjusted echo statement
         "$TEX3DS" -o "$output_file" "$flipped_file" -m point -f rgba8 -z auto >/dev/null 2>&1
@@ -53,7 +53,9 @@ convert_to_atlas() {
 		png_files=""
 		find "$input_dir" -type f -name "*.png" | while read -r file; do
 			flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
-			python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
+            if [ ! -e "$flipped_file" ]; then
+			    python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
+			fi
 			png_files="$png_files $flipped_file"  # Add flipped image to png_files list
 		done
 		

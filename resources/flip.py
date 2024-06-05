@@ -4,7 +4,7 @@ from PIL import Image
 
 def flip_image(image, input_path, output_dir, slice_number=None):
     # Flip the image vertically
-    flipped_image = image.transpose(Image.FLIP_TOP_BOTTOM)
+    flipped_image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
     
     # Construct the output filename
     filename, ext = os.path.splitext(os.path.basename(input_path))
