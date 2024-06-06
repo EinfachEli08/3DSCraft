@@ -41,6 +41,7 @@ class Minecraft {
 		void stop();
 		bool isRunning();
 		void setScreen(Screen* screen);
+		Screen* getScreen() const { return mScreen; }
 
 	private:
 		void releaseWorld();

@@ -8,6 +8,7 @@
 
 #include <3ds.h>
 
+#include "client/ButtonHandler.h"
 #include "client/gui/DebugUI.h"
 #include "client/gui/Gui.h"
 #include "client/gui/screens/TitleScreen.h"
@@ -117,6 +118,10 @@ void Minecraft::tick(float dt, float timeFull, float fps) {
 	hidTouchRead(&touchPos);
 
 	InputData inputData = {keysheld, keysdown, keysup, circlePos.dx, circlePos.dy, touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy};
+
+	ButtonHandler::keyPress(keysheld);
+
+	mScreen->tick();
 
 	// TODO: Fix da shit, need better scene management
 	if (WorldSelectScreen_Previous()) {
