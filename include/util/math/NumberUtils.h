@@ -51,8 +51,3 @@ static inline bool AABB_Overlap(float x0, float y0, float z0, float w0, float h0
 // Define constants for degree to radian and radian to degree conversions
 constexpr float DEG_TO_RAD = (M_PI * 2.f / 360.f);
 constexpr float RAD_TO_DEG = ((1.f / M_PI) * 180.f);
-
-// Define TICKS_PER_MSEC for 3DS platform
-#ifdef __3DS__
-constexpr double TICKS_PER_MSEC = 268111.856;
-#endif

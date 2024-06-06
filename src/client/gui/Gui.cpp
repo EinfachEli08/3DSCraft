@@ -161,34 +161,35 @@ void Gui_GetCursorMovement(int* x, int* y) {
 	*y = input.touchY / SpriteBatch_GetScale() - oldInput.touchY / SpriteBatch_GetScale();
 }
 
-void Gui_DrawDefaultBG(int shadowMode){
+void Gui_DrawDefaultBG(int shadowMode) {
 #define SPRITE_BG_SIZE 16
 	SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
 	for (int i = 0; i < 160 / 32 + 1; i++) {
 		for (int j = 0; j < 120 / 32 + 1; j++) {
-			if(shadowMode == 0){
-				//normal brightness
-				SpriteBatch_PushQuadColor((i * SPRITE_BG_SIZE)*2, (j * SPRITE_BG_SIZE)*2, -4, SPRITE_BG_SIZE*2, SPRITE_BG_SIZE*2, 0, 0, SPRITE_BG_SIZE,
-										  SPRITE_BG_SIZE, INT16_MAX);
-			}else if(shadowMode == 1){
-				//darker brightness
-				SpriteBatch_PushQuadColor((i * SPRITE_BG_SIZE)*2, (j * SPRITE_BG_SIZE)*2, -4, SPRITE_BG_SIZE*2, SPRITE_BG_SIZE*2, 0, 0, SPRITE_BG_SIZE,
-										  SPRITE_BG_SIZE,SHADER_RGB(12, 12, 12));
-			}else if(shadowMode == 2){
-				//mixed brightness
-				//TODO: Wenn weltladen wieder geht, testen ob das mit dem GUILayering Okay ist
+			if (shadowMode == 0) {
+				// normal brightness
+				SpriteBatch_PushQuadColor((i * SPRITE_BG_SIZE) * 2, (j * SPRITE_BG_SIZE) * 2, -4, SPRITE_BG_SIZE * 2, SPRITE_BG_SIZE * 2, 0,
+										  0, SPRITE_BG_SIZE, SPRITE_BG_SIZE, INT16_MAX);
+			} else if (shadowMode == 1) {
+				// darker brightness
+				SpriteBatch_PushQuadColor((i * SPRITE_BG_SIZE) * 2, (j * SPRITE_BG_SIZE) * 2, -4, SPRITE_BG_SIZE * 2, SPRITE_BG_SIZE * 2, 0,
+										  0, SPRITE_BG_SIZE, SPRITE_BG_SIZE, SHADER_RGB(12, 12, 12));
+			} else if (shadowMode == 2) {
+				// mixed brightness
+				// TODO: Wenn weltladen wieder geht, testen ob das mit dem GUILayering Okay ist
 				bool overlay = j >= 2;
-				SpriteBatch_PushQuadColor((i * SPRITE_BG_SIZE)*2, (j * SPRITE_BG_SIZE)*2, overlay ? -4 : -10, SPRITE_BG_SIZE*2, SPRITE_BG_SIZE*2, 0, 0, SPRITE_BG_SIZE,
-										  SPRITE_BG_SIZE,overlay ? INT16_MAX : SHADER_RGB(12, 12, 12) );
-			}else if(shadowMode == 3){
-				//mixed inverted brightness
+				SpriteBatch_PushQuadColor((i * SPRITE_BG_SIZE) * 2, (j * SPRITE_BG_SIZE) * 2, overlay ? -4 : -10, SPRITE_BG_SIZE * 2,
+										  SPRITE_BG_SIZE * 2, 0, 0, SPRITE_BG_SIZE, SPRITE_BG_SIZE,
+										  overlay ? INT16_MAX : SHADER_RGB(12, 12, 12));
+			} else if (shadowMode == 3) {
+				// mixed inverted brightness
 				bool overlay = j >= 2;
-				SpriteBatch_PushQuadColor((i * SPRITE_BG_SIZE)*2, (j * SPRITE_BG_SIZE)*2, overlay ? -4 : -10, SPRITE_BG_SIZE*2, SPRITE_BG_SIZE*2, 0, 0, SPRITE_BG_SIZE,
-										  SPRITE_BG_SIZE,overlay ? SHADER_RGB(12, 12, 12) : INT16_MAX );
-			}else{
-				shadowMode=0;
+				SpriteBatch_PushQuadColor((i * SPRITE_BG_SIZE) * 2, (j * SPRITE_BG_SIZE) * 2, overlay ? -4 : -10, SPRITE_BG_SIZE * 2,
+										  SPRITE_BG_SIZE * 2, 0, 0, SPRITE_BG_SIZE, SPRITE_BG_SIZE,
+										  overlay ? SHADER_RGB(12, 12, 12) : INT16_MAX);
+			} else {
+				shadowMode = 0;
 			}
-
 		}
 	}
 }

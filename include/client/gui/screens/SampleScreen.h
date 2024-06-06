@@ -1,23 +1,16 @@
-// SampleScreen.h
-#ifndef SAMPLESCREEN_H
-#define SAMPLESCREEN_H
+#pragma once
 
-#include "client/gui/screens/system/Screen.h"
-#include <iostream>
+#include "client/gui/screens/base/Screen.h"
 
 class SampleScreen : public Screen {
 	public:
-		void screenInit() override {
-			std::cout << "SampleScreen Init\n";
-		}
+		SampleScreen() : Screen("sample") {}
 
-		void screenUpdate() override {
-			std::cout << "SampleScreen Update\n";
-		}
+		void init() override {}
+		void tick() override {}
+		void render(touchPosition pos, float partialTicks) override {}
 
-		void screenClose() override {
-			std::cout << "SampleScreen Close\n";
-		}
+		bool touchClicked(touchPosition pos, u32 keys) override {}
+
+		bool isPauseScreen() override { return false; }
 };
-
-#endif // SAMPLESCREEN_H
