@@ -25,4 +25,8 @@ void FontLoader_Init(Font* font) {
 			font->fontWidth[c++] = length;
 		}
 	}
+
+	Texture::Atlas* test = new Texture::Atlas("block.t3x", false);
+	u16 outCol[2];
+	test->getUV(0, outCol);
 }

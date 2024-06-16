@@ -40,25 +40,29 @@ convert_to_atlas() {
     output_dir="$OUTPUT_DIR/$(basename "$1")"
     
     output_filename="${output_dir#*textures/}"
+	
+	mkdir -f "../include/textureIdx"
 
     if [ ! -e "$output_dir.t3x" ]; then
-	    rm "textures.t3s"
+	    rm -f "textures.t3s"
         echo "Breaking ${output_filename#$OUTPUT_DIR}/..."
 		echo "-m point --atlas -f ${3} -z auto" >> "textures.t3s"
 		echo "" >> "textures.t3s"
 		
+		# make option to skip this?
         find "$ASSETS_DIR/${output_filename#$OUTPUT_DIR}" -type f -name "*.png" | while read -r file; do
             flipped_file="$TMP_DIR/${file#$ASSETS_DIR/}"
             if ! ls "${flipped_file%.*}"* >/dev/null 2>&1; then
                 python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
             fi
         done
+		
         find "$TMP_DIR/${output_dir#$OUTPUT_DIR/}" -type f -name "*.png" | while read -r file; do
            echo "${file}" >> "textures.t3s"
 		done
         
         echo "Crafting ${output_filename#$OUTPUT_DIR}/..."
-        "$TEX3DS" -o "$output_dir.t3x" -i "textures.t3s" >/dev/null 2>&1
+        "$TEX3DS" -o "$output_dir.t3x" -i "textures.t3s" -H "../include/textureIdx/$output_filename.h" >/dev/null 2>&1
     else
         echo "Skipping ${output_filename#$OUTPUT_DIR}/..."
     fi

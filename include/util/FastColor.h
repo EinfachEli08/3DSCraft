@@ -45,7 +45,7 @@ namespace FastColor {
 
     namespace Mth {
         inline u8 lerpInt(float t, u8 a, u8 b) {
-            return static_cast<u8>(a + t * (b - a));
+            return (u8)(a + t * (b - a));
         }
     }
 }

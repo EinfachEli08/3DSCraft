@@ -3,7 +3,7 @@
 namespace GenFunction {
 
 void genTrees(Chunk* chunk, int x, int y, int z) {
-	/*// Simplicity: Just place a tree every certain interval
+	// Simplicity: Just place a tree every certain interval
 	if (x % 20 == 0 && z % 20 == 0) {
 		// Place a simple tree (just a trunk and some leaves)
 		for (int i = 0; i < 5; i++) {
@@ -30,11 +30,11 @@ void genTrees(Chunk* chunk, int x, int y, int z) {
 				}
 			}
 		}
-	}*/
+	}
 }
 
 void genCaves(Chunk* chunk, int x, int y, int z) {
-	/*// Simplicity: Randomly create caves within certain height range
+	// Simplicity: Randomly create caves within certain height range
 	if (y > 5 && y < 10 && rand() % 100 < 20) {
 		for (int i = x - 3; i <= x + 3; i++) {
 			for (int j = y - 3; j <= y + 3; j++) {
@@ -45,7 +45,7 @@ void genCaves(Chunk* chunk, int x, int y, int z) {
 				}
 			}
 		}
-	}*/
+	}
 }
 
 }  // namespace GenFunction

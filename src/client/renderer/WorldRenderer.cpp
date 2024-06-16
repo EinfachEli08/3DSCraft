@@ -101,12 +101,12 @@ static void renderWorld() {
 		Cluster* cluster = step.cluster;
 		renderingQueue.pop_back();
 
-		if (cluster->vertices > 0 && cluster->vbo->size) {
+		if (cluster->vertices > 0 && cluster->vbo.size) {
 			clusterWasRendered(chunk->x, cluster->y, chunk->z) |= 2;
 
 			C3D_BufInfo bufInfo;
 			BufInfo_Init(&bufInfo);
-			BufInfo_Add(&bufInfo, cluster->vbo->memory, sizeof(WorldVertex), 4, 0x3210);
+			BufInfo_Add(&bufInfo, cluster->vbo.memory, sizeof(WorldVertex), 4, 0x3210);
 			C3D_SetBufInfo(&bufInfo);
 			C3D_DrawArrays(GPU_TRIANGLES, 0, cluster->vertices);
 
@@ -120,7 +120,7 @@ static void renderWorld() {
 		// if (polysTotal >= 150000) break;
 
 		for (u8 i = 0; i < 24; i++) {
-			const int* offset = Direction::byIndex(i).getOffset().toArray();
+			const int* offset = DirectionToOffset[i];
 
 			int newX = chunk->x + offset[0], newY = cluster->y + offset[1], newZ = chunk->z + offset[2];
 			if (newX < world->cacheTranslationX - CHUNKCACHE_SIZE / 2 + 1 || newX > world->cacheTranslationX + CHUNKCACHE_SIZE / 2 - 1 ||
@@ -147,7 +147,7 @@ static void renderWorld() {
 			clusterWasRendered(newX, newY, newZ) |= 1;
 
 			Chunk* newChunk				   = world->getChunk(newX, newZ);
-			Direction::_ oppositeDirection = Direction::byIndex(i).getOppositeIdx();
+			Direction::_ oppositeDirection = DirectionOpposite[i];
 			RenderStep nextStep			   = {&newChunk->clusters[newY], newChunk, oppositeDirection};
 			if (newChunk)
 				renderingQueue.push_back(nextStep);
@@ -196,7 +196,7 @@ void WorldRenderer_Render(float iod) {
 	camera->update(player, iod);
 
 	Hand_Draw(projectionUniform, &camera->projection, player->quickSelectBar[player->quickSelectBarSlot], player);
-	// C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
+	C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
 
 	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projectionUniform, &camera->vp);
 

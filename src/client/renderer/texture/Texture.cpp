@@ -22,4 +22,18 @@ Texture::Texture(ResourceLocation location, bool vram) {
 		Crash("%st3x null: %s", msg, path.c_str());
 
 	Tex3DS_TextureFree(t3x);
+	fclose(f);
+}
+Texture::Atlas::Atlas(ResourceLocation location, bool vram) {
+	const std::string path = std::string(std::string(Path::assets) + location.getNamespace() + "/textures/" + location.getPath());
+	FILE* f				   = fopen(path.c_str(), "rb");	 // maybe inline "filename get" somewhere?
+	if (!f)
+		Crash("File could not be opened for texture: %s", path.c_str());
+
+	mAtlas			= Tex3DS_TextureImportStdio(f, nullptr, nullptr, vram);
+	const char* msg = "Texture could not be loaded, ";
+	if (!mAtlas)
+		Crash("%st3x atlas null: %s", msg, path.c_str());
+
+	fclose(f);
 }

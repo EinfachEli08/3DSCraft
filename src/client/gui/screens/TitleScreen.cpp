@@ -1,6 +1,7 @@
 #include "client/gui/Gui.h"
 
 #include "client/gui/SpriteBatch.h"
+#include "client/renderer/VertexFmt.h"
 
 static bool clicked_play			 = false;
 static bool clicked_multiplayer_play = false;
@@ -23,7 +24,14 @@ static TitleState menustate = TitleState_Default;
 void TitleScreen_Render() {
 	SpriteBatch_SetScale(2);
 
-	Gui_DrawDefaultBG(0);
+#define SPRITE_BG_SIZE 32
+	SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
+	for (int i = 0; i < 160 / 32 + 1; i++) {
+		for (int j = 0; j < 120 / 32 + 1; j++) {
+			SpriteBatch_PushQuad(i * SPRITE_BG_SIZE, j * SPRITE_BG_SIZE, -4, SPRITE_BG_SIZE, SPRITE_BG_SIZE, 0, 0, SPRITE_BG_SIZE,
+								 SPRITE_BG_SIZE);
+		}
+	}
 
 	if (menustate == TitleState_Default) {
 		int movementX = 0, movementY = 0;

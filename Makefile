@@ -197,7 +197,7 @@ cia:
 #---------------------------------------------------------------------------------
 clean:
 	rm -rf $(BUILD)/
-	rm -f $(TARGET).elf
+	rm -f *.elf *.smdh *.lst *.cia *.3dsx
 
 clean-all: clean-libs clean-pack clean
 

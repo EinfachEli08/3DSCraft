@@ -140,7 +140,7 @@ void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry
 
 static float rot = 0.f;
 extern const WorldVertex cube_sides_lut[6 * 6];
-void SpriteBatch_PushIcon(Block* block, uint8_t metadata, int x, int y, int z) {
+void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 	/*WorldVertex vertices[6 * 6];
 	memcpy(vertices, cube_sides_lut, sizeof(cube_sides_lut));
 	for (int i = 0; i < 6; i++) {
@@ -342,13 +342,13 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 			int16_t u0 = (int16_t)((float)cmd->u0 * divW), v0 = (int16_t)((float)cmd->v0 * divH);
 			int16_t u1 = (int16_t)((float)cmd->u1 * divW), v1 = (int16_t)((float)cmd->v1 * divH);
 
-			usedVertexList[vtx++] = (GuiVertex){{cmd->x3, cmd->y3, 0}, {u1, v1, color}};
-			usedVertexList[vtx++] = (GuiVertex){{cmd->x1, cmd->y1, 0}, {u1, v0, color}};
-			usedVertexList[vtx++] = (GuiVertex){{cmd->x0, cmd->y0, 0}, {u0, v0, color}};
+			usedVertexList[vtx++] = {{cmd->x3, cmd->y3, 0}, {u1, v1, color}};
+			usedVertexList[vtx++] = {{cmd->x1, cmd->y1, 0}, {u1, v0, color}};
+			usedVertexList[vtx++] = {{cmd->x0, cmd->y0, 0}, {u0, v0, color}};
 
-			usedVertexList[vtx++] = (GuiVertex){{cmd->x0, cmd->y0, 0}, {u0, v0, color}};
-			usedVertexList[vtx++] = (GuiVertex){{cmd->x2, cmd->y2, 0}, {u0, v1, color}};
-			usedVertexList[vtx++] = (GuiVertex){{cmd->x3, cmd->y3, 0}, {u1, v1, color}};
+			usedVertexList[vtx++] = {{cmd->x0, cmd->y0, 0}, {u0, v0, color}};
+			usedVertexList[vtx++] = {{cmd->x2, cmd->y2, 0}, {u0, v1, color}};
+			usedVertexList[vtx++] = {{cmd->x3, cmd->y3, 0}, {u1, v1, color}};
 			delete cmd;
 		}
 

@@ -58,8 +58,8 @@ bool Raycast_Cast(World* world, Vector3<float> inpos, Vector3<float> raydir, Ray
 			mapZ += stepZ;
 			side = 2;
 		}
-		// if (world->getBlock(mapX, mapY, mapZ) != Block_Air)
-		//	hit = 1;
+		if (world->getBlock(mapX, mapY, mapZ) != Block_Air)
+			hit = 1;
 		//  if (world->errFlags & World_ErrUnloadedBlockRequested) break;
 
 		if (steps++ > INF)
