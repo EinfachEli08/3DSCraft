@@ -23,7 +23,7 @@ void PolyGen::harvest() {
 					VBOUpdate update = vboUpdates.back();
 					vboUpdates.pop_back();
 
-					/*Chunk* chunk = world->getChunk(update.x, update.z);
+					Chunk* chunk = world->getChunk(update.x, update.z);
 					if (chunk) {
 						if (chunk->clusters[update.y].vertices > 0)
 							VBO_Free(chunk->clusters[update.y].vbo);
@@ -34,7 +34,7 @@ void PolyGen::harvest() {
 						chunk->clusters[update.y].transparentVBO	  = update.transparentVBO;
 						chunk->clusters[update.y].transparentVertices = update.transparentVertices;
 						chunk->clusters[update.y].seeThrough		  = update.visibility;
-					}*/
+					}
 				}
 		}
 
@@ -60,7 +60,7 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 		QueueElement item = floodFillQueue.back();
 		floodFillQueue.pop_back();
 
-		/*for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++) {
 			const int* offset = DirectionToOffset[i];
 			int x = item.x + offset[0], y = item.y + offset[1], z = item.z + offset[2];
 			if (x < 0 || y < 0 || z < 0 || x >= CHUNK_SIZE || y >= CHUNK_SIZE || z >= CHUNK_SIZE) {
@@ -77,7 +77,7 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 							!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf));
 				}
 			}
-		}*/
+		}
 	}
 	uint16_t visiblity = 0;
 	for (int i = 0; i < 6; i++)
@@ -89,7 +89,7 @@ uint16_t PolyGen::floodFill(World* world, Chunk* chunk, Cluster* cluster, int x,
 }
 
 void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
-	/*for (int i = 0; i < CLUSTER_PER_CHUNK; i++) {
+	for (int i = 0; i < CLUSTER_PER_CHUNK; i++) {
 		Cluster* cluster = &item.chunk->clusters[i];
 
 		if (cluster->revision != cluster->vboRevision || cluster->forceVBOUpdate) {
@@ -182,8 +182,8 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 			int py = FastFloor(player->position.y);
 			int pz = FastFloor(player->position.z);
 			if (WorldToChunkCoord(px) == item.chunk->x && WorldToChunkCoord(pz) == item.chunk->z && WorldToChunkCoord(py) == i) {
-				floodFill(world, item.chunk, cluster, WorldToLocalCoord(px), WorldToLocalCoord(py), WorldToLocalCoord(pz),
-						  Direction::NONE, Direction::NONE, Direction::NONE);
+				floodFill(world, item.chunk, cluster, WorldToLocalCoord(px), WorldToLocalCoord(py), WorldToLocalCoord(pz), Direction::NONE,
+						  Direction::NONE, Direction::NONE);
 			}
 
 			int transparentVertices = transparentFaces * 6;
@@ -200,10 +200,6 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 
 				WorldVertex* opaqueData		 = (WorldVertex*)memBlock.memory;
 				WorldVertex* transparentData = (WorldVertex*)transparentMem.memory;
-
-				s16 iconUV[2];
-				u8 color[3];
-
 				for (int j = 0; j < currentFace; j++) {
 					Face face = faceBuffer[j];
 
@@ -211,14 +207,16 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 					int offsetZ = face.z + item.chunk->z * CHUNK_SIZE;
 					int offsetY = face.y + i * CHUNK_SIZE;
 
+					int16_t iconUV[2];
 					Block_GetTexture(face.block, face.direction, face.metadata, iconUV);
 
 					WorldVertex* data = face.transparent ? transparentData : opaqueData;
-					memcpy(data, &cube_sides_lut[face.Direction::_ * 6], sizeof(WorldVertex) * 6);
+					memcpy(data, &cube_sides_lut[face.direction * 6], sizeof(WorldVertex) * 6);
 
 #define oneDivIconsPerRow (32768 / 8)
 #define halfTexel (6)
 
+					uint8_t color[3];
 					Block_GetColor(face.block, face.metadata, face.direction, color);
 
 					for (int k = 0; k < 6; k++) {
@@ -256,5 +254,5 @@ void PolyGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 		}
 	}
 	item.chunk->displayRevision = item.chunk->revision;
-	item.chunk->forceVBOUpdate	= false;*/
+	item.chunk->forceVBOUpdate	= false;
 }

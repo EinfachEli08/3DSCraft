@@ -7,7 +7,7 @@
 #include "client/renderer/VBOCache.h"
 #include "core/Direction.h"
 #include "util/math/Xorshift.h"
-#include "world/level/block/Block.h"
+#include "world/level/blocks/Block.h"
 
 #define CHUNK_SIZE (16)
 #define CHUNK_HEIGHT (384)
@@ -15,7 +15,7 @@
 
 typedef struct {
 		int y;
-		Block* blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+		Block blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 		uint8_t metadataLight[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];	// first half metadata, second half light
 
 		uint32_t revision;
@@ -25,7 +25,7 @@ typedef struct {
 		bool empty;
 		uint32_t emptyRevision;
 
-		VBO_Block *vbo, transparentVBO;
+		VBO_Block vbo, transparentVBO;
 		size_t vertices, transparentVertices;
 		uint32_t vboRevision;
 		bool forceVBOUpdate;
@@ -105,18 +105,18 @@ inline void Chunk_SetMetadata(Chunk* chunk, int x, int y, int z, uint8_t metadat
 	++chunk->revision;
 }
 
-inline Block* Chunk_GetBlock(Chunk* chunk, int x, int y, int z) {
+inline Block Chunk_GetBlock(Chunk* chunk, int x, int y, int z) {
 	return chunk->clusters[y / CHUNK_SIZE].blocks[x][y - (y / CHUNK_SIZE * CHUNK_SIZE)][z];
 }
 // resets the meta data
-inline void Chunk_SetBlock(Chunk* chunk, int x, int y, int z, Block* block) {
+inline void Chunk_SetBlock(Chunk* chunk, int x, int y, int z, Block block) {
 	Cluster* cluster										 = &chunk->clusters[y / CHUNK_SIZE];
 	cluster->blocks[x][y - (y / CHUNK_SIZE * CHUNK_SIZE)][z] = block;
 	Chunk_SetMetadata(chunk, x, y, z, 0);
 	/*++cluster->revision;
 	++chunk->revision;*/  // durch das Setzen der Metadaten wird das sowieso erhöht
 }
-inline void Chunk_SetBlockAndMeta(Chunk* chunk, int x, int y, int z, Block* block, uint8_t metadata) {
+inline void Chunk_SetBlockAndMeta(Chunk* chunk, int x, int y, int z, Block block, uint8_t metadata) {
 	Cluster* cluster										 = &chunk->clusters[y / CHUNK_SIZE];
 	cluster->blocks[x][y - (y / CHUNK_SIZE * CHUNK_SIZE)][z] = block;
 	metadata &= 0xf;

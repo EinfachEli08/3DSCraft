@@ -9,17 +9,17 @@
 #include "client/renderer/texture/Texture.h"
 
 static WorldVertex* handVBO;
-static C3D_Tex steveTexture;
+static Texture* steveTexture;
 
 extern const WorldVertex cube_sides_lut[6 * 6];
 
 void Hand_Init() {
-	handVBO = (WorldVertex*)linearAlloc(sizeof(cube_sides_lut));
-	// steveTexture = *TileSetMan::getTexture({TileSetGroup::ENTITY, entity_steve_idx});
+	handVBO		 = (WorldVertex*)linearAlloc(sizeof(cube_sides_lut));
+	steveTexture = new Texture(ResourceLocation("entity/player/wide/steve.t3x"));
 }
 void Hand_Deinit() {
 	linearFree(handVBO);
-	C3D_TexDelete(&steveTexture);
+	delete steveTexture;
 }
 
 void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* player) {
@@ -44,7 +44,7 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 
 	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projUniform, &pm);
 
-	/*memcpy(handVBO, cube_sides_lut, sizeof(cube_sides_lut));
+	memcpy(handVBO, cube_sides_lut, sizeof(cube_sides_lut));
 	for (int i = 0; i < 6; i++) {
 		if (stack.amount > 0) {
 			int16_t iconUV[2];
@@ -66,7 +66,7 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 				handVBO[idx].rgb[2] = color[2];
 			}
 		} else {
-			C3D_TexBind(0, &steveTexture);
+			C3D_TexBind(0, &steveTexture->mTex);
 
 			if (i == Direction::EAST || i == Direction::WEST) {	 // eines der dümmsten Dinge, die ich jemals in meinem Leben getan habe
 				const int16_t uvRotationTable[2][2][2][2] = {
@@ -97,7 +97,7 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 				handVBO[idx].uv[1] = uvLookUp[i][handVBO[idx].uv[1] + 2];
 			}
 		}
-	}*/
+	}
 
 	C3D_AlphaTest(true, GPU_GEQUAL, 255);
 

@@ -19,19 +19,19 @@ class ResourceLocation {
 		bool operator==(const ResourceLocation& other) const {
 			return strcmp(mNamespace, other.mNamespace) == 0 && strcmp(mPath, other.mPath) == 0;
 		}
-
-		struct HashFunction {
-				size_t operator()(const ResourceLocation& key) const {
-					size_t res		= 17;
-					const char* str = key.getNamespace();
-					while (*str) {
-						res = res * 31 + *str++;
-					}
-					str = key.getPath();
-					while (*str) {
-						res = res * 31 + *str++;
-					}
-					return res;
-				}
-		};
+		/*
+				struct HashFunction {
+						size_t operator()(const ResourceLocation& key) const {
+							size_t res		= 17;
+							const char* str = key.getNamespace();
+							while (*str) {
+								res = res * 31 + *str++;
+							}
+							str = key.getPath();
+							while (*str) {
+								res = res * 31 + *str++;
+							}
+							return res;
+						}
+				};*/
 };

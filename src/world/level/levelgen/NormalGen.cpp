@@ -18,7 +18,7 @@ void NormalGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 
 			int height = (int)(sino_2d((px) / (clusterSize * 4), (pz) / (clusterSize * 4)) * clusterSize) + (chunkHeight * clusterSize / 2);
 
-			/*for (int y = 0; y < height - 3; y++) {
+			for (int y = 0; y < height - 3; y++) {
 				Chunk_SetBlock(item.chunk, x, y, z, Block_Bedrock);
 			}
 			for (int y = 1; y < height - 3; y++) {
@@ -29,7 +29,7 @@ void NormalGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 			}
 
 			Chunk_SetBlock(item.chunk, x, height, z, Block_Grass);
-*/
+
 			if (i >= 5) {
 				GenFunction::genTrees(item.chunk, x, height, z);
 				i = 0;

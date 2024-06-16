@@ -6,7 +6,7 @@
 
 class Texture;
 struct Font {
-		uint8_t fontWidth[1 << 8];
+		u8 fontWidth[1 << 8];
 		Texture* texture;
 };
 

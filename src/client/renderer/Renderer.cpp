@@ -47,7 +47,7 @@ Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* ga
 
 	C3D_CullFace(GPU_CULL_BACK_CCW);
 
-	// Block_Init();
+	Block_Init();
 
 	logoTex = new Texture(ResourceLocation("gui/title/minecraft.t3x"));
 }
@@ -55,7 +55,7 @@ Renderer::Renderer(World* world, Player* player, WorkQueue* queue, GameState* ga
 Renderer::~Renderer() {
 	delete logoTex;
 
-	// Block_Deinit();
+	Block_Deinit();
 
 	WorldRenderer_Deinit();
 
@@ -95,7 +95,7 @@ void Renderer::render() {
 		C3D_SetAttrInfo(&world_vertexAttribs);
 
 		if (*gamestate == GameState_Playing) {
-			// C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
+			C3D_TexBind(0, (C3D_Tex*)Block_GetTileSet());
 
 			WorldRenderer_Render(!i ? -iod : iod);
 
@@ -118,7 +118,7 @@ void Renderer::render() {
 
 			Clouds_Render(world_shader_uLocProjection, &vp, world, 0.f, 0.f);
 
-			SpriteBatch_BindTexture(logoTex);
+			SpriteBatch_BindTexture(&logoTex->mTex);
 
 			SpriteBatch_SetScale(2);
 			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0, 0, 1024, 256);

@@ -15,13 +15,13 @@ void CustomGen::chunkFunction(WorkQueue* queue, WorkerItem item) {
 			const int chunkHeight = 16;
 			int height = (int)(sino_2d((px) / (clusterSize * 4), (pz) / (clusterSize * 4)) * clusterSize) + (chunkHeight * clusterSize / 2);
 
-			/*for (int y = 0; y < height - 3; y++) {
+			for (int y = 0; y < height - 3; y++) {
 				Chunk_SetBlock(item.chunk, x, y, z, Block_Bedrock);
 			}
 			for (int y = height - 3; y < height; y++) {
 				Chunk_SetBlock(item.chunk, x, y, z, Block_Sand);
 			}
 			Chunk_SetBlock(item.chunk, x, height, z, Block_Air);
-		*/}
+		}
 	}
 }

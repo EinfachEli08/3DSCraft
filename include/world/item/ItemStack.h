@@ -3,10 +3,10 @@
 #include <stdbool.h>
 
 #include "util/math/NumberUtils.h"
+#include "world/level/blocks/Block.h"
 
-class Block;
 struct ItemStack {
-		Block* block;
+		Block block;
 		u8 meta, amount;
 };
 

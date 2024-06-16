@@ -8,7 +8,6 @@
 
 #include <3ds.h>
 
-#include "client/ButtonHandler.h"
 #include "client/gui/DebugUI.h"
 #include "client/gui/Gui.h"
 #include "client/gui/screens/TitleScreen.h"
@@ -26,7 +25,7 @@
 #include "world/level/saveddata/SaveManager.h"
 #include "world/level/saveddata/SuperChunk.h"
 
-#include "client/gui/screens/SampleScreen.h"
+// #include "client/gui/screens/SampleScreen.h"
 
 #include <sino/sino.h>
 
@@ -68,12 +67,12 @@ Minecraft::Minecraft() : gamestate(GameState_TitleScreen) {
 	chunkWorker->addHandler(Enum::WorkerItemType::Load, (ChunkWorkerObjBase*)loadChunk);
 	chunkWorker->addHandler(Enum::WorkerItemType::Save, (ChunkWorkerObjBase*)saveChunk);
 
-	setScreen(new SampleScreen());
+	// setScreen(new SampleScreen());
 }
 
 Minecraft::~Minecraft() {
-	if (mScreen)
-		mScreen->removed();
+	// if (mScreen)
+	//	mScreen->removed();
 
 	SuperChunk::poolsDeinit();
 	delete saveMgr;
@@ -119,9 +118,7 @@ void Minecraft::tick(float dt, float timeFull, float fps) {
 
 	InputData inputData = {keysheld, keysdown, keysup, circlePos.dx, circlePos.dy, touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy};
 
-	ButtonHandler::keyPress(keysheld);
-
-	mScreen->tick();
+	// mScreen->tick();
 
 	// TODO: Fix da shit, need better scene management
 	if (WorldSelectScreen_Previous()) {
@@ -207,7 +204,7 @@ bool Minecraft::isRunning() {
 	return running;
 }
 void Minecraft::setScreen(Screen* screen) {
-	if (mScreen)
+	/*if (mScreen)
 		mScreen->removed();
 
 	// if (!screen)	 // if o screen and no level
@@ -218,5 +215,5 @@ void Minecraft::setScreen(Screen* screen) {
 	if (mScreen) {
 		mScreen->added();
 		mScreen->initBase();
-	}
+	}*/
 }

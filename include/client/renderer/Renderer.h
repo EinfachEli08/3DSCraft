@@ -14,6 +14,7 @@
 #include "client/renderer/texture/Texture.h"
 #include "world/WorkQueue.h"
 #include "world/World.h"
+#include "world/level/blocks/Block.h"
 
 #define DISPLAY_TRANSFER_FLAGS                                                                                                             \
 	(GX_TRANSFER_FLIP_VERT(0) | GX_TRANSFER_OUT_TILED(0) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |        \
@@ -23,7 +24,6 @@
 #define CLEAR_COLOR_BLACK 0x000000ff
 
 class PolyGen;
-class Texture;
 
 // Der Renderer ist ein Singleton, weil die darunterliegende Graphik API es auch ist
 class Renderer {

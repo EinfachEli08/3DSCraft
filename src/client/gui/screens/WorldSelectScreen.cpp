@@ -12,7 +12,6 @@
 #include "client/gui/Gui.h"
 #include "client/gui/SpriteBatch.h"
 #include "client/renderer/VertexFmt.h"
-#include "util/Paths.h"
 
 typedef struct {
 		uint32_t lastPlayed;
@@ -25,14 +24,14 @@ static std::vector<WorldInfo> worlds;
 void WorldSelect_ScanWorlds() {
 	worlds.clear();
 
-	DIR* directory = opendir(Path::saves.c_str());
+	DIR* directory = opendir("sdmc:/craft/saves");
 
 	char buffer[512];
 
 	struct dirent* entry;
 
 	while ((entry = readdir(directory))) {
-		sprintf(buffer, "%s%s/level.mp", Path::saves.c_str(), entry->d_name);
+		sprintf(buffer, "sdmc:/craft/saves/%s/level.mp", entry->d_name);
 		if (access(buffer, F_OK) != -1) {
 			mpack_tree_t tree;
 			mpack_tree_init_file(&tree, buffer, 0);
@@ -122,7 +121,14 @@ bool clicked_Back		  = false;
 void WorldSelect_Render() {
 	SpriteBatch_SetScale(2);
 
-	Gui_DrawDefaultBG(2);
+	SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
+	for (int i = 0; i < 160 / 32 + 1; i++) {
+		for (int j = 0; j < 120 / 32 + 1; j++) {
+			bool overlay = j >= 2 && menustate == MenuState_SelectWorld;
+			SpriteBatch_PushQuadColor(i * 32, j * 32, overlay ? -4 : -10, 32, 32, 0, 0, 32, 32,
+									  overlay ? INT16_MAX : SHADER_RGB(12, 12, 12));
+		}
+	}
 
 	if (menustate == MenuState_SelectWorld) {
 		int movementX = 0, movementY = 0;
@@ -272,7 +278,7 @@ bool WorldSelect_Update(char* out_worldpath, char* out_name, Enum::WorldGenType*
 	if (confirmed_deletion) {
 		confirmed_deletion = false;
 		char buffer[512];
-		sprintf(buffer, "%s%s", Path::saves.c_str(), worlds[selectedWorld].path);
+		sprintf(buffer, "sdmc:/craft/saves/%s", worlds[selectedWorld].path);
 		delete_folder(buffer);
 
 		WorldSelect_ScanWorlds();
