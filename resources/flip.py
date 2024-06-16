@@ -18,7 +18,7 @@ def flip_image(image, input_path, output_dir, slice_number=None):
 def split_and_flip_image(input_path, output_dir):
     # Open the image
     image = Image.open(input_path)
-        
+    
     # Check if the file is inside the "block/" directory
     if "block/" in input_path:
         # Check if the image height exceeds 16 pixels
@@ -28,15 +28,7 @@ def split_and_flip_image(input_path, output_dir):
             remainder = image.height % 16
             if remainder > 0:
                 num_slices += 1
-            print(f"Animate  ...{num_slices} Frames") 
-
-             # Create .mcanim file if there are multiple slices
-            if num_slices is not None and num_slices > 1:
-                filename, _ = os.path.splitext(os.path.basename(input_path))
-                mcanim_file = os.path.join(output_dir, f"{filename}.png.mcanim")
-                # print(f"Enchant  block/{filename}.png.mcanim...")
-                with open(mcanim_file, 'w') as f:
-                    f.write(str(num_slices))
+            print(f"...detected animation of {num_slices} frames...") 
 
             # Iterate over each slice
             for i in range(num_slices):
@@ -56,7 +48,6 @@ def split_and_flip_image(input_path, output_dir):
     else:
         # Save the original image
         flip_image(image, input_path, output_dir)
-    flip_image(image, input_path, output_dir)
 
 
 if __name__ == "__main__":
@@ -69,7 +60,7 @@ if __name__ == "__main__":
     if len(path_parts) > 1:
         print(f"Mining   {path_parts[-1]}...")
     else:
-        print(f"CREEPER!:{input_file}!")
+        print(f"Error flipping {input_file}!")
         
     #print(f"{input_file}")
     #print(f"{output_dir}")

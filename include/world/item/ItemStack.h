@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 #include "util/math/NumberUtils.h"
-#include "world/level/block/Block.h"
+#include "world/level/blocks/Block.h"
 
 struct ItemStack {
 		Block block;
@@ -24,7 +24,7 @@ inline void ItemStack_Transfer(ItemStack* src, ItemStack* dst) {
 		dst->meta  = src->meta;
 	} else {
 		ItemStack tmp = *src;
-		*src          = *dst;
-		*dst          = tmp;
+		*src		  = *dst;
+		*dst		  = tmp;
 	}
 }

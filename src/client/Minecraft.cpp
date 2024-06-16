@@ -24,46 +24,20 @@
 #include "world/level/levelgen/SuperFlatGen.h"
 #include "world/level/saveddata/SaveManager.h"
 #include "world/level/saveddata/SuperChunk.h"
+
 // #include "client/gui/screens/SampleScreen.h"
 
-#include <citro3d.h>
 #include <sino/sino.h>
 
-const char* gVersion;
-bool gIsDebug;
-bool gIsNew3ds;
+#include <citro3d.h>
 
 Minecraft::Minecraft() : gamestate(GameState_TitleScreen) {
-	std::string file = Path::root + Path::assets + "minecraft/textures/block/grass.t3x";
+	std::string file = Path::assets + "minecraft/textures/block.t3x";
 	if (access(file.c_str(), F_OK)) {
 		Crash("ERROR: Could not find assets, please generate them with instructions from the github README.md.\n\n File not found: %s",
 			  file.c_str());
 	}
 	printf("INFO: Assets found.\n");
-
-	// is new 3ds
-	bool isNew3ds;
-	APT_CheckNew3DS(&isNew3ds);
-	gIsNew3ds = isNew3ds;
-
-	// get version
-	u64 programId;
-	u16 titleVersion;
-	char versionStr[32];
-	APT_GetProgramID(&programId);
-	APT_GetAppletProgramInfo(programId, 0x20, &titleVersion);
-	int major	 = GET_VERSION_MAJOR(titleVersion);
-	int minor	 = GET_VERSION_MINOR(titleVersion);
-	int revision = GET_VERSION_REVISION(titleVersion);
-	snprintf(versionStr, sizeof(versionStr), "v%d.%d.%d", major, minor, revision);
-	gVersion = versionStr;
-
-	// is debug
-#ifdef DEBUG
-	gIsDebug = true;
-#else
-	gIsDebug = false;
-#endif
 
 	gamestate = GameState_TitleScreen;
 	SuperChunk::poolsInit();

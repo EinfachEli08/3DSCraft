@@ -1,7 +1,7 @@
 #include "client/player/Player.h"
 
 #include "world/level/Collision.h"
-#include "world/level/block/Block.h"
+#include "world/level/blocks/Block.h"
 
 Player::Player(World* _world)
 	: position(0.f, 0.f, 0.f),
@@ -24,33 +24,33 @@ Player::Player(World* _world)
 	  quickSelectBarSlot(0),
 	  autoJumpEnabled(true) {
 	{
-		int l          = 0;
-		inventory[l++] = (ItemStack){ Block_Stone, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Dirt, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Grass, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Cobblestone, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Sand, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Log, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Leaves, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Glass, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Stone_Bricks, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Brick, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Planks, 0, 1 };
+		int l		   = 0;
+		inventory[l++] = (ItemStack){Block_Stone, 0, 1};
+		inventory[l++] = (ItemStack){Block_Dirt, 0, 1};
+		inventory[l++] = (ItemStack){Block_Grass, 0, 1};
+		inventory[l++] = (ItemStack){Block_Cobblestone, 0, 1};
+		inventory[l++] = (ItemStack){Block_Sand, 0, 1};
+		inventory[l++] = (ItemStack){Block_Log, 0, 1};
+		inventory[l++] = (ItemStack){Block_Leaves, 0, 1};
+		inventory[l++] = (ItemStack){Block_Glass, 0, 1};
+		inventory[l++] = (ItemStack){Block_Stone_Bricks, 0, 1};
+		inventory[l++] = (ItemStack){Block_Brick, 0, 1};
+		inventory[l++] = (ItemStack){Block_Planks, 0, 1};
 		for (u8 i = 0; i < 16; i++)
-			inventory[l++] = (ItemStack){ Block_Wool, i, 1 };
-		inventory[l++] = (ItemStack){ Block_Wool, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Bedrock, 0, 1 };
-		inventory[l++] = (ItemStack){ Block_Smooth_Stone, 0, 64 };
-		inventory[l++] = (ItemStack){ Block_Smooth_Stone_Slab, 0, 64 };
+			inventory[l++] = (ItemStack){Block_Wool, i, 1};
+		inventory[l++] = (ItemStack){Block_Wool, 0, 1};
+		inventory[l++] = (ItemStack){Block_Bedrock, 0, 1};
+		inventory[l++] = (ItemStack){Block_Smooth_Stone, 0, 64};
+		inventory[l++] = (ItemStack){Block_Smooth_Stone_Slab, 0, 64};
 		for (int i = 0; i < INVENTORY_QUICKSELECT_MAXSLOTS; i++)
-			quickSelectBar[i] = (ItemStack){ Block_Air, 0, 0 };
+			quickSelectBar[i] = (ItemStack){Block_Air, 0, 0};
 	}
 }
 
 void Player::update() {
 	view = Vector3<float>(-sinf(yaw) * cosf(pitch), sinf(pitch), -cosf(yaw) * cosf(pitch));
 
-	blockInSeight      = Raycast_Cast(world, Vector3<float>(position.x, position.y + PLAYER_EYEHEIGHT, position.z), view, &viewRayCast);
+	blockInSeight	   = Raycast_Cast(world, Vector3<float>(position.x, position.y + PLAYER_EYEHEIGHT, position.z), view, &viewRayCast);
 	blockInActionRange = blockInSeight && viewRayCast.distSqr < 5.f * 5.f * 5.f;
 }
 
@@ -78,14 +78,14 @@ void Player::jump(Vector3<float> accl) {
 		velocity.x = accl.x * 1.1f;
 		velocity.z = accl.z * 1.1f;
 		velocity.y = 6.7f;
-		jumped     = true;
+		jumped	   = true;
 		crouching  = false;
 	}
 }
 // i wont let it stay like this
 #include "client/gui/DebugUI.h"
-const float MaxWalkVelocity     = 4.3f;
-const float MaxFallVelocity     = -50.f;
+const float MaxWalkVelocity		= 4.3f;
+const float MaxFallVelocity		= -50.f;
 const float GravityPlusFriction = 10.f;
 void Player::move(float dt, Vector3<float> accl) {
 	breakPlaceTimeout -= dt;
@@ -109,15 +109,15 @@ void Player::move(float dt, Vector3<float> accl) {
 			speedFactor = 2.f;
 		else if (crouching)
 			speedFactor = 0.5f;
-		Vector3<float> newPos   = position + velocity * SimStep + accl * (SimStep * speedFactor);
+		Vector3<float> newPos	= position + velocity * SimStep + accl * (SimStep * speedFactor);
 		Vector3<float> finalPos = position;
 
 		bool wallCollision = false, wasGrounded = grounded;
 
 		grounded = false;
 		for (int j = 0; j < 3; j++) {
-			int i                   = (int[]){ 0, 2, 1 }[j];
-			bool collision          = false;
+			int i					= (int[]){0, 2, 1}[j];
+			bool collision			= false;
 			Vector3<float> axisStep = /*Vector3<float>(i == 0 ? newPos.x : position.x, i == 1 ? newPos.y : position.y,
 						 i == 2 ? newPos.z : position.z)*/
 				finalPos;
@@ -135,8 +135,8 @@ void Player::move(float dt, Vector3<float> accl) {
 							Box blockBox = Box_Create(pX, pY, pZ, 1, 1, 1);
 
 							Vector3<float> normal = Vector3<float>(0.f, 0.f, 0.f);
-							float depth           = 0.f;
-							int face              = 0;
+							float depth			  = 0.f;
+							int face			  = 0;
 
 							bool intersects = Collision_BoxIntersect(blockBox, playerBox, 0, &normal, &depth, &face);
 							collision |= intersects;
@@ -149,7 +149,7 @@ void Player::move(float dt, Vector3<float> accl) {
 			else if (i == 1) {
 				if (velocity.y < 0.f || accl.y < 0.f)
 					grounded = true;
-				jumped     = false;
+				jumped	   = false;
 				velocity.x = 0.f;
 				velocity.y = 0.f;
 				velocity.z = 0.f;
@@ -169,9 +169,9 @@ void Player::move(float dt, Vector3<float> accl) {
 
 		if (wallCollision && autoJumpEnabled) {
 			Vector3<float> nrmDiff = (newPos - position).normal();
-			Block block            = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 2,
+			Block block			   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 2,
 													 FastFloor(finalPos.z + nrmDiff.z));
-			Block landingBlock     = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 1,
+			Block landingBlock	   = world->getBlock(FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 1,
 													 FastFloor(finalPos.z + nrmDiff.z));
 			if (block == Block_Air && landingBlock != Block_Air)
 				jump(accl);

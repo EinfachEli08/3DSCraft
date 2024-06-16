@@ -18,8 +18,8 @@ class PolyGen : public ChunkWorkerObjBase {
 		~PolyGen();
 
 		void harvest();
-		u16 floodFill(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z, Direction::_ entrySide0, Direction::_ entrySide1,
-					  Direction::_ entrySide2);
+		uint16_t floodFill(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z, Direction::_ entrySide0,
+						   Direction::_ entrySide1, Direction::_ entrySide2);
 
 		void chunkFunction(WorkQueue* queue, WorkerItem item) override;
 
@@ -28,33 +28,33 @@ class PolyGen : public ChunkWorkerObjBase {
 					   ? world->getBlock((chunk->x * CHUNK_SIZE) + x, (cluster->y * CHUNK_SIZE) + y, (chunk->z * CHUNK_SIZE) + z)
 					   : cluster->blocks[x][y][z];
 		}
-		inline u8 fastMetadataFetch(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z) {
+		inline uint8_t fastMetadataFetch(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z) {
 			return (x < 0 || y < 0 || z < 0 || x >= CHUNK_SIZE || y >= CHUNK_SIZE || z >= CHUNK_SIZE)
 					   ? world->getMetadata((chunk->x * CHUNK_SIZE) + x, (cluster->y * CHUNK_SIZE) + y, (chunk->z * CHUNK_SIZE) + z)
 					   : (cluster->metadataLight[x][y][z] & 0xf);
 		}
-		inline void addFace(s8 x, s8 y, s8 z, Direction::_ dir, Block block, u8 metadata, s8 ao, bool transparent) {
+		inline void addFace(s8 x, s8 y, s8 z, Direction::_ dir, Block block, uint8_t metadata, s8 ao, bool transparent) {
 			if (x >= 0 && y >= 0 && z >= 0 && x < CHUNK_SIZE && y < CHUNK_SIZE && z < CHUNK_SIZE) {
 				faceBuffer[currentFace++] = (Face){x, y, z, dir, block, ao, metadata, transparent};
 				transparentFaces += transparent;
 			}
 		}
 		struct QueueElement {
-				s8 x, y, z;
+				int8_t x, y, z;
 		};
 		struct VBOUpdate {
 				VBO_Block vbo, transparentVBO;
 				int x, y, z;
 				size_t vertices, transparentVertices;
-				u8 delay;
-				u16 visibility;
+				uint8_t delay;
+				uint16_t visibility;
 		};
 		struct Face {
-				s8 x, y, z;
+				int8_t x, y, z;
 				Direction::_ direction;
 				Block block;
-				s8 ao;
-				u8 metadata;
+				int8_t ao;
+				uint8_t metadata;
 				bool transparent;
 		};
 

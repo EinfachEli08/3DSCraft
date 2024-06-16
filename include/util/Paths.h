@@ -6,6 +6,6 @@ using std::string;
 
 namespace Path {
 const string root	= "sdmc:/craft/";
-const string assets = "assets/";
-const string saves	= "saves/";
+const string assets = root + "assets/";
+const string saves	= root + "saves/";
 }  // namespace Path
