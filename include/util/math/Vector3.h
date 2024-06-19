@@ -25,7 +25,11 @@ union Vector3 {
 		Vector3 operator-(const Vector3<U>& other) const {
 			return Vector3{x - other.x, y - other.y, z - other.z};
 		}
+		Vector3 operator+(T addition) const { return Vector3{x + addition, y + addition, z + addition}; }
+		Vector3 operator-(T difference) const { return Vector3{x - difference, y - difference, z - difference}; }
 		Vector3 operator*(T multiplier) const { return Vector3{x * multiplier, y * multiplier, z * multiplier}; }
+		Vector3 operator+(T* addition) const { return Vector3{x + addition[0], y + addition[1], z + addition[2]}; }
+		Vector3 operator-(T* difference) const { return Vector3{x - difference[0], y - difference[1], z - difference[2]}; }
 
 		template <typename U>
 		T dot(const Vector3<U>& other) const {
