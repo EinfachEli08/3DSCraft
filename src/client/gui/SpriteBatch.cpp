@@ -11,14 +11,14 @@
 #include "client/renderer/VertexFmt.h"
 #include "client/renderer/texture/Texture.h"
 
-typedef struct {
-		int depth;
+struct Sprite {
+		s32 depth;
 		C3D_Tex* texture;
-		int16_t x0, y0, x1, y1;	 // top left, right
-		int16_t x2, y2, x3, y3;	 // bottom left, right
-		int16_t u0, v0, u1, v1;
-		int16_t color;
-} Sprite;
+		s16 x0, y0, x1, y1;	 // top left, right
+		s16 x2, y2, x3, y3;	 // bottom left, right
+		s16 u0, v0, u1, v1;
+		s16 color;
+};
 
 static vector<Sprite*> cmdList;
 static C3D_Tex* currentTexture = nullptr;
@@ -190,8 +190,7 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 								 color16};
 		cmdList.push_back(spr);
 
-#undef unpackP
-	}*/
+#undef unpackP*/
 }
 
 int SpriteBatch_PushText(int x, int y, int z, int16_t color, bool shadow, int wrap, int* ySize, const char* fmt, ...) {
