@@ -1,6 +1,5 @@
 #include "util/JsonIO.h"
 
-#include "client/Exception.h"
 #include "util/Paths.h"
 
 // Load
@@ -51,8 +50,11 @@ void JsonRead::parseJsonValue(cJSON* jsonValue, void* variablePtr) {
 	} else if (cJSON_IsArray(jsonValue))
 		deserializeArray(jsonValue, variablePtr);
 
+	else if (cJSON_IsNull(jsonValue))
+		Crash("Reading NULL value from JSON");
+
 	else
-		Crash("Unsupported JSON type");
+		Crash("Unsupported JSON type\nkey string: %s\nkey ref: %i\nkey type: %i", jsonValue->string, jsonValue, jsonValue->type);
 }
 
 void JsonRead::deserializeArray(cJSON* arrayObj, void* arrayPtr) {
@@ -72,18 +74,20 @@ void JsonRead::jsonRead(const char* filename) {
 		return;
 	}
 
-	for (JsonValue& value : mCodec) {
-		if (value.key.empty()) {
-			Crash("No key provided in JsonValue");
+	std::string strVal = "";
+	for (JsonValue value : mCodec) {
+		if (!value.key) {
+			Crash("No key provided in JsonValue\nCodec Size: %i\nValue reference: %i", mCodec.size(), value.dataRef);
 			continue;
 		}
 
 		cJSON* obj = nullptr;
-		if (value.key.find('.') != std::string::npos)
-			obj = getNestedObject(json, value.key);
+		strVal	   = value.key;
+		if (strVal.find('.') != std::string::npos)
+			obj = getNestedObject(json, strVal);
 
 		else
-			obj = cJSON_GetObjectItemCaseSensitive(json, value.key.c_str());
+			obj = cJSON_GetObjectItemCaseSensitive(json, value.key);
 
 		if (!obj) {
 			Crash("Could not get json key: %s from file: %s", value.key, filename);

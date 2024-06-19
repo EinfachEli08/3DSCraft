@@ -1,12 +1,13 @@
 #pragma once
 
+#include "client/Exception.h"
 #include <cJSON/cJSON.h>
 #include <string>
 #include <vector/vector.h>
 
 class JsonRead {
 		struct JsonValue {
-				const std::string key;
+				const char* key;
 				void* dataRef;
 		};
 
@@ -18,9 +19,10 @@ class JsonRead {
 		void jsonRead(const char* filename);
 
 		template <typename T>
-		void jsonAdd(const std::string& key, T* dataRef) {
-			const std::string myKey = key;
-			const JsonValue val		= {myKey, (void*)dataRef};
+		void jsonAdd(const char* key, T* dataRef) {
+			JsonValue val;
+			val.key		= strdup(key);
+			val.dataRef = (void*)dataRef;
 			mCodec.push_back(val);
 		}
 
