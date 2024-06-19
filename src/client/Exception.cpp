@@ -13,10 +13,10 @@ void Crash(const char* reason, ...) {
 	va_start(vl, reason);
 	vprintf(reason, vl);
 
-	FILE* f = fopen("sdmc:/craft/crash.txt", "w");
+	/*FILE* f = fopen("sdmc:/craft/crash.txt", "w");
 	vfprintf(f, reason, vl);
 	fclose(f);
-
+*/
 	va_end(vl);
 
 	printf("\n\nFatal error, press start to exit\n");
