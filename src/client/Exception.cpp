@@ -6,20 +6,26 @@
 
 #include "client/Exception.h"
 
-void Crash(const char* reason, ...) {
+void CrashBase(bool isExit, const char* reason, va_list args) {
 	consoleInit(GFX_TOP, NULL);
 
-	va_list vl;
-	va_start(vl, reason);
-	vprintf(reason, vl);
+	vprintf(reason, args);	// Print to console
 
-	/*FILE* f = fopen("sdmc:/craft/crash.txt", "w");
-	vfprintf(f, reason, vl);
-	fclose(f);
-*/
-	va_end(vl);
+	/* Example: Print to file
+	FILE* f = fopen("sdmc:/craft/crash.txt", "w");
+	if (f) {
+		vfprintf(f, reason, args);
+		fclose(f);
+	}
+	*/
 
-	printf("\n\nFatal error, press start to exit\n");
+	va_end(args);
+
+	if (isExit)
+		printf("\n\nFatal error, press start to exit\n");
+	else
+		printf("\n\nBreakpoint, press start to continue\n");
+
 	while (aptMainLoop()) {
 		gspWaitForVBlank();
 
@@ -29,5 +35,24 @@ void Crash(const char* reason, ...) {
 			break;
 	}
 
-	exit(EXIT_FAILURE);
+	if (isExit)
+		exit(EXIT_FAILURE);
+}
+
+void Crash(const char* reason, ...) {
+	va_list args;
+	va_start(args, reason);
+
+	CrashBase(true, reason, args);	// Pass va_list to CrashOrNot
+
+	va_end(args);
+}
+
+void Break(const char* reason, ...) {
+	va_list args;
+	va_start(args, reason);
+
+	CrashBase(false, reason, args);	 // Pass va_list to CrashOrNot
+
+	va_end(args);
 }

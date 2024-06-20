@@ -9,36 +9,40 @@ constexpr double TICKS_PER_MSEC = 268111.856;
 
 #include "util/JsonIO.h"
 
-class Testing : JsonRead {
+class Testing : public JsonRead {
 		const char* particle;
 		int uv[4];
 
 	public:
 		Testing() {
-			jsonAdd("textures.particle", &particle);
-			jsonAdd("elements[0].faces.north.uv", &particle);
+			jsonAdd<const char*>("textures.particle", &particle);
+			jsonAdd<int>("elements.0.faces.north.uv", uv);
 
 			jsonRead("json.json");
 
-			Crash("PRINTING: %s and %i%i%i%i", particle, uv[0], uv[1], uv[2], uv[3]);
+			Break("PRINTING: %s and %i %i %i %i", particle, uv[0], uv[1], uv[2], uv[3]);
 		}
 };
 
 int main() {
 	gfxInitDefault();
-
 	gfxSet3D(true);
-
 	romfsInit();
 
 	Testing* test = new Testing();
 
-	while (true) {}
+	while (aptMainLoop()) {
+		gspWaitForVBlank();
 
-	delete sMinecraft;
+		hidScanInput();
+
+		if (hidKeysDown() & KEY_START)
+			break;
+	}
+
+	delete test;
 
 	romfsExit();
-
 	gfxExit();
 	return 0;
 }

@@ -1,8 +1,5 @@
 #include "util/JsonIO.h"
-
 #include "util/Paths.h"
-
-// Load
 
 cJSON* JsonRead::loadFromFile(const char* filePath) {
 	const std::string path = Path::root + filePath;
@@ -34,34 +31,31 @@ cJSON* JsonRead::loadFromFile(const char* filePath) {
 }
 
 void JsonRead::parseJsonValue(cJSON* jsonValue, void* variablePtr) {
-	if (cJSON_IsBool(jsonValue))
-		*((bool*)variablePtr) = cJSON_IsTrue(jsonValue) ? true : false;
+	if (cJSON_IsString(jsonValue))
+		*(char**)variablePtr = strdup(cJSON_Print(jsonValue));
 
 	else if (cJSON_IsNumber(jsonValue)) {
-		if (strstr(jsonValue->valuestring, ".") == nullptr)
+		if (jsonValue->valuestring == nullptr || strstr(jsonValue->valuestring, ".") == nullptr) {
 			*((int*)variablePtr) = jsonValue->valueint;
-		else
+		} else {
 			*((double*)variablePtr) = jsonValue->valuedouble;
-
-	} else if (cJSON_IsString(jsonValue)) {
-		strncpy((char*)variablePtr, jsonValue->valuestring, 256);
-		((char*)variablePtr)[49] = '\0';  // Ensure null termination
-
-	} else if (cJSON_IsArray(jsonValue))
+		}
+	} else if (cJSON_IsBool(jsonValue)) {
+		*((bool*)variablePtr) = cJSON_IsTrue(jsonValue) ? true : false;
+	} else if (cJSON_IsArray(jsonValue)) {
 		deserializeArray(jsonValue, variablePtr);
-
-	else if (cJSON_IsNull(jsonValue))
+	} else if (cJSON_IsNull(jsonValue)) {
 		Crash("Reading NULL value from JSON");
-
-	else
-		Crash("Unsupported JSON type\nkey string: %s\nkey ref: %i\nkey type: %i", jsonValue->string, jsonValue, jsonValue->type);
+	} else {
+		Crash("Unsupported JSON type\nkey string: %s\nkey ref: %p\nkey type: %d", jsonValue->string, jsonValue, jsonValue->type);
+	}
 }
 
 void JsonRead::deserializeArray(cJSON* arrayObj, void* arrayPtr) {
 	cJSON* arrayItem = nullptr;
 	int index		 = 0;
 	cJSON_ArrayForEach(arrayItem, arrayObj) {
-		parseJsonValue(arrayItem, (void*)((char*)arrayPtr + index));
+		parseJsonValue(arrayItem, (void*)((char*)arrayPtr + index * sizeof(arrayItem->valueint)));
 		index++;
 	}
 }
@@ -74,74 +68,72 @@ void JsonRead::jsonRead(const char* filename) {
 		return;
 	}
 
-	std::string strVal = "";
-	for (JsonValue value : mCodec) {
-		if (!value.key) {
-			Crash("No key provided in JsonValue\nCodec Size: %i\nValue reference: %i", mCodec.size(), value.dataRef);
+	size_t size = mCodec.size();
+	for (size_t i = 0; i < size; i++) {
+		if (!mCodec[i].key) {
+			Crash("No key provided in JsonValue\nCodec Size: %zu\nValue reference: %p\n Key: %s", size, mCodec[i].dataRef, mCodec[i].key);
 			continue;
 		}
 
-		cJSON* obj = nullptr;
-		strVal	   = value.key;
-		if (strVal.find('.') != std::string::npos)
-			obj = getNestedObject(json, strVal);
-
-		else
-			obj = cJSON_GetObjectItemCaseSensitive(json, value.key);
-
+		cJSON* obj = getNestedObject(json, mCodec[i].key);
 		if (!obj) {
-			Crash("Could not get json key: %s from file: %s", value.key, filename);
+			Crash("Could not get json key: %s from file: %s", mCodec[i].key, filename);
 			continue;
 		}
 
-		parseJsonValue(obj, value.dataRef);
+		parseJsonValue(obj, mCodec[i].dataRef);
 	}
 
 	cJSON_Delete(json);
 }
+cJSON* JsonRead::getNestedObject(cJSON* root, const char* nestedKey) {
+	cJSON* current		= root;
+	const char* pos		= nestedKey;
+	const char* prevPos = nestedKey;
 
-cJSON* JsonRead::getNestedObject(cJSON* root, const std::string& nestedKey) {
-	cJSON* current = root;
-	std::string key;
-	size_t pos	   = 0;
-	size_t prevPos = 0;
+	while ((pos = strchr(prevPos, '.')) != nullptr) {
+		// Extract key segment
+		char keySegment[256];
+		size_t length = pos - prevPos;
+		strncpy(keySegment, prevPos, length);
+		keySegment[length] = '\0';
 
-	while ((pos = nestedKey.find('.', prevPos)) != std::string::npos) {
-		key		= nestedKey.substr(prevPos, pos - prevPos);
-		current = cJSON_GetObjectItemCaseSensitive(current, key.c_str());
-		if (!current) {
-			Crash("Returned nullptr %s, %i", key.c_str(), pos);
-			return nullptr;
+		// Check if the current segment is an array index
+		if (isdigit(keySegment[0])) {
+			int arrayIndex = atoi(keySegment);
+			current		   = cJSON_GetArrayItem(current, arrayIndex);
+			if (!current) {
+				Crash("Returned nullptr for array index: %d", arrayIndex);
+				return nullptr;
+			}
+		} else {
+			// Navigate to the next object key
+			current = cJSON_GetObjectItemCaseSensitive(current, keySegment);
+			if (!current) {
+				Crash("Returned nullptr for key segment: %s\nkey: %s\nprevPos: %s", keySegment, nestedKey, prevPos);
+				return nullptr;
+			}
 		}
+
+		// Move to the next segment
 		prevPos = pos + 1;
 	}
-	key				= nestedKey.substr(prevPos);
-	cJSON* finalObj = cJSON_GetObjectItemCaseSensitive(current, key.c_str());
 
-	return finalObj;
-}
-
-// Save
-/*
-void JsonRead::saveToFile(const char* filePath, const cJSON* json) {
-	const std::string path = Path::root + filePath;
-
-	char* jsonString = cJSON_Print(json);
-	if (!jsonString) {
-		Crash("Error printing JSON");
-		return;
+	// Handle the last segment (could be an array index or object key)
+	if (isdigit(prevPos[0])) {
+		int arrayIndex = atoi(prevPos);
+		current		   = cJSON_GetArrayItem(current, arrayIndex);
+		if (!current) {
+			Crash("Returned nullptr for array index: %d", arrayIndex);
+			return nullptr;
+		}
+	} else {
+		current = cJSON_GetObjectItemCaseSensitive(current, prevPos);
+		if (!current) {
+			Crash("Returned nullptr for key: %s", prevPos);
+			return nullptr;
+		}
 	}
 
-	FILE* file = fopen(path.c_str(), "wb");
-	if (!file) {
-		free(jsonString);
-		Crash("Could not open file for writing: %s", path.c_str());
-		return;
-	}
-
-	fwrite(jsonString, 1, strlen(jsonString), file);
-	fclose(file);
-
-	free(jsonString);
+	return current;
 }
-*/
