@@ -47,6 +47,16 @@ static inline bool AABB_Overlap(float x0, float y0, float z0, float w0, float h0
 								float h1, float d1) {
 	return (x0 <= x1 + w1 && x0 + w0 >= x1) && (y0 <= y1 + h1 && y0 + h0 >= y1) && (z0 <= z1 + d1 && z0 + d0 >= z1);
 }
+static inline bool isBetween(s64 min, s64 max, s64 value) {
+	return value > min && value < max;
+}
+static inline int smallestPOT(int value) {
+	int power = 1;
+	while (power < value) {
+		power <<= 1;
+	}
+	return power;
+}
 
 // Define constants for degree to radian and radian to degree conversions
 constexpr float DEG_TO_RAD = (M_PI * 2.f / 360.f);
