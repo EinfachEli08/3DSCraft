@@ -7,6 +7,9 @@
 constexpr double TICKS_PER_MSEC = 268111.856;
 #endif
 
+#include "util/FileIO.h"
+#include "util/JsonUtils.h"
+
 int main() {
 	gfxInitDefault();
 
