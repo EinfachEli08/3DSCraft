@@ -6,7 +6,7 @@
 #include "client/Exception.h"
 #include "client/renderer/texture/Texture.h"
 
-class NativeImage : Texture {
+class NativeImage : public Texture {
 		u8* mBuffer = nullptr;
 
 		bool isOutsideBounds(int x, int y);
