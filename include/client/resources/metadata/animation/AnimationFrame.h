@@ -11,6 +11,6 @@ class AnimationFrame {
 		AnimationFrame(u16 frameIndexIn, u16 frameTimeIn) : mFrameIndex(frameIndexIn), mFrameTime(frameTimeIn) {}
 
 		bool hasNoTime() const { return mFrameTime == -1; }
-		int getFrameTime() const { return mFrameTime; }
-		int getFrameIndex() const { return mFrameIndex; }
+		u16 getFrameTime() const { return mFrameTime; }
+		u16 getFrameIndex() const { return mFrameIndex; }
 };
