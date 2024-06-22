@@ -3,12 +3,12 @@
 #include <3ds/types.h>
 
 class AnimationFrame {
-		u8 mFrameIndex;
-		u8 mFrameTime;
+		u16 mFrameIndex;
+		u16 mFrameTime;
 
 	public:
-		AnimationFrame(u8 frameIndexIn) : mFrameIndex(frameIndexIn), mFrameTime(-1) {}
-		AnimationFrame(u8 frameIndexIn, u8 frameTimeIn) : mFrameIndex(frameIndexIn), mFrameTime(frameTimeIn) {}
+		AnimationFrame(u16 frameIndexIn) : mFrameIndex(frameIndexIn), mFrameTime(-1) {}
+		AnimationFrame(u16 frameIndexIn, u16 frameTimeIn) : mFrameIndex(frameIndexIn), mFrameTime(frameTimeIn) {}
 
 		bool hasNoTime() const { return mFrameTime == -1; }
 		int getFrameTime() const { return mFrameTime; }

@@ -8,6 +8,7 @@
 template <typename T>
 union Vector3 {
 		T v[3];
+		u8 penils;
 		struct {
 				T x, y, z;
 		};
