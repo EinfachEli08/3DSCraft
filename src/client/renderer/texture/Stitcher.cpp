@@ -3,42 +3,36 @@
 #include "client/Exception.h"
 #include "util/math/NumberUtils.h"
 
-template <typename T>
-Stitcher<T>::Region::Region(int x, int y, int width, int height) : originX(x), originY(y), width(width), height(height), holder(nullptr) {
+Stitcher::Region::Region(int x, int y, int width, int height) : originX(x), originY(y), width(width), height(height), holder(nullptr) {
 }
-
-template <typename T>
-bool Stitcher<T>::holderComparator(const Holder& a, const Holder& b) {
-	if (a.height != b.height)
-		return a.height > b.height;
-	if (a.width != b.width)
-		return a.width > b.width;
-	return a.entry->name() < b.entry->name();
-}
-
-template <typename T>
-Stitcher<T>::Stitcher(int maxWidth, int maxHeight, int mipLevel)
+Stitcher::Stitcher(int maxWidth, int maxHeight, int mipLevel)
 	: maxWidth(maxWidth), maxHeight(maxHeight), mipLevel(mipLevel), storageX(0), storageY(0) {
 }
 
-template <typename T>
-int Stitcher<T>::getWidth() const {
+int holderComparator(const void* ga, const void* gb) {
+	const Stitcher::Holder* a = (const Stitcher::Holder*)ga;
+	const Stitcher::Holder* b = (const Stitcher::Holder*)gb;
+	if (a->height != b->height)
+		return a->height > b->height;
+	if (a->width != b->width)
+		return a->width > b->width;
+	return a->entry->name().getPath() < b->entry->name().getPath();
+}
+
+int Stitcher::getWidth() const {
 	return storageX;
 }
 
-template <typename T>
-int Stitcher<T>::getHeight() const {
+int Stitcher::getHeight() const {
 	return storageY;
 }
 
-template <typename T>
-void Stitcher<T>::registerSprite(T* entry) {
+void Stitcher::registerSprite(Entry* entry) {
 	Holder holder(entry, mipLevel);
 	texturesToBeStitched.push_back(holder);
 }
 
-template <typename T>
-void Stitcher<T>::stitch() {
+void Stitcher::stitch() {
 	vector<Holder> list = texturesToBeStitched;
 	list.sort(holderComparator);
 
@@ -49,20 +43,17 @@ void Stitcher<T>::stitch() {
 	}
 }
 
-template <typename T>
-void Stitcher<T>::gatherSprites(void (*spriteLoader)(T*, int, int)) {
+void Stitcher::gatherSprites(void (*spriteLoader)(Entry*, int, int)) {
 	for (Region& region : storage) {
 		region.walk(spriteLoader);
 	}
 }
 
-template <typename T>
-int Stitcher<T>::smallestFittingMinTexel(int value, int mipLevel) {
+int Stitcher::smallestFittingMinTexel(int value, int mipLevel) {
 	return ((value >> mipLevel) + ((value & ((1 << mipLevel) - 1)) == 0 ? 0 : 1)) << mipLevel;
 }
 
-template <typename T>
-bool Stitcher<T>::addToStorage(Holder& holder) {
+bool Stitcher::addToStorage(Holder& holder) {
 	for (Region& region : storage) {
 		if (region.add(holder)) {
 			return true;
@@ -71,8 +62,7 @@ bool Stitcher<T>::addToStorage(Holder& holder) {
 	return expand(holder);
 }
 
-template <typename T>
-bool Stitcher<T>::expand(Holder& holder) {
+bool Stitcher::expand(Holder& holder) {
 	int newWidth  = smallestPOT(storageX + holder.width);
 	int newHeight = smallestPOT(storageY + holder.height);
 
@@ -101,15 +91,13 @@ bool Stitcher<T>::expand(Holder& holder) {
 	return storage.back().add(holder);
 }
 
-template <typename T>
-Stitcher<T>::Holder::Holder(T* entry, int mipLevel)
+Stitcher::Holder::Holder(Entry* entry, int mipLevel)
 	: entry(entry),
 	  width(Stitcher::smallestFittingMinTexel(entry->width(), mipLevel)),
 	  height(Stitcher::smallestFittingMinTexel(entry->height(), mipLevel)) {
 }
 
-template <typename T>
-bool Stitcher<T>::Region::add(Holder& holder) {
+bool Stitcher::Region::add(Holder& holder) {
 	if (this->holder != nullptr) {
 		return false;
 	}
@@ -154,8 +142,7 @@ bool Stitcher<T>::Region::add(Holder& holder) {
 	return false;
 }
 
-template <typename T>
-void Stitcher<T>::Region::walk(void (*spriteLoader)(T*, int, int)) {
+void Stitcher::Region::walk(void (*spriteLoader)(Entry*, int, int)) {
 	if (holder != nullptr) {
 		spriteLoader(holder->entry, originX, originY);
 	} else {

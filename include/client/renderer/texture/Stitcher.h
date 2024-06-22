@@ -6,15 +6,12 @@
 #include <string>
 #include <vector/vector.h>
 
-template <typename T>
 class Stitcher {
 	private:
 		struct Entry;
 		struct Holder;
 		struct Region;
 		using Comparator = bool (*)(const Holder&, const Holder&);
-
-		static bool holderComparator(const Holder& a, const Holder& b);
 
 		int mipLevel;
 		vector<Holder> texturesToBeStitched;
@@ -24,27 +21,25 @@ class Stitcher {
 		int maxWidth;
 		int maxHeight;
 
+		static int smallestFittingMinTexel(int value, int mipLevel);
+		bool addToStorage(Holder& holder);
+		bool expand(Holder& holder);
+
 	public:
 		Stitcher(int maxWidth, int maxHeight, int mipLevel);
 
 		int getWidth() const;
 		int getHeight() const;
-		void registerSprite(T* entry);
+		void registerSprite(Entry* entry);
 		void stitch();
-		void gatherSprites(void (*spriteLoader)(T*, int, int));
-
-	private:
-		static int smallestFittingMinTexel(int value, int mipLevel);
-		bool addToStorage(Holder& holder);
-		bool expand(Holder& holder);
-		static int smallestEncompassingPowerOfTwo(int value);
+		void gatherSprites(void (*spriteLoader)(Entry*, int, int));
 
 		struct Holder {
-				T* entry;
+				Entry* entry;
 				int width;
 				int height;
 
-				Holder(T* entry, int mipLevel);
+				Holder(Entry* entry, int mipLevel);
 		};
 
 		struct Region {
@@ -57,10 +52,14 @@ class Stitcher {
 
 				Region(int x, int y, int width, int height);
 				bool add(Holder& holder);
-				void walk(void (*spriteLoader)(T*, int, int));
+				void walk(void (*spriteLoader)(Entry*, int, int));
 		};
 		class Entry {
 			public:
-				virtual const char* name() const = 0;
+				virtual u16 width() const = 0;
+
+				virtual u16 height() const = 0;
+
+				virtual ResourceLocation name() const = 0;
 		};
 };

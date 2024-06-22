@@ -39,9 +39,7 @@ convert_to_t3x_single() {
 pack_textures() {
     find "$1" -mindepth 1 -maxdepth 1 -type d | while read -r dir; do
 	    compression="rgba8"
-        #if [ "$(basename "$dir")" = "entity" ]; then
-        #    compression="etc1"
-        #fi
+        
         find "$dir" -mindepth 1 -maxdepth 4 -type f -name "*.png" | while read -r png_file; do
             convert_to_t3x_single "$png_file" "$1" compression
         done
