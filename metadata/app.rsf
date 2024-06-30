@@ -13,8 +13,7 @@ TitleInfo:
 CardInfo:
   MediaSize               : 128MB # 128MB / 256MB / 512MB / 1GB / 2GB / 4GB
   MediaType               : Card1 # Card1 / Card2
-  CardDevice              : NorFlash # NorFlash(Pick this if you use savedata) / None
-  
+  CardDevice              : None # NorFlash(Pick this if you use savedata) / None
 
 Option:
   UseOnSD                : true # true if App is to be installed to SD

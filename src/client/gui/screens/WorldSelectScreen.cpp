@@ -14,7 +14,7 @@
 #include "client/renderer/VertexFmt.h"
 
 typedef struct {
-		uint32_t lastPlayed;
+		u32 lastPlayed;
 		char name[WORLD_NAME_LIMIT];
 		char path[256];
 } WorldInfo;

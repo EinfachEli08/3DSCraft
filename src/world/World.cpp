@@ -124,7 +124,7 @@ void World::setBlock(int x, int y, int z, Block block) {
 	}
 }
 
-void World::setBlockAndMeta(int x, int y, int z, Block block, uint8_t metadata) {
+void World::setBlockAndMeta(int x, int y, int z, Block block, u8 metadata) {
 	if (y < 0 || y >= CHUNK_HEIGHT)
 		return;
 	int cX		 = WorldToChunkCoord(x);
@@ -139,7 +139,7 @@ void World::setBlockAndMeta(int x, int y, int z, Block block, uint8_t metadata) 
 	}
 }
 
-uint8_t World::getMetadata(int x, int y, int z) {
+u8 World::getMetadata(int x, int y, int z) {
 	if (y < 0 || y >= CHUNK_HEIGHT)
 		return 0;
 	Chunk* chunk = getChunk(WorldToChunkCoord(x), WorldToChunkCoord(z));
@@ -148,7 +148,7 @@ uint8_t World::getMetadata(int x, int y, int z) {
 	return 0;
 }
 
-void World::setMetadata(int x, int y, int z, uint8_t metadata) {
+void World::setMetadata(int x, int y, int z, u8 metadata) {
 	if (y < 0 || y >= CHUNK_HEIGHT)
 		return;
 	int cX		 = WorldToChunkCoord(x);

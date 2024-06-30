@@ -17,16 +17,16 @@ int main() {
 
 	romfsInit();
 
-	sMinecraft = new Minecraft();
+	Minecraft* gMinecraft = new Minecraft();
 
-	uint64_t lastTime = svcGetSystemTick();
+	u64 lastTime = svcGetSystemTick();
 	float dt = 0.f, timeFull = 0.f, fpsClock = 0.f;
 	int frameCounter = 0, fps = 0;
 
-	while (aptMainLoop() && sMinecraft->isRunning()) {
-		uint64_t currentTime = svcGetSystemTick();
-		dt					 = ((float)(currentTime / (float)TICKS_PER_MSEC) - (float)(lastTime / (float)TICKS_PER_MSEC)) / 1000.f;
-		lastTime			 = currentTime;
+	while (aptMainLoop() && gMinecraft->isRunning()) {
+		u64 currentTime = svcGetSystemTick();
+		dt				= ((float)(currentTime / (float)TICKS_PER_MSEC) - (float)(lastTime / (float)TICKS_PER_MSEC)) / 1000.f;
+		lastTime		= currentTime;
 		timeFull += dt;
 
 		frameCounter++;
@@ -37,12 +37,12 @@ int main() {
 			fpsClock	 = 0.f;
 		}
 
-		sMinecraft->tick(dt, timeFull, fps);
+		gMinecraft->tick(dt, timeFull, fps);
 
 		lastTime = svcGetSystemTick();	// fix timing
 	}
 
-	delete sMinecraft;
+	delete gMinecraft;
 
 	romfsExit();
 

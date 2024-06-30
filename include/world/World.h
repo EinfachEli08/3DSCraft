@@ -21,7 +21,7 @@ const short WorldGenTypeCount = 5;
 };	// namespace Enum
 
 struct GeneratorSettings {
-		uint64_t seed;
+		u64 seed;
 		Enum::WorldGenType type;
 		union {
 				struct {
@@ -47,9 +47,9 @@ class World {
 		Block getBlock(int x, int y, int z);
 		void setBlock(int x, int y, int z, Block block);
 
-		void setBlockAndMeta(int x, int y, int z, Block block, uint8_t metadata);
-		uint8_t getMetadata(int x, int y, int z);
-		void setMetadata(int x, int y, int z, uint8_t metadata);
+		void setBlockAndMeta(int x, int y, int z, Block block, u8 metadata);
+		u8 getMetadata(int x, int y, int z);
+		void setMetadata(int x, int y, int z, u8 metadata);
 
 		void updateChunkCache(int orginX, int orginZ);
 		int getHeight(int x, int z);

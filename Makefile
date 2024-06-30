@@ -12,9 +12,9 @@ endif
 TOPDIR ?= $(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
-VERSION_MAJOR	:= 1
-VERSION_MINOR	:= 0
-VERSION_MICRO	:= 0
+VER_MAJ			:= 4
+VER_MIN			:= 0
+VER_MIC			:= 0 
 
 DEBUG			?=	1
 
@@ -40,7 +40,7 @@ RSF_PATH		:=	$(META)/app.rsf
 LOGO			:=	$(META)/logo.bcma.lz
 ICON_FLAGS		:=	nosavebackups,visible
 
-LIBS			:= -lgame -lcitro2dd -lcitro3dd -lctru -lstdc++ -lm -ljansson -lcurl #tex3ds
+LIBS			:= -lgame -lcitro2dd -lcitro3dd -lctru -lstdc++ -lm -lpng -lz
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -151,7 +151,7 @@ BANNERTOOL   ?= tools/bannertool.exe
 MAKEROM      ?= tools/makerom.exe
 
 MAKEROM_ARGS += -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(BUILD)/icon.icn"
-MAKEROM_ARGS += -major $(VERSION_MAJOR) -minor $(VERSION_MINOR) -micro $(VERSION_MICRO)
+MAKEROM_ARGS += -major $(VER_MAJ) -minor $(VER_MIN) -micro $(VER_MIC)
 
 ifneq ($(strip $(LOGO)),)
 	MAKEROM_ARGS += -logo "$(LOGO)"
@@ -177,7 +177,7 @@ endif
 ifeq ($(DEBUG), 1)
 	VERSION_BUILD := Debug build
 else
-	VERSION_BUILD := Release build v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_MICRO)
+	VERSION_BUILD := Release build v$(VER_MAJ).$(VER_MIN).$(VER_MIC)
 endif
 
 #---------------------------------------------------------------------------------------
@@ -294,6 +294,7 @@ lib: lib/libgame.a
 lib/libgame.a: $(LIBOBJS)
 	@echo Building library file...
 	@$(AR) rcs lib/libgame.a $^
+	@echo built ... lib/libgame.a
 
 lib/%.o: lib/%.cpp
 	@echo $@...

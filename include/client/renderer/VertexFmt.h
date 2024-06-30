@@ -27,5 +27,5 @@ struct GuiVertex {
 // .4 fix comma
 #define SHADER_RGB_DARKEN(a, f) SHADER_RGB(((int)SHADER_R(a)) * f / 16, ((int)SHADER_G(a)) * f / 16, ((int)SHADER_B(a)) * f / 16)
 
-int16_t HSV16_ToRGB(int16_t hsv);
-int16_t RGB16_ToHSV(uint16_t rgb);
+s16 HSV16_ToRGB(s16 hsv);
+s16 RGB16_ToHSV(u16 rgb);

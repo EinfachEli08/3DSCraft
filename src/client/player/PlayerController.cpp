@@ -3,6 +3,7 @@
 #include <ini/ini.h>
 #include <unistd.h>
 
+#include "Project.h"
 #include "commands/CommandLine.h"
 #include "util/Paths.h"
 #include "util/math/NumberUtils.h"
@@ -149,9 +150,7 @@ PlayerController::PlayerController(Player* player) {
 	breakPlaceTimeout = 0.f;
 	player			  = player;
 
-	bool isNew3ds = false;
-	APT_CheckNew3DS(&isNew3ds);
-	if (isNew3ds) {
+	if (gIsNew3ds) {
 		controlScheme			= n3ds_default_scheme;
 		player->autoJumpEnabled = false;
 	} else {

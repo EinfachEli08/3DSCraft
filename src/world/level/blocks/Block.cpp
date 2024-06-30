@@ -30,7 +30,7 @@ void Block_Deinit() {
 C3D_Tex* Block_GetTileSet() {
 }
 
-void Block_GetTexture(Block block, int _direction, uint8_t metadata, int16_t* out_uv) {
+void Block_GetTexture(Block block, int _direction, u8 metadata, s16* out_uv) {
 	/*int direction	= (int)_direction;
 	Texture::Tile i = {0, 0, 0};
 	switch (block) {
@@ -108,7 +108,7 @@ void Block_GetTexture(Block block, int _direction, uint8_t metadata, int16_t* ou
 #define extractB(c) ((c) & 0xff)
 /*#define toRGB16(c) \
 	{ extractR(c), extractG(c), extractB(c) }*/
-void Block_GetColor(Block block, uint8_t metadata, int _direction, uint8_t out_rgb[]) {
+void Block_GetColor(Block block, u8 metadata, int _direction, u8 out_rgb[]) {
 	int direction = (int)_direction;
 	if ((block == Block_Grass && direction == Direction::UP) || block == Block_Leaves) {
 		out_rgb[0] = 140;
@@ -117,8 +117,8 @@ void Block_GetColor(Block block, uint8_t metadata, int _direction, uint8_t out_r
 		return;
 	}
 	// white, orange, magenta, light blue, yellow, lime, pink, gray, silver, cyan, purple, blue, green, red, black
-	const uint32_t dies[] = {(16777215), (14188339), (11685080), (6724056), (15066419), (8375321), (15892389), (5000268),
-							 (10066329), (5013401),	 (8339378),	 (3361970), (6704179),	(6717235), (10040115), (1644825)};
+	const u32 dies[] = {(16777215), (14188339), (11685080), (6724056), (15066419), (8375321), (15892389), (5000268),
+						(10066329), (5013401),	(8339378),	(3361970), (6704179),  (6717235), (10040115), (1644825)};
 	if (block == Block_Wool) {
 		out_rgb[0] = extractR(dies[metadata]);
 		out_rgb[1] = extractG(dies[metadata]);
@@ -130,7 +130,7 @@ void Block_GetColor(Block block, uint8_t metadata, int _direction, uint8_t out_r
 	}
 }
 
-bool Block_Opaque(Block block, uint8_t metadata) {
+bool Block_Opaque(Block block, u8 metadata) {
 	return block != Block_Air && block != Block_Leaves && block != Block_Glass;
 }
 

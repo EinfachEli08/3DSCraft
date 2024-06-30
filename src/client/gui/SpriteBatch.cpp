@@ -12,7 +12,7 @@
 #include "client/renderer/texture/Texture.h"
 
 struct Sprite {
-		s32 depth;
+		int depth;
 		C3D_Tex* texture;
 		s16 x0, y0, x1, y1;	 // top left, right
 		s16 x2, y2, x3, y3;	 // bottom left, right
@@ -48,8 +48,8 @@ void SpriteBatch_Init(int projUniform_) {
 	// widgetsTex = TileSetMan::getTexture({TileSetGroup::GUI, gui_widgets_idx});
 	widgetsTex = new Texture("gui/widgets.t3x", true);
 
-	uint8_t data[16 * 16];
-	memset(data, 0xFF, 16 * 16 * sizeof(uint8_t));
+	u8 data[16 * 16];
+	memset(data, 0xFF, 16 * 16 * sizeof(u8));
 	C3D_TexInit(&whiteTex, 16, 16, GPU_L8);
 	C3D_TexLoadImage(&whiteTex, data, GPU_TEXFACE_2D, 0);
 
@@ -109,14 +109,14 @@ void SpriteBatch_BindGuiTexture(GuiTexture texture) {
 	SpriteBatch_BindTexture(&mTmp->mTex);
 }
 
-void SpriteBatch_PushSingleColorQuad(int x, int y, int z, int w, int h, int16_t color) {
+void SpriteBatch_PushSingleColorQuad(int x, int y, int z, int w, int h, s16 color) {
 	SpriteBatch_BindTexture(&whiteTex);
 	SpriteBatch_PushQuadColor(x, y, z, w, h, 0, 0, 4, 4, color);
 }
 void SpriteBatch_PushQuad(int x, int y, int z, int w, int h, int rx, int ry, int rw, int rh) {
 	SpriteBatch_PushQuadColor(x, y, z, w, h, rx, ry, rw, rh, INT16_MAX);
 }
-void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry, int rw, int rh, int16_t color) {
+void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry, int rw, int rh, s16 color) {
 	if (currentTexture == nullptr)
 		Crash("SpriteBatch has null texture as current, internal error. Current SpriteStack size: %i", cmdList.size());
 
@@ -140,19 +140,19 @@ void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry
 
 static float rot = 0.f;
 extern const WorldVertex cube_sides_lut[6 * 6];
-void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
+void SpriteBatch_PushIcon(Block block, u8 metadata, int x, int y, int z) {
 	/*WorldVertex vertices[6 * 6];
 	memcpy(vertices, cube_sides_lut, sizeof(cube_sides_lut));
 	for (int i = 0; i < 6; i++) {
 		if (i != Direction::UP && i != Direction::SOUTH && i != Direction::WEST)
 			continue;
-		int16_t iconUV[2];
+		s16 iconUV[2];
 		Block_GetTexture(block, i, metadata, iconUV);
 
 #define oneDivIconsPerRow (32768 / 8)
 #define halfTexel (6)
 
-		uint8_t color[3];
+		u8 color[3];
 		Block_GetColor(block, metadata, i, color);
 
 		for (int j = 0; j < 5; j++) {
@@ -170,7 +170,7 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 
 		C3D_Tex* texture = Block_GetTileSet();
 
-		int16_t color16 = SHADER_RGB(color[0] >> 3, color[1] >> 3, color[2] >> 3);
+		s16 color16 = SHADER_RGB(color[0] >> 3, color[1] >> 3, color[2] >> 3);
 		if (i == Direction::SOUTH)
 			color16 = SHADER_RGB_DARKEN(color16, 14);
 		else if (i == Direction::WEST)
@@ -193,7 +193,7 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 #undef unpackP*/
 }
 
-int SpriteBatch_PushText(int x, int y, int z, int16_t color, bool shadow, int wrap, int* ySize, const char* fmt, ...) {
+int SpriteBatch_PushText(int x, int y, int z, s16 color, bool shadow, int wrap, int* ySize, const char* fmt, ...) {
 	va_list arg;
 	va_start(arg, fmt);
 	int length = SpriteBatch_PushTextVargs(x, y, z, color, shadow, wrap, ySize, fmt, arg);
@@ -201,7 +201,7 @@ int SpriteBatch_PushText(int x, int y, int z, int16_t color, bool shadow, int wr
 	return length;
 }
 
-int SpriteBatch_PushTextVargs(int x, int y, int z, int16_t color, bool shadow, int wrap, int* ySize, const char* fmt, va_list arg) {
+int SpriteBatch_PushTextVargs(int x, int y, int z, s16 color, bool shadow, int wrap, int* ySize, const char* fmt, va_list arg) {
 	SpriteBatch_BindTexture(&font->texture->mTex);
 
 #define CHAR_WIDTH 0
@@ -334,12 +334,12 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 		float divH = 1.f / texture->height * INT16_MAX;
 
 		while (!cmdList.empty() && cmdList.back()->texture == texture) {
-			Sprite* cmd	  = cmdList.back();
-			int16_t color = cmd->color;
+			Sprite* cmd = cmdList.back();
+			s16 color	= cmd->color;
 			cmdList.pop_back();
 
-			int16_t u0 = (int16_t)((float)cmd->u0 * divW), v0 = (int16_t)((float)cmd->v0 * divH);
-			int16_t u1 = (int16_t)((float)cmd->u1 * divW), v1 = (int16_t)((float)cmd->v1 * divH);
+			s16 u0 = (s16)((float)cmd->u0 * divW), v0 = (s16)((float)cmd->v0 * divH);
+			s16 u1 = (s16)((float)cmd->u1 * divW), v1 = (s16)((float)cmd->v1 * divH);
 
 			usedVertexList[vtx++] = {{cmd->x3, cmd->y3, 0}, {u1, v1, color}};
 			usedVertexList[vtx++] = {{cmd->x1, cmd->y1, 0}, {u1, v0, color}};

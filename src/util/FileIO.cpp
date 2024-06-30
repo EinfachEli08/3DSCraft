@@ -21,12 +21,12 @@ FILE* getFile(const char* filepath, const char* perms) {
 
 	return get(path, perms);
 }
-FILE* getFile(const ResourceLocation& location, const char* perms) {
+FILE* getFile(const ResourceLocation& location, const char* subFolder, const char* perms) {
 	char path[256];
 	strcpy(path, Path::root.c_str());
 	strcat(path, Path::assets.c_str());
 	strcat(path, location.getNamespace());
-	strcat(path, "/");
+	strcat(path, subFolder);
 	strcat(path, location.getPath());
 
 	return get(path, perms);
