@@ -21,7 +21,7 @@ const short WorkerItemTypeCount = 5;
 struct WorkerItem {
 		Enum::WorkerItemType type;
 		Chunk* chunk;
-		uint32_t uuid;
+		u32 uuid;
 };
 
 class WorkQueue {

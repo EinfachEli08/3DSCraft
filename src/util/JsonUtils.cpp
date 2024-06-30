@@ -35,37 +35,33 @@ bool isJsonObject(const cJSON* field) {
 	return field && cJSON_IsObject(field);
 }
 
-bool hasField(const cJSON* jsonElement, std::string fieldName) {
-	return cJSON_GetObjectItemCaseSensitive(jsonElement, fieldName.c_str()) != nullptr;
-}
-
 const char* getString(const cJSON* jsonElement, std::string fieldName, const char* defaultValue) {
-	const cJSON* field = cJSON_GetObjectItemCaseSensitive(jsonElement, fieldName.c_str());
+	const cJSON* field = getField(jsonElement, fieldName);
 	return field && cJSON_IsString(field) ? field->valuestring : defaultValue;
 }
 
 bool getBoolean(const cJSON* jsonElement, std::string fieldName, bool defaultValue) {
-	const cJSON* field = cJSON_GetObjectItemCaseSensitive(jsonElement, fieldName.c_str());
+	const cJSON* field = getField(jsonElement, fieldName);
 	return field && cJSON_IsBool(field) ? cJSON_IsTrue(field) : defaultValue;
 }
 
 float getFloat(const cJSON* jsonElement, std::string fieldName, float defaultValue) {
-	const cJSON* field = cJSON_GetObjectItemCaseSensitive(jsonElement, fieldName.c_str());
+	const cJSON* field = getField(jsonElement, fieldName);
 	return field && cJSON_IsNumber(field) ? static_cast<float>(field->valuedouble) : defaultValue;
 }
 
 int getInt(const cJSON* jsonElement, std::string fieldName, int defaultValue) {
-	const cJSON* field = cJSON_GetObjectItemCaseSensitive(jsonElement, fieldName.c_str());
+	const cJSON* field = getField(jsonElement, fieldName);
 	return field && cJSON_IsNumber(field) ? field->valueint : defaultValue;
 }
 
 cJSON* getJsonObject(cJSON* jsonElement, std::string fieldName) {
-	const cJSON* field = cJSON_GetObjectItemCaseSensitive(jsonElement, fieldName.c_str());
+	const cJSON* field = getField(jsonElement, fieldName);
 	return field && cJSON_IsObject(field) ? cJSON_Duplicate(const_cast<cJSON*>(field), true) : nullptr;
 }
 
 cJSON* getJsonArray(cJSON* jsonElement, std::string fieldName) {
-	const cJSON* field = cJSON_GetObjectItemCaseSensitive(jsonElement, fieldName.c_str());
+	const cJSON* field = getField(jsonElement, fieldName);
 	return field && cJSON_IsArray(field) ? cJSON_Duplicate(const_cast<cJSON*>(field), true) : nullptr;
 }
 

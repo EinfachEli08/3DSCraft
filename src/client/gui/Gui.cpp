@@ -68,7 +68,7 @@ void Gui_EndRow() {
 	windowY += currentRow.highestElement + paddingY;
 }
 
-void Gui_Label(float size, bool shadow, int16_t color, bool center, const char* text, ...) {
+void Gui_Label(float size, bool shadow, s16 color, bool center, const char* text, ...) {
 	int wrap	  = size <= 0.f ? (currentRow.width - relativeX - paddingX) : relativeToAbsoluteSize(size);
 	int yTextSize = 0;
 

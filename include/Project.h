@@ -6,5 +6,6 @@ typedef enum {
 	GameState_TitleScreen
 } GameState;  // TODO: remove
 
-static bool gIsDebug		= false;
-static const char* gVersion = "v0.4";
+extern const char* gVersion;
+extern bool gIsDebug;
+extern bool gIsNew3ds;

@@ -40,7 +40,7 @@ u8 Texture::getPixelComponents(GPU_TEXCOLOR format) {
 	}
 }
 Texture::Texture(const ResourceLocation& location, bool vram) {
-	FILE* f = FileIO::getFile(location, "rb");
+	FILE* f = FileIO::getFile(location, "/textures/", "rb");
 
 	Tex3DS_Texture t3x = Tex3DS_TextureImportStdio(f, &mTex, nullptr, vram);
 
@@ -75,26 +75,26 @@ void Texture::checkAllocated() {
 void Texture::writeToFile(const char* filename) {
 	checkAllocated();
 
-	FILE* file = FileIO::getFile(filename);
+	FILE* file = FileIO::getFile(filename, "wb");
 
 	// Initialize libpng structures
 	png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if (!png) {
-		printf("Failed to initialize libpng\n");
+		Break("Failed to initialize libpng\n");
 		fclose(file);
 		return;
 	}
 
 	png_infop info = png_create_info_struct(png);
 	if (!info) {
-		printf("Failed to create libpng info structure\n");
+		Break("Failed to create libpng info structure\n");
 		png_destroy_write_struct(&png, NULL);
 		fclose(file);
 		return;
 	}
 
 	if (setjmp(png_jmpbuf(png))) {
-		Crash("Error during PNG creation");
+		Break("Error during PNG creation");
 		png_destroy_write_struct(&png, &info);
 		fclose(file);
 		return;

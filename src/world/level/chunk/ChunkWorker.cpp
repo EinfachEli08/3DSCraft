@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 
+#include "Project.h"
 #include "client/Exception.h"
 #include "util/VecUtil.h"
 
@@ -13,11 +14,9 @@ ChunkWorker::ChunkWorker() {
 	}
 
 	s32 priority;
-	bool isNew3ds = false;
-	APT_CheckNew3DS(&isNew3ds);
 	svcGetThreadPriority(&priority, CUR_THREAD_HANDLE);
 
-	thread = threadCreate(&mainLoop, (void*)this, CHUNKWORKER_THREAD_STACKSIZE, priority - 1, isNew3ds ? 2 : 1, false);
+	thread = threadCreate(&mainLoop, (void*)this, CHUNKWORKER_THREAD_STACKSIZE, priority - 1, gIsNew3ds ? 2 : 1, false);
 
 	if (thread == 0) {
 		Crash("Couldn't create worker thread");

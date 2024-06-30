@@ -59,7 +59,7 @@ void Inventory_Draw(int x, int y, ItemStack* stacks, int count) {
 	int headY		= y;
 	bool even		= false;
 
-	const int16_t colors[2] = {SHADER_RGB_DARKEN(SHADER_RGB(20, 20, 21), 9), SHADER_RGB_DARKEN(SHADER_RGB(20, 20, 21), 8)};
+	const s16 colors[2] = {SHADER_RGB_DARKEN(SHADER_RGB(20, 20, 21), 9), SHADER_RGB_DARKEN(SHADER_RGB(20, 20, 21), 8)};
 
 	for (int i = 0; i < count; i++) {
 		if (stacks[i].amount > 0)

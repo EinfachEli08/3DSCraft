@@ -1,5 +1,7 @@
 #pragma once
 
+#include <3ds/types.h>
+
 class FrameSize {
 		u16 width;
 		u16 height;

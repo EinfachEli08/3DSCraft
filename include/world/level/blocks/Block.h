@@ -6,7 +6,7 @@
 
 #include "core/Direction.h"
 
-typedef uint8_t Block;
+typedef u8 Block;
 
 enum {
 	Block_Air,
@@ -33,10 +33,10 @@ void Block_Deinit();
 
 C3D_Tex* Block_GetTileSet();  // always a C3D_Tex*
 
-void Block_GetTexture(Block block, int direction, uint8_t metadata, int16_t* out_uv);
+void Block_GetTexture(Block block, int direction, u8 metadata, s16* out_uv);
 
-void Block_GetColor(Block block, uint8_t metadata, int direction, uint8_t out_rgb[]);
+void Block_GetColor(Block block, u8 metadata, int direction, u8 out_rgb[]);
 
-bool Block_Opaque(Block block, uint8_t metadata);
+bool Block_Opaque(Block block, u8 metadata);
 
 extern const char* BlockNames[Blocks_Count];

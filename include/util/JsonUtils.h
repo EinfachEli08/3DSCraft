@@ -12,7 +12,12 @@ bool isJsonObject(const cJSON* jsonElement, const char* fieldName);
 bool isJsonObject(const cJSON* field);
 bool isJsonPrimitive(const cJSON* jsonElement, const char* fieldName);
 bool isJsonPrimitive(const cJSON* field);
-bool hasField(const cJSON* jsonElement, std::string fieldName);
+inline cJSON* getField(const cJSON* jsonElement, std::string fieldName) {
+	return cJSON_GetObjectItemCaseSensitive(jsonElement, fieldName.c_str());
+}
+inline bool hasField(const cJSON* jsonElement, std::string fieldName) {
+	return getField(jsonElement, fieldName) != nullptr;
+}
 
 const char* getString(const cJSON* jsonElement, std::string fieldName, const char* defaultValue = nullptr);
 bool getBoolean(const cJSON* jsonElement, std::string fieldName, bool defaultValue = false);

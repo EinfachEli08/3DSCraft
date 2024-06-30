@@ -201,7 +201,7 @@ void SuperChunk::chunkSave(Chunk* chunk) {
 
 		size_t uncompressedSize = mpack_writer_buffer_used(&writer);
 		mz_ulong compressedSize = mFileBufferSize;
-		if (compress((uint8_t*)mFileBuffer, &compressedSize, (uint8_t*)mDecompressBuffer, uncompressedSize) == Z_OK) {
+		if (compress((u8*)mFileBuffer, &compressedSize, (u8*)mDecompressBuffer, uncompressedSize) == Z_OK) {
 			size_t blockSize = compressedSize / mSectorsize + 1;
 
 			if (mGrid[x][z].actualSize > 0)
@@ -228,7 +228,7 @@ void SuperChunk::chunkLoad(Chunk* chunk) {
 			Crash("Read chunk data size isn't equal to the expected size");
 		mz_ulong uncompressedSize = mDecompressBufferSize;
 
-		if (uncompress((uint8_t*)mDecompressBuffer, &uncompressedSize, (uint8_t*)mFileBuffer, chunkInfo.compressedSize) == Z_OK) {
+		if (uncompress((u8*)mDecompressBuffer, &uncompressedSize, (u8*)mFileBuffer, chunkInfo.compressedSize) == Z_OK) {
 			mpack_tree_t tree;
 			mpack_tree_init_pool(&tree, mDecompressBuffer, uncompressedSize, mNodeDataPool, mNodeDataPoolSize);
 			mpack_node_t root = mpack_tree_root(&tree);

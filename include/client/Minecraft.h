@@ -47,4 +47,4 @@ class Minecraft {
 		void releaseWorld();
 };
 
-static Minecraft* sMinecraft;
+extern Minecraft* gMinecraft;

@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector/vector.h>
 
+#include "FrameSize.h"
 #include "client/resources/metadata/animation/AnimationFrame.h"
 #include "util/math/NumberUtils.h"
 
