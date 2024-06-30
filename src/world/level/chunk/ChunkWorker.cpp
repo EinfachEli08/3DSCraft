@@ -4,7 +4,7 @@
 
 #include "Project.h"
 #include "client/Exception.h"
-#include "util/VecUtil.h"
+#include "vector/vector.h"
 
 ChunkWorker::ChunkWorker() {
 	queue = new WorkQueue();
@@ -58,33 +58,32 @@ void ChunkWorker::setHandlerActive(Enum::WorkerItemType workerType, ChunkWorkerO
 	}
 }
 
-void mainLoop(void* todo_) {
-	ChunkWorker* todo = (ChunkWorker*)todo_;
-	std::vector<WorkerItem> privateQueue;
-	while (workerToStop != todo || todo->queue->queue.size() > 0) {
-		todo->working = false;
+void mainLoop(void* workerIn) {
+	ChunkWorker* worker = (ChunkWorker*)workerIn;
+	vector<WorkerItem> privateQueue;
+	while (workerToStop != worker || worker->queue->queue.size() > 0) {
+		worker->working = false;
 
-		LightEvent_Wait(&todo->queue->itemAddedEvent);
-		LightEvent_Clear(&todo->queue->itemAddedEvent);
+		LightEvent_Wait(&worker->queue->itemAddedEvent);
+		LightEvent_Clear(&worker->queue->itemAddedEvent);
 
-		todo->working = true;
+		worker->working = true;
 
-		LightLock_Lock(&todo->queue->listInUse);
-		Vec::push_array(privateQueue, todo->queue->queue.data(), todo->queue->queue.size());
-		todo->queue->queue.clear();
-		LightLock_Unlock(&todo->queue->listInUse);
+		LightLock_Lock(&worker->queue->listInUse);
+		privateQueue.push_array(worker->queue->queue.data(), worker->queue->queue.size());
+		worker->queue->queue.clear();
+		LightLock_Unlock(&worker->queue->listInUse);
 
 		while (privateQueue.size() > 0) {
 			WorkerItem item = privateQueue.back();
-			int itemType	= (int)item.type;
+			auto& workObj	= worker->handler[item.type];
 			privateQueue.pop_back();
 
 			if (item.uuid == item.chunk->uuid) {
-				size_t sizeHandler = todo->handler[itemType].size();
+				size_t sizeHandler = workObj.size();
 				for (size_t i = 0; i < sizeHandler; i++) {
-					if (todo->handler[itemType][i].active)
-						todo->handler[itemType][i].workerPtr->chunkFunction(todo->queue, item);
-					// call ChunkFunction
+					if (workObj[i].active)
+						workObj[i].workerPtr->chunkFunction(worker->queue, item);
 					svcSleepThread(7000);
 				}
 
