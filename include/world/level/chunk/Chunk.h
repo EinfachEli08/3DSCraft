@@ -9,9 +9,9 @@
 #include "util/math/Xorshift.h"
 #include "world/level/blocks/Block.h"
 
-#define CHUNK_SIZE (16)
-#define CHUNK_HEIGHT (384)
-#define CLUSTER_PER_CHUNK (CHUNK_HEIGHT / CHUNK_SIZE)
+constexpr u8 CHUNK_SIZE		   = 16;
+constexpr u16 CHUNK_HEIGHT	   = 384;
+constexpr u8 CLUSTER_PER_CHUNK = CHUNK_HEIGHT / CHUNK_SIZE;
 
 struct Cluster {
 		int y;
