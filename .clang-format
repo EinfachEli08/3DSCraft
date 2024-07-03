@@ -1,6 +1,8 @@
 ---
 Language: Cpp
 AlignAfterOpenBracket: Align
+AlignArrayInitializers: true
+AlignArrayOfStructures: Right
 AlignConsecutiveAssignments: true
 AlignOperands: true
 AlignTrailingComments: true
@@ -24,7 +26,7 @@ CommentPragmas: '^ IWYU pragma:'
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
-Cpp11BracedListStyle: true
+Cpp11BracedListStyle: false
 DerivePointerAlignment: true
 DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
@@ -37,7 +39,7 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 MacroBlockBegin: ''
 MacroBlockEnd: ''
 MaxEmptyLinesToKeep: 1
-NamespaceIndentation: Inner
+NamespaceIndentation: All
 ObjCBlockIndentWidth: 2
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: false
@@ -57,8 +59,7 @@ SpacesInAngles: false
 SpacesInContainerLiterals: true
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
-
 SpacesInSquareBrackets: false
 Standard: Auto
 TabWidth: 4
-UseTab: Always
+UseTab: ForContinuationAndIndentation
