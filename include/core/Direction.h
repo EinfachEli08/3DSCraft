@@ -3,6 +3,9 @@
 #include <3ds/types.h>
 
 #include "util/math/Vector3.h"
+namespace Axis {
+	enum _;
+}
 
 namespace Direction {
 	enum _ : u8 {
@@ -16,7 +19,7 @@ namespace Direction {
 		COUNT
 	};
 
-	constexpr Vector3<s8> DirectionToOffset[COUNT] = {
+	constexpr Vector3<s8> offset[COUNT] = {
 		{  0, -1,  0 }, // down
 		{  0,  1,  0 }, // up
 		{  0,  0, -1 }, // north
@@ -32,17 +35,6 @@ namespace Direction {
 
 	constexpr Axis::_ byAxis[COUNT] = { Axis::Y, Axis::Y, Axis::Z, Axis::Z, Axis::X, Axis::X, Axis::X };
 
-	constexpr const Vector3<s8> getOffset(_ dir) {
-		return DirectionToOffset[dir];
-	}
-
-	constexpr _ getOpposite(_ dir) {
-		return opposite[dir];
-	}
-
-	constexpr Axis::_ getAxis(_ dir) {
-		return byAxis[dir];
-	}
 }  // namespace Direction
 
 namespace Axis {
@@ -53,7 +45,7 @@ namespace Axis {
 		NONE
 	};
 
-	constexpr Direction::_ primaryDirection(_ dir) {
+	constexpr Direction::_ toDirection(_ dir) {
 		switch (dir) {
 			case X:
 				return Direction::EAST;
