@@ -36,10 +36,60 @@ convert_to_t3x_single() {
     fi
 }
 
+# Function to convert a directory into one atlas
+convert_to_atlas() {
+    input_dir="$1"
+    output_dir="$OUTPUT_SUB/$(basename "$1")"
+
+    output_filename="${output_dir#*textures/}"
+
+	mkdir -p "../include/textureIdx"
+	mkdir -p "$output_dir"
+
+    if [ ! -e "$output_dir.t3x" ]; then
+	    rm -f "textures.t3s"
+        echo "Breaking ${output_filename#$OUTPUT_SUB}/..."
+		echo "-m point --atlas -f ${3} -z auto" >> "textures.t3s"
+		echo "" >> "textures.t3s"
+
+        find "$ASSETS_SUB/${output_filename#$OUTPUT_SUB}" -type f -name "*.mcmeta" | while read -r file; do
+		    filec="$OUTPUT_DIR/${file#$ASSETS_DIR/}"
+			copy "${file}" "${filec}"
+		done
+		
+		# make option to skip this?
+        find "$ASSETS_SUB/${output_filename#$OUTPUT_SUB}" -type f -name "*.png" | while read -r file; do
+            flipped_file="$TMP_SUB/${file#$ASSETS_SUB/}"
+            if ! ls "${flipped_file%.*}"* >/dev/null 2>&1; then
+                python "$PYTHON_SCRIPT" "$file" "$flipped_file"  # Flip the image and save to TMP directory
+            fi
+        done
+		
+        find "$TMP_SUB/${output_filename#$OUTPUT_SUB}" -type f -name "*.mcanim" | while read -r file; do
+		    filec="$OUTPUT_DIR/${file#$TMP_DIR/}"
+			copy "${file}" "${filec}"
+		done
+
+        find "$TMP_DIR/${output_dir#$OUTPUT_DIR/}" -type f -name "*.png" | while read -r file; do
+           echo "${file}" >> "textures.t3s"
+		done
+
+        echo "Crafting ${output_filename#$OUTPUT_SUB}/..."
+        "$TEX3DS" -o "$output_dir.t3x" -i "textures.t3s" -H "../include/textureIdx/$output_filename.h" >/dev/null 2>&1
+    else
+        echo "Skipping ${output_filename#$OUTPUT_SUB}/..."
+    fi
+}
+
 pack_textures() {
     find "$1" -mindepth 1 -maxdepth 1 -type d | while read -r dir; do
 	    compression="rgba8"
         
+		if [ "$(basename "$dir")" = "block" ]; then
+            output_dir="$2/$(basename "$dir")"
+            convert_to_atlas "$dir" "$output_dir" "etc1"
+            continue
+        fi
         find "$dir" -mindepth 1 -maxdepth 4 -type f -name "*.png" | while read -r png_file; do
             convert_to_t3x_single "$png_file" "$1" compression
         done
@@ -48,13 +98,17 @@ pack_textures() {
 }
 
 copy() {
-	cp -r "$ASSETS_DIR/$namespace/$1" "$OUTPUT_DIR/$namespace/$1"
-	echo "Teleporting $ASSETS_DIR/$namespace/$1 to $OUTPUT_DIR/$namespace/$1..."
+    echo "Moving   $(basename ${1})..."
+    if [ -n "$2" ]; then
+        cp -r "$1" "$2"
+        return
+    fi
+    cp -r "$ASSETS_DIR/$namespace/$1" "$OUTPUT_DIR/$namespace/$1"
 }
 
 
 clean() {
-    rm -rf "$OUTPUT_SUB" "$TMP_SUB" "$TEXHEADERS_SUB" "$DIR_FILE"
+    rm -rf "$OUTPUT_DIR" "$TMP_DIR" "$TEXHEADERS_SUB" "$DIR_FILE"
     echo "Clean..."
 }
 
