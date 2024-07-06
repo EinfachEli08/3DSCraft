@@ -14,7 +14,7 @@
 #include "client/renderer/texture/Texture.h"
 #include "world/WorkQueue.h"
 #include "world/World.h"
-#include "world/level/blocks/Block.h"
+#include "world/level/block/Block.h"
 
 #define DISPLAY_TRANSFER_FLAGS                                                                                                             \
 	(GX_TRANSFER_FLIP_VERT(0) | GX_TRANSFER_OUT_TILED(0) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |        \

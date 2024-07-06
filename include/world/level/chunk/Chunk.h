@@ -7,10 +7,10 @@
 #include "client/renderer/VBOCache.h"
 #include "core/Direction.h"
 #include "util/math/Xorshift.h"
-#include "world/level/blocks/Block.h"
+#include "world/level/block/Block.h"
 
-constexpr u8 CHUNK_SIZE		   = 16;
-constexpr u16 CHUNK_HEIGHT	   = 384;
+constexpr u8 CHUNK_SIZE        = 16;
+constexpr u16 CHUNK_HEIGHT     = 384;
 constexpr u8 CLUSTER_PER_CHUNK = CHUNK_HEIGHT / CHUNK_SIZE;
 
 struct Cluster {
@@ -32,7 +32,7 @@ struct Cluster {
 };
 
 enum ChunkGenProgress {
-	ChunkGen_Empty,	 //
+	ChunkGen_Empty,  //
 	ChunkGen_Terrain,
 	ChunkGen_Finished  // Terrain | Decoration
 };
@@ -75,16 +75,16 @@ inline void Chunk_Init(Chunk* chunk, int x, int z) {
 	chunk->x = x;
 	chunk->z = z;
 	for (int i = 0; i < CLUSTER_PER_CHUNK; i++) {
-		chunk->clusters[i].y		  = i;
+		chunk->clusters[i].y          = i;
 		chunk->clusters[i].seeThrough = UINT16_MAX;
-		chunk->clusters[i].empty	  = true;
+		chunk->clusters[i].empty      = true;
 	}
 	chunk->uuid = Xorshift32_Next(&uuidGenerator);
 }
 
 inline void Chunk_RequestGraphicsUpdate(Chunk* chunk, int cluster) {
 	chunk->clusters[cluster].forceVBOUpdate = true;
-	chunk->forceVBOUpdate					= true;
+	chunk->forceVBOUpdate                   = true;
 }
 
 void Chunk_GenerateHeightmap(Chunk* chunk);
@@ -99,8 +99,8 @@ inline u8 Chunk_GetMetadata(Chunk* chunk, int x, int y, int z) {
 inline void Chunk_SetMetadata(Chunk* chunk, int x, int y, int z, u8 metadata) {
 	metadata &= 0xf;
 	Cluster* cluster = &chunk->clusters[y / CHUNK_SIZE];
-	u8* addr		 = &cluster->metadataLight[x][y - (y / CHUNK_SIZE * CHUNK_SIZE)][z];
-	*addr			 = (*addr & 0xf0) | metadata;
+	u8* addr         = &cluster->metadataLight[x][y - (y / CHUNK_SIZE * CHUNK_SIZE)][z];
+	*addr            = (*addr & 0xf0) | metadata;
 	++cluster->revision;
 	++chunk->revision;
 }
@@ -110,18 +110,18 @@ inline Block Chunk_GetBlock(Chunk* chunk, int x, int y, int z) {
 }
 // resets the meta data
 inline void Chunk_SetBlock(Chunk* chunk, int x, int y, int z, Block block) {
-	Cluster* cluster										 = &chunk->clusters[y / CHUNK_SIZE];
+	Cluster* cluster                                         = &chunk->clusters[y / CHUNK_SIZE];
 	cluster->blocks[x][y - (y / CHUNK_SIZE * CHUNK_SIZE)][z] = block;
 	Chunk_SetMetadata(chunk, x, y, z, 0);
 	/*++cluster->revision;
 	++chunk->revision;*/  // durch das Setzen der Metadaten wird das sowieso erhöht
 }
 inline void Chunk_SetBlockAndMeta(Chunk* chunk, int x, int y, int z, Block block, u8 metadata) {
-	Cluster* cluster										 = &chunk->clusters[y / CHUNK_SIZE];
+	Cluster* cluster                                         = &chunk->clusters[y / CHUNK_SIZE];
 	cluster->blocks[x][y - (y / CHUNK_SIZE * CHUNK_SIZE)][z] = block;
 	metadata &= 0xf;
 	u8* addr = &cluster->metadataLight[x][y - (y / CHUNK_SIZE * CHUNK_SIZE)][z];
-	*addr	 = (*addr & 0xf0) | metadata;
+	*addr    = (*addr & 0xf0) | metadata;
 
 	++cluster->revision;
 	++chunk->revision;

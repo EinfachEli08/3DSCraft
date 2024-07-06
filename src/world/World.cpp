@@ -7,7 +7,7 @@
 #include <stdint.h>
 
 #include "util/VecUtil.h"
-#include "world/level/blocks/BlockEvent.h"
+#include "world/level/block/BlockEvent.h"
 
 World::World(WorkQueue* _workqueue) : workqueue(_workqueue) {
 	strcpy(name, "My World");
@@ -54,7 +54,7 @@ Chunk* World::loadChunk(int x, int z) {
 			Vec::splice(freeChunks, i, 1);
 
 			Chunk_Init(chunk, x, z);
-			workqueue->addItem((WorkerItem){Enum::WorkerItemType::Load, chunk});
+			workqueue->addItem((WorkerItem){ Enum::WorkerItemType::Load, chunk });
 
 			chunk->references++;
 			return chunk;
@@ -67,7 +67,7 @@ void World::unloadChunk(int i, int j) {
 	unloadChunk(chunkCache[i][j]);
 }
 void World::unloadChunk(Chunk* chunk) {
-	workqueue->addItem((WorkerItem){Enum::WorkerItemType::Save, chunk});
+	workqueue->addItem((WorkerItem){ Enum::WorkerItemType::Save, chunk });
 	freeChunks.push_back(chunk);
 	chunk->references--;
 }
@@ -112,8 +112,8 @@ Block World::getBlock(int x, int y, int z) {
 void World::setBlock(int x, int y, int z, Block block) {
 	if (y < 0 || y >= CHUNK_HEIGHT)
 		return;
-	int cX		 = WorldToChunkCoord(x);
-	int cZ		 = WorldToChunkCoord(z);
+	int cX       = WorldToChunkCoord(x);
+	int cZ       = WorldToChunkCoord(z);
 	Chunk* chunk = getChunk(cX, cZ);
 	if (chunk) {
 		int lX = WorldToLocalCoord(x);
@@ -127,8 +127,8 @@ void World::setBlock(int x, int y, int z, Block block) {
 void World::setBlockAndMeta(int x, int y, int z, Block block, u8 metadata) {
 	if (y < 0 || y >= CHUNK_HEIGHT)
 		return;
-	int cX		 = WorldToChunkCoord(x);
-	int cZ		 = WorldToChunkCoord(z);
+	int cX       = WorldToChunkCoord(x);
+	int cZ       = WorldToChunkCoord(z);
 	Chunk* chunk = getChunk(cX, cZ);
 	if (chunk) {
 		int lX = WorldToLocalCoord(x);
@@ -151,8 +151,8 @@ u8 World::getMetadata(int x, int y, int z) {
 void World::setMetadata(int x, int y, int z, u8 metadata) {
 	if (y < 0 || y >= CHUNK_HEIGHT)
 		return;
-	int cX		 = WorldToChunkCoord(x);
-	int cZ		 = WorldToChunkCoord(z);
+	int cX       = WorldToChunkCoord(x);
+	int cZ       = WorldToChunkCoord(z);
 	Chunk* chunk = getChunk(cX, cZ);
 	if (chunk) {
 		int lX = WorldToLocalCoord(x);
@@ -164,8 +164,8 @@ void World::setMetadata(int x, int y, int z, u8 metadata) {
 }
 
 int World::getHeight(int x, int z) {
-	int cX		 = WorldToChunkCoord(x);
-	int cZ		 = WorldToChunkCoord(z);
+	int cX       = WorldToChunkCoord(x);
+	int cZ       = WorldToChunkCoord(z);
 	Chunk* chunk = getChunk(cX, cZ);
 	if (chunk) {
 		int lX = WorldToLocalCoord(x);
@@ -193,7 +193,7 @@ void World::updateChunkCache(int orginX, int orginZ) {
 				int wz = orginZ + (j - CHUNKCACHE_SIZE / 2);
 				if (wx >= oldBufferStartX && wx < oldBufferStartX + CHUNKCACHE_SIZE && wz >= oldBufferStartZ &&
 					wz < oldBufferStartZ + CHUNKCACHE_SIZE) {
-					chunkCache[i][j]				= tmpBuffer[i + diffX][j + diffZ];
+					chunkCache[i][j]                = tmpBuffer[i + diffX][j + diffZ];
 					tmpBuffer[i + diffX][j + diffZ] = NULL;
 				} else {
 					chunkCache[i][j] = loadChunk(wx, wz);
@@ -220,7 +220,7 @@ void World::tick() {
 			Chunk* chunk = chunkCache[x][z];
 
 			if (chunk->genProgress == ChunkGen_Empty && !chunk->tasksRunning)
-				workqueue->addItem((WorkerItem){Enum::WorkerItemType::BaseGen, chunk});
+				workqueue->addItem((WorkerItem){ Enum::WorkerItemType::BaseGen, chunk });
 
 			if (x > 0 && z > 0 && x < CHUNKCACHE_SIZE - 1 && z < CHUNKCACHE_SIZE - 1 && chunk->genProgress == ChunkGen_Terrain &&
 				!chunk->tasksRunning) {
@@ -232,7 +232,7 @@ void World::tick() {
 							clear = false;
 					}
 				if (clear)
-					workqueue->addItem((WorkerItem){Enum::WorkerItemType::Decorate, chunk});
+					workqueue->addItem((WorkerItem){ Enum::WorkerItemType::Decorate, chunk });
 
 				int xVals[RANDOMTICKS_PER_CHUNK];
 				int yVals[RANDOMTICKS_PER_CHUNK];

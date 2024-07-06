@@ -1,4 +1,4 @@
-#include "world/level/blocks/Block.h"
+#include "world/level/block/Block.h"
 
 #include "client/renderer/VertexFmt.h"
 #include "client/renderer/texture/Texture.h"
@@ -117,8 +117,8 @@ void Block_GetColor(Block block, u8 metadata, int _direction, u8 out_rgb[]) {
 		return;
 	}
 	// white, orange, magenta, light blue, yellow, lime, pink, gray, silver, cyan, purple, blue, green, red, black
-	const u32 dies[] = {(16777215), (14188339), (11685080), (6724056), (15066419), (8375321), (15892389), (5000268),
-						(10066329), (5013401),	(8339378),	(3361970), (6704179),  (6717235), (10040115), (1644825)};
+	const u32 dies[] = { (16777215), (14188339), (11685080), (6724056), (15066419), (8375321), (15892389), (5000268),
+						 (10066329), (5013401),  (8339378),  (3361970), (6704179),  (6717235), (10040115), (1644825) };
 	if (block == Block_Wool) {
 		out_rgb[0] = extractR(dies[metadata]);
 		out_rgb[1] = extractG(dies[metadata]);
@@ -134,5 +134,5 @@ bool Block_Opaque(Block block, u8 metadata) {
 	return block != Block_Air && block != Block_Leaves && block != Block_Glass;
 }
 
-const char* BlockNames[Blocks_Count] = {"Air",	  "Smooth Stone", "Stone",		  "Dirt",	"Grass",  "Cobblestone", "Sand",   "Log",
-										"Leaves", "Glass",		  "Stone Bricks", "Bricks", "Planks", "Wool",		 "Bedrock"};
+const char* BlockNames[Blocks_Count] = { "Air",    "Smooth Stone", "Stone",        "Dirt",   "Grass",  "Cobblestone", "Sand",   "Log",
+										 "Leaves", "Glass",        "Stone Bricks", "Bricks", "Planks", "Wool",        "Bedrock" };

@@ -6,6 +6,11 @@
 #include <3ds/types.h>
 #include <bitset>
 
+using uptr         = uintptr_t;
+using BoolFunction = bool (*)(void);
+using VecFunction  = Vector3<float> (*)(void);
+using IntFunction  = u8 (*)(void);
+
 constexpr Direction::_ UPDATE_SHAPE_ORDER[Direction::COUNT] = { Direction::WEST,  Direction::EAST, Direction::NORTH,
 																Direction::SOUTH, Direction::DOWN, Direction::UP };
 
@@ -59,6 +64,9 @@ class BlockBehavior {
 		ResourceLocation* drops;
 
 	public:
+		BlockBehavior(Properties properties);
+
+	public:
 		class Properties {
 				enum propBool : u8 {
 					HasCollision,
@@ -87,21 +95,20 @@ class BlockBehavior {
 					COUNT
 				};
 				enum propFunc : u8 {
-					MapColor,
-					LightEmission,
 					IsValidSpawn,
 					IsRedstoneConductor,
 					IsSuffocating,
 					IsViewBlocking,
 					HasPostProcess,
-					OffsetFunction,
 					COUNT
 				};
 
 				std::bitset<propBool::COUNT> propBools;
 				u8 propInts[propInt::COUNT];
 				float propFloats[propFloat::COUNT];
-				uintptr_t propFuncs[propFunc::COUNT];
+				BoolFunction propFuncs[propBool::COUNT];
+				IntFunction propIntFuncs[2];
+				VecFunction offsetFunc;
 
 				ResourceLocation drops;
 
@@ -156,6 +163,33 @@ class BlockBehavior {
 
 				inline float jumpFactor() const { return propFloats[propFloat::JumpFactor]; }
 				inline void setJumpFactor(float val) { propFloats[propFloat::JumpFactor] = val; }
+
+				inline bool isValidSpawn() const { return (*propFuncs[propFunc::IsValidSpawn])(); }
+				inline void setIsValidSpawn(BoolFunction function) { propFuncs[propFunc::IsValidSpawn] = function; }
+
+				inline bool isRedstoneConductor() const { return (*propFuncs[propFunc::IsRedstoneConductor])(); }
+				inline void setIsRedstoneConductor(BoolFunction function) { propFuncs[propFunc::IsRedstoneConductor] = function; }
+
+				inline bool isSuffocating() const { return (*propFuncs[propFunc::IsSuffocating])(); }
+				inline void setIsSuffocating(BoolFunction function) { propFuncs[propFunc::IsSuffocating] = function; }
+
+				inline bool isViewBlocking() const { return (*propFuncs[propFunc::IsViewBlocking])(); }
+				inline void setIsViewBlocking(BoolFunction function) { propFuncs[propFunc::IsViewBlocking] = function; }
+
+				inline bool hasPostProcess() const { return (*propFuncs[propFunc::HasPostProcess])(); }
+				inline void setHasPostProcess(BoolFunction function) { propFuncs[propFunc::HasPostProcess] = function; }
+
+				inline u8 mapColor() const { return (*propIntFuncs[0])(); }
+				inline void setMapColor(IntFunction function) { propIntFuncs[0] = function; }
+
+				inline u8 lightEmission() const { return (*propIntFuncs[1])(); }
+				inline void setLightEmission(IntFunction function) { propIntFuncs[1] = function; }
+
+				inline void setOffsetFunction(VecFunction function) { offsetFunc = function; }
+
+			public:
+				Properties();
+				static Properties* create() { return new Properties(); }
 		};
 
 		class BlockStateBase {
@@ -189,7 +223,7 @@ class BlockBehavior {
 				std::bitset<stateBool::COUNT> stateBools;
 				u8 stateInts[stateInt::COUNT];
 				float stateFloats[stateFloat::COUNT];
-				uintptr_t stateFuncs[stateFunc::COUNT];
+				BoolFunction stateFuncs[stateBool::COUNT];
 
 			protected:
 				inline bool isAir() const { return stateBools[stateBool::IsAir]; }
@@ -221,5 +255,17 @@ class BlockBehavior {
 
 				inline float destroySpeed() const { return stateFloats[stateFloat::DestroySpeed]; }
 				inline void setDestroySpeed(float val) { stateFloats[stateFloat::DestroySpeed] = val; }
+
+				inline bool isRedstoneConductor() const { return (*stateFuncs[stateFunc::IsRedstoneConductor])(); }
+				inline void setIsRedstoneConductor(bool (*function)(void)) { stateFuncs[stateFunc::IsRedstoneConductor] = function; }
+
+				inline bool isSuffocating() const { return (*stateFuncs[stateFunc::IsSuffocating])(); }
+				inline void setIsSuffocating(bool (*function)(void)) { stateFuncs[stateFunc::IsSuffocating] = function; }
+
+				inline bool isViewBlocking() const { return (*stateFuncs[stateFunc::IsViewBlocking])(); }
+				inline void setIsViewBlocking(bool (*function)(void)) { stateFuncs[stateFunc::IsViewBlocking] = function; }
+
+				inline bool hasPostProcess() const { return (*stateFuncs[stateFunc::HasPostProcess])(); }
+				inline void setHasPostProcess(bool (*function)(void)) { stateFuncs[stateFunc::HasPostProcess] = function; }
 		};
 };
