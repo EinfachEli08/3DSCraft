@@ -1,12 +1,12 @@
-#include "world/level/blocks/BlockEvent.h"
+#include "world/level/block/BlockEvent.h"
 
 void BlockEvent::randomTick(Chunk* chunk, int x[], int y[], int z[]) {
 	int k = 0;
 	for (int i = 0; i < CLUSTER_PER_CHUNK; i++) {
 		for (int j = 0; j < RANDOMTICKS_PER_CLUSTER; j++) {
-			int px		= x[k];
-			int py		= y[k] + i * CHUNK_SIZE;
-			int pz		= z[k];
+			int px      = x[k];
+			int py      = y[k] + i * CHUNK_SIZE;
+			int pz      = z[k];
 			Block block = Chunk_GetBlock(chunk, px, py, pz);
 			switch (block) {
 				case Block_Dirt:
