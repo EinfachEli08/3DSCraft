@@ -28,13 +28,13 @@ def split_and_flip_image(input_path, output_dir):
             remainder = image.height % 16
             if remainder > 0:
                 num_slices += 1
-            print(f"...detected animation of {num_slices} frames...") 
+            print(f"Animate  ...{num_slices} Frames") 
 
              # Create .mcanim file if there are multiple slices
             if num_slices is not None and num_slices > 1:
                 filename, _ = os.path.splitext(os.path.basename(input_path))
                 mcanim_file = os.path.join(output_dir, f"{filename}.png.mcanim")
-                print(f"Enchant  {filename}.png.mcanim...")
+                # print(f"Enchant  block/{filename}.png.mcanim...")
                 with open(mcanim_file, 'w') as f:
                     f.write(str(num_slices))
 
