@@ -229,7 +229,8 @@ endif
 #---------------------------------------------------------------------------------
 
 $(OUTPUT).3dsx	:	$(OUTPUT).elf $(OUTPUT).smdh
-	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "../$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "../$(BANNER_AUDIO)" -o "banner.bnr"
+	echo $(CURDIR)
+	$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "../$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "../$(BANNER_AUDIO)" -o "banner.bnr"
 	@echo building $(TARGET).cxi...
 	@$(MAKEROM) -o "$(OUTPUT).cxi" -target t -exefslogo $(MAKEROM_ARGS)
 	@echo building $(TARGET).cfa...
