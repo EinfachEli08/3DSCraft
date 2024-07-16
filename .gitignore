@@ -1,5 +1,6 @@
 *.3dsx
 *.cia
+*.cfa
 *.elf
 *.smdh
 *.lst
@@ -9,9 +10,13 @@
 *.png
 *.t3x
 
+build
 backup_cpp/build
+<<<<<<< HEAD
 build
 lib/libgame.a
+=======
+>>>>>>> 0cb9f00946d8156c155205c2a94a89d23c54c77e
 resources/OUTPUT
 resources/TMP
 resources/assets

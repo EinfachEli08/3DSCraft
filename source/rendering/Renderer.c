@@ -105,7 +105,7 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 
 	Item_Init();
 
-	Texture_Load(&logoTex, "romfs:/assets/textures/gui/title/craftus.png");
+	Texture_Load(&logoTex, "romfs:/assets/textures/gui/title/img.png");
 }
 
 void Renderer_Deinit() {
@@ -182,9 +182,11 @@ void Renderer_Render() {
 			SpriteBatch_BindTexture(&logoTex);
 
 			SpriteBatch_SetScale(2);
-			SpriteBatch_PushQuad(100 / 2 - 76 / 2, 120 / 2, 0, 256, 64, 0, 0, 128, 32);
+			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0,0, 1024, 256);
 
-			SpriteBatch_PushText(0, 0, 0, INT16_MAX, true, INT_MAX, NULL, "v" CRAFTUS_VERSION_STR);
+			SpriteBatch_PushText(0, 112, 0, INT16_MAX, false, INT_MAX, NULL,"0.0.INDEV");
+
+			SpriteBatch_SetScale(1);
 		}
 
 		C3D_BindProgram(&gui_shader);
