@@ -33,7 +33,7 @@ SOURCES 		:=  $(foreach dir,$(SOURCES),$(patsubst $(CURDIR)/%,%,$(dir)))
 # 3dsx
 APP_DESCRIPTION :=  Re-reload of Craftus Reloaded
 APP_AUTHOR		:=  Omega
-ICON			:=	$(META)/newicon.png
+ICON			:=	$(META)/icon.png
 
 # CIA
 BANNER_AUDIO	:=	$(META)/banner.wav
@@ -129,8 +129,8 @@ ifeq ($(strip $(ICON)),)
 	ifneq (,$(findstring $(TARGET).png,$(icons)))
 		export APP_ICON := $(TOPDIR)/$(TARGET).png
 	else
-		ifneq (,$(findstring newicon.png,$(icons)))
-			export APP_ICON := $(TOPDIR)/newicon.png
+		ifneq (,$(findstring icon.png,$(icons)))
+			export APP_ICON := $(TOPDIR)/icon.png
 		endif
 	endif
 else
@@ -240,8 +240,7 @@ $(OUTPUT).3dsx	:	$(OUTPUT).elf $(OUTPUT).smdh
 	@echo Built cia package for $(TARGET), $(VERSION_BUILD).
 
 $(OUTPUT).smdh:
-	echo $(CURDIR)
-	$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "icon.icn"
+	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "icon.icn"
 
 $(OUTPUT).elf	:	$(OFILES)
 
