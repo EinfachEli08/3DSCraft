@@ -240,7 +240,8 @@ $(OUTPUT).3dsx	:	$(OUTPUT).elf $(OUTPUT).smdh
 	@echo Built cia package for $(TARGET), $(VERSION_BUILD).
 
 $(OUTPUT).smdh:
-	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "icon.icn"
+	echo $(CURDIR)
+	$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "icon.icn"
 
 $(OUTPUT).elf	:	$(OFILES)
 
