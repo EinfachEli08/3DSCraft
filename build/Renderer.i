@@ -20699,7 +20699,7 @@ int SpriteBatch_GetHeight();
 void SpriteBatch_StartFrame(int width, int height);
 void SpriteBatch_Render(gfxScreen_t screen);
 # 8 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 2
-# 1 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/WorldSelect.h" 1
+# 1 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/SelectWorldScreen.h" 1
        
 
 
@@ -20709,25 +20709,25 @@ void SpriteBatch_Render(gfxScreen_t screen);
 
 
 typedef struct {
-    char worldName[12];
-    GeneratorSettings settings;
+  char worldName[12];
+  GeneratorSettings settings;
 } WorldSelect_Result;
 
-void WorldSelect_Init();
-void WorldSelect_Deinit();
+void SelectWorldScreen_Init();
+void SelectWorldScreen_Deinit();
 
-void WorldSelect_Render();
+void SelectWorldScreen_Render();
 
-# 18 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/WorldSelect.h" 3 4
+# 18 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/SelectWorldScreen.h" 3 4
 _Bool 
-# 18 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/WorldSelect.h"
-    WorldSelect_Update(char* out_worldpath, char* out_name, WorldGenType* worldType, 
-# 18 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/WorldSelect.h" 3 4
-                                                                                     _Bool
-# 18 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/WorldSelect.h"
-                                                                                         * newWorld);
+# 18 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/SelectWorldScreen.h"
+    SelectWorldScreen_Update(char* out_worldpath, char* out_name, WorldGenType* worldType, 
+# 18 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/SelectWorldScreen.h" 3 4
+                                                                                           _Bool
+# 18 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/SelectWorldScreen.h"
+                                                                                               * newWorld);
 
-void WorldSelect_ScanWorlds();
+void SelectWorldScreen_ScanWorlds();
 # 9 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 2
 # 1 "C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Camera.h" 1
        
@@ -20899,7 +20899,64 @@ extern const u8 world_shbin_end[];
 extern const u8 world_shbin[];
 extern const u32 world_shbin_size;
 # 20 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 2
-# 30 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
+# 1 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/State1.h" 1
+
+
+
+
+
+
+# 1 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/state_machine/state_machine.h" 1
+# 9 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/state_machine/state_machine.h"
+typedef struct state_machine_s {
+  void (*current_state)(struct state_machine_s *);
+
+
+
+
+
+  void *context;
+} state_machine_t;
+
+typedef void (*state_func)(state_machine_t *);
+
+
+state_machine_t *state_machine_create(void);
+
+
+void state_machine_delete(state_machine_t *machine);
+
+
+state_func state_machine_get_current_state(const state_machine_t *machine);
+
+
+void state_machine_set_current_state(state_machine_t *machine, state_func state);
+
+
+void state_machine_run(state_machine_t *machine);
+
+
+int state_machine_state_is_valid(const state_machine_t *machine);
+
+
+
+
+void state_machine_exit(state_machine_t *machine);
+
+
+void state_machine_set_context(state_machine_t *machine, void *context);
+
+
+void *state_machine_get_context(const state_machine_t *machine);
+# 8 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/State1.h" 2
+
+void state1(state_machine_t *machine);
+# 21 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 2
+# 1 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/State2.h" 1
+# 10 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/State2.h"
+void state2(state_machine_t *machine);
+# 22 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 2
+# 31 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
 static C3D_RenderTarget* renderTargets[2];
 static C3D_RenderTarget* lowerScreen;
 
@@ -20917,13 +20974,22 @@ static WorkQueue* workqueue;
 
 static GameState* gamestate;
 
+static state_machine_t *machine;
+
 extern 
-# 47 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
+# 50 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
       _Bool 
-# 47 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
+# 50 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
            showDebugInfo;
 
+extern void TitleScreen(state_machine_t *machine);
+extern void SelectWorldScreen(state_machine_t *machine);
+
 void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* gamestate_) {
+
+ machine = state_machine_create();
+ state_machine_set_current_state(machine, TitleScreen);
+
  world = world_;
  player = player_;
  workqueue = queue;
@@ -20971,11 +21037,15 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 
  Block_Init();
 
-
+ Item_Init();
 
  Texture_Load(&logoTex, "romfs:/assets/textures/gui/title/craftus.png");
 }
+
 void Renderer_Deinit() {
+
+ state_machine_delete(machine);
+
  C3D_TexDelete(&logoTex);
 
  Item_Deinit();
@@ -21016,8 +21086,6 @@ void Renderer_Render() {
   C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR, 0);
   C3D_TexEnvFunc(env, C3D_Both, GPU_MODULATE);
 
-
-
   C3D_BindProgram(&world_shader);
   C3D_SetAttrInfo(&world_vertexAttribs);
 
@@ -21028,29 +21096,27 @@ void Renderer_Render() {
 
    SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
    if (iod == 0.f) SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 240, 0, 16, 16);
-
-
   } else {
    C3D_Mtx projection;
    Mtx_PerspStereoTilt(&projection, ((90.f)*(6.28318530717958647692528676655900576)/360.0f), ((400.f) / (240.f)), 0.22f, 4.f * (16),
-         !i ? -iod : iod, 3.f, 
-# 159 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
-                              0
-# 159 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
-                                   );
+        !i ? -iod : iod, 3.f, 
+# 169 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
+                             0
+# 169 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
+                                  );
 
    C3D_Mtx view;
    Mtx_Identity(&view);
    Mtx_Translate(&view, 0.f, -70.f, 0.f, 
-# 163 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
+# 173 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
                                         0
-# 163 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
+# 173 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
                                              );
 
    Mtx_RotateX(&view, -((30.f)*(6.28318530717958647692528676655900576)/360.0f), 
-# 165 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
+# 175 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
                                                   1
-# 165 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
+# 175 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
                                                       );
 
    C3D_Mtx vp;
@@ -21064,23 +21130,21 @@ void Renderer_Render() {
    SpriteBatch_PushQuad(100 / 2 - 76 / 2, 120 / 2, 0, 256, 64, 0, 0, 128, 32);
 
    SpriteBatch_PushText(0, 0, 0, 
-# 177 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
+# 187 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
                                 (0x7fff)
-# 177 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
+# 187 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
                                          , 
-# 177 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
+# 187 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
                                            1
-# 177 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
+# 187 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
                                                , 0x7fffffff
-# 177 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
+# 187 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
                                                         , 
-# 177 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
+# 187 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c" 3 4
                                                           ((void *)0)
-# 177 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
+# 187 "C:/Users/Elias/CLionProjects/3DSCraft/source/rendering/Renderer.c"
                                                               , "v" "0.5.4");
   }
-
-
 
   C3D_BindProgram(&gui_shader);
   C3D_SetAttrInfo(&gui_vertexAttribs);
@@ -21095,22 +21159,22 @@ void Renderer_Render() {
 
  SpriteBatch_StartFrame(320, 240);
 
- if (*gamestate == GameState_SelectWorld)
- {
-  WorldSelect_Render();
- }
- else {
+
+
+ if (*gamestate == GameState_SelectWorld) {
+  state_machine_run(machine);
+ } else {
   SpriteBatch_SetScale(2);
   player->quickSelectBarSlots = Inventory_QuickSelectCalcSlots(160);
   Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth(player->quickSelectBarSlots) / 2,
-       120 - (22 + 1), player->quickSelectBar, player->quickSelectBarSlots,
-       &player->quickSelectBarSlot);
+          120 - (22 + 1), player->quickSelectBar, player->quickSelectBarSlots,
+          &player->quickSelectBarSlot);
   player->inventorySite = Inventory_Draw(16, 0, 160, player->inventory, sizeof(player->inventory) / sizeof(ItemStack),player->inventorySite);
-
-
  }
 
-        if (showDebugInfo) DebugUI_Draw();
+
+
+ if (showDebugInfo) DebugUI_Draw();
 
  Gui_Frame();
 

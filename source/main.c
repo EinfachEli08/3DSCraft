@@ -11,7 +11,7 @@
 #include <entity/Damage.h>
 #include <gui/DebugUI.h>
 #include <gui/Gui.h>
-#include <gui/WorldSelect.h>
+#include <gui/SelectWorldScreen.h>
 #include <rendering/PolyGen.h>
 #include <rendering/Renderer.h>
 #include <world/ChunkWorker.h>
@@ -24,12 +24,8 @@
 
 #include <sino/sino.h>
 #include <citro3d.h>
-#include <gui/state_machine/state_machine.h>
 
 bool showDebugInfo = true;
-
-void state1(state_machine_t *machine);
-void state2(state_machine_t *machine);
 
 void releaseWorld(ChunkWorker* chunkWorker, SaveManager* savemgr, World* world) {
 	for (int i = 0; i < CHUNKCACHE_SIZE; i++) {
@@ -87,7 +83,7 @@ int main() {
 	
 	DebugUI_Init();
 
-	WorldSelect_Init();
+	SelectWorldScreen_Init();
 
 	World_Init(world, &chunkWorker.queue);
 
@@ -100,10 +96,6 @@ int main() {
 	float dt = 0.f, timeAccum = 0.f, fpsClock = 0.f;
 	int frameCounter = 0, fps = 0;
 	bool initBackgroundSound = true;
-
-	state_machine_t *machine;
-	machine = state_machine_create();
-	state_machine_set_current_state(machine, state1);
 
 	while (aptMainLoop()) 
 	{
@@ -132,7 +124,6 @@ int main() {
 
 		Renderer_Render();
 
-		state_machine_run(machine);
 
 
 		uint64_t currentTime = svcGetSystemTick();
@@ -158,7 +149,7 @@ int main() {
 
 				gamestate = GameState_SelectWorld;
 
-				WorldSelect_ScanWorlds();
+				SelectWorldScreen_ScanWorlds();
 
 				lastTime = svcGetSystemTick();
 			}
@@ -192,7 +183,7 @@ int main() {
 			char name[WORLD_NAME_SIZE] = {'\0'};
 			WorldGenType worldType;
 			bool newWorld = false;
-			if (WorldSelect_Update(path, name, &worldType, &newWorld)) {
+			if (SelectWorldScreen_Update(path, name, &worldType, &newWorld)) {
 				strcpy(world->name, name);
 				world->genSettings.type = worldType;
 
@@ -250,7 +241,7 @@ int main() {
 
 	free(world);
 
-	state_machine_delete(machine);
+
 
 	if (BackgroundSound.threaid != NULL)
 	{
@@ -278,7 +269,7 @@ int main() {
 	ndspExit();
 	sino_exit();
 
-	WorldSelect_Deinit();
+	SelectWorldScreen_Deinit();
 
 	DebugUI_Deinit();
 
@@ -292,16 +283,3 @@ int main() {
 	return 0;
 }
 
-void state1(state_machine_t *machine)
-{
-	DebugUI_Text("state1");
-		state_machine_set_current_state(machine, state2);
-
-}
-
-void state2(state_machine_t *machine)
-{
-	DebugUI_Text("state2");
-	state_machine_set_current_state(machine, state1);
-
-}

@@ -5,7 +5,7 @@
 #include <gui/Gui.h>
 #include <gui/Inventory.h>
 #include <gui/SpriteBatch.h>
-#include <gui/WorldSelect.h>
+#include <gui/SelectWorldScreen.h>
 #include <rendering/Camera.h>
 #include <rendering/Clouds.h>
 #include <rendering/Cursor.h>
@@ -17,11 +17,12 @@
 
 #include <gui_shbin.h>
 #include <world_shbin.h>
+#include <gui/State1.h>
+#include <gui/State2.h>
 
 #define DISPLAY_TRANSFER_FLAGS                                                                                                          \
-	(GX_TRANSFER_FLIP_VERT(0) | GX_TRANSFER_OUT_TILED(0) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) | \
-	 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGB8) | \
-GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO))
+    (GX_TRANSFER_FLIP_VERT(0) | GX_TRANSFER_OUT_TILED(0) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) | \
+     GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGB8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO))
 
 #define CLEAR_COLOR_SKY 0x90d9ffff
 //#define CLEAR_COLOR_SKY 0x06070cff
@@ -44,9 +45,18 @@ static WorkQueue* workqueue;
 
 static GameState* gamestate;
 
+static state_machine_t *machine;
+
 extern bool showDebugInfo;
 
+extern void TitleScreen(state_machine_t *machine);
+extern void SelectWorldScreen(state_machine_t *machine);
+
 void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* gamestate_) {
+
+	machine = state_machine_create();
+	state_machine_set_current_state(machine, TitleScreen);
+
 	world = world_;
 	player = player_;
 	workqueue = queue;
@@ -94,11 +104,15 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 
 	Block_Init();
 
-	//Item_Init();
+	Item_Init();
 
 	Texture_Load(&logoTex, "romfs:/assets/textures/gui/title/craftus.png");
 }
+
 void Renderer_Deinit() {
+
+	state_machine_delete(machine);
+
 	C3D_TexDelete(&logoTex);
 
 	Item_Deinit();
@@ -139,8 +153,6 @@ void Renderer_Render() {
 		C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR, 0);
 		C3D_TexEnvFunc(env, C3D_Both, GPU_MODULATE);
 
-
-
 		C3D_BindProgram(&world_shader);
 		C3D_SetAttrInfo(&world_vertexAttribs);
 
@@ -151,12 +163,10 @@ void Renderer_Render() {
 
 			SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
 			if (iod == 0.f) SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 240, 0, 16, 16);
-
-
 		} else {
 			C3D_Mtx projection;
 			Mtx_PerspStereoTilt(&projection, C3D_AngleFromDegrees(90.f), ((400.f) / (240.f)), 0.22f, 4.f * CHUNK_SIZE,
-					    !i ? -iod : iod, 3.f, false);
+								!i ? -iod : iod, 3.f, false);
 
 			C3D_Mtx view;
 			Mtx_Identity(&view);
@@ -177,8 +187,6 @@ void Renderer_Render() {
 			SpriteBatch_PushText(0, 0, 0, INT16_MAX, true, INT_MAX, NULL, "v" CRAFTUS_VERSION_STR);
 		}
 
-
-
 		C3D_BindProgram(&gui_shader);
 		C3D_SetAttrInfo(&gui_vertexAttribs);
 
@@ -192,22 +200,22 @@ void Renderer_Render() {
 
 	SpriteBatch_StartFrame(320, 240);
 
-	if (*gamestate == GameState_SelectWorld)
-	{
-		WorldSelect_Render();
-	}
-	else {
+
+
+	if (*gamestate == GameState_SelectWorld) {
+		state_machine_run(machine);
+	} else {
 		SpriteBatch_SetScale(2);
 		player->quickSelectBarSlots = Inventory_QuickSelectCalcSlots(160);
 		Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth(player->quickSelectBarSlots) / 2,
-					  120 - INVENTORY_QUICKSELECT_HEIGHT, player->quickSelectBar, player->quickSelectBarSlots,
-					  &player->quickSelectBarSlot);
+								  120 - INVENTORY_QUICKSELECT_HEIGHT, player->quickSelectBar, player->quickSelectBarSlots,
+								  &player->quickSelectBarSlot);
 		player->inventorySite = Inventory_Draw(16, 0, 160, player->inventory, sizeof(player->inventory) / sizeof(ItemStack),player->inventorySite);
-
-
 	}
 
-        if (showDebugInfo) DebugUI_Draw();
+
+
+	if (showDebugInfo) DebugUI_Draw();
 
 	Gui_Frame();
 
@@ -215,3 +223,52 @@ void Renderer_Render() {
 
 	C3D_FrameEnd(0);
 }
+
+/*
+static bool clicked_play = false;
+
+#include <gui/Gui.h>
+#include <gui/SpriteBatch.h>
+
+void state1(state_machine_t *machine) {
+	//WorldSelect_Render();
+	/*SpriteBatch_SetScale(2);
+
+	SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
+	for (int i = 0; i < 160 / 32 + 1; i++) {
+		for (int j = 0; j < 120 / 32 + 1; j++) {
+			bool overlay = j >= 2;
+			SpriteBatch_PushQuadColor(i * 32, j * 32, overlay ? -4 : -10, 32, 32, 0, 0, 32, 32,
+									  overlay ? INT16_MAX : SHADER_RGB(12, 12, 12));
+		}
+	}
+	Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 1);
+	clicked_play = Gui_Button(1.f, "Test scene management with gui");
+	Gui_EndRow();
+
+	if (clicked_play) {
+		state_machine_set_current_state(machine, state2);
+	}
+}
+
+void state2(state_machine_t *machine) {
+	SpriteBatch_SetScale(2);
+
+	SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
+	for (int i = 0; i < 160 / 32 + 1; i++) {
+		for (int j = 0; j < 120 / 32 + 1; j++) {
+			bool overlay = j >= 2;
+			SpriteBatch_PushQuadColor(i * 32, j * 32, overlay ? -4 : -10, 32, 32, 0, 0, 32, 32,
+									  overlay ? INT16_MAX : SHADER_RGB(12, 12, 12));
+		}
+	}
+
+	Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 1);
+	clicked_play = Gui_Button(1.f, "it works!");
+	Gui_EndRow();
+
+	if (clicked_play) {
+		state_machine_set_current_state(machine, state1);
+	}
+}
+*/
