@@ -33,7 +33,7 @@ SOURCES 		:=  $(foreach dir,$(SOURCES),$(patsubst $(CURDIR)/%,%,$(dir)))
 # 3dsx
 APP_DESCRIPTION :=  Re-reload of Craftus Reloaded
 APP_AUTHOR		:=  Omega
-ICON			:=	$(META)/icon.png
+ICON			:=	$(META)/newicon.png
 
 # CIA
 BANNER_AUDIO	:=	$(META)/banner.wav
@@ -129,8 +129,8 @@ ifeq ($(strip $(ICON)),)
 	ifneq (,$(findstring $(TARGET).png,$(icons)))
 		export APP_ICON := $(TOPDIR)/$(TARGET).png
 	else
-		ifneq (,$(findstring icon.png,$(icons)))
-			export APP_ICON := $(TOPDIR)/icon.png
+		ifneq (,$(findstring newicon.png,$(icons)))
+			export APP_ICON := $(TOPDIR)/newicon.png
 		endif
 	endif
 else
