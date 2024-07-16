@@ -233,7 +233,7 @@ Inventory_DrawQuickSelect:
 	.loc 1 24 20 discriminator 1 view .LVU61
 	cmp	r10, #0
 .LBE14:
-	.loc 1 45 40 is_stmt 0 view .LVU62
+	.loc 1 47 40 is_stmt 0 view .LVU62
 	sub	r8, r10, #2
 .LBB18:
 	.loc 1 24 20 discriminator 1 view .LVU63
@@ -243,14 +243,14 @@ Inventory_DrawQuickSelect:
 	add	ip, r9, #3
 	.loc 1 27 7 view .LVU65
 	lsl	ip, ip, #1
-	.loc 1 29 7 view .LVU66
+	.loc 1 31 7 view .LVU66
 	sub	r3, ip, #4
 .LBE15:
 	.loc 1 24 11 view .LVU67
 	mov	r5, #0
 	ldr	fp, .L42
 .LBB16:
-	.loc 1 29 7 view .LVU68
+	.loc 1 31 7 view .LVU68
 	str	r3, [sp, #28]
 	add	r6, r7, #1
 	str	ip, [sp, #32]
@@ -258,38 +258,38 @@ Inventory_DrawQuickSelect:
 	b	.L26
 .LVL16:
 .L22:
-	.loc 1 29 3 is_stmt 1 view .LVU69
-	.loc 1 29 7 is_stmt 0 view .LVU70
+	.loc 1 31 3 is_stmt 1 view .LVU69
+	.loc 1 31 7 is_stmt 0 view .LVU70
 	mov	r3, #36
 	mov	r0, r7
 	mov	r2, r3
 	ldr	r1, [sp, #28]
 	bl	Gui_EnteredCursorInside
 .LVL17:
-	.loc 1 29 6 discriminator 1 view .LVU71
+	.loc 1 31 6 discriminator 1 view .LVU71
 	cmp	r0, #0
 	bne	.L39
 .L23:
-	.loc 1 33 3 is_stmt 1 view .LVU72
+	.loc 1 35 3 is_stmt 1 view .LVU72
 	mov	r0, #2
 	bl	SpriteBatch_SetScale
 .LVL18:
-	.loc 1 34 3 view .LVU73
-	.loc 1 34 6 is_stmt 0 view .LVU74
+	.loc 1 36 3 view .LVU73
+	.loc 1 36 6 is_stmt 0 view .LVU74
 	ldr	r3, [fp]
 	cmp	r4, r3
 	beq	.L40
 .L24:
-	.loc 1 38 3 is_stmt 1 view .LVU75
-	.loc 1 39 4 view .LVU76
-	.loc 1 38 6 is_stmt 0 view .LVU77
+	.loc 1 40 3 is_stmt 1 view .LVU75
+	.loc 1 41 4 view .LVU76
+	.loc 1 40 6 is_stmt 0 view .LVU77
 	cmp	r5, r8
-	.loc 1 39 4 view .LVU78
+	.loc 1 41 4 view .LVU78
 	add	r7, r6, #20
 .LVL19:
-	.loc 1 38 6 view .LVU79
+	.loc 1 40 6 view .LVU79
 	bge	.L25
-	.loc 1 39 4 view .LVU80
+	.loc 1 41 4 view .LVU80
 	mov	r2, #22
 	mov	r1, #0
 	mov	r3, #20
@@ -305,7 +305,7 @@ Inventory_DrawQuickSelect:
 	bl	SpriteBatch_PushQuad
 .LVL20:
 .L25:
-	.loc 1 39 4 view .LVU81
+	.loc 1 41 4 view .LVU81
 .LBE16:
 	.loc 1 24 30 is_stmt 1 discriminator 2 view .LVU82
 	add	r5, r5, #1
@@ -334,7 +334,7 @@ Inventory_DrawQuickSelect:
 	.loc 1 28 6 is_stmt 0 view .LVU90
 	cmp	r3, #0
 	beq	.L22
-	.loc 1 28 29 is_stmt 1 discriminator 1 view .LVU91
+	.loc 1 29 4 is_stmt 1 view .LVU91
 	mov	r3, #11
 	ldrb	r1, [r4, #1]	@ zero_extendqisi2
 	str	r3, [sp]
@@ -342,25 +342,25 @@ Inventory_DrawQuickSelect:
 	ldr	r3, [sp, #32]
 	add	r2, r7, #4
 .LVL26:
-	.loc 1 28 29 is_stmt 0 discriminator 1 view .LVU92
+	.loc 1 29 4 is_stmt 0 view .LVU92
 	bl	SpriteBatch_PushIcon
 .LVL27:
-	.loc 1 28 29 discriminator 1 view .LVU93
+	.loc 1 29 4 view .LVU93
 	b	.L22
 .L39:
-	.loc 1 30 4 is_stmt 1 view .LVU94
-	.loc 1 30 14 is_stmt 0 view .LVU95
+	.loc 1 32 4 is_stmt 1 view .LVU94
+	.loc 1 32 14 is_stmt 0 view .LVU95
 	ldr	r3, [sp, #80]
-	.loc 1 31 4 view .LVU96
+	.loc 1 33 4 view .LVU96
 	mov	r0, r4
-	.loc 1 30 14 view .LVU97
+	.loc 1 32 14 view .LVU97
 	str	r5, [r3]
-	.loc 1 31 4 is_stmt 1 view .LVU98
+	.loc 1 33 4 is_stmt 1 view .LVU98
 	bl	clickAtStack
 .LVL28:
 	b	.L23
 .L40:
-	.loc 1 35 4 view .LVU99
+	.loc 1 37 4 view .LVU99
 	ldr	r3, .L42+4
 	mov	r0, r6
 	str	r3, [sp, #4]
@@ -370,30 +370,30 @@ Inventory_DrawQuickSelect:
 	str	r3, [sp]
 	bl	SpriteBatch_PushSingleColorQuad
 .LVL29:
-	.loc 1 36 4 view .LVU100
+	.loc 1 38 4 view .LVU100
 	mov	r0, #3
 	bl	SpriteBatch_BindGuiTexture
 .LVL30:
 	b	.L24
 .LVL31:
 .L41:
-	.loc 1 36 4 is_stmt 0 view .LVU101
+	.loc 1 38 4 is_stmt 0 view .LVU101
 .LBE17:
 	ldr	r7, [sp, #36]
 .LVL32:
 .L27:
-	.loc 1 36 4 view .LVU102
+	.loc 1 38 4 view .LVU102
 .LBE18:
-	.loc 1 42 2 is_stmt 1 view .LVU103
-	.loc 1 44 2 is_stmt 0 view .LVU104
+	.loc 1 44 2 is_stmt 1 view .LVU103
+	.loc 1 46 2 is_stmt 0 view .LVU104
 	mov	r5, #22
 	mov	r6, #21
 	mov	r4, #0
-	.loc 1 42 2 view .LVU105
+	.loc 1 44 2 view .LVU105
 	mov	r0, #2
 	bl	SpriteBatch_SetScale
 .LVL33:
-	.loc 1 44 2 is_stmt 1 view .LVU106
+	.loc 1 46 2 is_stmt 1 view .LVU106
 	mov	r3, r6
 	mov	r1, r9
 	mov	r0, r7
@@ -405,13 +405,13 @@ Inventory_DrawQuickSelect:
 	str	r5, [sp]
 	bl	SpriteBatch_PushQuad
 .LVL34:
-	.loc 1 45 2 view .LVU107
+	.loc 1 47 2 view .LVU107
 	mov	r3, #161
-	.loc 1 45 31 is_stmt 0 view .LVU108
+	.loc 1 47 31 is_stmt 0 view .LVU108
 	add	r8, r8, r8, lsl #2
-	.loc 1 45 26 view .LVU109
+	.loc 1 47 26 view .LVU109
 	add	r0, r7, r8, lsl #2
-	.loc 1 45 2 view .LVU110
+	.loc 1 47 2 view .LVU110
 	mov	r1, r9
 	str	r3, [sp, #4]
 	add	r0, r0, r6
@@ -423,21 +423,21 @@ Inventory_DrawQuickSelect:
 	str	r5, [sp]
 	bl	SpriteBatch_PushQuad
 .LVL35:
-	.loc 1 47 2 is_stmt 1 view .LVU111
+	.loc 1 49 2 is_stmt 1 view .LVU111
 	mov	r3, #24
-	.loc 1 47 37 is_stmt 0 view .LVU112
+	.loc 1 49 37 is_stmt 0 view .LVU112
 	ldr	r2, [sp, #80]
-	.loc 1 47 2 view .LVU113
+	.loc 1 49 2 view .LVU113
 	str	r5, [sp, #8]
-	.loc 1 47 37 view .LVU114
+	.loc 1 49 37 view .LVU114
 	ldr	r0, [r2]
-	.loc 1 47 2 view .LVU115
+	.loc 1 49 2 view .LVU115
 	sub	r1, r9, #1
-	.loc 1 47 37 view .LVU116
+	.loc 1 49 37 view .LVU116
 	add	r0, r0, r0, lsl #2
-	.loc 1 47 25 view .LVU117
+	.loc 1 49 25 view .LVU117
 	add	r0, r7, r0, lsl #2
-	.loc 1 47 2 view .LVU118
+	.loc 1 49 2 view .LVU118
 	mov	r2, #14
 	stm	sp, {r3, r4}
 	str	r3, [sp, #16]
@@ -445,14 +445,14 @@ Inventory_DrawQuickSelect:
 	sub	r0, r0, #1
 	bl	SpriteBatch_PushQuad
 .LVL36:
-	.loc 1 48 1 view .LVU119
+	.loc 1 50 1 view .LVU119
 	add	sp, sp, #44
 	.cfi_def_cfa_offset 36
 	@ sp needed
 	pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
 .LVL37:
 .L43:
-	.loc 1 48 1 view .LVU120
+	.loc 1 50 1 view .LVU120
 	.align	2
 .L42:
 	.word	.LANCHOR0
@@ -476,12 +476,12 @@ Inventory_DrawQuickSelect:
 Inventory_Draw:
 .LVL38:
 .LFB218:
-	.loc 1 50 82 is_stmt 1 view -0
+	.loc 1 52 82 is_stmt 1 view -0
 	.cfi_startproc
 	@ args = 8, pretend = 0, frame = 24
 	@ frame_needed = 0, uses_anonymous_args = 0
-	.loc 1 51 2 view .LVU122
-	.loc 1 50 82 is_stmt 0 view .LVU123
+	.loc 1 53 2 view .LVU122
+	.loc 1 52 82 is_stmt 0 view .LVU123
 	push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	.cfi_def_cfa_offset 36
 	.cfi_offset 4, -36
@@ -500,193 +500,193 @@ Inventory_Draw:
 	mov	ip, r0
 	sub	sp, sp, #36
 	.cfi_def_cfa_offset 80
-	.loc 1 51 2 view .LVU124
+	.loc 1 53 2 view .LVU124
 	mov	r0, #1
 .LVL39:
-	.loc 1 50 82 view .LVU125
+	.loc 1 52 82 view .LVU125
 	mov	r4, r3
 	mov	r8, r1
 	ldr	fp, [sp, #84]
 	str	ip, [sp, #16]
 	str	r2, [sp, #12]
-	.loc 1 51 2 view .LVU126
+	.loc 1 53 2 view .LVU126
 	bl	SpriteBatch_SetScale
 .LVL40:
-	.loc 1 53 2 is_stmt 1 view .LVU127
-	.loc 1 54 2 view .LVU128
-	.loc 1 55 2 view .LVU129
-	.loc 1 56 1 view .LVU130
-	.loc 1 57 1 view .LVU131
-	.loc 1 59 2 view .LVU132
-	.loc 1 59 16 is_stmt 0 view .LVU133
+	.loc 1 55 2 is_stmt 1 view .LVU127
+	.loc 1 56 2 view .LVU128
+	.loc 1 57 2 view .LVU129
+	.loc 1 58 1 view .LVU130
+	.loc 1 59 1 view .LVU131
+	.loc 1 61 2 view .LVU132
+	.loc 1 61 16 is_stmt 0 view .LVU133
 	ldr	r3, .L78
 	str	r3, [sp, #28]
-	.loc 1 60 2 is_stmt 1 view .LVU134
-	.loc 1 60 5 is_stmt 0 view .LVU135
+	.loc 1 62 2 is_stmt 1 view .LVU134
+	.loc 1 62 5 is_stmt 0 view .LVU135
 	ldr	r3, [sp, #80]
 	cmp	r3, #32
 	bgt	.L45
-	.loc 1 68 38 discriminator 1 view .LVU136
+	.loc 1 70 38 discriminator 1 view .LVU136
 	lsl	r3, fp, #5
-	.loc 1 74 6 view .LVU137
+	.loc 1 76 6 view .LVU137
 	sub	r5, r3, #32
 .L46:
-	.loc 1 74 2 is_stmt 1 view .LVU138
+	.loc 1 76 2 is_stmt 1 view .LVU138
 .LVL41:
-	.loc 1 75 2 view .LVU139
+	.loc 1 77 2 view .LVU139
 .LBB19:
-	.loc 1 75 7 view .LVU140
-	.loc 1 75 31 is_stmt 0 discriminator 1 view .LVU141
+	.loc 1 77 7 view .LVU140
+	.loc 1 77 31 is_stmt 0 discriminator 1 view .LVU141
 	vmov	s15, r3	@ int
 	vcvt.f64.s32	d0, s15
 	vldr.32	s15, [sp, #80]	@ int
 	vcvt.f64.s32	d1, s15
 	bl	fmin
 .LVL42:
-	.loc 1 75 29 discriminator 1 view .LVU142
+	.loc 1 77 29 discriminator 1 view .LVU142
 	vmov	s15, r5	@ int
 	vcvt.f64.s32	d7, s15
 	vcmpe.f64	d0, d7
 	vmrs	APSR_nzcv, FPSCR
-	.loc 1 75 31 discriminator 1 view .LVU143
+	.loc 1 77 31 discriminator 1 view .LVU143
 	vmov.f64	d8, d0
 .LVL43:
-	.loc 1 75 29 is_stmt 1 discriminator 1 view .LVU144
+	.loc 1 77 29 is_stmt 1 discriminator 1 view .LVU144
 	ble	.L50
-	.loc 1 75 29 is_stmt 0 discriminator 1 view .LVU145
+	.loc 1 77 29 is_stmt 0 discriminator 1 view .LVU145
 .LBE19:
-	.loc 1 56 6 view .LVU146
+	.loc 1 58 6 view .LVU146
 	mov	r10, #0
 	add	r3, r5, r5, lsl #1
-	.loc 1 53 6 view .LVU147
+	.loc 1 55 6 view .LVU147
 	ldr	r9, [sp, #16]
 	add	r4, r4, r3
 .LVL44:
 .LBB20:
-	.loc 1 91 17 view .LVU148
+	.loc 1 92 88 view .LVU148
 	str	fp, [sp, #20]
 .LVL45:
 .L57:
-	.loc 1 77 3 is_stmt 1 view .LVU149
-	.loc 1 77 16 is_stmt 0 view .LVU150
+	.loc 1 79 3 is_stmt 1 view .LVU149
+	.loc 1 79 16 is_stmt 0 view .LVU150
 	ldrb	r0, [r4]	@ zero_extendqisi2
-	.loc 1 77 6 view .LVU151
+	.loc 1 79 6 view .LVU151
 	cmp	r0, #0
 	beq	.L52
-	.loc 1 77 23 discriminator 1 view .LVU152
+	.loc 1 79 23 discriminator 1 view .LVU152
 	ldrb	r3, [r4, #2]	@ zero_extendqisi2
 	cmp	r3, #0
 	beq	.L52
-	.loc 1 79 4 is_stmt 1 view .LVU153
+	.loc 1 81 4 is_stmt 1 view .LVU153
 .LVL46:
-	.loc 1 80 4 view .LVU154
-	.loc 1 80 7 is_stmt 0 view .LVU155
+	.loc 1 82 4 view .LVU154
+	.loc 1 82 7 is_stmt 0 view .LVU155
 	ldr	r2, [sp, #12]
-	.loc 1 80 15 view .LVU156
+	.loc 1 82 15 view .LVU156
 	add	r3, r9, #16
-	.loc 1 80 7 view .LVU157
+	.loc 1 82 7 view .LVU157
 	cmp	r3, r2
-	.loc 1 82 5 is_stmt 1 view .LVU158
+	.loc 1 84 5 is_stmt 1 view .LVU158
 .LVL47:
-	.loc 1 83 5 view .LVU159
-	.loc 1 82 11 is_stmt 0 view .LVU160
+	.loc 1 85 5 view .LVU159
+	.loc 1 84 11 is_stmt 0 view .LVU160
 	ldrge	r3, [sp, #16]
 	movlt	r6, r9
 	movge	r6, r3
 	movlt	r9, r3
-	.loc 1 93 10 view .LVU161
+	.loc 1 94 10 view .LVU161
 	addge	r9, r3, #16
-	.loc 1 87 5 view .LVU162
+	.loc 1 89 5 view .LVU162
 	mov	r3, #10
-	.loc 1 83 11 view .LVU163
+	.loc 1 85 11 view .LVU163
 	addge	r8, r8, #17
 .LVL48:
-	.loc 1 84 5 is_stmt 1 view .LVU164
-	.loc 1 87 5 is_stmt 0 view .LVU165
+	.loc 1 86 5 is_stmt 1 view .LVU164
+	.loc 1 89 5 is_stmt 0 view .LVU165
 	lsl	r6, r6, #1
 	lsl	r7, r8, #1
 	ldrb	r1, [r4, #1]	@ zero_extendqisi2
 	mov	r2, r6
 	str	r3, [sp]
 	mov	r3, r7
-	.loc 1 84 13 view .LVU166
+	.loc 1 86 13 view .LVU166
 	movge	fp, #1
-	.loc 1 79 12 view .LVU167
+	.loc 1 81 12 view .LVU167
 	movlt	fp, #0
 .LVL49:
-	.loc 1 86 4 is_stmt 1 view .LVU168
-	.loc 1 87 5 view .LVU169
+	.loc 1 88 4 is_stmt 1 view .LVU168
+	.loc 1 89 5 view .LVU169
 	bl	SpriteBatch_PushIcon
 .LVL50:
-	.loc 1 88 4 view .LVU170
-	.loc 1 88 8 is_stmt 0 view .LVU171
+	.loc 1 90 4 view .LVU170
+	.loc 1 90 8 is_stmt 0 view .LVU171
 	mov	r3, #32
 	mov	r1, r7
 	mov	r2, r3
 	mov	r0, r6
 	bl	Gui_EnteredCursorInside
 .LVL51:
-	.loc 1 88 7 discriminator 1 view .LVU172
+	.loc 1 90 7 discriminator 1 view .LVU172
 	cmp	r0, #0
 	bne	.L76
 .L54:
-	.loc 1 90 4 is_stmt 1 view .LVU173
+	.loc 1 92 4 is_stmt 1 view .LVU173
 	ldr	r3, .L78+4
-	.loc 1 90 4 is_stmt 0 discriminator 4 view .LVU174
+	.loc 1 92 4 is_stmt 0 discriminator 4 view .LVU174
 	mov	r0, r6
-	.loc 1 90 4 view .LVU175
+	.loc 1 92 4 view .LVU175
 	ldr	r3, [r3]
-	.loc 1 90 4 discriminator 4 view .LVU176
+	.loc 1 92 4 discriminator 4 view .LVU176
 	mov	r2, #9
-	.loc 1 90 4 view .LVU177
+	.loc 1 92 4 view .LVU177
 	cmp	r4, r3
-	.loc 1 90 4 discriminator 1 view .LVU178
+	.loc 1 92 4 discriminator 1 view .LVU178
 	addne	r3, sp, #32
 	addne	r3, r3, r10, lsl #1
 	ldrshne	r3, [r3, #-4]
-	.loc 1 90 4 discriminator 2 view .LVU179
+	.loc 1 92 4 discriminator 2 view .LVU179
 	ldreq	r3, .L78+8
-	.loc 1 90 4 discriminator 4 view .LVU180
+	.loc 1 92 4 discriminator 4 view .LVU180
 	mov	r1, r7
 	str	r3, [sp, #4]
 	mov	r3, #32
 	str	r3, [sp]
 	bl	SpriteBatch_PushSingleColorQuad
 .LVL52:
-	.loc 1 92 4 is_stmt 1 view .LVU181
-	.loc 1 93 4 view .LVU182
-	.loc 1 94 4 view .LVU183
-	.loc 1 94 7 is_stmt 0 view .LVU184
+	.loc 1 93 4 is_stmt 1 view .LVU181
+	.loc 1 94 4 view .LVU182
+	.loc 1 95 4 view .LVU183
+	.loc 1 95 7 is_stmt 0 view .LVU184
 	cmp	fp, #0
-	.loc 1 92 9 view .LVU185
+	.loc 1 93 9 view .LVU185
 	eoreq	r10, r10, #1
 .LVL53:
-	.loc 1 94 7 view .LVU186
+	.loc 1 95 7 view .LVU186
 	bne	.L77
 .LVL54:
 .L52:
-	.loc 1 75 55 is_stmt 1 discriminator 2 view .LVU187
+	.loc 1 77 55 is_stmt 1 discriminator 2 view .LVU187
 	add	r5, r5, #1
 .LVL55:
-	.loc 1 75 29 discriminator 1 view .LVU188
+	.loc 1 77 29 discriminator 1 view .LVU188
 	vmov	s15, r5	@ int
 	vcvt.f64.s32	d7, s15
 	vcmpe.f64	d7, d8
 	vmrs	APSR_nzcv, FPSCR
 	add	r4, r4, #3
 	bmi	.L57
-	.loc 1 75 29 is_stmt 0 discriminator 1 view .LVU189
+	.loc 1 77 29 is_stmt 0 discriminator 1 view .LVU189
 	ldr	fp, [sp, #20]
 .LVL56:
 .L50:
-	.loc 1 75 29 discriminator 1 view .LVU190
+	.loc 1 77 29 discriminator 1 view .LVU190
 .LBE20:
-	.loc 1 103 2 is_stmt 1 view .LVU191
+	.loc 1 104 2 is_stmt 1 view .LVU191
 	mov	r0, #2
 	bl	SpriteBatch_SetScale
 .LVL57:
-	.loc 1 104 2 view .LVU192
-	.loc 1 105 1 is_stmt 0 view .LVU193
+	.loc 1 105 2 view .LVU192
+	.loc 1 106 1 is_stmt 0 view .LVU193
 	mov	r0, fp
 	add	sp, sp, #36
 	.cfi_remember_state
@@ -701,97 +701,97 @@ Inventory_Draw:
 .L77:
 	.cfi_restore_state
 .LBB21:
-	.loc 1 96 5 is_stmt 1 view .LVU194
-	.loc 1 98 5 view .LVU195
+	.loc 1 97 5 is_stmt 1 view .LVU194
+	.loc 1 99 5 view .LVU195
 	mov	r6, #2
-	.loc 1 98 68 is_stmt 0 view .LVU196
+	.loc 1 99 68 is_stmt 0 view .LVU196
 	ldr	r3, [sp, #12]
-	.loc 1 98 5 view .LVU197
+	.loc 1 99 5 view .LVU197
 	ldr	r0, [sp, #16]
 	sub	r1, r7, #2
 	ldr	r7, .L78+12
-	.loc 1 98 68 view .LVU198
+	.loc 1 99 68 view .LVU198
 	sub	r3, r3, #32
-	.loc 1 98 5 view .LVU199
+	.loc 1 99 5 view .LVU199
 	mov	r2, #10
 	strd	r6, [sp]
 	lsl	r3, r3, #1
 	lsl	r0, r0, #1
 	bl	SpriteBatch_PushSingleColorQuad
 .LVL59:
-	.loc 1 96 10 view .LVU200
+	.loc 1 97 10 view .LVU200
 	mov	r10, #0
 	b	.L52
 .LVL60:
 .L76:
-	.loc 1 89 5 is_stmt 1 view .LVU201
+	.loc 1 91 5 is_stmt 1 view .LVU201
 	mov	r0, r4
 	bl	clickAtStack
 .LVL61:
 	b	.L54
 .LVL62:
 .L45:
-	.loc 1 89 5 is_stmt 0 view .LVU202
+	.loc 1 91 5 is_stmt 0 view .LVU202
 .LBE21:
-	.loc 1 62 3 is_stmt 1 view .LVU203
+	.loc 1 64 3 is_stmt 1 view .LVU203
 	mov	r1, #60
 	mov	r0, #0
 	bl	Gui_Offset
 .LVL63:
-	.loc 1 63 3 view .LVU204
-	.loc 1 63 7 is_stmt 0 view .LVU205
+	.loc 1 65 3 view .LVU204
+	.loc 1 65 7 is_stmt 0 view .LVU205
 	ldr	r1, .L78+16
 	mov	r0, #0
 	bl	Gui_Button
 .LVL64:
-	.loc 1 63 31 discriminator 1 view .LVU206
+	.loc 1 65 31 discriminator 1 view .LVU206
 	cmp	fp, #1
 	movle	r0, #0
 	andgt	r0, r0, #1
-	.loc 1 67 3 view .LVU207
+	.loc 1 69 3 view .LVU207
 	mov	r1, #60
-	.loc 1 63 31 discriminator 1 view .LVU208
+	.loc 1 65 31 discriminator 1 view .LVU208
 	cmp	r0, #0
-	.loc 1 65 4 is_stmt 1 view .LVU209
-	.loc 1 67 3 is_stmt 0 view .LVU210
+	.loc 1 67 4 is_stmt 1 view .LVU209
+	.loc 1 69 3 is_stmt 0 view .LVU210
 	ldr	r0, .L78+20
-	.loc 1 65 8 view .LVU211
+	.loc 1 67 8 view .LVU211
 	subne	fp, fp, #1
 .LVL65:
-	.loc 1 67 3 is_stmt 1 view .LVU212
+	.loc 1 69 3 is_stmt 1 view .LVU212
 	bl	Gui_Offset
 .LVL66:
-	.loc 1 68 3 view .LVU213
-	.loc 1 68 7 is_stmt 0 view .LVU214
+	.loc 1 70 3 view .LVU213
+	.loc 1 70 7 is_stmt 0 view .LVU214
 	mov	r0, #0
 	ldr	r1, .L78+24
 	bl	Gui_Button
 .LVL67:
-	.loc 1 68 6 discriminator 1 view .LVU215
+	.loc 1 70 6 discriminator 1 view .LVU215
 	cmp	r0, #0
-	.loc 1 68 38 discriminator 1 view .LVU216
+	.loc 1 70 38 discriminator 1 view .LVU216
 	lsl	r3, fp, #5
-	.loc 1 68 6 discriminator 1 view .LVU217
+	.loc 1 70 6 discriminator 1 view .LVU217
 	beq	.L75
-	.loc 1 68 31 discriminator 1 view .LVU218
+	.loc 1 70 31 discriminator 1 view .LVU218
 	ldr	r2, [sp, #80]
 	cmp	r2, r3
-	.loc 1 70 4 is_stmt 1 view .LVU219
+	.loc 1 72 4 is_stmt 1 view .LVU219
 .LBB22:
-	.loc 1 75 40 is_stmt 0 discriminator 1 view .LVU220
+	.loc 1 77 40 is_stmt 0 discriminator 1 view .LVU220
 	movgt	r5, r3
 .LBE22:
-	.loc 1 70 8 view .LVU221
+	.loc 1 72 8 view .LVU221
 	addgt	fp, fp, #1
 .LVL68:
 .LBB23:
-	.loc 1 75 40 discriminator 1 view .LVU222
+	.loc 1 77 40 discriminator 1 view .LVU222
 	addgt	r3, r3, #32
 	bgt	.L46
 .L75:
-	.loc 1 75 40 discriminator 1 view .LVU223
+	.loc 1 77 40 discriminator 1 view .LVU223
 .LBE23:
-	.loc 1 74 6 view .LVU224
+	.loc 1 76 6 view .LVU224
 	sub	r5, r3, #32
 	b	.L46
 .L79:
@@ -1414,7 +1414,7 @@ proposedSourceStack:
 	.uleb128 0x21
 	.4byte	.LASF118
 	.byte	0x1
-	.byte	0x32
+	.byte	0x34
 	.byte	0x5
 	.4byte	0x3b
 	.4byte	.LFB218
@@ -1424,35 +1424,35 @@ proposedSourceStack:
 	.4byte	0x711
 	.uleb128 0xa
 	.ascii	"x\000"
-	.byte	0x32
+	.byte	0x34
 	.byte	0x18
 	.4byte	0x3b
 	.4byte	.LLST14
 	.4byte	.LVUS14
 	.uleb128 0xa
 	.ascii	"y\000"
-	.byte	0x32
+	.byte	0x34
 	.byte	0x1f
 	.4byte	0x3b
 	.4byte	.LLST15
 	.4byte	.LVUS15
 	.uleb128 0xa
 	.ascii	"w\000"
-	.byte	0x32
+	.byte	0x34
 	.byte	0x26
 	.4byte	0x3b
 	.4byte	.LLST16
 	.4byte	.LVUS16
 	.uleb128 0x11
 	.4byte	.LASF103
-	.byte	0x32
+	.byte	0x34
 	.byte	0x34
 	.4byte	0x368
 	.4byte	.LLST17
 	.4byte	.LVUS17
 	.uleb128 0xb
 	.4byte	.LASF104
-	.byte	0x32
+	.byte	0x34
 	.byte	0x40
 	.4byte	0x3b
 	.uleb128 0x2
@@ -1460,7 +1460,7 @@ proposedSourceStack:
 	.sleb128 0
 	.uleb128 0xb
 	.4byte	.LASF105
-	.byte	0x32
+	.byte	0x34
 	.byte	0x4b
 	.4byte	0x3b
 	.uleb128 0x2
@@ -1468,37 +1468,37 @@ proposedSourceStack:
 	.sleb128 4
 	.uleb128 0x9
 	.4byte	.LASF106
-	.byte	0x35
+	.byte	0x37
 	.4byte	0x3b
 	.4byte	.LLST18
 	.4byte	.LVUS18
 	.uleb128 0x9
 	.4byte	.LASF107
-	.byte	0x36
+	.byte	0x38
 	.4byte	0x3b
 	.4byte	.LLST19
 	.4byte	.LVUS19
 	.uleb128 0x9
 	.4byte	.LASF108
-	.byte	0x37
+	.byte	0x39
 	.4byte	0x3b
 	.4byte	.LLST20
 	.4byte	.LVUS20
 	.uleb128 0x9
 	.4byte	.LASF109
-	.byte	0x38
+	.byte	0x3a
 	.4byte	0x23d
 	.4byte	.LLST21
 	.4byte	.LVUS21
 	.uleb128 0x9
 	.4byte	.LASF110
-	.byte	0x39
+	.byte	0x3b
 	.4byte	0x23d
 	.4byte	.LLST22
 	.4byte	.LVUS22
 	.uleb128 0x10
 	.4byte	.LASF111
-	.byte	0x3b
+	.byte	0x3d
 	.byte	0x10
 	.4byte	0x711
 	.uleb128 0x2
@@ -1506,7 +1506,7 @@ proposedSourceStack:
 	.sleb128 -52
 	.uleb128 0x9
 	.4byte	.LASF112
-	.byte	0x4a
+	.byte	0x4c
 	.4byte	0x3b
 	.4byte	.LLST23
 	.4byte	.LVUS23
@@ -1515,7 +1515,7 @@ proposedSourceStack:
 	.4byte	0x68c
 	.uleb128 0xc
 	.ascii	"i\000"
-	.byte	0x4b
+	.byte	0x4d
 	.byte	0xb
 	.4byte	0x3b
 	.4byte	.LLST25
