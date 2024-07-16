@@ -132,7 +132,7 @@ Renderer.o: \
  C:/devkitPro/libctru/include/c3d/fog.h \
  C:/devkitPro/libctru/include/c3d/framebuffer.h \
  C:/devkitPro/libctru/include/c3d/renderqueue.h \
- C:/Users/Elias/CLionProjects/3DSCraft/include/gui/WorldSelect.h \
+ C:/Users/Elias/CLionProjects/3DSCraft/include/gui/SelectWorldScreen.h \
  C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Camera.h \
  C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Clouds.h \
  C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Cursor.h \
@@ -141,7 +141,10 @@ Renderer.o: \
  C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/TextureMap.h \
  C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/WorldRenderer.h \
  C:/Users/Elias/CLionProjects/3DSCraft/build/gui_shbin.h \
- C:/Users/Elias/CLionProjects/3DSCraft/build/world_shbin.h
+ C:/Users/Elias/CLionProjects/3DSCraft/build/world_shbin.h \
+ C:/Users/Elias/CLionProjects/3DSCraft/include/gui/State1.h \
+ C:/Users/Elias/CLionProjects/3DSCraft/include/gui/state_machine/state_machine.h \
+ C:/Users/Elias/CLionProjects/3DSCraft/include/gui/State2.h
 C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Renderer.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/entity/Player.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/world/World.h:
@@ -274,7 +277,7 @@ C:/devkitPro/libctru/include/c3d/lightlut.h:
 C:/devkitPro/libctru/include/c3d/fog.h:
 C:/devkitPro/libctru/include/c3d/framebuffer.h:
 C:/devkitPro/libctru/include/c3d/renderqueue.h:
-C:/Users/Elias/CLionProjects/3DSCraft/include/gui/WorldSelect.h:
+C:/Users/Elias/CLionProjects/3DSCraft/include/gui/SelectWorldScreen.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Camera.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Clouds.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Cursor.h:
@@ -284,3 +287,6 @@ C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/TextureMap.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/WorldRenderer.h:
 C:/Users/Elias/CLionProjects/3DSCraft/build/gui_shbin.h:
 C:/Users/Elias/CLionProjects/3DSCraft/build/world_shbin.h:
+C:/Users/Elias/CLionProjects/3DSCraft/include/gui/State1.h:
+C:/Users/Elias/CLionProjects/3DSCraft/include/gui/state_machine/state_machine.h:
+C:/Users/Elias/CLionProjects/3DSCraft/include/gui/State2.h:

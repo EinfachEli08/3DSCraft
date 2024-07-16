@@ -1,5 +1,6 @@
 //TODO: in Makefile einbauen
-make clean;; make all;;
+
+cls;;make clean;; make all;;
 .\tools\makerom -o 3DSCraft.cxi -rsf craftus.rsf -target t -elf 3DSCraft.elf -icon icon/craftus.png -banner banner.bnr -desc app:4;;
 .\tools\makerom -o 3DSCraft.cfa -rsf craftus.rsf -target t;;
 .\tools\makerom -f cia -o 3DSCraft.cia -target t -i 3DSCraft.cxi:0:0 -i 3DSCraft.cfa:1:1;;

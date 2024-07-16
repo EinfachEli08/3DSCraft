@@ -113,7 +113,7 @@ main.o: C:/Users/Elias/CLionProjects/3DSCraft/source/main.c \
  C:/Users/Elias/CLionProjects/3DSCraft/include/misc/InputData.h \
  C:/Users/Elias/CLionProjects/3DSCraft/include/gui/DebugUI.h \
  C:/Users/Elias/CLionProjects/3DSCraft/include/gui/Gui.h \
- C:/Users/Elias/CLionProjects/3DSCraft/include/gui/WorldSelect.h \
+ C:/Users/Elias/CLionProjects/3DSCraft/include/gui/SelectWorldScreen.h \
  C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/PolyGen.h \
  C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/VertexFmt.h \
  C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Renderer.h \
@@ -140,8 +140,7 @@ main.o: C:/Users/Elias/CLionProjects/3DSCraft/source/main.c \
  C:/devkitPro/libctru/include/c3d/lightlut.h \
  C:/devkitPro/libctru/include/c3d/fog.h \
  C:/devkitPro/libctru/include/c3d/framebuffer.h \
- C:/devkitPro/libctru/include/c3d/renderqueue.h \
- C:/Users/Elias/CLionProjects/3DSCraft/include/gui/state_machine/state_machine.h
+ C:/devkitPro/libctru/include/c3d/renderqueue.h
 C:/devkitPro/libctru/include/3ds.h:
 C:/devkitPro/libctru/include/3ds/types.h:
 C:/devkitPro/libctru/include/3ds/result.h:
@@ -256,7 +255,7 @@ C:/Users/Elias/CLionProjects/3DSCraft/include/entity/PlayerController.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/misc/InputData.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/gui/DebugUI.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/gui/Gui.h:
-C:/Users/Elias/CLionProjects/3DSCraft/include/gui/WorldSelect.h:
+C:/Users/Elias/CLionProjects/3DSCraft/include/gui/SelectWorldScreen.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/PolyGen.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/VertexFmt.h:
 C:/Users/Elias/CLionProjects/3DSCraft/include/rendering/Renderer.h:
@@ -284,4 +283,3 @@ C:/devkitPro/libctru/include/c3d/lightlut.h:
 C:/devkitPro/libctru/include/c3d/fog.h:
 C:/devkitPro/libctru/include/c3d/framebuffer.h:
 C:/devkitPro/libctru/include/c3d/renderqueue.h:
-C:/Users/Elias/CLionProjects/3DSCraft/include/gui/state_machine/state_machine.h:
