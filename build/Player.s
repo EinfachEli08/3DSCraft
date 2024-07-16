@@ -1331,7 +1331,7 @@ Player_Move:
 .LFB154:
 	.loc 1 208 57 is_stmt 1 view -0
 	.cfi_startproc
-	@ args = 0, pretend = 0, frame = 160
+	@ args = 0, pretend = 0, frame = 168
 	@ frame_needed = 0, uses_anonymous_args = 0
 	.loc 1 210 23 is_stmt 0 view .LVU372
 	vldr.32	s15, [r0, #72]
@@ -1369,7 +1369,7 @@ Player_Move:
 	.cfi_offset 94, -44
 	.cfi_offset 95, -40
 	.loc 1 212 30 view .LVU376
-	vldr.32	s20, .L182
+	vldr.32	s20, .L180
 .LVL59:
 	.loc 1 209 2 is_stmt 1 view .LVU377
 	.loc 1 209 28 is_stmt 0 view .LVU378
@@ -1381,12 +1381,12 @@ Player_Move:
 	.loc 1 212 30 view .LVU381
 	vmrs	APSR_nzcv, FPSCR
 	.loc 1 208 57 view .LVU382
-	sub	sp, sp, #212
-	.cfi_def_cfa_offset 312
+	sub	sp, sp, #220
+	.cfi_def_cfa_offset 320
 	.loc 1 208 57 view .LVU383
-	vstr.32	s1, [sp, #76]
-	vstr.32	s2, [sp, #80]
-	vstr.32	s3, [sp, #84]
+	vstr.32	s1, [sp, #84]
+	vstr.32	s2, [sp, #88]
+	vstr.32	s3, [sp, #92]
 	.loc 1 209 28 view .LVU384
 	vstr.32	s14, [r0, #76]
 	.loc 1 210 2 is_stmt 1 view .LVU385
@@ -1397,7 +1397,6 @@ Player_Move:
 	.loc 1 212 2 view .LVU388
 	.loc 1 212 30 view .LVU389
 	blt	.L90
-	mov	fp, r0
 	vmov.f32	s23, s1
 	vmov.f32	s22, s2
 	vmov.f32	s24, s3
@@ -1405,13 +1404,14 @@ Player_Move:
 	.loc 1 213 19 is_stmt 0 view .LVU390
 	vldr.32	s15, [r0, #64]
 	.loc 1 213 22 view .LVU391
-	vldr.32	s25, .L182+4
+	vldr.32	s25, .L180+4
 	.loc 1 214 6 view .LVU392
-	vldr.32	s21, .L182+8
+	vldr.32	s21, .L180+8
 	.loc 1 216 42 discriminator 1 view .LVU393
-	vldr.32	s16, .L182+72
+	vldr.32	s16, .L180+72
+	mov	r8, r0
 .LVL61:
-.L131:
+.L129:
 	.loc 1 213 3 is_stmt 1 view .LVU394
 	.loc 1 213 22 is_stmt 0 view .LVU395
 	vsub.f32	s15, s15, s25
@@ -1421,13 +1421,13 @@ Player_Move:
 	vmrs	APSR_nzcv, FPSCR
 	vmovmi.f32	s15, s21
 	.loc 1 216 6 view .LVU398
-	ldrb	r3, [fp, #35]	@ zero_extendqisi2
-	vstr.32	s15, [fp, #64]
+	ldrb	r3, [r8, #35]	@ zero_extendqisi2
+	vstr.32	s15, [r8, #64]
 	.loc 1 216 3 is_stmt 1 view .LVU399
 	.loc 1 216 6 is_stmt 0 view .LVU400
 	cmp	r3, #0
 	.loc 1 219 14 view .LVU401
-	ldrb	r4, [fp, #32]	@ zero_extendqisi2
+	ldrb	r4, [r8, #32]	@ zero_extendqisi2
 	.loc 1 216 6 view .LVU402
 	bne	.L94
 	.loc 1 218 3 is_stmt 1 view .LVU403
@@ -1445,10 +1445,10 @@ Player_Move:
 	bne	.L95
 	.loc 1 220 4 is_stmt 1 view .LVU408
 	.loc 1 220 7 is_stmt 0 view .LVU409
-	vldr.32	s14, .L182+12
-	vldr.32	s13, .L182+16
+	vldr.32	s14, .L180+12
+	vldr.32	s13, .L180+16
 	.loc 1 220 14 view .LVU410
-	ldrb	r3, [fp, #33]	@ zero_extendqisi2
+	ldrb	r3, [r8, #33]	@ zero_extendqisi2
 	.loc 1 220 7 view .LVU411
 	cmp	r3, #0
 	vmovne.f32	s14, s13
@@ -1487,7 +1487,7 @@ Player_Move:
 .LBE274:
 .LBE273:
 	.loc 1 229 10 is_stmt 0 view .LVU424
-	ldm	fp, {r0, r1, r2}
+	ldm	r8, {r0, r1, r2}
 .LBB278:
 .LBB268:
 	.loc 2 18 50 view .LVU425
@@ -1497,8 +1497,8 @@ Player_Move:
 .LBE278:
 .LBB279:
 .LBB264:
-	vldr.32	s10, [fp, #60]
-	vldr.32	s11, [fp, #68]
+	vldr.32	s10, [r8, #60]
+	vldr.32	s11, [r8, #68]
 .LBE264:
 .LBE279:
 .LBB280:
@@ -1511,9 +1511,9 @@ Player_Move:
 .LBE280:
 .LBB281:
 .LBB276:
-	vldr.32	s13, [fp]
-	vldr.32	s12, [fp, #4]
-	vldr.32	s14, [fp, #8]
+	vldr.32	s13, [r8]
+	vldr.32	s12, [r8, #4]
+	vldr.32	s14, [r8, #8]
 .LVL65:
 	.loc 2 16 51 view .LVU428
 .LBE276:
@@ -1538,582 +1538,598 @@ Player_Move:
 .LBE275:
 .LBE277:
 .LBE283:
-	.loc 1 233 20 view .LVU432
+	.loc 1 233 22 view .LVU432
 	mov	r3, #0
+	add	ip, sp, #132
 .LBB284:
 .LBB285:
-	.loc 1 241 8 view .LVU433
-	vldr.32	s19, .L182+20
+	.loc 1 241 11 view .LVU433
+	vldr.32	s19, .L180+20
 .LBB286:
 .LBB287:
 	.file 4 "C:/Users/Elias/CLionProjects/3DSCraft/include/misc/Collision.h"
 	.loc 4 9 109 discriminator 1 view .LVU434
-	vldr.32	s18, .L182+24
+	vldr.32	s18, .L180+24
 .LBE287:
 .LBE286:
+.LBB291:
 .LBB292:
 .LBB293:
 .LBB294:
 .LBB295:
 .LBB296:
 .LBB297:
-.LBB298:
-	vldr.32	s17, .L182+28
-	vstr.32	s26, [sp, #104]
-	vstr.32	s29, [sp, #100]
-	vstr.32	s28, [sp, #108]
+	vldr.32	s17, .L180+28
+	vstr.32	s26, [sp, #112]
+	vstr.32	s29, [sp, #108]
+	vstr.32	s28, [sp, #116]
 .LVL67:
 	.loc 4 9 109 discriminator 1 view .LVU435
-.LBE298:
 .LBE297:
 .LBE296:
 .LBE295:
 .LBE294:
 .LBE293:
 .LBE292:
+.LBE291:
 .LBE285:
 .LBE284:
 	.loc 1 229 3 is_stmt 1 view .LVU436
-	.loc 1 231 2 view .LVU437
-	.loc 1 233 3 view .LVU438
-	.loc 1 234 3 view .LVU439
-.LBB401:
-	.loc 1 234 8 view .LVU440
-	.loc 1 234 21 discriminator 1 view .LVU441
-.LBE401:
+	.loc 1 231 4 view .LVU437
+	.loc 1 233 5 view .LVU438
+	.loc 1 234 5 view .LVU439
+.LBB399:
+	.loc 1 234 10 view .LVU440
+	.loc 1 234 23 discriminator 1 view .LVU441
+	mov	r5, ip
+	mov	r9, r8
+.LBE399:
 	.loc 1 229 10 is_stmt 0 view .LVU442
-	add	lr, sp, #112
+	add	lr, sp, #120
 	stm	lr, {r0, r1, r2}
-	add	ip, sp, #124
-	.loc 1 233 20 view .LVU443
-	strb	r3, [fp, #32]
-	str	r4, [sp, #72]
-	str	r3, [sp, #68]
+	.loc 1 233 22 view .LVU443
+	strb	r3, [r8, #32]
+	str	r3, [sp, #76]
+	str	r4, [sp, #80]
 .LVL68:
-.L115:
-.LBB402:
-.LBB398:
-	.loc 1 235 4 is_stmt 1 view .LVU444
-	.loc 1 235 19 is_stmt 0 view .LVU445
-	ldr	r3, .L182+48
-.LBB385:
-.LBB288:
-	.loc 4 9 109 discriminator 1 view .LVU446
-	vldr.32	s12, .L182+32
-.LBE288:
-.LBE385:
-	.loc 1 235 19 view .LVU447
+.L113:
+.LBB400:
+.LBB396:
+	.loc 1 235 7 is_stmt 1 view .LVU444
+	.loc 1 235 22 is_stmt 0 view .LVU445
+	ldr	r3, .L180+48
+	.loc 1 236 11 view .LVU446
+	mov	fp, #0
+	.loc 1 235 22 view .LVU447
 	ldm	r3, {r0, r1, r2}
-	add	r3, sp, #124
+	add	r3, sp, #132
 	stm	r3, {r0, r1, r2}
-	.loc 1 237 11 view .LVU448
-	add	r3, sp, #112
-	.loc 1 235 8 view .LVU449
-	ldr	r4, [ip], #4
+	.loc 1 237 14 view .LVU448
+	add	r3, sp, #120
+	ldm	r3, {r0, r1, r2}
+	.loc 1 235 11 view .LVU449
+	ldr	r4, [r5], #4
 .LVL69:
-	.loc 1 236 3 is_stmt 1 view .LVU450
-	.loc 1 237 4 view .LVU451
-	.loc 1 239 4 view .LVU452
-	.loc 1 237 11 is_stmt 0 view .LVU453
-	ldm	r3, {r0, r1, r2}
-	add	r3, sp, #136
+	.loc 1 236 6 is_stmt 1 view .LVU450
+	.loc 1 237 7 view .LVU451
+	.loc 1 239 7 view .LVU452
+	.loc 1 237 14 is_stmt 0 view .LVU453
+	add	r3, sp, #144
 	stm	r3, {r0, r1, r2}
-	.loc 1 239 28 view .LVU454
-	add	r3, sp, #208
+	.loc 1 239 31 view .LVU454
+	add	r3, sp, #216
 	add	r2, r3, r4, lsl #2
 	vldr.32	s27, [r2, #-108]
-	.loc 1 239 18 view .LVU455
+	.loc 1 239 21 view .LVU455
 	vstr.32	s27, [r2, #-72]
-	.loc 1 240 4 is_stmt 1 view .LVU456
-	.loc 1 241 27 is_stmt 0 view .LVU457
-	vldr.32	s13, [sp, #136]
-	.loc 1 241 67 view .LVU458
-	vldr.32	s14, [sp, #144]
-.LBB386:
+	.loc 1 240 7 is_stmt 1 view .LVU456
+	.loc 1 241 30 is_stmt 0 view .LVU457
+	vldr.32	s13, [sp, #144]
+.LBB384:
+.LBB375:
+.LBB365:
+.LBB354:
+.LBB306:
+.LBB307:
+	.loc 3 25 47 view .LVU458
+	vcvt.s32.f32	s9, s13
+.LBE307:
+.LBE306:
+.LBE354:
+.LBE365:
+.LBE375:
+.LBE384:
+	.loc 1 241 70 view .LVU459
+	vldr.32	s14, [sp, #152]
+.LBB385:
 .LBB376:
 .LBB366:
-.LBB356:
-.LBB309:
-.LBB310:
-	.loc 3 25 47 view .LVU459
-	vcvt.s32.f32	s9, s13
-.LBE310:
-.LBE309:
-.LBE356:
+.LBB355:
+.LBB315:
+.LBB308:
+	.loc 3 25 58 view .LVU460
+	vcvt.f32.s32	s2, s9
+.LBE308:
+.LBE315:
+.LBE355:
 .LBE366:
 .LBE376:
-.LBE386:
-	.loc 1 241 8 view .LVU460
-	vldr.32	s15, [sp, #140]
-.LBB387:
+.LBE385:
+	.loc 1 241 11 view .LVU461
+	vldr.32	s15, [sp, #148]
+.LBB386:
 .LBB377:
 .LBB367:
-.LBB357:
-.LBB318:
-.LBB319:
-	.loc 3 25 47 view .LVU461
+.LBB356:
+.LBB316:
+.LBB317:
+	.loc 3 25 47 view .LVU462
 	vcvt.s32.f32	s10, s14
-.LBE319:
-.LBE318:
-.LBB326:
-.LBB311:
-	.loc 3 25 58 view .LVU462
-	vcvt.f32.s32	s2, s9
-.LBE311:
-.LBE326:
-.LBB327:
-.LBB328:
-	.loc 3 25 47 view .LVU463
-	vcvt.s32.f32	s11, s15
-.LBE328:
-.LBE327:
-.LBB335:
-.LBB312:
-	.loc 3 25 58 view .LVU464
+.LBE317:
+.LBE316:
+.LBB325:
+.LBB309:
+	.loc 3 25 58 view .LVU463
 	vcmpe.f32	s13, s2
-.LBE312:
+.LBE309:
+.LBE325:
+.LBB326:
+.LBB327:
+	.loc 3 25 47 view .LVU464
+	vcvt.s32.f32	s11, s15
+.LBE327:
+.LBE326:
+.LBB334:
+.LBB318:
+	.loc 3 25 58 view .LVU465
+	vcvt.f32.s32	s5, s10
+.LBE318:
+.LBE334:
+.LBB335:
+.LBB310:
+	vmrs	APSR_nzcv, FPSCR
+.LBE310:
 .LBE335:
 .LBB336:
-.LBB320:
-	vcvt.f32.s32	s5, s10
-.LBE320:
+.LBB328:
+	vcvt.f32.s32	s6, s11
+.LBE328:
 .LBE336:
-.LBE357:
+.LBB337:
+.LBB319:
+	vcmpe.f32	s14, s5
+.LBE319:
+.LBE337:
+.LBE356:
 .LBE367:
 .LBE377:
-.LBE387:
-	.loc 1 236 8 view .LVU465
-	mov	r1, #0
-.LBB388:
+.LBE386:
+	.loc 1 239 31 view .LVU466
+	lsl	r3, r4, #2
+.LBB387:
 .LBB378:
 .LBB368:
-.LBB358:
-.LBB337:
-.LBB313:
-	.loc 3 25 58 view .LVU466
-	vmrs	APSR_nzcv, FPSCR
-.LBE313:
-.LBE337:
+.LBB357:
 .LBB338:
-.LBB329:
-	vcvt.f32.s32	s6, s11
-.LBE329:
+.LBB311:
+	.loc 3 25 58 view .LVU467
+	movmi	r2, #1
+	movpl	r2, fp
+.LBE311:
 .LBE338:
-.LBB339:
-.LBB321:
-	vcmpe.f32	s14, s5
-.LBE321:
-.LBE339:
-.LBE358:
+.LBE357:
 .LBE368:
 .LBE378:
-.LBE388:
-	.loc 1 239 28 view .LVU467
-	lsl	r3, r4, #2
-.LBB389:
+.LBE387:
+	.loc 1 239 31 view .LVU468
+	str	r3, [sp, #72]
+.LBB388:
 .LBB379:
 .LBB369:
-.LBB359:
+.LBB358:
+.LBB339:
+.LBB312:
+	.loc 3 25 56 view .LVU469
+	vmov	r3, s9	@ int
+.LBE312:
+.LBE339:
 .LBB340:
-.LBB314:
-	.loc 3 25 58 view .LVU468
-	movmi	r2, #1
-	movpl	r2, r1
-.LBE314:
-.LBE340:
-.LBE359:
-.LBE369:
-.LBE379:
-.LBE389:
-	.loc 1 239 28 view .LVU469
-	str	r3, [sp, #64]
-.LBB390:
-.LBB380:
-.LBB370:
-.LBB360:
-.LBB341:
-.LBB322:
+.LBB320:
 	.loc 3 25 58 view .LVU470
 	vmrs	APSR_nzcv, FPSCR
-.LBE322:
-.LBE341:
-.LBB342:
-.LBB315:
-	.loc 3 25 56 view .LVU471
-	vmov	r3, s9	@ int
-.LBE315:
-.LBE342:
-.LBB343:
-.LBB330:
-	.loc 3 25 58 view .LVU472
+.LBE320:
+.LBE340:
+.LBB341:
+.LBB329:
 	vcmpe.f32	s15, s6
-.LBE330:
-.LBE343:
-.LBE360:
-.LBE370:
-.LBE380:
-.LBE390:
-	.loc 1 241 8 view .LVU473
+.LBE329:
+.LBE341:
+.LBE358:
+.LBE369:
+.LBE379:
+.LBE388:
+	.loc 1 241 11 view .LVU471
 	vsub.f32	s7, s13, s19
 	vsub.f32	s8, s14, s19
 .LVL70:
-.LBB391:
+.LBB389:
 .LBI286:
-	.loc 4 9 12 is_stmt 1 view .LVU474
+	.loc 4 9 12 is_stmt 1 view .LVU472
+.LBB288:
+	.loc 4 9 79 view .LVU473
+	.loc 4 9 109 is_stmt 0 discriminator 1 view .LVU474
+	vldr.32	s12, .L180+32
+.LBE288:
+.LBE389:
+.LBB390:
+.LBB380:
+.LBB370:
+.LBB359:
+.LBB342:
+.LBB313:
+	.loc 3 25 56 view .LVU475
+	sub	r2, r3, r2
+	add	r3, r2, #2
+.LBE313:
+.LBE342:
+.LBB343:
+.LBB321:
+	.loc 3 25 58 view .LVU476
+	movmi	r1, #1
+	movpl	r1, fp
+	str	r3, [sp, #56]
+.LBE321:
+.LBE343:
+.LBB344:
+.LBB330:
+	vmrs	APSR_nzcv, FPSCR
+.LBE330:
+.LBE344:
+.LBB345:
+.LBB322:
+	.loc 3 25 56 view .LVU477
+	vmov	r3, s10	@ int
+.LBE322:
+.LBE345:
+.LBE359:
+.LBE370:
+.LBE380:
+.LBE390:
+.LBB391:
 .LBB289:
-	.loc 4 9 79 view .LVU475
+	.loc 4 9 109 discriminator 1 view .LVU478
+	vadd.f32	s12, s15, s12
+	vadd.f32	s3, s7, s18
+	vadd.f32	s4, s8, s18
+	sub	r8, r2, #1
 .LBE289:
 .LBE391:
 .LBB392:
 .LBB381:
 .LBB371:
-.LBB361:
-.LBB344:
-.LBB316:
-	.loc 3 25 56 is_stmt 0 view .LVU476
-	sub	r10, r3, r2
-.LBE316:
-.LBE344:
-.LBB345:
-.LBB323:
-	.loc 3 25 58 view .LVU477
-	movmi	r2, #1
-	movpl	r2, r1
-	.loc 3 25 56 view .LVU478
-	vmov	r3, s10	@ int
-.LBE323:
-.LBE345:
+.LBB360:
 .LBB346:
-.LBB331:
-	.loc 3 25 58 view .LVU479
-	vmrs	APSR_nzcv, FPSCR
-.LBE331:
+.LBB323:
+	.loc 3 25 56 view .LVU479
+	sub	r6, r3, r1
+.LBE323:
 .LBE346:
-.LBE361:
+.LBB347:
+.LBB331:
+	.loc 3 25 58 view .LVU480
+	movmi	r2, #1
+	.loc 3 25 56 view .LVU481
+	vmov	r3, s11	@ int
+	.loc 3 25 58 view .LVU482
+	movpl	r2, fp
+.LBE331:
+.LBE347:
+.LBE360:
 .LBE371:
 .LBE381:
 .LBE392:
 .LBB393:
 .LBB290:
-	.loc 4 9 109 discriminator 1 view .LVU480
-	vadd.f32	s12, s15, s12
-	vadd.f32	s3, s7, s18
-	vadd.f32	s4, s8, s18
+	.loc 4 9 86 discriminator 2 view .LVU483
+	vstr.32	s15, [sp, #172]
+	vstr.32	s7, [sp, #168]
+	vstr.32	s8, [sp, #176]
+	vstr.32	s12, [sp, #184]
+	vstr.32	s3, [sp, #180]
+	vstr.32	s4, [sp, #188]
+.LVL71:
+	.loc 4 9 86 discriminator 2 view .LVU484
 .LBE290:
 .LBE393:
+	.loc 1 244 7 is_stmt 1 view .LVU485
 .LBB394:
+	.loc 1 244 12 view .LVU486
+	.loc 1 244 26 discriminator 1 view .LVU487
+	mov	r7, r8
 .LBB382:
 .LBB372:
-.LBB362:
-.LBB347:
-.LBB324:
-	.loc 3 25 56 view .LVU481
-	sub	r7, r3, r2
-.LBE324:
-.LBE347:
+.LBB361:
 .LBB348:
 .LBB332:
-	.loc 3 25 58 view .LVU482
-	movmi	r2, #1
-	movpl	r2, r1
-	.loc 3 25 56 view .LVU483
-	vmov	r3, s11	@ int
-.LBE332:
-.LBE348:
-.LBE362:
-.LBE372:
-.LBE382:
-.LBE394:
-.LBB395:
-.LBB291:
-	.loc 4 9 86 discriminator 2 view .LVU484
-	vstr.32	s15, [sp, #164]
-	vstr.32	s7, [sp, #160]
-	vstr.32	s8, [sp, #168]
-	vstr.32	s12, [sp, #176]
-	vstr.32	s3, [sp, #172]
-	vstr.32	s4, [sp, #180]
-.LVL71:
-	.loc 4 9 86 discriminator 2 view .LVU485
-.LBE291:
-.LBE395:
-	.loc 1 244 4 is_stmt 1 view .LVU486
-.LBB396:
-	.loc 1 244 9 view .LVU487
-	.loc 1 244 23 discriminator 1 view .LVU488
-	mov	r5, r1
-.LBB383:
-.LBB373:
-.LBB363:
-.LBB349:
-.LBB333:
-	.loc 3 25 56 is_stmt 0 view .LVU489
+	.loc 3 25 56 is_stmt 0 view .LVU488
 	sub	r2, r3, r2
-	sub	r6, r10, #1
-	add	r10, r10, #2
-	sub	r9, r7, #1
-	add	r8, r2, #3
-	add	r7, r7, #2
-	str	r4, [sp, #56]
-	str	ip, [sp, #60]
-	str	r10, [sp, #48]
-	str	r2, [sp, #52]
+	strd	r4, [sp, #64]
+	add	r3, r2, #3
+	sub	r10, r6, #1
+	str	r3, [sp, #52]
+	add	r6, r6, #2
+	str	r2, [sp, #60]
 .LVL72:
 .L98:
-	.loc 3 25 56 view .LVU490
-.LBE333:
-.LBE349:
-.LBE363:
-.LBE373:
-	.loc 1 245 23 is_stmt 1 discriminator 1 view .LVU491
-	ldr	r10, [sp, #52]
+	.loc 3 25 56 view .LVU489
+.LBE332:
+.LBE348:
+.LBE361:
+.LBE372:
+	.loc 1 245 27 is_stmt 1 discriminator 1 view .LVU490
+.LBB373:
+.LBB362:
+.LBB349:
+	.loc 1 255 19 is_stmt 0 view .LVU491
+	mov	r5, #0
+	ldr	r8, [sp, #60]
 .LVL73:
-.L105:
-.LBB374:
-	.loc 1 246 25 discriminator 1 view .LVU492
-	mov	r4, r9
+.L103:
+	.loc 1 255 19 view .LVU492
+.LBE349:
+.LBE362:
+	.loc 1 246 30 is_stmt 1 discriminator 1 view .LVU493
+	mov	r4, r10
 .LVL74:
-.L102:
-.LBB364:
-	.loc 1 247 7 view .LVU493
+.L100:
+.LBB363:
+	.loc 1 247 13 view .LVU494
 .LBB350:
-.LBI309:
-	.loc 3 25 19 view .LVU494
-.LBB317:
-	.loc 3 25 40 view .LVU495
-	.loc 3 25 40 is_stmt 0 view .LVU496
-.LBE317:
+.LBI306:
+	.loc 3 25 19 view .LVU495
+.LBB314:
+	.loc 3 25 40 view .LVU496
+	.loc 3 25 40 is_stmt 0 view .LVU497
+.LBE314:
 .LBE350:
-	.loc 1 248 7 is_stmt 1 view .LVU497
+	.loc 1 248 13 is_stmt 1 view .LVU498
 .LBB351:
-.LBI327:
-	.loc 3 25 19 view .LVU498
-.LBB334:
-	.loc 3 25 40 view .LVU499
-	.loc 3 25 40 is_stmt 0 view .LVU500
-.LBE334:
+.LBI326:
+	.loc 3 25 19 view .LVU499
+.LBB333:
+	.loc 3 25 40 view .LVU500
+	.loc 3 25 40 is_stmt 0 view .LVU501
+.LBE333:
 .LBE351:
-	.loc 1 249 7 is_stmt 1 view .LVU501
+	.loc 1 249 13 is_stmt 1 view .LVU502
 .LBB352:
-.LBI318:
-	.loc 3 25 19 view .LVU502
-.LBB325:
-	.loc 3 25 40 view .LVU503
-	.loc 3 25 40 is_stmt 0 view .LVU504
-.LBE325:
+.LBI316:
+	.loc 3 25 19 view .LVU503
+.LBB324:
+	.loc 3 25 40 view .LVU504
+	.loc 3 25 40 is_stmt 0 view .LVU505
+.LBE324:
 .LBE352:
-	.loc 1 250 7 is_stmt 1 view .LVU505
-	.loc 1 250 11 is_stmt 0 view .LVU506
+	.loc 1 250 13 is_stmt 1 view .LVU506
+	.loc 1 250 17 is_stmt 0 view .LVU507
 	mov	r3, r4
-	mov	r2, r10
-	mov	r1, r6
-	ldr	r0, [fp, #40]
+	mov	r2, r8
+	mov	r1, r7
+	ldr	r0, [r9, #40]
 	bl	World_GetBlock
 .LVL75:
-	.loc 1 250 10 discriminator 1 view .LVU507
+	.loc 1 250 16 discriminator 1 view .LVU508
 	cmp	r0, #0
-	bne	.L177
-.L101:
-	.loc 1 250 10 discriminator 1 view .LVU508
-.LBE364:
-	.loc 1 246 31 is_stmt 1 discriminator 2 view .LVU509
-	.loc 1 246 25 discriminator 1 view .LVU510
-	add	r4, r4, #1
+	bne	.L175
+.L99:
+	.loc 1 250 16 discriminator 1 view .LVU509
+.LBE363:
+	.loc 1 246 36 is_stmt 1 discriminator 2 view .LVU510
 .LVL76:
-	.loc 1 246 25 is_stmt 0 discriminator 1 view .LVU511
-	cmp	r7, r4
-	bne	.L102
-	.loc 1 246 25 discriminator 1 view .LVU512
-.LBE374:
-	.loc 1 245 29 is_stmt 1 discriminator 2 view .LVU513
+	.loc 1 246 30 discriminator 1 view .LVU511
+	add	r4, r4, #1
 .LVL77:
-	.loc 1 245 23 discriminator 1 view .LVU514
-	add	r10, r10, #1
-	cmp	r8, r10
-	bne	.L105
-.LBE383:
-	.loc 1 244 29 discriminator 2 view .LVU515
-	.loc 1 244 23 discriminator 1 view .LVU516
-	ldr	r3, [sp, #48]
-	add	r6, r6, #1
-	.loc 1 244 23 is_stmt 0 discriminator 1 view .LVU517
-	cmp	r3, r6
-	bne	.L98
-.LBE396:
-	.loc 1 264 7 view .LVU518
-	cmp	r5, #0
-	ldr	r4, [sp, #56]
+	.loc 1 246 30 is_stmt 0 discriminator 1 view .LVU512
+	cmp	r6, r4
+	bne	.L100
+	.loc 1 246 30 discriminator 1 view .LVU513
+.LBE373:
+	.loc 1 245 33 is_stmt 1 discriminator 2 view .LVU514
 .LVL78:
-	.loc 1 264 7 view .LVU519
-	ldr	ip, [sp, #60]
-	.loc 1 264 4 is_stmt 1 view .LVU520
-	.loc 1 264 7 is_stmt 0 view .LVU521
-	bne	.L106
-	.loc 1 265 5 is_stmt 1 view .LVU522
-	.loc 1 265 19 is_stmt 0 view .LVU523
-	ldr	r3, [sp, #64]
-	add	r3, r3, #208
+	.loc 1 245 27 discriminator 1 view .LVU515
+	ldr	r3, [sp, #52]
+	add	r8, r8, #1
+	cmp	r3, r8
+	bne	.L103
+.LBE382:
+	.loc 1 244 32 discriminator 2 view .LVU516
+	.loc 1 244 26 discriminator 1 view .LVU517
+	ldr	r3, [sp, #56]
+	add	r7, r7, #1
+	.loc 1 244 26 is_stmt 0 discriminator 1 view .LVU518
+	cmp	r3, r7
+	bne	.L98
+.LBE394:
+	.loc 1 263 10 view .LVU519
+	ldrd	r4, [sp, #64]
+.LVL79:
+	.loc 1 263 7 is_stmt 1 view .LVU520
+	.loc 1 263 10 is_stmt 0 view .LVU521
+	cmp	fp, #0
+	bne	.L104
+	.loc 1 264 9 is_stmt 1 view .LVU522
+	.loc 1 264 23 is_stmt 0 view .LVU523
+	ldr	r3, [sp, #72]
+	add	r3, r3, #216
 	add	r2, sp, r3
 	vstr.32	s27, [r2, #-96]
-.L112:
-.LBE398:
-	.loc 1 234 27 is_stmt 1 discriminator 2 view .LVU524
-	.loc 1 234 21 discriminator 1 view .LVU525
-	add	r3, sp, #136
-	.loc 1 234 21 is_stmt 0 discriminator 1 view .LVU526
-	cmp	r3, ip
-	bne	.L115
-.LBE402:
-	.loc 1 283 6 view .LVU527
-	ldrb	r3, [fp, #32]	@ zero_extendqisi2
-	.loc 1 283 6 view .LVU528
-	vldr.32	s30, [fp]
+.L110:
+.LBE396:
+	.loc 1 234 29 is_stmt 1 discriminator 2 view .LVU524
+	.loc 1 234 23 discriminator 1 view .LVU525
+	add	r3, sp, #144
+	.loc 1 234 23 is_stmt 0 discriminator 1 view .LVU526
+	cmp	r3, r5
+	bne	.L113
+.LBE400:
+	.loc 1 282 8 view .LVU527
+	ldrb	r3, [r9, #32]	@ zero_extendqisi2
+	.loc 1 282 8 view .LVU528
+	mov	r8, r9
+	.loc 1 280 5 is_stmt 1 view .LVU529
+	.loc 1 282 8 is_stmt 0 view .LVU530
 	cmp	r3, #0
-	vldr.32	s15, [fp, #4]
-	vldr.32	s27, [fp, #8]
-	vldr.32	s18, [sp, #112]
-	vldr.32	s19, [sp, #116]
-	vldr.32	s17, [sp, #120]
-	ldr	r4, [sp, #72]
-	ldr	r1, [sp, #68]
-	.loc 1 281 3 is_stmt 1 view .LVU529
-.LVL79:
-.LBB403:
-.LBI403:
-	.loc 2 17 15 view .LVU530
-.LBB404:
-	.loc 2 17 44 view .LVU531
-	.loc 2 17 44 is_stmt 0 view .LVU532
-.LBE404:
-.LBE403:
-	.loc 1 283 3 is_stmt 1 view .LVU533
-	.loc 1 283 6 is_stmt 0 view .LVU534
-	beq	.L116
-	.loc 1 283 24 discriminator 1 view .LVU535
-	ldrb	r2, [fp, #35]	@ zero_extendqisi2
-	cmp	r2, #0
-	.loc 1 283 43 is_stmt 1 discriminator 2 view .LVU536
-	.loc 1 283 58 is_stmt 0 discriminator 2 view .LVU537
-	movne	r2, #0
-	strbne	r2, [fp, #35]
-.L116:
-	.loc 1 285 3 is_stmt 1 view .LVU538
-	.loc 1 285 6 is_stmt 0 view .LVU539
-	cmp	r1, #0
-	beq	.L117
-	.loc 1 285 21 discriminator 1 view .LVU540
-	ldrb	r2, [fp, #56]	@ zero_extendqisi2
-	cmp	r2, #0
-	bne	.L178
+	vldr.32	s30, [r9]
+	vldr.32	s15, [r9, #4]
+	vldr.32	s27, [r9, #8]
+	vldr.32	s18, [sp, #120]
 .LVL80:
-.L117:
-	.loc 1 294 3 is_stmt 1 view .LVU541
-	.loc 1 294 6 is_stmt 0 view .LVU542
-	ldrb	r2, [fp, #36]	@ zero_extendqisi2
-	.loc 1 294 34 discriminator 1 view .LVU543
-	vldr.32	s14, [fp, #28]
-	.loc 1 294 6 view .LVU544
+	.loc 1 282 8 view .LVU531
+	vldr.32	s19, [sp, #124]
+.LVL81:
+	.loc 1 282 8 view .LVU532
+	vldr.32	s17, [sp, #128]
+.LVL82:
+.LBB401:
+.LBI401:
+	.loc 2 17 15 is_stmt 1 view .LVU533
+.LBB402:
+	.loc 2 17 44 view .LVU534
+	.loc 2 17 44 is_stmt 0 view .LVU535
+.LBE402:
+.LBE401:
+	.loc 1 282 5 is_stmt 1 view .LVU536
+	.loc 1 282 8 is_stmt 0 view .LVU537
+	ldr	r2, [sp, #76]
+	ldr	r4, [sp, #80]
+	beq	.L114
+.LVL83:
+	.loc 1 282 26 discriminator 1 view .LVU538
+	ldrb	r3, [r9, #35]	@ zero_extendqisi2
+	cmp	r3, #0
+	.loc 1 282 45 is_stmt 1 discriminator 2 view .LVU539
+	.loc 1 282 60 is_stmt 0 discriminator 2 view .LVU540
+	movne	r3, #0
+	strbne	r3, [r9, #35]
+.L114:
+	.loc 1 284 5 is_stmt 1 view .LVU541
+	.loc 1 284 8 is_stmt 0 view .LVU542
 	cmp	r2, #0
-	beq	.L118
-	.loc 1 294 25 discriminator 1 view .LVU545
-	vldr.32	s15, .L182+36
+	beq	.L115
+	.loc 1 284 23 discriminator 1 view .LVU543
+	ldrb	r3, [r8, #56]	@ zero_extendqisi2
+	cmp	r3, #0
+	bne	.L176
+.LVL84:
+.L115:
+	.loc 1 293 5 is_stmt 1 view .LVU544
+	.loc 1 293 8 is_stmt 0 view .LVU545
+	ldrb	r3, [r8, #36]	@ zero_extendqisi2
+	.loc 1 293 36 discriminator 1 view .LVU546
+	vldr.32	s14, [r8, #28]
+	.loc 1 293 8 view .LVU547
+	cmp	r3, #0
+	beq	.L116
+	.loc 1 293 27 discriminator 1 view .LVU548
+	vldr.32	s15, .L180+36
 	vcmpe.f32	s14, s15
 	vmrs	APSR_nzcv, FPSCR
-	.loc 1 294 55 is_stmt 1 discriminator 2 view .LVU546
-	.loc 1 294 73 is_stmt 0 discriminator 2 view .LVU547
-	vldrgt.32	s15, .L182+60
+	.loc 1 293 57 is_stmt 1 discriminator 2 view .LVU549
+	.loc 1 293 75 is_stmt 0 discriminator 2 view .LVU550
+	vldrgt.32	s15, .L180+60
 	vsubgt.f32	s14, s14, s15
-	vstrgt.32	s14, [fp, #28]
-	.loc 1 295 3 is_stmt 1 view .LVU548
-.L119:
-	.loc 1 297 3 view .LVU549
-	.loc 1 297 25 is_stmt 0 discriminator 1 view .LVU550
+	vstrgt.32	s14, [r8, #28]
+	.loc 1 294 5 is_stmt 1 view .LVU551
+.L117:
+	.loc 1 296 5 view .LVU552
+	.loc 1 296 27 is_stmt 0 discriminator 1 view .LVU553
+	ldrb	r3, [r8, #32]	@ zero_extendqisi2
 	eor	r3, r3, #1
-	.loc 1 297 46 discriminator 2 view .LVU551
+	.loc 1 296 48 discriminator 2 view .LVU554
 	tst	r4, r3
-	bne	.L123
-.LVL81:
-.L124:
-	.loc 1 305 22 view .LVU552
-	vldr.32	s15, [fp, #64]
-.LVL82:
+	bne	.L121
+.LVL85:
 .L122:
-	.loc 1 304 3 is_stmt 1 view .LVU553
-	.loc 1 305 22 is_stmt 0 view .LVU554
-	vldr.32	s13, [fp, #60]
-	vldr.32	s12, .L182+40
+	.loc 1 304 24 view .LVU555
+	vldr.32	s15, [r8, #64]
+.LVL86:
+.L120:
+	.loc 1 303 5 is_stmt 1 view .LVU556
+	.loc 1 304 24 is_stmt 0 view .LVU557
+	vldr.32	s13, [r8, #60]
+	vldr.32	s12, .L180+40
 	vmul.f32	s13, s13, s12
-	vldr.32	s14, [fp, #68]
-	.loc 1 306 81 view .LVU555
+	vldr.32	s14, [r8, #68]
+	.loc 1 305 83 view .LVU558
 	vcmpe.f32	s13, #0
-	.loc 1 305 22 view .LVU556
+	.loc 1 304 24 view .LVU559
 	vmul.f32	s14, s14, s12
-	.loc 1 306 81 view .LVU557
+	.loc 1 305 83 view .LVU560
 	vmrs	APSR_nzcv, FPSCR
-	.loc 1 304 20 view .LVU558
-	add	r3, sp, #112
+	.loc 1 303 22 view .LVU561
+	add	r3, sp, #120
 	ldm	r3, {r0, r1, r2}
-	.loc 1 305 22 view .LVU559
-	vstr.32	s15, [fp, #64]
-	vstr.32	s13, [fp, #60]
-	vstr.32	s14, [fp, #68]
-	.loc 1 304 20 view .LVU560
-	stm	fp, {r0, r1, r2}
-	.loc 1 305 3 is_stmt 1 view .LVU561
-	.loc 1 306 3 view .LVU562
-	.loc 1 306 81 is_stmt 0 view .LVU563
-	bmi	.L179
-	.loc 1 306 81 discriminator 2 view .LVU564
-	vldr.32	s12, .L182+44
+	.loc 1 304 24 view .LVU562
+	vstr.32	s15, [r8, #64]
+	vstr.32	s13, [r8, #60]
+	vstr.32	s14, [r8, #68]
+	.loc 1 303 22 view .LVU563
+	stm	r8, {r0, r1, r2}
+	.loc 1 304 5 is_stmt 1 view .LVU564
+	.loc 1 305 5 view .LVU565
+	.loc 1 305 83 is_stmt 0 view .LVU566
+	bmi	.L177
+	.loc 1 305 83 discriminator 2 view .LVU567
+	vldr.32	s12, .L180+44
 	vcmpe.f32	s13, s12
 	vmrs	APSR_nzcv, FPSCR
 	movmi	r3, #1
 	movpl	r3, #0
-.L127:
-	.loc 1 307 81 view .LVU565
+.L125:
+	.loc 1 306 83 view .LVU568
 	vcmpe.f32	s14, #0
-	.loc 1 306 6 discriminator 4 view .LVU566
+	.loc 1 305 8 discriminator 4 view .LVU569
 	cmp	r3, #0
-	.loc 1 306 108 discriminator 5 view .LVU567
-	vstrne.32	s16, [fp, #60]
-	.loc 1 307 3 is_stmt 1 view .LVU568
-	.loc 1 307 81 is_stmt 0 view .LVU569
+	.loc 1 305 110 discriminator 5 view .LVU570
+	vstrne.32	s16, [r8, #60]
+	.loc 1 306 5 is_stmt 1 view .LVU571
+	.loc 1 306 83 is_stmt 0 view .LVU572
 	vmrs	APSR_nzcv, FPSCR
-	bmi	.L180
-	.loc 1 307 81 discriminator 2 view .LVU570
-	vldr.32	s13, .L182+44
+	bmi	.L178
+	.loc 1 306 83 discriminator 2 view .LVU573
+	vldr.32	s13, .L180+44
 	vcmpe.f32	s14, s13
 	vmrs	APSR_nzcv, FPSCR
 	movmi	r3, #1
 	movpl	r3, #0
-.L130:
-	.loc 1 309 24 view .LVU571
-	vldr.32	s14, [fp, #72]
+.L128:
+	.loc 1 308 26 view .LVU574
+	vldr.32	s14, [r8, #72]
 	vsub.f32	s14, s14, s20
 .LBE260:
-	.loc 1 212 30 view .LVU572
+	.loc 1 212 30 view .LVU575
 	vcmpe.f32	s14, s20
-.LBB471:
-	.loc 1 307 6 discriminator 4 view .LVU573
+.LBB469:
+	.loc 1 306 8 discriminator 4 view .LVU576
 	cmp	r3, #0
-	.loc 1 307 108 discriminator 5 view .LVU574
-	vstrne.32	s16, [fp, #68]
-	.loc 1 309 3 is_stmt 1 view .LVU575
-.LBE471:
-	.loc 1 212 30 is_stmt 0 view .LVU576
+	.loc 1 306 110 discriminator 5 view .LVU577
+	vstrne.32	s16, [r8, #68]
+	.loc 1 308 5 is_stmt 1 view .LVU578
+.LBE469:
+	.loc 1 212 30 is_stmt 0 view .LVU579
 	vmrs	APSR_nzcv, FPSCR
-.LBB472:
-	.loc 1 309 24 view .LVU577
-	vstr.32	s14, [fp, #72]
-.LVL83:
-	.loc 1 309 24 view .LVU578
-.LBE472:
-	.loc 1 212 30 is_stmt 1 view .LVU579
-	bge	.L131
-.LVL84:
+.LBB470:
+	.loc 1 308 26 view .LVU580
+	vstr.32	s14, [r8, #72]
+.LVL87:
+	.loc 1 308 26 view .LVU581
+.LBE470:
+	.loc 1 212 30 is_stmt 1 view .LVU582
+	bge	.L129
+.LVL88:
 .L90:
-	.loc 1 311 1 is_stmt 0 view .LVU580
-	add	sp, sp, #212
+	.loc 1 310 1 is_stmt 0 view .LVU583
+	add	sp, sp, #220
 	.cfi_remember_state
 	.cfi_def_cfa_offset 100
 	@ sp needed
@@ -2136,9 +2152,9 @@ Player_Move:
 	.cfi_restore 81
 	.cfi_def_cfa_offset 36
 	pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
-.L183:
+.L181:
 	.align	2
-.L182:
+.L180:
 	.word	1015580809
 	.word	1051372203
 	.word	-1035468800
@@ -2158,625 +2174,606 @@ Player_Move:
 	.word	-1110651699
 	.word	1007192201
 	.word	0
-.LVL85:
-.L177:
+.LVL89:
+.L175:
 	.cfi_restore_state
-.LBB473:
-.LBB406:
-.LBB399:
+.LBB471:
+.LBB404:
 .LBB397:
-.LBB384:
-.LBB375:
-.LBB365:
-	.loc 1 250 67 discriminator 1 view .LVU581
-	mov	r3, r4
-	mov	r2, r10
-	mov	r1, r6
-	ldr	r0, [fp, #40]
-	bl	World_GetBlock
-.LVL86:
-	.loc 1 250 65 discriminator 1 view .LVU582
-	cmp	r0, #27
-	beq	.L101
-	.loc 1 251 9 view .LVU583
-	mov	r3, r4
-	mov	r2, r10
-	mov	r1, r6
-	ldr	r0, [fp, #40]
-	bl	World_GetBlock
-.LVL87:
+.LBB395:
+.LBB383:
+.LBB374:
+.LBB364:
 .LBB353:
-	.loc 1 252 8 is_stmt 1 view .LVU584
-.LBE353:
-	.loc 1 251 7 is_stmt 0 discriminator 1 view .LVU585
-	cmp	r0, #26
-.LBB354:
-	.loc 1 258 25 view .LVU586
-	add	ip, sp, #8
-	add	lr, sp, #160
-.LBE354:
-	.loc 1 251 7 discriminator 1 view .LVU587
-	beq	.L101
-.LBB355:
-	.loc 1 252 23 view .LVU588
-	vmov	s15, r6	@ int
+	.loc 1 251 15 is_stmt 1 view .LVU584
+	.loc 1 251 30 is_stmt 0 view .LVU585
+	vmov	s15, r7	@ int
 	vmov	s13, r4	@ int
 	vcvt.f32.s32	s14, s15
-	vmov	s15, r10	@ int
+	vmov	s15, r8	@ int
 	vcvt.f32.s32	s13, s13
-.LVL88:
-	.loc 1 252 23 view .LVU589
+.LVL90:
+	.loc 1 251 30 view .LVU586
 	vcvt.f32.s32	s15, s15
-.LVL89:
-.LBB304:
-.LBI297:
-	.loc 4 9 12 is_stmt 1 view .LVU590
-.LBB299:
-	.loc 4 9 79 view .LVU591
-.LBE299:
-.LBE304:
-	.loc 1 258 25 is_stmt 0 view .LVU592
-	add	r3, sp, #96
-	str	r3, [sp, #44]
-	add	r3, sp, #92
-	str	r3, [sp, #40]
-	add	r3, sp, #148
-	str	r3, [sp, #36]
-	mov	r3, #0
-.LBB305:
-.LBB300:
-	.loc 4 9 109 discriminator 1 view .LVU593
-	vadd.f32	s11, s15, s17
+.LVL91:
+.LBB302:
+.LBI296:
+	.loc 4 9 12 is_stmt 1 view .LVU587
+.LBB298:
+	.loc 4 9 79 view .LVU588
+	.loc 4 9 109 is_stmt 0 discriminator 1 view .LVU589
 	vadd.f32	s12, s13, s17
+	vadd.f32	s11, s15, s17
 	vadd.f32	s10, s14, s17
-.LBE300:
-.LBE305:
-	.loc 1 258 25 view .LVU594
-	str	r3, [sp, #32]
+.LBE298:
+.LBE302:
+	.loc 1 257 31 view .LVU590
+	add	r1, sp, #104
+	add	r2, sp, #100
+	add	r3, sp, #156
+	str	r1, [sp, #44]
+	str	r2, [sp, #40]
+	str	r3, [sp, #36]
+	str	r5, [sp, #32]
+	add	ip, sp, #8
+	add	lr, sp, #168
 	ldmia	lr!, {r0, r1, r2, r3}
 	stmia	ip!, {r0, r1, r2, r3}
-	.loc 1 256 12 view .LVU595
-	mov	r2, #0
-	.loc 1 258 25 view .LVU596
+	.loc 1 253 31 view .LVU591
+	vstr.32	s16, [sp, #156]
+	.loc 1 257 31 view .LVU592
 	ldm	lr, {r0, r1}
-	.loc 1 254 24 view .LVU597
-	vstr.32	s16, [sp, #148]
-	vstr.32	s16, [sp, #152]
-	.loc 1 258 25 view .LVU598
+	.loc 1 253 31 view .LVU593
+	vstr.32	s16, [sp, #160]
+	.loc 1 257 31 view .LVU594
 	stm	ip, {r0, r1}
-.LBB306:
-.LBB301:
-	.loc 4 9 86 discriminator 2 view .LVU599
-	vstr.32	s11, [sp, #200]
-	vstr.32	s12, [sp, #204]
-.LVL90:
-	.loc 4 9 86 discriminator 2 view .LVU600
-.LBE301:
-.LBE306:
-	.loc 1 254 8 is_stmt 1 view .LVU601
-	.loc 1 255 8 view .LVU602
-	.loc 1 256 8 view .LVU603
-	.loc 1 258 7 view .LVU604
-.LBB307:
-.LBB302:
-	.loc 4 9 86 is_stmt 0 discriminator 2 view .LVU605
-	vstr.32	s13, [sp, #192]
-	vstr.32	s10, [sp, #196]
-.LBE302:
-.LBE307:
-	.loc 1 256 12 view .LVU606
-	str	r2, [sp, #96]
-	.loc 1 258 25 view .LVU607
-	add	r2, sp, #208
+.LBB303:
+.LBB299:
+	.loc 4 9 86 discriminator 2 view .LVU595
+	vstr.32	s11, [sp, #208]
+	vstr.32	s12, [sp, #212]
+.LVL92:
+	.loc 4 9 86 discriminator 2 view .LVU596
+.LBE299:
+.LBE303:
+	.loc 1 253 15 is_stmt 1 view .LVU597
+	.loc 1 254 15 view .LVU598
+	.loc 1 255 15 view .LVU599
+	.loc 1 257 14 view .LVU600
+.LBB304:
+.LBB300:
+	.loc 4 9 86 is_stmt 0 discriminator 2 view .LVU601
+	vstr.32	s13, [sp, #200]
+	vstr.32	s10, [sp, #204]
+.LBE300:
+.LBE304:
+	.loc 1 257 31 view .LVU602
+	add	r2, sp, #216
 	ldmdb	r2, {r0, r1}
 	stm	sp, {r0, r1}
-	add	r3, sp, #184
-.LBB308:
-.LBB303:
-	.loc 4 9 86 discriminator 2 view .LVU608
-	vstr.32	s14, [sp, #184]
-	vstr.32	s15, [sp, #188]
-.LBE303:
-.LBE308:
-	.loc 1 254 24 view .LVU609
-	vstr.32	s16, [sp, #156]
-	.loc 1 255 14 view .LVU610
-	vstr.32	s16, [sp, #92]
-	.loc 1 258 25 view .LVU611
+	add	r3, sp, #192
+.LBB305:
+.LBB301:
+	.loc 4 9 86 discriminator 2 view .LVU603
+	vstr.32	s14, [sp, #192]
+	vstr.32	s15, [sp, #196]
+.LBE301:
+.LBE305:
+	.loc 1 253 31 view .LVU604
+	vstr.32	s16, [sp, #164]
+	.loc 1 254 21 view .LVU605
+	vstr.32	s16, [sp, #100]
+	.loc 1 255 19 view .LVU606
+	str	r5, [sp, #104]
+	.loc 1 257 31 view .LVU607
 	ldm	r3, {r0, r1, r2, r3}
 	bl	Collision_BoxIntersect
-.LVL91:
-	.loc 1 259 8 is_stmt 1 view .LVU612
-	.loc 1 259 18 is_stmt 0 view .LVU613
-	orr	r0, r0, r5
-.LVL92:
-	.loc 1 259 18 view .LVU614
-	uxtb	r5, r0
 .LVL93:
-	.loc 1 259 18 view .LVU615
-	b	.L101
+	.loc 1 258 15 is_stmt 1 view .LVU608
+	.loc 1 258 25 is_stmt 0 view .LVU609
+	orr	r0, r0, fp
 .LVL94:
-.L106:
-	.loc 1 259 18 view .LVU616
-.LBE355:
-.LBE365:
-.LBE375:
-.LBE384:
-.LBE397:
-	.loc 1 266 9 is_stmt 1 view .LVU617
-	.loc 1 266 12 is_stmt 0 view .LVU618
-	cmp	r4, #1
-	beq	.L181
-	.loc 1 273 5 is_stmt 1 view .LVU619
+	.loc 1 258 25 view .LVU610
+	uxtb	fp, r0
 .LVL95:
-	.loc 1 274 5 view .LVU620
-	.loc 1 274 8 is_stmt 0 view .LVU621
-	cmp	r4, #0
-	.loc 1 275 6 is_stmt 1 view .LVU622
-	.loc 1 275 25 is_stmt 0 view .LVU623
-	vstreq.32	s16, [fp, #60]
-	.loc 1 277 6 is_stmt 1 view .LVU624
-	.loc 1 277 25 is_stmt 0 view .LVU625
-	vstrne.32	s16, [fp, #68]
-	.loc 1 273 19 view .LVU626
-	str	r5, [sp, #68]
-	b	.L112
+	.loc 1 258 25 view .LVU611
+	b	.L99
 .LVL96:
-.L181:
-	.loc 1 267 5 is_stmt 1 view .LVU627
-	.loc 1 267 8 is_stmt 0 view .LVU628
-	vldr.32	s15, [fp, #64]
+.L104:
+	.loc 1 258 25 view .LVU612
+.LBE353:
+.LBE364:
+.LBE374:
+.LBE383:
+.LBE395:
+	.loc 1 265 12 is_stmt 1 view .LVU613
+	.loc 1 265 15 is_stmt 0 view .LVU614
+	cmp	r4, #1
+	beq	.L179
+	.loc 1 272 9 is_stmt 1 view .LVU615
+.LVL97:
+	.loc 1 273 9 view .LVU616
+	.loc 1 273 12 is_stmt 0 view .LVU617
+	cmp	r4, #0
+	.loc 1 274 11 is_stmt 1 view .LVU618
+	.loc 1 274 30 is_stmt 0 view .LVU619
+	vstreq.32	s16, [r9, #60]
+	.loc 1 276 11 is_stmt 1 view .LVU620
+	.loc 1 276 30 is_stmt 0 view .LVU621
+	vstrne.32	s16, [r9, #68]
+	.loc 1 272 23 view .LVU622
+	str	fp, [sp, #76]
+	b	.L110
+.LVL98:
+.L179:
+	.loc 1 266 9 is_stmt 1 view .LVU623
+	.loc 1 266 12 is_stmt 0 view .LVU624
+	vldr.32	s15, [r9, #64]
 	vcmpe.f32	s15, #0
 	vmrs	APSR_nzcv, FPSCR
-	bmi	.L109
-	.loc 1 267 34 discriminator 2 view .LVU629
+	bmi	.L107
+	.loc 1 266 38 discriminator 2 view .LVU625
 	vcmpe.f32	s22, #0
 	vmrs	APSR_nzcv, FPSCR
-	bmi	.L109
-.L110:
-	.loc 1 268 5 is_stmt 1 view .LVU630
-	.loc 1 268 20 is_stmt 0 view .LVU631
+	bmi	.L107
+.L108:
+	.loc 1 267 9 is_stmt 1 view .LVU626
+	.loc 1 267 24 is_stmt 0 view .LVU627
 	mov	r2, #0
-	.loc 1 269 24 view .LVU632
-	vstr.32	s16, [fp, #60]
-	.loc 1 270 24 view .LVU633
-	vstr.32	s16, [fp, #64]
-	.loc 1 271 24 view .LVU634
-	vstr.32	s16, [fp, #68]
-	.loc 1 268 20 view .LVU635
-	strb	r2, [fp, #33]
-	.loc 1 269 5 is_stmt 1 view .LVU636
-	.loc 1 270 5 view .LVU637
-	.loc 1 271 5 view .LVU638
-	b	.L112
-.LVL97:
-.L178:
-	.loc 1 271 5 is_stmt 0 view .LVU639
-.LBE399:
-.LBE406:
-.LBB407:
-	.loc 1 286 4 is_stmt 1 view .LVU640
-.LBB408:
-.LBI408:
-	.loc 2 17 15 view .LVU641
-.LBB409:
-	.loc 2 17 44 view .LVU642
-	.loc 2 17 51 is_stmt 0 view .LVU643
-	vsub.f32	s26, s26, s15
-.LVL98:
-	.loc 2 17 51 view .LVU644
-	vsub.f32	s29, s29, s30
+	.loc 1 268 28 view .LVU628
+	vstr.32	s16, [r9, #60]
+	.loc 1 269 28 view .LVU629
+	vstr.32	s16, [r9, #64]
+	.loc 1 270 28 view .LVU630
+	vstr.32	s16, [r9, #68]
+	.loc 1 267 24 view .LVU631
+	strb	r2, [r9, #33]
+	.loc 1 268 9 is_stmt 1 view .LVU632
+	.loc 1 269 9 view .LVU633
+	.loc 1 270 9 view .LVU634
+	b	.L110
 .LVL99:
-	.loc 2 17 51 view .LVU645
-.LBE409:
-.LBE408:
+.L176:
+	.loc 1 270 9 is_stmt 0 view .LVU635
+.LBE397:
+.LBE404:
+.LBB405:
+	.loc 1 285 7 is_stmt 1 view .LVU636
+.LBB406:
+.LBI406:
+	.loc 2 17 15 view .LVU637
+.LBB407:
+	.loc 2 17 44 view .LVU638
+	.loc 2 17 51 is_stmt 0 view .LVU639
+	vsub.f32	s26, s26, s15
+.LVL100:
+	.loc 2 17 51 view .LVU640
+	vsub.f32	s29, s29, s30
+.LVL101:
+	.loc 2 17 51 view .LVU641
+.LBE407:
+.LBE406:
+.LBB409:
+.LBB410:
 .LBB411:
 .LBB412:
 .LBB413:
 .LBB414:
-.LBB415:
-.LBB416:
-	.loc 2 20 66 view .LVU646
+	.loc 2 20 66 view .LVU642
 	vmul.f32	s15, s26, s26
-.LVL100:
-	.loc 2 20 66 view .LVU647
-.LBE416:
-.LBE415:
+.LVL102:
+	.loc 2 20 66 view .LVU643
 .LBE414:
 .LBE413:
 .LBE412:
 .LBE411:
-.LBB424:
-.LBB410:
-	.loc 2 17 51 view .LVU648
-	vsub.f32	s28, s28, s27
-.LVL101:
-	.loc 2 17 51 view .LVU649
 .LBE410:
-.LBE424:
-.LBB425:
-.LBI411:
-	.loc 2 25 15 is_stmt 1 view .LVU650
-.LBB421:
-	.loc 2 26 2 view .LVU651
-.LBB420:
-.LBI413:
-	.loc 2 23 14 view .LVU652
+.LBE409:
+.LBB422:
+.LBB408:
+	.loc 2 17 51 view .LVU644
+	vsub.f32	s28, s28, s27
+.LVL103:
+	.loc 2 17 51 view .LVU645
+.LBE408:
+.LBE422:
+.LBB423:
+.LBI409:
+	.loc 2 25 15 is_stmt 1 view .LVU646
 .LBB419:
-	.loc 2 23 35 view .LVU653
+	.loc 2 26 2 view .LVU647
 .LBB418:
-.LBI415:
-	.loc 2 20 14 view .LVU654
+.LBI411:
+	.loc 2 23 14 view .LVU648
 .LBB417:
-	.loc 2 20 43 view .LVU655
-	.loc 2 20 60 is_stmt 0 view .LVU656
+	.loc 2 23 35 view .LVU649
+.LBB416:
+.LBI413:
+	.loc 2 20 14 view .LVU650
+.LBB415:
+	.loc 2 20 43 view .LVU651
+	.loc 2 20 60 is_stmt 0 view .LVU652
 	vmla.f32	s15, s29, s29
-	.loc 2 20 72 view .LVU657
+	.loc 2 20 72 view .LVU653
 	vmla.f32	s15, s28, s28
+.LBE415:
+.LBE416:
+	.loc 2 23 42 discriminator 1 view .LVU654
+	vsqrt.f32	s12, s15
+.LVL104:
+	.loc 2 23 42 discriminator 1 view .LVU655
 .LBE417:
 .LBE418:
-	.loc 2 23 42 discriminator 1 view .LVU658
-	vsqrt.f32	s11, s15
-.LVL102:
-	.loc 2 23 42 discriminator 1 view .LVU659
+	.loc 2 27 2 is_stmt 1 view .LVU656
+	.loc 2 27 2 is_stmt 0 view .LVU657
 .LBE419:
-.LBE420:
-	.loc 2 27 2 is_stmt 1 view .LVU660
-	.loc 2 27 2 is_stmt 0 view .LVU661
-.LBE421:
-.LBE425:
-	.loc 1 287 4 is_stmt 1 view .LVU662
-.LBB426:
-.LBB422:
-	.loc 2 27 9 is_stmt 0 view .LVU663
-	vdiv.f32	s12, s29, s11
-.LVL103:
-	.loc 2 27 9 view .LVU664
-	vdiv.f32	s13, s26, s11
-.LVL104:
-	.loc 2 27 9 view .LVU665
-.LBE422:
-.LBE426:
-	.loc 1 287 18 view .LVU666
-	vadd.f32	s12, s12, s18
-.LVL105:
-.LBB427:
-.LBI427:
-	.loc 3 25 19 is_stmt 1 view .LVU667
-.LBB428:
-	.loc 3 25 40 view .LVU668
-.LBE428:
-.LBE427:
-	.loc 1 288 12 is_stmt 0 view .LVU669
-	vadd.f32	s13, s13, s19
-.LVL106:
-.LBB435:
-.LBB429:
-	.loc 3 25 47 view .LVU670
-	vcvt.s32.f32	s10, s12
-.LBE429:
-.LBE435:
-.LBB436:
-.LBB423:
-	.loc 2 27 9 view .LVU671
-	vdiv.f32	s14, s28, s11
-.LVL107:
-	.loc 2 27 9 view .LVU672
 .LBE423:
-.LBE436:
-.LBB437:
-.LBB430:
-	.loc 3 25 58 view .LVU673
-	vcvt.f32.s32	s7, s10
-.LBE430:
-.LBE437:
-	.loc 1 287 18 view .LVU674
-	vadd.f32	s14, s14, s17
+	.loc 1 286 7 is_stmt 1 view .LVU658
+.LBB424:
+.LBB420:
+	.loc 2 27 9 is_stmt 0 view .LVU659
+	vdiv.f32	s13, s29, s12
+.LVL105:
+	.loc 2 27 9 view .LVU660
+	vdiv.f32	s14, s26, s12
+.LVL106:
+	.loc 2 27 9 view .LVU661
+.LBE420:
+.LBE424:
+	.loc 1 286 21 view .LVU662
+	vadd.f32	s13, s13, s18
+.LVL107:
+.LBB425:
+.LBI425:
+	.loc 3 25 19 is_stmt 1 view .LVU663
+.LBB426:
+	.loc 3 25 40 view .LVU664
+.LBE426:
+.LBE425:
+	.loc 1 287 36 is_stmt 0 view .LVU665
+	vadd.f32	s14, s14, s19
 .LVL108:
-.LBB438:
-.LBB439:
-	.loc 3 25 47 view .LVU675
-	vcvt.s32.f32	s11, s13
+.LBB433:
+.LBB427:
+	.loc 3 25 47 view .LVU666
+	vcvt.s32.f32	s10, s13
+.LBE427:
+.LBE433:
+.LBB434:
+.LBB421:
+	.loc 2 27 9 view .LVU667
+	vdiv.f32	s15, s28, s12
 .LVL109:
-	.loc 3 25 47 view .LVU676
-.LBE439:
-.LBE438:
-.LBB445:
-.LBB446:
-	vcvt.s32.f32	s15, s14
+	.loc 2 27 9 view .LVU668
+.LBE421:
+.LBE434:
+.LBB435:
+.LBB436:
+	.loc 3 25 47 view .LVU669
+	vcvt.s32.f32	s11, s14
+.LBE436:
+.LBE435:
+	.loc 1 286 21 view .LVU670
+	vadd.f32	s15, s15, s17
 .LVL110:
-	.loc 3 25 47 view .LVU677
-.LBE446:
-.LBE445:
+.LBB442:
+.LBB428:
+	.loc 3 25 58 view .LVU671
+	vcvt.f32.s32	s7, s10
+.LBE428:
+.LBE442:
+.LBB443:
+.LBB444:
+	.loc 3 25 47 view .LVU672
+	vcvt.s32.f32	s12, s15
+.LVL111:
+	.loc 3 25 47 view .LVU673
+.LBE444:
+.LBE443:
+.LBB449:
+.LBB429:
+	.loc 3 25 58 view .LVU674
+	vcmpe.f32	s13, s7
+.LBE429:
+.LBE449:
+.LBB450:
+.LBB437:
+	vcvt.f32.s32	s8, s11
+.LBE437:
+.LBE450:
 .LBB451:
-.LBB431:
-	.loc 3 25 58 view .LVU678
-	vcmpe.f32	s12, s7
-.LBE431:
+.LBB430:
+	vmrs	APSR_nzcv, FPSCR
+.LBE430:
 .LBE451:
 .LBB452:
-.LBB440:
-	vcvt.f32.s32	s8, s11
-.LBE440:
+.LBB445:
+	vcvt.f32.s32	s9, s12
+.LBE445:
 .LBE452:
 .LBB453:
-.LBB432:
-	vmrs	APSR_nzcv, FPSCR
-.LBE432:
+.LBB438:
+	vcmpe.f32	s14, s8
+.LBE438:
 .LBE453:
 .LBB454:
-.LBB447:
-	vcvt.f32.s32	s9, s15
-.LBE447:
+.LBB431:
+	movmi	r3, #1
+	movpl	r3, #0
+	.loc 3 25 56 view .LVU675
+	vmov	r2, s10	@ int
+.LBE431:
 .LBE454:
 .LBB455:
-.LBB441:
-	vcmpe.f32	s13, s8
-.LBE441:
+.LBB439:
+	.loc 3 25 58 view .LVU676
+	vmrs	APSR_nzcv, FPSCR
+.LBE439:
 .LBE455:
 .LBB456:
-.LBB433:
-	movmi	r3, #1
-	movpl	r3, #0
-	.loc 3 25 56 view .LVU679
-	vmov	r2, s10	@ int
-.LBE433:
+.LBB446:
+	vcmpe.f32	s15, s9
+.LBE446:
 .LBE456:
 .LBB457:
-.LBB442:
-	.loc 3 25 58 view .LVU680
-	vmrs	APSR_nzcv, FPSCR
-.LBE442:
+.LBB432:
+	.loc 3 25 56 view .LVU677
+	sub	r6, r2, r3
+.LVL112:
+	.loc 3 25 56 view .LVU678
+.LBE432:
 .LBE457:
 .LBB458:
-.LBB448:
-	vcmpe.f32	s14, s9
-.LBE448:
+.LBI435:
+	.loc 3 25 19 is_stmt 1 view .LVU679
+.LBB440:
+	.loc 3 25 40 view .LVU680
+	.loc 3 25 58 is_stmt 0 view .LVU681
+	movmi	r3, #1
+	movpl	r3, #0
+	.loc 3 25 56 view .LVU682
+	vmov	r2, s11	@ int
+.LBE440:
 .LBE458:
 .LBB459:
-.LBB434:
-	.loc 3 25 56 view .LVU681
-	sub	r6, r2, r3
-.LVL111:
-	.loc 3 25 56 view .LVU682
-.LBE434:
+.LBB447:
+	.loc 3 25 58 view .LVU683
+	vmrs	APSR_nzcv, FPSCR
+.LBE447:
 .LBE459:
 .LBB460:
-.LBI438:
-	.loc 3 25 19 is_stmt 1 view .LVU683
-.LBB443:
-	.loc 3 25 40 view .LVU684
-	.loc 3 25 58 is_stmt 0 view .LVU685
-	movmi	r3, #1
-	movpl	r3, #0
-	.loc 3 25 56 view .LVU686
-	vmov	r2, s11	@ int
-.LBE443:
+.LBB441:
+	.loc 3 25 56 view .LVU684
+	sub	r5, r2, r3
+.LVL113:
+	.loc 3 25 56 view .LVU685
+.LBE441:
 .LBE460:
 .LBB461:
-.LBB449:
-	.loc 3 25 58 view .LVU687
-	vmrs	APSR_nzcv, FPSCR
-.LBE449:
-.LBE461:
-.LBB462:
-.LBB444:
-	.loc 3 25 56 view .LVU688
-	sub	r5, r2, r3
-.LVL112:
-	.loc 3 25 56 view .LVU689
-.LBE444:
-.LBE462:
-.LBB463:
-.LBI445:
-	.loc 3 25 19 is_stmt 1 view .LVU690
-.LBB450:
-	.loc 3 25 40 view .LVU691
-	.loc 3 25 56 is_stmt 0 view .LVU692
-	vmov	ip, s15	@ int
-	.loc 3 25 58 view .LVU693
+.LBI443:
+	.loc 3 25 19 is_stmt 1 view .LVU686
+.LBB448:
+	.loc 3 25 40 view .LVU687
+	.loc 3 25 56 is_stmt 0 view .LVU688
+	vmov	ip, s12	@ int
+	.loc 3 25 58 view .LVU689
 	movmi	r3, #1
 	movpl	r3, #0
-	.loc 3 25 56 view .LVU694
+	.loc 3 25 56 view .LVU690
 	sub	r7, ip, r3
-.LVL113:
-	.loc 3 25 56 view .LVU695
-.LBE450:
-.LBE463:
-	.loc 1 287 18 discriminator 1 view .LVU696
-	mov	r1, r6
-	mov	r3, r7
-	add	r2, r5, #2
-	ldr	r0, [fp, #40]
-	bl	World_GetBlock
 .LVL114:
-	.loc 1 289 4 is_stmt 1 view .LVU697
-	.loc 1 289 25 is_stmt 0 discriminator 1 view .LVU698
-	mov	r3, r7
+	.loc 3 25 56 view .LVU691
+.LBE448:
+.LBE461:
+	.loc 1 286 21 discriminator 1 view .LVU692
+	add	r2, r5, #2
 	mov	r1, r6
-	ldr	r0, [fp, #40]
-	add	r2, r5, #1
+	mov	r3, r7
+	ldr	r0, [r8, #40]
 	bl	World_GetBlock
 .LVL115:
-	.loc 1 291 4 is_stmt 1 view .LVU699
-	.loc 1 291 149 discriminator 1 view .LVU700
-.LBB464:
-.LBI464:
+	.loc 1 288 28 discriminator 1 view .LVU693
+	add	r2, r5, #1
+	.loc 1 286 21 discriminator 1 view .LVU694
+	mov	r5, r0
+.LVL116:
+	.loc 1 288 7 is_stmt 1 view .LVU695
+	.loc 1 288 28 is_stmt 0 discriminator 1 view .LVU696
+	mov	r3, r7
+	mov	r1, r6
+	ldr	r0, [r8, #40]
+	bl	World_GetBlock
+.LVL117:
+	.loc 1 290 7 is_stmt 1 view .LVU697
+	.loc 1 290 10 is_stmt 0 view .LVU698
+	clz	r5, r5
+.LVL118:
+	.loc 1 290 10 view .LVU699
+	cmp	r0, #0
+	lsr	r5, r5, #5
+	moveq	r5, #0
+	cmp	r5, #0
+	beq	.L115
+	.loc 1 290 60 is_stmt 1 discriminator 1 view .LVU700
+.LVL119:
+.LBB462:
+.LBI462:
 	.loc 1 195 6 view .LVU701
-.LBB465:
+.LBB463:
 	.loc 1 196 2 view .LVU702
 	.loc 1 196 5 is_stmt 0 view .LVU703
-	ldrb	r3, [fp, #32]	@ zero_extendqisi2
+	ldrb	r3, [r8, #32]	@ zero_extendqisi2
 	cmp	r3, #0
-	beq	.L117
+	beq	.L115
 	.loc 1 196 23 discriminator 1 view .LVU704
-	ldrb	r2, [fp, #35]	@ zero_extendqisi2
-	cmp	r2, #0
-	bne	.L117
+	ldrb	r3, [r8, #35]	@ zero_extendqisi2
+	cmp	r3, #0
+	bne	.L115
 	.loc 1 197 3 is_stmt 1 view .LVU705
 	.loc 1 197 31 is_stmt 0 view .LVU706
-	vldr.32	s15, .L182+56
+	vldr.32	s15, .L180+56
 	vmul.f32	s13, s23, s15
 	.loc 1 198 31 view .LVU707
 	vmul.f32	s15, s24, s15
-	.loc 1 199 22 view .LVU708
-	ldr	r3, .L182+52
-	vldr.32	s14, [fp, #28]
-	str	r3, [fp, #64]	@ float
-	.loc 1 200 18 view .LVU709
+	.loc 1 201 21 view .LVU708
+	strb	r3, [r8, #36]
+	.loc 1 199 22 view .LVU709
+	ldr	r3, .L180+52
+	vldr.32	s14, [r8, #28]
+	str	r3, [r8, #64]	@ float
+	.loc 1 200 18 view .LVU710
 	mov	r3, #1
-	.loc 1 197 22 view .LVU710
-	vstr.32	s13, [fp, #60]
-	.loc 1 198 3 is_stmt 1 view .LVU711
-	.loc 1 198 22 is_stmt 0 view .LVU712
-	vstr.32	s15, [fp, #68]
-	.loc 1 199 3 is_stmt 1 view .LVU713
-	.loc 1 200 3 view .LVU714
-	.loc 1 201 3 view .LVU715
-.LVL116:
-	.loc 1 201 3 is_stmt 0 view .LVU716
-.LBE465:
-.LBE464:
-.LBE407:
-	.loc 1 294 3 is_stmt 1 view .LVU717
-.LBB468:
-.LBB467:
+	.loc 1 197 22 view .LVU711
+	vstr.32	s13, [r8, #60]
+	.loc 1 198 3 is_stmt 1 view .LVU712
+	.loc 1 198 22 is_stmt 0 view .LVU713
+	vstr.32	s15, [r8, #68]
+	.loc 1 199 3 is_stmt 1 view .LVU714
+	.loc 1 200 3 view .LVU715
+	.loc 1 201 3 view .LVU716
+.LVL120:
+	.loc 1 201 3 is_stmt 0 view .LVU717
+.LBE463:
+.LBE462:
+.LBE405:
+	.loc 1 293 5 is_stmt 1 view .LVU718
 .LBB466:
-	.loc 1 201 21 is_stmt 0 view .LVU718
-	strb	r2, [fp, #36]
-	.loc 1 200 18 view .LVU719
-	strb	r3, [fp, #33]
-.L118:
+.LBB465:
+.LBB464:
+	.loc 1 200 18 is_stmt 0 view .LVU719
+	strb	r3, [r8, #33]
+.LVL121:
+.L116:
 	.loc 1 200 18 view .LVU720
+.LBE464:
+.LBE465:
 .LBE466:
-.LBE467:
-.LBE468:
-	.loc 1 295 3 is_stmt 1 view .LVU721
-	.loc 1 295 26 is_stmt 0 discriminator 1 view .LVU722
+	.loc 1 294 5 is_stmt 1 view .LVU721
+	.loc 1 294 28 is_stmt 0 discriminator 1 view .LVU722
 	vcmpe.f32	s14, #0
 	vmrs	APSR_nzcv, FPSCR
-	bpl	.L124
-	.loc 1 295 55 is_stmt 1 discriminator 2 view .LVU723
-	.loc 1 295 73 is_stmt 0 discriminator 2 view .LVU724
-	vldr.32	s13, .L182+60
+	bpl	.L122
+	.loc 1 294 57 is_stmt 1 discriminator 2 view .LVU723
+	.loc 1 294 75 is_stmt 0 discriminator 2 view .LVU724
+	vldr.32	s13, .L180+60
 	vadd.f32	s14, s14, s13
-	.loc 1 305 22 view .LVU725
-	vldr.32	s15, [fp, #64]
-	.loc 1 295 73 discriminator 2 view .LVU726
-	vstr.32	s14, [fp, #28]
-	.loc 1 297 3 is_stmt 1 view .LVU727
-	b	.L122
-.LVL117:
+	.loc 1 304 24 view .LVU725
+	vldr.32	s15, [r8, #64]
+	.loc 1 294 75 discriminator 2 view .LVU726
+	vstr.32	s14, [r8, #28]
+	.loc 1 296 5 is_stmt 1 view .LVU727
+	b	.L120
+.LVL122:
 .L94:
 	.loc 1 216 23 discriminator 1 view .LVU728
 	.loc 1 216 42 is_stmt 0 discriminator 1 view .LVU729
-	vstr.32	s16, [fp, #64]
+	vstr.32	s16, [r8, #64]
 	.loc 1 218 3 is_stmt 1 view .LVU730
-.LVL118:
+.LVL123:
 	.loc 1 219 3 view .LVU731
 	.loc 1 224 10 view .LVU732
 	.loc 1 216 42 is_stmt 0 discriminator 1 view .LVU733
 	vmov.f32	s15, s16
-	vldr.32	s14, .L182+60
+	vldr.32	s14, .L180+60
 	b	.L97
-.LVL119:
-.L180:
-	.loc 1 307 81 discriminator 1 view .LVU734
-	vldr.32	s13, .L182+64
+.LVL124:
+.L178:
+	.loc 1 306 83 discriminator 1 view .LVU734
+	vldr.32	s13, .L180+64
 	vcmpe.f32	s14, s13
 	vmrs	APSR_nzcv, FPSCR
 	movgt	r3, #1
 	movle	r3, #0
-	b	.L130
-.L179:
-	.loc 1 306 81 discriminator 1 view .LVU735
-	vldr.32	s12, .L182+64
+	b	.L128
+.L177:
+	.loc 1 305 83 discriminator 1 view .LVU735
+	vldr.32	s12, .L180+64
 	vcmpe.f32	s13, s12
 	vmrs	APSR_nzcv, FPSCR
 	movgt	r3, #1
 	movle	r3, #0
-	b	.L127
-.LVL120:
+	b	.L125
+.LVL125:
 .L95:
 	.loc 1 224 10 is_stmt 1 view .LVU736
 	.loc 1 226 8 view .LVU737
 	.loc 1 226 11 is_stmt 0 view .LVU738
-	vldr.32	s14, .L182+68
+	vldr.32	s14, .L180+68
 	.loc 1 226 18 view .LVU739
-	ldrb	r3, [fp, #36]	@ zero_extendqisi2
+	ldrb	r3, [r8, #36]	@ zero_extendqisi2
 	.loc 1 226 11 view .LVU740
 	cmp	r3, #0
 	movne	r4, r3
 	vmoveq.f32	s14, s20
 	b	.L97
-.LVL121:
-.L109:
-.LBB469:
-.LBB400:
-	.loc 1 267 51 is_stmt 1 discriminator 3 view .LVU741
-	.loc 1 267 68 is_stmt 0 discriminator 3 view .LVU742
+.LVL126:
+.L107:
+.LBB467:
+.LBB398:
+	.loc 1 266 55 is_stmt 1 discriminator 3 view .LVU741
+	.loc 1 266 72 is_stmt 0 discriminator 3 view .LVU742
 	mov	r2, #1
-	strb	r2, [fp, #32]
-	b	.L110
-.LVL122:
-.L123:
-	.loc 1 267 68 discriminator 3 view .LVU743
-.LBE400:
-.LBE469:
-.LBB470:
-.LBB405:
+	strb	r2, [r9, #32]
+	b	.L108
+.LVL127:
+.L121:
+	.loc 1 266 72 discriminator 3 view .LVU743
+.LBE398:
+.LBE467:
+.LBB468:
+.LBB403:
 	.loc 2 17 51 view .LVU744
 	vsub.f32	s18, s18, s30
-.LVL123:
+.LVL128:
 	.loc 2 17 51 view .LVU745
 	vsub.f32	s17, s17, s27
-.LVL124:
+.LVL129:
 	.loc 2 17 51 view .LVU746
-.LBE405:
-.LBE470:
-	.loc 1 297 96 discriminator 4 view .LVU747
+.LBE403:
+.LBE468:
+	.loc 1 296 98 discriminator 4 view .LVU747
 	vcmp.f32	s18, #0
-	.loc 1 297 61 discriminator 3 view .LVU748
-	vldr.32	s15, [fp, #4]
-	.loc 1 297 96 discriminator 4 view .LVU749
+	.loc 1 296 63 discriminator 3 view .LVU748
+	vldr.32	s15, [r8, #4]
+	.loc 1 296 98 discriminator 4 view .LVU749
 	vmrs	APSR_nzcv, FPSCR
-	.loc 1 297 116 discriminator 5 view .LVU750
+	.loc 1 296 118 discriminator 5 view .LVU750
 	vcmp.f32	s17, #0
-	.loc 1 297 96 discriminator 4 view .LVU751
+	.loc 1 296 98 discriminator 4 view .LVU751
 	movne	r3, #1
 	moveq	r3, #0
-	.loc 1 297 116 discriminator 5 view .LVU752
+	.loc 1 296 118 discriminator 5 view .LVU752
 	vmrs	APSR_nzcv, FPSCR
-	.loc 1 297 61 discriminator 3 view .LVU753
+	.loc 1 296 63 discriminator 3 view .LVU753
 	vcmpe.f32	s15, s19
-	.loc 1 297 116 discriminator 5 view .LVU754
+	.loc 1 296 118 discriminator 5 view .LVU754
 	moveq	r3, #0
 	andne	r3, r3, #1
-	.loc 1 297 61 discriminator 3 view .LVU755
+	.loc 1 296 63 discriminator 3 view .LVU755
 	vmrs	APSR_nzcv, FPSCR
-	.loc 1 297 116 discriminator 5 view .LVU756
+	.loc 1 296 118 discriminator 5 view .LVU756
 	movle	r3, #0
 	andgt	r3, r3, #1
 	cmp	r3, #0
-	beq	.L124
-	.loc 1 299 4 is_stmt 1 view .LVU757
-	.loc 1 299 13 is_stmt 0 view .LVU758
-	ldm	fp, {r0, r1, r2}
-	.loc 1 300 21 view .LVU759
+	beq	.L122
+	.loc 1 298 7 is_stmt 1 view .LVU757
+	.loc 1 298 16 is_stmt 0 view .LVU758
+	ldm	r8, {r0, r1, r2}
+	.loc 1 299 24 view .LVU759
 	mov	r3, #1
-	strb	r3, [fp, #32]
-	.loc 1 299 13 view .LVU760
-	add	r3, sp, #112
-.LVL125:
-	.loc 1 300 21 view .LVU761
-	vldr.32	s15, .L182+72
-	.loc 1 299 13 view .LVU762
+	strb	r3, [r8, #32]
+	.loc 1 298 16 view .LVU760
+	add	r3, sp, #120
+.LVL130:
+	.loc 1 299 24 view .LVU761
+	vldr.32	s15, .L180+72
+	.loc 1 298 16 view .LVU762
 	stm	r3, {r0, r1, r2}
-.LVL126:
-	.loc 1 300 4 is_stmt 1 view .LVU763
-	.loc 1 301 4 view .LVU764
-	b	.L122
-.LBE473:
+.LVL131:
+	.loc 1 299 7 is_stmt 1 view .LVU763
+	.loc 1 300 7 view .LVU764
+	b	.L120
+.LBE471:
 	.cfi_endproc
 .LFE154:
 	.size	Player_Move, .-Player_Move
@@ -2791,7 +2788,7 @@ Player_Move:
 	.arm
 	.type	Player_PlaceBlock, %function
 Player_PlaceBlock:
-.LVL127:
+.LVL132:
 .LFB155:
 	.loc 1 313 54 view -0
 	.cfi_startproc
@@ -2809,7 +2806,7 @@ Player_PlaceBlock:
 	mov	r4, r0
 	.loc 1 314 12 view .LVU768
 	ldr	r0, [r0, #40]
-.LVL128:
+.LVL133:
 	.loc 1 314 59 discriminator 2 view .LVU769
 	vldr.32	s15, [r4, #76]
 	.loc 1 314 5 view .LVU770
@@ -2818,74 +2815,74 @@ Player_PlaceBlock:
 	sub	sp, sp, #12
 	.cfi_def_cfa_offset 32
 	.loc 1 314 5 view .LVU772
-	beq	.L185
+	beq	.L183
 	.loc 1 314 20 discriminator 1 view .LVU773
 	ldrb	r3, [r4, #193]	@ zero_extendqisi2
 	cmp	r3, #0
-	bne	.L211
-.LVL129:
-.L185:
+	bne	.L209
+.LVL134:
+.L183:
 	.loc 1 331 2 is_stmt 1 view .LVU774
 	.loc 1 331 5 is_stmt 0 view .LVU775
 	vcmpe.f32	s15, #0
 	vmrs	APSR_nzcv, FPSCR
 	.loc 1 331 39 is_stmt 1 discriminator 1 view .LVU776
 	.loc 1 331 65 is_stmt 0 discriminator 1 view .LVU777
-	ldrmi	r3, .L212+16
+	ldrmi	r3, .L210+16
 	strmi	r3, [r4, #76]	@ float
-.L184:
+.L182:
 	.loc 1 332 1 view .LVU778
 	add	sp, sp, #12
 	.cfi_remember_state
 	.cfi_def_cfa_offset 20
 	@ sp needed
 	pop	{r4, r5, r6, r7, pc}
-.LVL130:
-.L211:
+.LVL135:
+.L209:
 	.cfi_restore_state
 	.loc 1 314 50 discriminator 2 view .LVU779
 	vcmpe.f32	s15, #0
 	vmrs	APSR_nzcv, FPSCR
-	bpl	.L184
-.LBB474:
+	bpl	.L182
+.LBB472:
 	.loc 1 315 3 is_stmt 1 view .LVU780
 	.loc 1 315 14 is_stmt 0 view .LVU781
 	ldrb	r2, [r4, #188]	@ zero_extendqisi2
-	ldr	r3, .L212+20
+	ldr	r3, .L210+20
 	add	r2, r2, r2, lsl #1
 	.loc 1 318 37 view .LVU782
 	ldr	ip, [r3, r2, lsl #2]
 	mov	r6, r1
 	ldr	r1, [r4, #172]
-.LVL131:
+.LVL136:
 	.loc 1 316 7 view .LVU783
 	vldr.32	s15, [r4]
 	.loc 1 318 37 view .LVU784
 	add	r1, r1, ip
 	.loc 1 316 7 view .LVU785
 	vmov	s14, r1	@ int
-	vldr.32	s12, .L212
-.LBB475:
-.LBB476:
+	vldr.32	s12, .L210
+.LBB473:
+.LBB474:
 	.loc 3 33 19 view .LVU786
-	vldr.32	s13, .L212+4
-.LBE476:
-.LBE475:
+	vldr.32	s13, .L210+4
+.LBE474:
+.LBE473:
 	.loc 1 316 7 view .LVU787
 	vcvt.f32.s32	s14, s14
 	vsub.f32	s15, s15, s12
-.LBB481:
-.LBB477:
+.LBB479:
+.LBB475:
 	.loc 3 33 19 view .LVU788
 	vadd.f32	s11, s14, s13
 	.loc 3 33 78 view .LVU789
 	vcmpe.f32	s15, s11
 	vmrs	APSR_nzcv, FPSCR
-.LBE477:
-.LBE481:
+.LBE475:
+.LBE479:
 	.loc 1 315 14 view .LVU790
 	add	r3, r3, r2, lsl #2
-.LVL132:
+.LVL137:
 	.loc 1 316 3 is_stmt 1 view .LVU791
 	.loc 1 318 72 is_stmt 0 view .LVU792
 	ldr	ip, [r3, #4]
@@ -2897,86 +2894,86 @@ Player_PlaceBlock:
 	.loc 1 319 28 view .LVU795
 	ldr	ip, [r3, #8]
 	ldr	r3, [r4, #180]
-.LVL133:
+.LVL138:
 	.loc 1 317 22 view .LVU796
 	vldr.32	s9, [r4, #8]
 	.loc 1 319 28 view .LVU797
 	add	r3, r3, ip
-.LVL134:
-.LBB482:
-.LBI475:
+.LVL139:
+.LBB480:
+.LBI473:
 	.loc 3 32 19 is_stmt 1 view .LVU798
-.LBB478:
+.LBB476:
 	.loc 3 33 2 view .LVU799
 	.loc 3 33 78 is_stmt 0 view .LVU800
-	bhi	.L188
+	bhi	.L186
 	.loc 3 33 30 discriminator 1 view .LVU801
-	vldr.32	s11, .L212+8
+	vldr.32	s11, .L210+8
 	vadd.f32	s15, s15, s11
-.LVL135:
+.LVL140:
 	.loc 3 33 24 discriminator 1 view .LVU802
 	vcmpe.f32	s14, s15
 	vmrs	APSR_nzcv, FPSCR
-	bhi	.L188
-.LBE478:
-.LBE482:
+	bhi	.L186
+.LBE476:
+.LBE480:
 	.loc 1 316 7 view .LVU803
 	vmov	s15, r2	@ int
 	vcvt.f32.s32	s15, s15
-.LVL136:
-.LBB483:
-.LBB479:
+.LVL141:
+.LBB481:
+.LBB477:
 	.loc 3 33 55 discriminator 3 view .LVU804
 	vadd.f32	s14, s15, s13
-.LVL137:
+.LVL142:
 	.loc 3 33 42 discriminator 3 view .LVU805
 	vcmpe.f32	s10, s14
 	vmrs	APSR_nzcv, FPSCR
-	bhi	.L188
+	bhi	.L186
 	.loc 3 33 66 discriminator 5 view .LVU806
-	vldr.32	s14, .L212+12
+	vldr.32	s14, .L210+12
 	vadd.f32	s10, s10, s14
-.LVL138:
+.LVL143:
 	.loc 3 33 60 discriminator 5 view .LVU807
 	vcmpe.f32	s15, s10
 	vmrs	APSR_nzcv, FPSCR
-	bhi	.L188
-.LBE479:
-.LBE483:
+	bhi	.L186
+.LBE477:
+.LBE481:
 	.loc 1 316 7 view .LVU808
 	vmov	s15, r3	@ int
-.LVL139:
+.LVL144:
 	.loc 1 316 7 view .LVU809
 	vcvt.f32.s32	s15, s15
-.LVL140:
+.LVL145:
 	.loc 1 316 7 view .LVU810
 	vsub.f32	s9, s9, s12
-.LVL141:
-.LBB484:
-.LBB480:
+.LVL146:
+.LBB482:
+.LBB478:
 	.loc 3 33 91 discriminator 7 view .LVU811
 	vadd.f32	s13, s15, s13
 	.loc 3 33 78 discriminator 7 view .LVU812
 	vcmpe.f32	s9, s13
 	vmrs	APSR_nzcv, FPSCR
-	bhi	.L188
+	bhi	.L186
 	.loc 3 33 102 discriminator 9 view .LVU813
 	vadd.f32	s9, s9, s11
-.LVL142:
+.LVL147:
 	.loc 3 33 96 discriminator 9 view .LVU814
 	vcmpe.f32	s15, s9
 	vmrs	APSR_nzcv, FPSCR
-	bls	.L184
-.LVL143:
-.L188:
+	bls	.L182
+.LVL148:
+.L186:
 	.loc 3 33 96 discriminator 9 view .LVU815
-.LBE480:
-.LBE484:
+.LBE478:
+.LBE482:
 	.loc 1 321 3 is_stmt 1 view .LVU816
 	.loc 1 322 75 is_stmt 0 view .LVU817
 	ldr	ip, [r4, #136]
 	.loc 1 327 3 view .LVU818
-	ldr	r5, .L212+24
+	ldr	r5, .L210+24
 	.loc 1 321 3 view .LVU819
 	add	ip, ip, ip, lsl #1
 	add	ip, r4, ip
@@ -2985,12 +2982,12 @@ Player_PlaceBlock:
 	add	r7, r5, #32
 	.loc 1 321 3 view .LVU821
 	str	lr, [sp, #4]
-.LVL144:
+.LVL149:
 	.loc 1 321 3 view .LVU822
 	ldrb	ip, [ip, #144]	@ zero_extendqisi2
 	str	ip, [sp]
 	bl	World_SetBlockAndMeta
-.LVL145:
+.LVL150:
 	.loc 1 324 3 is_stmt 1 view .LVU823
 	.loc 1 324 21 is_stmt 0 view .LVU824
 	mov	r3, #0
@@ -2999,15 +2996,15 @@ Player_PlaceBlock:
 	.loc 1 324 21 view .LVU826
 	strb	r3, [r6, #128]
 	.loc 1 325 3 is_stmt 1 view .LVU827
-.LVL146:
+.LVL151:
 	.loc 1 326 3 view .LVU828
 	.loc 1 326 18 is_stmt 0 view .LVU829
 	strb	r3, [r6]
 	.loc 1 327 3 is_stmt 1 view .LVU830
 	bl	strlen
-.LVL147:
+.LVL152:
 	add	ip, r6, r0
-.L195:
+.L193:
 	mov	lr, r5
 	add	ip, ip, #16
 	ldmia	lr!, {r0, r1, r2, r3}
@@ -3017,7 +3014,7 @@ Player_PlaceBlock:
 	str	r1, [ip, #-12]	@ unaligned
 	str	r2, [ip, #-8]	@ unaligned
 	str	r3, [ip, #-4]	@ unaligned
-	bne	.L195
+	bne	.L193
 	ldmia	r5!, {r0, r1}
 	ldrh	r3, [r5]	@ unaligned
 	str	r0, [ip]	@ unaligned
@@ -3030,12 +3027,12 @@ Player_PlaceBlock:
 	strb	r3, [ip, #10]
 	.loc 1 329 3 is_stmt 1 view .LVU833
 	bl	playopus
-.LVL148:
+.LVL153:
 	vldr.32	s15, [r4, #76]
-	b	.L185
-.L213:
+	b	.L183
+.L211:
 	.align	2
-.L212:
+.L210:
 	.word	1051092582
 	.word	1065353216
 	.word	1059481190
@@ -3043,7 +3040,7 @@ Player_PlaceBlock:
 	.word	1045220557
 	.word	DirectionToOffset
 	.word	.LC43
-.LBE474:
+.LBE472:
 	.cfi_endproc
 .LFE155:
 	.size	Player_PlaceBlock, .-Player_PlaceBlock
@@ -3054,7 +3051,7 @@ Player_PlaceBlock:
 	.arm
 	.type	Player_BreakBlock, %function
 Player_BreakBlock:
-.LVL149:
+.LVL154:
 .LFB156:
 	.loc 1 334 40 view -0
 	.cfi_startproc
@@ -3069,7 +3066,7 @@ Player_BreakBlock:
 	mov	r4, r0
 	.loc 1 335 12 view .LVU837
 	ldr	r0, [r0, #40]
-.LVL150:
+.LVL155:
 	.loc 1 335 59 discriminator 2 view .LVU838
 	vldr.32	s15, [r4, #76]
 	.loc 1 335 5 view .LVU839
@@ -3078,46 +3075,46 @@ Player_BreakBlock:
 	sub	sp, sp, #8
 	.cfi_def_cfa_offset 16
 	.loc 1 335 5 view .LVU841
-	beq	.L215
+	beq	.L213
 	.loc 1 335 20 discriminator 1 view .LVU842
 	ldrb	r3, [r4, #193]	@ zero_extendqisi2
 	cmp	r3, #0
-	bne	.L228
-.L215:
+	bne	.L226
+.L213:
 	.loc 1 338 2 is_stmt 1 view .LVU843
 	.loc 1 338 5 is_stmt 0 view .LVU844
 	vcmpe.f32	s15, #0
 	vmrs	APSR_nzcv, FPSCR
 	.loc 1 338 39 is_stmt 1 discriminator 1 view .LVU845
 	.loc 1 338 65 is_stmt 0 discriminator 1 view .LVU846
-	ldrmi	r3, .L229
+	ldrmi	r3, .L227
 	strmi	r3, [r4, #76]	@ float
-.L214:
+.L212:
 	.loc 1 339 1 view .LVU847
 	add	sp, sp, #8
 	.cfi_remember_state
 	.cfi_def_cfa_offset 8
 	@ sp needed
 	pop	{r4, pc}
-.LVL151:
-.L228:
+.LVL156:
+.L226:
 	.cfi_restore_state
 	.loc 1 335 50 discriminator 2 view .LVU848
 	vcmpe.f32	s15, #0
 	vmrs	APSR_nzcv, FPSCR
-	bpl	.L214
+	bpl	.L212
 	.loc 1 336 3 is_stmt 1 view .LVU849
 	ldrd	r2, [r4, #176]
 	mov	ip, #0
 	ldr	r1, [r4, #172]
 	str	ip, [sp]
 	bl	World_SetBlock
-.LVL152:
+.LVL157:
 	vldr.32	s15, [r4, #76]
-	b	.L215
-.L230:
+	b	.L213
+.L228:
 	.align	2
-.L229:
+.L227:
 	.word	1045220557
 	.cfi_endproc
 .LFE156:
@@ -3179,36 +3176,36 @@ MaxWalkVelocity:
 	.file 35 "<built-in>"
 	.section	.debug_info,"",%progbits
 .Ldebug_info0:
-	.4byte	0x1eac
+	.4byte	0x1e78
 	.2byte	0x5
 	.byte	0x1
 	.byte	0x4
 	.4byte	.Ldebug_abbrev0
-	.uleb128 0x3d
+	.uleb128 0x3b
 	.4byte	.LASF284
 	.byte	0x1d
 	.4byte	.LASF285
 	.4byte	.LASF286
-	.4byte	.LLRL130
+	.4byte	.LLRL132
 	.4byte	0
 	.4byte	.Ldebug_line0
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x4
 	.byte	0x4
 	.4byte	.LASF0
-	.uleb128 0x3e
+	.uleb128 0x3c
 	.byte	0x4
 	.byte	0x5
 	.ascii	"int\000"
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x8
 	.byte	0x7
 	.4byte	.LASF1
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x4
 	.byte	0x7
 	.4byte	.LASF2
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x1
 	.byte	0x6
 	.4byte	.LASF3
@@ -3218,11 +3215,11 @@ MaxWalkVelocity:
 	.byte	0x2b
 	.byte	0x17
 	.4byte	0x55
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x1
 	.byte	0x8
 	.4byte	.LASF4
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x2
 	.byte	0x5
 	.4byte	.LASF5
@@ -3232,7 +3229,7 @@ MaxWalkVelocity:
 	.byte	0x39
 	.byte	0x1c
 	.4byte	0x6f
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x2
 	.byte	0x7
 	.4byte	.LASF8
@@ -3242,7 +3239,7 @@ MaxWalkVelocity:
 	.byte	0x4d
 	.byte	0x12
 	.4byte	0x82
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x4
 	.byte	0x5
 	.4byte	.LASF10
@@ -3252,7 +3249,7 @@ MaxWalkVelocity:
 	.byte	0x4f
 	.byte	0x1b
 	.4byte	0x95
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x4
 	.byte	0x7
 	.4byte	.LASF12
@@ -3262,7 +3259,7 @@ MaxWalkVelocity:
 	.byte	0x67
 	.byte	0x17
 	.4byte	0xa8
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x8
 	.byte	0x5
 	.4byte	.LASF14
@@ -3497,7 +3494,7 @@ MaxWalkVelocity:
 	.byte	0
 	.uleb128 0x9
 	.4byte	0x284
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x1
 	.byte	0x8
 	.4byte	.LASF71
@@ -3515,11 +3512,11 @@ MaxWalkVelocity:
 	.byte	0xd6
 	.byte	0x16
 	.4byte	0x3b
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x8
 	.byte	0x4
 	.4byte	.LASF74
-	.uleb128 0x3f
+	.uleb128 0x3d
 	.byte	0x4
 	.uleb128 0x5
 	.4byte	.LASF75
@@ -3529,7 +3526,7 @@ MaxWalkVelocity:
 	.4byte	0xd8
 	.uleb128 0x9
 	.4byte	0x27d
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0x8
 	.byte	0xc
 	.byte	0x8
@@ -3561,7 +3558,7 @@ MaxWalkVelocity:
 	.byte	0xd
 	.byte	0x10
 	.4byte	0x39d
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"y\000"
 	.byte	0xd
 	.byte	0x11
@@ -3605,7 +3602,7 @@ MaxWalkVelocity:
 	.byte	0xb
 	.4byte	0xe4
 	.2byte	0x200c
-	.uleb128 0x40
+	.uleb128 0x3e
 	.ascii	"vbo\000"
 	.byte	0xd
 	.byte	0x1c
@@ -3669,7 +3666,7 @@ MaxWalkVelocity:
 	.4byte	0x3b
 	.byte	0xf
 	.byte	0
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x1
 	.byte	0x2
 	.4byte	.LASF90
@@ -3735,14 +3732,14 @@ MaxWalkVelocity:
 	.byte	0x13
 	.4byte	0x408
 	.byte	0xc
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"x\000"
 	.byte	0xd
 	.byte	0x31
 	.byte	0x6
 	.4byte	0x2d
 	.byte	0x10
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"z\000"
 	.byte	0xd
 	.byte	0x31
@@ -3828,23 +3825,23 @@ MaxWalkVelocity:
 	.4byte	0x26
 	.uleb128 0x26
 	.4byte	0x26
-	.uleb128 0xb
+	.uleb128 0xa
 	.byte	0x8
 	.byte	0x4
 	.4byte	.LASF106
-	.uleb128 0x21
+	.uleb128 0x22
 	.ascii	"u32\000"
 	.byte	0xe
 	.byte	0x17
 	.byte	0x12
 	.4byte	0xe4
-	.uleb128 0x21
+	.uleb128 0x22
 	.ascii	"s32\000"
 	.byte	0xe
 	.byte	0x1c
 	.byte	0x11
 	.4byte	0xd8
-	.uleb128 0x21
+	.uleb128 0x22
 	.ascii	"s64\000"
 	.byte	0xe
 	.byte	0x1d
@@ -3856,7 +3853,7 @@ MaxWalkVelocity:
 	.byte	0xa
 	.byte	0x11
 	.4byte	0x2aa
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0x8
 	.byte	0xf
 	.byte	0x13
@@ -3953,7 +3950,7 @@ MaxWalkVelocity:
 	.4byte	.LASF123
 	.byte	0x3
 	.byte	0
-	.uleb128 0x41
+	.uleb128 0x3f
 	.byte	0x7
 	.byte	0x1
 	.4byte	0x55
@@ -4031,7 +4028,7 @@ MaxWalkVelocity:
 	.byte	0x14
 	.byte	0x3
 	.4byte	0x65f
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0xc
 	.byte	0x16
 	.byte	0x16
@@ -4067,7 +4064,7 @@ MaxWalkVelocity:
 	.byte	0x1a
 	.byte	0x3
 	.4byte	0x69d
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0xc
 	.byte	0x16
 	.byte	0x1d
@@ -4097,7 +4094,7 @@ MaxWalkVelocity:
 	.byte	0
 	.uleb128 0x9
 	.4byte	0x6d3
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0x18
 	.byte	0x16
 	.byte	0x1c
@@ -4154,7 +4151,7 @@ MaxWalkVelocity:
 	.byte	0x11
 	.byte	0x49
 	.4byte	0x752
-	.uleb128 0x42
+	.uleb128 0x40
 	.byte	0
 	.byte	0x17
 	.byte	0x18
@@ -4165,14 +4162,14 @@ MaxWalkVelocity:
 	.byte	0x17
 	.byte	0x2
 	.4byte	0x799
-	.uleb128 0x43
+	.uleb128 0x41
 	.4byte	.LASF176
 	.byte	0x17
 	.byte	0x1a
 	.byte	0x5
 	.4byte	0x77e
 	.byte	0
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0x10
 	.byte	0x17
 	.byte	0x13
@@ -4206,7 +4203,7 @@ MaxWalkVelocity:
 	.byte	0x1c
 	.byte	0x3
 	.4byte	0x799
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0xc
 	.byte	0x17
 	.byte	0x2a
@@ -4365,7 +4362,7 @@ MaxWalkVelocity:
 	.4byte	.LASF168
 	.byte	0x1
 	.byte	0
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0x3
 	.byte	0x19
 	.byte	0xa
@@ -4399,7 +4396,7 @@ MaxWalkVelocity:
 	.byte	0xd
 	.byte	0x3
 	.4byte	0x917
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0x8
 	.byte	0x1a
 	.byte	0x5
@@ -4426,27 +4423,27 @@ MaxWalkVelocity:
 	.byte	0x8
 	.byte	0x2
 	.4byte	0x954
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0xc
 	.byte	0x2
 	.byte	0x9
 	.byte	0x2
 	.4byte	0x9af
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"x\000"
 	.byte	0x2
 	.byte	0xa
 	.byte	0x9
 	.4byte	0x26
 	.byte	0
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"y\000"
 	.byte	0x2
 	.byte	0xa
 	.byte	0xc
 	.4byte	0x26
 	.byte	0x4
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"z\000"
 	.byte	0x2
 	.byte	0xa
@@ -4460,13 +4457,13 @@ MaxWalkVelocity:
 	.byte	0x7
 	.byte	0x9
 	.4byte	0x9c8
-	.uleb128 0x44
+	.uleb128 0x42
 	.ascii	"v\000"
 	.byte	0x2
 	.byte	0x8
 	.byte	0x8
 	.4byte	0x9c8
-	.uleb128 0x45
+	.uleb128 0x43
 	.4byte	0x984
 	.byte	0
 	.uleb128 0xf
@@ -4482,27 +4479,27 @@ MaxWalkVelocity:
 	.byte	0xc
 	.byte	0x3
 	.4byte	0x9af
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0x14
 	.byte	0x1b
 	.byte	0x7
 	.byte	0x9
 	.4byte	0xa29
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"x\000"
 	.byte	0x1b
 	.byte	0x8
 	.byte	0x6
 	.4byte	0x2d
 	.byte	0
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"y\000"
 	.byte	0x1b
 	.byte	0x8
 	.byte	0x9
 	.4byte	0x2d
 	.byte	0x4
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"z\000"
 	.byte	0x1b
 	.byte	0x8
@@ -4538,7 +4535,7 @@ MaxWalkVelocity:
 	.4byte	0xa41
 	.uleb128 0x32
 	.4byte	.LASF181
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0x8c
 	.byte	0x1d
 	.byte	0x4
@@ -4609,7 +4606,7 @@ MaxWalkVelocity:
 	.byte	0x8
 	.4byte	0x26
 	.byte	0xc
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"yaw\000"
 	.byte	0x1e
 	.byte	0x17
@@ -4721,7 +4718,7 @@ MaxWalkVelocity:
 	.byte	0x6
 	.4byte	0x2d
 	.byte	0x50
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"hp\000"
 	.byte	0x1e
 	.byte	0x26
@@ -4884,20 +4881,20 @@ MaxWalkVelocity:
 	.byte	0x3d
 	.byte	0x3
 	.4byte	0xaaa
-	.uleb128 0xc
+	.uleb128 0xb
 	.byte	0x18
 	.byte	0x4
 	.byte	0x7
 	.byte	0x9
 	.4byte	0xcf6
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"min\000"
 	.byte	0x4
 	.byte	0x7
 	.byte	0x19
 	.4byte	0x9d8
 	.byte	0
-	.uleb128 0xd
+	.uleb128 0xc
 	.ascii	"max\000"
 	.byte	0x4
 	.byte	0x7
@@ -4905,7 +4902,7 @@ MaxWalkVelocity:
 	.4byte	0x9d8
 	.byte	0xc
 	.byte	0
-	.uleb128 0x21
+	.uleb128 0x22
 	.ascii	"Box\000"
 	.byte	0x4
 	.byte	0x7
@@ -4932,7 +4929,7 @@ MaxWalkVelocity:
 	.uleb128 0x5
 	.byte	0x3
 	.4byte	GravityPlusFriction
-	.uleb128 0x22
+	.uleb128 0x23
 	.4byte	.LASF229
 	.byte	0x17
 	.byte	0x42
@@ -4948,7 +4945,7 @@ MaxWalkVelocity:
 	.uleb128 0x6
 	.4byte	0x16e
 	.byte	0
-	.uleb128 0x22
+	.uleb128 0x23
 	.4byte	.LASF230
 	.byte	0x1d
 	.byte	0xb
@@ -4958,7 +4955,7 @@ MaxWalkVelocity:
 	.byte	0
 	.uleb128 0x9
 	.4byte	0xa9e
-	.uleb128 0x23
+	.uleb128 0x24
 	.4byte	.LASF232
 	.byte	0x1f
 	.byte	0x2a
@@ -4972,7 +4969,7 @@ MaxWalkVelocity:
 	.uleb128 0x6
 	.4byte	0x295
 	.byte	0
-	.uleb128 0x22
+	.uleb128 0x23
 	.4byte	.LASF231
 	.byte	0x17
 	.byte	0x46
@@ -4990,7 +4987,7 @@ MaxWalkVelocity:
 	.uleb128 0x6
 	.4byte	0xc0
 	.byte	0
-	.uleb128 0x24
+	.uleb128 0x25
 	.4byte	.LASF233
 	.2byte	0x18b
 	.byte	0xe
@@ -4999,7 +4996,7 @@ MaxWalkVelocity:
 	.uleb128 0x6
 	.4byte	0x26
 	.byte	0
-	.uleb128 0x23
+	.uleb128 0x24
 	.4byte	.LASF234
 	.byte	0x4
 	.byte	0xe
@@ -5021,7 +5018,7 @@ MaxWalkVelocity:
 	.byte	0
 	.uleb128 0x9
 	.4byte	0x9d8
-	.uleb128 0x46
+	.uleb128 0x44
 	.4byte	.LASF235
 	.byte	0x21
 	.2byte	0x35b
@@ -5030,7 +5027,7 @@ MaxWalkVelocity:
 	.uleb128 0x6
 	.4byte	0x537
 	.byte	0
-	.uleb128 0x47
+	.uleb128 0x45
 	.4byte	.LASF271
 	.byte	0x1a
 	.byte	0xa
@@ -5038,7 +5035,7 @@ MaxWalkVelocity:
 	.4byte	0xe22
 	.uleb128 0x17
 	.byte	0
-	.uleb128 0x22
+	.uleb128 0x23
 	.4byte	.LASF236
 	.byte	0x22
 	.byte	0x8
@@ -5047,7 +5044,7 @@ MaxWalkVelocity:
 	.4byte	0x278
 	.uleb128 0x17
 	.byte	0
-	.uleb128 0x23
+	.uleb128 0x24
 	.4byte	.LASF237
 	.byte	0x17
 	.byte	0x41
@@ -5063,7 +5060,7 @@ MaxWalkVelocity:
 	.uleb128 0x6
 	.4byte	0x2d
 	.byte	0
-	.uleb128 0x24
+	.uleb128 0x25
 	.4byte	.LASF238
 	.2byte	0x151
 	.byte	0xf
@@ -5072,7 +5069,7 @@ MaxWalkVelocity:
 	.uleb128 0x6
 	.4byte	0x518
 	.byte	0
-	.uleb128 0x23
+	.uleb128 0x24
 	.4byte	.LASF239
 	.byte	0x1b
 	.byte	0xd
@@ -5090,7 +5087,7 @@ MaxWalkVelocity:
 	.byte	0
 	.uleb128 0x9
 	.4byte	0xa29
-	.uleb128 0x24
+	.uleb128 0x25
 	.4byte	.LASF240
 	.2byte	0x176
 	.byte	0xe
@@ -5099,7 +5096,7 @@ MaxWalkVelocity:
 	.uleb128 0x6
 	.4byte	0x26
 	.byte	0
-	.uleb128 0x24
+	.uleb128 0x25
 	.4byte	.LASF241
 	.2byte	0x177
 	.byte	0xe
@@ -5121,10 +5118,10 @@ MaxWalkVelocity:
 	.2byte	0x14e
 	.byte	0x20
 	.4byte	0xeff
-	.4byte	.LLST129
-	.4byte	.LVUS129
+	.4byte	.LLST131
+	.4byte	.LVUS131
 	.uleb128 0x15
-	.4byte	.LVL152
+	.4byte	.LVL157
 	.4byte	0xd32
 	.uleb128 0x4
 	.uleb128 0x2
@@ -5143,33 +5140,34 @@ MaxWalkVelocity:
 	.4byte	.LFE155-.LFB155
 	.uleb128 0x1
 	.byte	0x9c
-	.4byte	0x1053
+	.4byte	0x1054
 	.uleb128 0x28
 	.4byte	.LASF244
 	.2byte	0x139
 	.byte	0x20
 	.4byte	0xeff
-	.4byte	.LLST113
-	.4byte	.LVUS113
+	.4byte	.LLST115
+	.4byte	.LVUS115
 	.uleb128 0x28
 	.4byte	.LASF245
 	.2byte	0x139
 	.byte	0x2f
 	.4byte	0xd68
-	.4byte	.LLST114
-	.4byte	.LVUS114
-	.uleb128 0x48
-	.4byte	.LBB474
-	.4byte	.LBE474-.LBB474
-	.uleb128 0x25
+	.4byte	.LLST116
+	.4byte	.LVUS116
+	.uleb128 0x46
+	.4byte	.LBB472
+	.4byte	.LBE472-.LBB472
+	.uleb128 0x1d
 	.4byte	.LASF246
 	.2byte	0x13b
 	.byte	0xe
-	.4byte	0x1053
-	.4byte	.LLST115
-	.4byte	.LVUS115
-	.uleb128 0x36
+	.4byte	0x1054
+	.4byte	.LLST117
+	.4byte	.LVUS117
+	.uleb128 0x47
 	.4byte	.LASF249
+	.byte	0x1
 	.2byte	0x145
 	.byte	0x9
 	.4byte	0x2b6
@@ -5177,70 +5175,70 @@ MaxWalkVelocity:
 	.byte	0x3
 	.4byte	.LC43
 	.byte	0x9f
-	.uleb128 0x19
-	.4byte	0x1dd5
-	.4byte	.LBI475
+	.uleb128 0x1a
+	.4byte	0x1da1
+	.4byte	.LBI473
 	.2byte	.LVU798
-	.4byte	.LLRL116
+	.4byte	.LLRL118
 	.2byte	0x13c
 	.byte	0x7
-	.4byte	0x1024
+	.4byte	0x1025
 	.uleb128 0x3
-	.4byte	0x1e5c
-	.4byte	.LLST117
-	.4byte	.LVUS117
+	.4byte	0x1e28
+	.4byte	.LLST119
+	.4byte	.LVUS119
 	.uleb128 0x3
-	.4byte	0x1e51
-	.4byte	.LLST117
-	.4byte	.LVUS117
+	.4byte	0x1e1d
+	.4byte	.LLST119
+	.4byte	.LVUS119
 	.uleb128 0x3
-	.4byte	0x1e46
-	.4byte	.LLST117
-	.4byte	.LVUS117
+	.4byte	0x1e12
+	.4byte	.LLST119
+	.4byte	.LVUS119
 	.uleb128 0x3
-	.4byte	0x1e3b
-	.4byte	.LLST120
-	.4byte	.LVUS120
-	.uleb128 0x3
-	.4byte	0x1e30
-	.4byte	.LLST121
-	.4byte	.LVUS121
-	.uleb128 0x3
-	.4byte	0x1e25
+	.4byte	0x1e07
 	.4byte	.LLST122
 	.4byte	.LVUS122
 	.uleb128 0x3
-	.4byte	0x1e1a
+	.4byte	0x1dfc
 	.4byte	.LLST123
 	.4byte	.LVUS123
 	.uleb128 0x3
-	.4byte	0x1e0f
+	.4byte	0x1df1
 	.4byte	.LLST124
 	.4byte	.LVUS124
 	.uleb128 0x3
-	.4byte	0x1e04
-	.4byte	.LLST123
-	.4byte	.LVUS123
+	.4byte	0x1de6
+	.4byte	.LLST125
+	.4byte	.LVUS125
 	.uleb128 0x3
-	.4byte	0x1df9
+	.4byte	0x1ddb
 	.4byte	.LLST126
 	.4byte	.LVUS126
 	.uleb128 0x3
-	.4byte	0x1dee
-	.4byte	.LLST127
-	.4byte	.LVUS127
+	.4byte	0x1dd0
+	.4byte	.LLST125
+	.4byte	.LVUS125
 	.uleb128 0x3
-	.4byte	0x1de3
+	.4byte	0x1dc5
 	.4byte	.LLST128
 	.4byte	.LVUS128
+	.uleb128 0x3
+	.4byte	0x1dba
+	.4byte	.LLST129
+	.4byte	.LVUS129
+	.uleb128 0x3
+	.4byte	0x1daf
+	.4byte	.LLST130
+	.4byte	.LVUS130
 	.byte	0
 	.uleb128 0x29
-	.4byte	.LVL145
+	.4byte	.LVL150
 	.4byte	0xd8d
-	.uleb128 0xa
-	.4byte	.LVL147
-	.4byte	0x1ea4
-	.4byte	0x1041
+	.uleb128 0xd
+	.4byte	.LVL152
+	.4byte	0x1e70
+	.4byte	0x1042
 	.uleb128 0x4
 	.uleb128 0x1
 	.byte	0x50
@@ -5249,7 +5247,7 @@ MaxWalkVelocity:
 	.sleb128 0
 	.byte	0
 	.uleb128 0x15
-	.4byte	.LVL148
+	.4byte	.LVL153
 	.4byte	0xd57
 	.uleb128 0x4
 	.uleb128 0x1
@@ -5269,8 +5267,8 @@ MaxWalkVelocity:
 	.4byte	.LFE154-.LFB154
 	.uleb128 0x1
 	.byte	0x9c
-	.4byte	0x16b5
-	.uleb128 0x1d
+	.4byte	0x1681
+	.uleb128 0x1e
 	.4byte	.LASF244
 	.byte	0xd0
 	.byte	0x1a
@@ -5284,14 +5282,14 @@ MaxWalkVelocity:
 	.4byte	0x26
 	.4byte	.LLST36
 	.4byte	.LVUS36
-	.uleb128 0x1d
+	.uleb128 0x1e
 	.4byte	.LASF248
 	.byte	0xd0
 	.byte	0x33
 	.4byte	0x9d8
 	.4byte	.LLST37
 	.4byte	.LVUS37
-	.uleb128 0x49
+	.uleb128 0x48
 	.4byte	.LASF250
 	.byte	0x1
 	.byte	0xd3
@@ -5301,14 +5299,14 @@ MaxWalkVelocity:
 	.4byte	0x3c888889
 	.uleb128 0x10
 	.4byte	.LLRL38
-	.uleb128 0x1a
+	.uleb128 0x1b
 	.4byte	.LASF251
 	.byte	0xda
 	.byte	0x9
 	.4byte	0x26
 	.4byte	.LLST39
 	.4byte	.LVUS39
-	.uleb128 0x1b
+	.uleb128 0x18
 	.4byte	.LASF252
 	.byte	0xe4
 	.byte	0xa
@@ -5316,7 +5314,7 @@ MaxWalkVelocity:
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -212
-	.uleb128 0x1b
+	.uleb128 0x18
 	.4byte	.LASF253
 	.byte	0xe5
 	.byte	0xa
@@ -5324,34 +5322,34 @@ MaxWalkVelocity:
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -200
-	.uleb128 0x1a
+	.uleb128 0x1b
 	.4byte	.LASF254
 	.byte	0xe7
-	.byte	0x7
+	.byte	0x9
 	.4byte	0x3d5
 	.4byte	.LLST40
 	.4byte	.LVUS40
-	.uleb128 0x1a
+	.uleb128 0x1b
 	.4byte	.LASF255
 	.byte	0xe7
-	.byte	0x1e
+	.byte	0x20
 	.4byte	0x3d5
 	.4byte	.LLST41
 	.4byte	.LVUS41
-	.uleb128 0x25
+	.uleb128 0x1d
 	.4byte	.LASF256
-	.2byte	0x119
-	.byte	0xa
+	.2byte	0x118
+	.byte	0xc
 	.4byte	0x9d8
 	.4byte	.LLST42
 	.4byte	.LVUS42
 	.uleb128 0x1c
 	.4byte	.LLRL57
-	.4byte	0x13ed
+	.4byte	0x13ad
 	.uleb128 0xe
 	.ascii	"j\000"
 	.byte	0xea
-	.byte	0xc
+	.byte	0xe
 	.4byte	0x2d
 	.4byte	.LLST58
 	.4byte	.LVUS58
@@ -5360,40 +5358,40 @@ MaxWalkVelocity:
 	.uleb128 0xe
 	.ascii	"i\000"
 	.byte	0xeb
-	.byte	0x8
+	.byte	0xb
 	.4byte	0x2d
 	.4byte	.LLST60
 	.4byte	.LVUS60
-	.uleb128 0x1a
+	.uleb128 0x1b
 	.4byte	.LASF257
 	.byte	0xec
-	.byte	0x8
+	.byte	0xb
 	.4byte	0x3d5
 	.4byte	.LLST61
 	.4byte	.LVUS61
-	.uleb128 0x1b
+	.uleb128 0x18
 	.4byte	.LASF258
 	.byte	0xed
-	.byte	0xb
+	.byte	0xe
 	.4byte	0x9d8
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -176
-	.uleb128 0x1b
+	.uleb128 0x18
 	.4byte	.LASF259
 	.byte	0xf0
-	.byte	0x8
+	.byte	0xb
 	.4byte	0xcf6
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -152
 	.uleb128 0x1c
 	.4byte	.LLRL69
-	.4byte	0x138a
+	.4byte	0x134a
 	.uleb128 0xe
 	.ascii	"x\000"
 	.byte	0xf4
-	.byte	0xd
+	.byte	0x10
 	.4byte	0x2d
 	.4byte	.LLST70
 	.4byte	.LVUS70
@@ -5402,7 +5400,7 @@ MaxWalkVelocity:
 	.uleb128 0xe
 	.ascii	"y\000"
 	.byte	0xf5
-	.byte	0xe
+	.byte	0x12
 	.4byte	0x2d
 	.4byte	.LLST72
 	.4byte	.LVUS72
@@ -5411,209 +5409,163 @@ MaxWalkVelocity:
 	.uleb128 0xe
 	.ascii	"z\000"
 	.byte	0xf6
-	.byte	0xf
+	.byte	0x14
 	.4byte	0x2d
 	.4byte	.LLST74
 	.4byte	.LVUS74
 	.uleb128 0x10
 	.4byte	.LLRL75
-	.uleb128 0x1f
+	.uleb128 0x20
 	.ascii	"pX\000"
 	.byte	0x1
 	.byte	0xf7
-	.byte	0xb
+	.byte	0x11
 	.4byte	0x2d
-	.uleb128 0x1f
+	.uleb128 0x20
 	.ascii	"pY\000"
 	.byte	0x1
 	.byte	0xf8
-	.byte	0xb
+	.byte	0x11
 	.4byte	0x2d
 	.uleb128 0xe
 	.ascii	"pZ\000"
 	.byte	0xf9
-	.byte	0xb
+	.byte	0x11
 	.4byte	0x2d
 	.4byte	.LLST76
 	.4byte	.LVUS76
 	.uleb128 0x1c
 	.4byte	.LLRL77
 	.4byte	0x12c1
-	.uleb128 0x1b
+	.uleb128 0x18
 	.4byte	.LASF260
-	.byte	0xfc
-	.byte	0xc
+	.byte	0xfb
+	.byte	0x13
 	.4byte	0xcf6
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -128
-	.uleb128 0x1b
+	.uleb128 0x18
 	.4byte	.LASF261
-	.byte	0xfe
-	.byte	0xf
+	.byte	0xfd
+	.byte	0x16
 	.4byte	0x9d8
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -164
-	.uleb128 0x1b
+	.uleb128 0x18
 	.4byte	.LASF262
-	.byte	0xff
-	.byte	0xe
+	.byte	0xfe
+	.byte	0x15
 	.4byte	0x26
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -220
-	.uleb128 0x36
+	.uleb128 0x18
 	.4byte	.LASF263
-	.2byte	0x100
-	.byte	0xc
+	.byte	0xff
+	.byte	0x13
 	.4byte	0x2d
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -216
-	.uleb128 0x25
+	.uleb128 0x1d
 	.4byte	.LASF264
-	.2byte	0x102
-	.byte	0xc
+	.2byte	0x101
+	.byte	0x13
 	.4byte	0x3d5
 	.4byte	.LLST78
 	.4byte	.LVUS78
 	.uleb128 0x11
-	.4byte	0x1c81
-	.4byte	.LBI297
-	.2byte	.LVU590
+	.4byte	0x1c4d
+	.4byte	.LBI296
+	.2byte	.LVU587
 	.4byte	.LLRL79
-	.byte	0xfc
-	.byte	0x17
+	.byte	0xfb
+	.byte	0x1e
 	.4byte	0x12b7
 	.uleb128 0x3
-	.4byte	0x1cc3
+	.4byte	0x1c8f
 	.4byte	.LLST80
 	.4byte	.LVUS80
 	.uleb128 0x3
-	.4byte	0x1cb9
+	.4byte	0x1c85
 	.4byte	.LLST80
 	.4byte	.LVUS80
 	.uleb128 0x3
-	.4byte	0x1caf
+	.4byte	0x1c7b
 	.4byte	.LLST80
 	.4byte	.LVUS80
 	.uleb128 0x3
-	.4byte	0x1ca5
+	.4byte	0x1c71
 	.4byte	.LLST83
 	.4byte	.LVUS83
 	.uleb128 0x3
-	.4byte	0x1c9b
+	.4byte	0x1c67
 	.4byte	.LLST84
 	.4byte	.LVUS84
 	.uleb128 0x3
-	.4byte	0x1c91
+	.4byte	0x1c5d
 	.4byte	.LLST85
 	.4byte	.LVUS85
 	.byte	0
 	.uleb128 0x29
-	.4byte	.LVL91
+	.4byte	.LVL93
 	.4byte	0xdcd
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1e68
-	.4byte	.LBI309
-	.2byte	.LVU494
+	.4byte	0x1e34
+	.4byte	.LBI306
+	.2byte	.LVU495
 	.4byte	.LLRL86
 	.byte	0xf7
-	.byte	0x10
+	.byte	0x16
 	.4byte	0x12e4
 	.uleb128 0x3
-	.4byte	0x1e76
+	.4byte	0x1e42
 	.4byte	.LLST87
 	.4byte	.LVUS87
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1e68
-	.4byte	.LBI318
-	.2byte	.LVU502
+	.4byte	0x1e34
+	.4byte	.LBI316
+	.2byte	.LVU503
 	.4byte	.LLRL88
 	.byte	0xf9
-	.byte	0x10
+	.byte	0x16
 	.4byte	0x1307
 	.uleb128 0x3
-	.4byte	0x1e76
+	.4byte	0x1e42
 	.4byte	.LLST89
 	.4byte	.LVUS89
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1e68
-	.4byte	.LBI327
-	.2byte	.LVU498
+	.4byte	0x1e34
+	.4byte	.LBI326
+	.2byte	.LVU499
 	.4byte	.LLRL90
 	.byte	0xf8
-	.byte	0x10
+	.byte	0x16
 	.4byte	0x132a
 	.uleb128 0x3
-	.4byte	0x1e76
+	.4byte	0x1e42
 	.4byte	.LLST91
 	.4byte	.LVUS91
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0x15
 	.4byte	.LVL75
 	.4byte	0xe34
-	.4byte	0x134a
 	.uleb128 0x4
 	.uleb128 0x1
 	.byte	0x51
 	.uleb128 0x2
-	.byte	0x76
+	.byte	0x77
 	.sleb128 0
 	.uleb128 0x4
 	.uleb128 0x1
 	.byte	0x52
 	.uleb128 0x2
-	.byte	0x7a
-	.sleb128 0
-	.uleb128 0x4
-	.uleb128 0x1
-	.byte	0x53
-	.uleb128 0x2
-	.byte	0x74
-	.sleb128 0
-	.byte	0
-	.uleb128 0xa
-	.4byte	.LVL86
-	.4byte	0xe34
-	.4byte	0x136a
-	.uleb128 0x4
-	.uleb128 0x1
-	.byte	0x51
-	.uleb128 0x2
-	.byte	0x76
-	.sleb128 0
-	.uleb128 0x4
-	.uleb128 0x1
-	.byte	0x52
-	.uleb128 0x2
-	.byte	0x7a
-	.sleb128 0
-	.uleb128 0x4
-	.uleb128 0x1
-	.byte	0x53
-	.uleb128 0x2
-	.byte	0x74
-	.sleb128 0
-	.byte	0
-	.uleb128 0x15
-	.4byte	.LVL87
-	.4byte	0xe34
-	.uleb128 0x4
-	.uleb128 0x1
-	.byte	0x51
-	.uleb128 0x2
-	.byte	0x76
-	.sleb128 0
-	.uleb128 0x4
-	.uleb128 0x1
-	.byte	0x52
-	.uleb128 0x2
-	.byte	0x7a
+	.byte	0x78
 	.sleb128 0
 	.uleb128 0x4
 	.uleb128 0x1
@@ -5627,35 +5579,35 @@ MaxWalkVelocity:
 	.byte	0
 	.byte	0
 	.uleb128 0x2c
-	.4byte	0x1c81
+	.4byte	0x1c4d
 	.4byte	.LBI286
-	.2byte	.LVU474
+	.2byte	.LVU472
 	.4byte	.LLRL62
 	.byte	0x1
 	.byte	0xf1
-	.byte	0x8
+	.byte	0xb
 	.uleb128 0x3
-	.4byte	0x1cc3
+	.4byte	0x1c8f
 	.4byte	.LLST63
 	.4byte	.LVUS63
 	.uleb128 0x3
-	.4byte	0x1cb9
+	.4byte	0x1c85
 	.4byte	.LLST64
 	.4byte	.LVUS64
 	.uleb128 0x3
-	.4byte	0x1caf
+	.4byte	0x1c7b
 	.4byte	.LLST63
 	.4byte	.LVUS63
 	.uleb128 0x3
-	.4byte	0x1ca5
+	.4byte	0x1c71
 	.4byte	.LLST66
 	.4byte	.LVUS66
 	.uleb128 0x3
-	.4byte	0x1c9b
+	.4byte	0x1c67
 	.4byte	.LLST67
 	.4byte	.LVUS67
 	.uleb128 0x3
-	.4byte	0x1c91
+	.4byte	0x1c5d
 	.4byte	.LLST68
 	.4byte	.LVUS68
 	.byte	0
@@ -5663,141 +5615,147 @@ MaxWalkVelocity:
 	.byte	0
 	.uleb128 0x1c
 	.4byte	.LLRL95
-	.4byte	0x158f
-	.uleb128 0x25
+	.4byte	0x155b
+	.uleb128 0x1d
 	.4byte	.LASF265
-	.2byte	0x11e
-	.byte	0xb
+	.2byte	0x11d
+	.byte	0xe
 	.4byte	0x9d8
 	.4byte	.LLST96
 	.4byte	.LVUS96
-	.uleb128 0x37
+	.uleb128 0x1d
 	.4byte	.LASF169
-	.2byte	0x11f
-	.4byte	0x16e
-	.uleb128 0x37
-	.4byte	.LASF266
-	.2byte	0x121
-	.4byte	0x16e
-	.uleb128 0x19
-	.4byte	0x1d5c
-	.4byte	.LBI408
-	.2byte	.LVU641
-	.4byte	.LLRL97
 	.2byte	0x11e
-	.byte	0x15
-	.4byte	0x1451
-	.uleb128 0x3
-	.4byte	0x1d76
+	.byte	0xd
+	.4byte	0x16e
+	.4byte	.LLST97
+	.4byte	.LVUS97
+	.uleb128 0x1d
+	.4byte	.LASF266
+	.2byte	0x120
+	.byte	0xd
+	.4byte	0x16e
 	.4byte	.LLST98
 	.4byte	.LVUS98
+	.uleb128 0x1a
+	.4byte	0x1d28
+	.4byte	.LBI406
+	.2byte	.LVU637
+	.4byte	.LLRL99
+	.2byte	0x11d
+	.byte	0x18
+	.4byte	0x1423
 	.uleb128 0x3
-	.4byte	0x1d6c
-	.4byte	.LLST99
-	.4byte	.LVUS99
-	.byte	0
-	.uleb128 0x19
-	.4byte	0x1cce
-	.4byte	.LBI411
-	.2byte	.LVU650
-	.4byte	.LLRL100
-	.2byte	0x11e
-	.byte	0x15
-	.4byte	0x14b5
+	.4byte	0x1d42
+	.4byte	.LLST100
+	.4byte	.LVUS100
 	.uleb128 0x3
-	.4byte	0x1cde
+	.4byte	0x1d38
 	.4byte	.LLST101
 	.4byte	.LVUS101
-	.uleb128 0x10
-	.4byte	.LLRL100
-	.uleb128 0x4a
-	.4byte	0x1cea
-	.uleb128 0x2c
-	.4byte	0x1cf5
-	.4byte	.LBI413
-	.2byte	.LVU652
+	.byte	0
+	.uleb128 0x1a
+	.4byte	0x1c9a
+	.4byte	.LBI409
+	.2byte	.LVU646
 	.4byte	.LLRL102
+	.2byte	0x11d
+	.byte	0x18
+	.4byte	0x1487
+	.uleb128 0x3
+	.4byte	0x1caa
+	.4byte	.LLST103
+	.4byte	.LVUS103
+	.uleb128 0x10
+	.4byte	.LLRL102
+	.uleb128 0x49
+	.4byte	0x1cb6
+	.uleb128 0x2c
+	.4byte	0x1cc1
+	.4byte	.LBI411
+	.2byte	.LVU648
+	.4byte	.LLRL104
 	.byte	0x2
 	.byte	0x1a
 	.byte	0xc
 	.uleb128 0x16
-	.4byte	0x1d05
+	.4byte	0x1cd1
 	.uleb128 0x2c
-	.4byte	0x1d12
-	.4byte	.LBI415
-	.2byte	.LVU654
-	.4byte	.LLRL103
+	.4byte	0x1cde
+	.4byte	.LBI413
+	.2byte	.LVU650
+	.4byte	.LLRL105
 	.byte	0x2
 	.byte	0x17
 	.byte	0x2a
 	.uleb128 0x16
-	.4byte	0x1d2c
+	.4byte	0x1cf8
 	.uleb128 0x16
-	.4byte	0x1d22
+	.4byte	0x1cee
 	.byte	0
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x19
-	.4byte	0x1e68
-	.4byte	.LBI427
-	.2byte	.LVU667
-	.4byte	.LLRL104
-	.2byte	0x11f
-	.byte	0x12
-	.4byte	0x14d9
-	.uleb128 0x3
-	.4byte	0x1e76
-	.4byte	.LLST105
-	.4byte	.LVUS105
-	.byte	0
-	.uleb128 0x19
-	.4byte	0x1e68
-	.4byte	.LBI438
-	.2byte	.LVU683
+	.uleb128 0x1a
+	.4byte	0x1e34
+	.4byte	.LBI425
+	.2byte	.LVU663
 	.4byte	.LLRL106
-	.2byte	0x120
-	.byte	0xc
-	.4byte	0x14fd
+	.2byte	0x11e
+	.byte	0x15
+	.4byte	0x14ab
 	.uleb128 0x3
-	.4byte	0x1e76
+	.4byte	0x1e42
 	.4byte	.LLST107
 	.4byte	.LVUS107
 	.byte	0
-	.uleb128 0x19
-	.4byte	0x1e68
-	.4byte	.LBI445
-	.2byte	.LVU690
+	.uleb128 0x1a
+	.4byte	0x1e34
+	.4byte	.LBI435
+	.2byte	.LVU679
 	.4byte	.LLRL108
 	.2byte	0x11f
-	.byte	0x12
-	.4byte	0x1521
+	.byte	0x24
+	.4byte	0x14cf
 	.uleb128 0x3
-	.4byte	0x1e76
+	.4byte	0x1e42
 	.4byte	.LLST109
 	.4byte	.LVUS109
 	.byte	0
-	.uleb128 0x19
-	.4byte	0x16b5
-	.4byte	.LBI464
-	.2byte	.LVU701
+	.uleb128 0x1a
+	.4byte	0x1e34
+	.4byte	.LBI443
+	.2byte	.LVU686
 	.4byte	.LLRL110
-	.2byte	0x123
-	.byte	0x95
-	.4byte	0x1552
+	.2byte	0x11e
+	.byte	0x15
+	.4byte	0x14f3
 	.uleb128 0x3
-	.4byte	0x16cd
+	.4byte	0x1e42
 	.4byte	.LLST111
 	.4byte	.LVUS111
-	.uleb128 0x3
-	.4byte	0x16c2
-	.4byte	.LLST112
-	.4byte	.LVUS112
 	.byte	0
-	.uleb128 0xa
-	.4byte	.LVL114
+	.uleb128 0x1a
+	.4byte	0x1681
+	.4byte	.LBI462
+	.2byte	.LVU701
+	.4byte	.LLRL112
+	.2byte	0x122
+	.byte	0x3c
+	.4byte	0x1524
+	.uleb128 0x3
+	.4byte	0x1699
+	.4byte	.LLST113
+	.4byte	.LVUS113
+	.uleb128 0x3
+	.4byte	0x168e
+	.4byte	.LLST114
+	.4byte	.LVUS114
+	.byte	0
+	.uleb128 0xd
+	.4byte	.LVL115
 	.4byte	0xe34
-	.4byte	0x1572
+	.4byte	0x1544
 	.uleb128 0x4
 	.uleb128 0x1
 	.byte	0x51
@@ -5818,7 +5776,7 @@ MaxWalkVelocity:
 	.sleb128 0
 	.byte	0
 	.uleb128 0x15
-	.4byte	.LVL115
+	.4byte	.LVL117
 	.4byte	0xe34
 	.uleb128 0x4
 	.uleb128 0x1
@@ -5828,12 +5786,6 @@ MaxWalkVelocity:
 	.sleb128 0
 	.uleb128 0x4
 	.uleb128 0x1
-	.byte	0x52
-	.uleb128 0x2
-	.byte	0x75
-	.sleb128 1
-	.uleb128 0x4
-	.uleb128 0x1
 	.byte	0x53
 	.uleb128 0x2
 	.byte	0x77
@@ -5841,72 +5793,72 @@ MaxWalkVelocity:
 	.byte	0
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1d37
+	.4byte	0x1d03
 	.4byte	.LBI261
 	.2byte	.LVU413
 	.4byte	.LLRL43
 	.byte	0xe4
 	.byte	0x13
-	.4byte	0x15bf
+	.4byte	0x158b
 	.uleb128 0x3
-	.4byte	0x1d51
+	.4byte	0x1d1d
 	.4byte	.LLST44
 	.4byte	.LVUS44
 	.uleb128 0x3
-	.4byte	0x1d47
+	.4byte	0x1d13
 	.4byte	.LLST45
 	.4byte	.LVUS45
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1d37
+	.4byte	0x1d03
 	.4byte	.LBI266
 	.2byte	.LVU416
 	.4byte	.LLRL46
 	.byte	0xe4
 	.byte	0x13
-	.4byte	0x15e7
+	.4byte	0x15b3
 	.uleb128 0x16
-	.4byte	0x1d51
+	.4byte	0x1d1d
 	.uleb128 0x3
-	.4byte	0x1d47
+	.4byte	0x1d13
 	.4byte	.LLST47
 	.4byte	.LVUS47
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1d81
+	.4byte	0x1d4d
 	.4byte	.LBI269
 	.2byte	.LVU419
 	.4byte	.LLRL48
 	.byte	0xe4
 	.byte	0x13
-	.4byte	0x1617
+	.4byte	0x15e3
 	.uleb128 0x3
-	.4byte	0x1d9b
+	.4byte	0x1d67
 	.4byte	.LLST49
 	.4byte	.LVUS49
 	.uleb128 0x3
-	.4byte	0x1d91
+	.4byte	0x1d5d
 	.4byte	.LLST50
 	.4byte	.LVUS50
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1d81
+	.4byte	0x1d4d
 	.4byte	.LBI273
 	.2byte	.LVU422
 	.4byte	.LLRL51
 	.byte	0xe4
 	.byte	0x13
-	.4byte	0x1685
+	.4byte	0x1651
 	.uleb128 0x3
-	.4byte	0x1d9b
+	.4byte	0x1d67
 	.4byte	.LLST52
 	.4byte	.LVUS52
 	.uleb128 0x3
-	.4byte	0x1d91
+	.4byte	0x1d5d
 	.4byte	.LLST53
 	.4byte	.LVUS53
-	.uleb128 0x4b
-	.4byte	0x1da6
+	.uleb128 0x4a
+	.4byte	0x1d72
 	.4byte	.LBI275
 	.2byte	.LVU429
 	.4byte	.LBB275
@@ -5915,57 +5867,57 @@ MaxWalkVelocity:
 	.byte	0x10
 	.byte	0x33
 	.uleb128 0x3
-	.4byte	0x1dca
+	.4byte	0x1d96
 	.4byte	.LLST54
 	.4byte	.LVUS54
 	.uleb128 0x3
-	.4byte	0x1dc0
+	.4byte	0x1d8c
 	.4byte	.LLST55
 	.4byte	.LVUS55
 	.uleb128 0x3
-	.4byte	0x1db6
+	.4byte	0x1d82
 	.4byte	.LLST56
 	.4byte	.LVUS56
 	.byte	0
 	.byte	0
-	.uleb128 0x4c
-	.4byte	0x1d5c
-	.4byte	.LBI403
-	.2byte	.LVU530
+	.uleb128 0x4b
+	.4byte	0x1d28
+	.4byte	.LBI401
+	.2byte	.LVU533
 	.4byte	.LLRL92
 	.byte	0x1
-	.2byte	0x119
-	.byte	0x14
+	.2byte	0x118
+	.byte	0x16
 	.uleb128 0x3
-	.4byte	0x1d76
+	.4byte	0x1d42
 	.4byte	.LLST93
 	.4byte	.LVUS93
 	.uleb128 0x3
-	.4byte	0x1d6c
+	.4byte	0x1d38
 	.4byte	.LLST94
 	.4byte	.LVUS94
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x4d
+	.uleb128 0x4c
 	.4byte	.LASF267
 	.byte	0x1
 	.byte	0xc3
 	.byte	0x6
 	.byte	0x1
-	.4byte	0x16d9
-	.uleb128 0x38
+	.4byte	0x16a5
+	.uleb128 0x36
 	.4byte	.LASF244
 	.byte	0xc3
 	.byte	0x1a
 	.4byte	0xeff
-	.uleb128 0x38
+	.uleb128 0x36
 	.4byte	.LASF248
 	.byte	0xc3
 	.byte	0x29
 	.4byte	0x9d8
 	.byte	0
-	.uleb128 0x4e
+	.uleb128 0x4d
 	.4byte	.LASF287
 	.byte	0x1
 	.byte	0xae
@@ -5975,8 +5927,8 @@ MaxWalkVelocity:
 	.4byte	.LFE152-.LFB152
 	.uleb128 0x1
 	.byte	0x9c
-	.4byte	0x18c2
-	.uleb128 0x1d
+	.4byte	0x188e
+	.uleb128 0x1e
 	.4byte	.LASF244
 	.byte	0xae
 	.byte	0x1c
@@ -6019,13 +5971,13 @@ MaxWalkVelocity:
 	.4byte	.LVUS25
 	.uleb128 0x10
 	.4byte	.LLRL26
-	.uleb128 0x1f
+	.uleb128 0x20
 	.ascii	"pX\000"
 	.byte	0x1
 	.byte	0xb2
 	.byte	0x9
 	.4byte	0x2d
-	.uleb128 0x1f
+	.uleb128 0x20
 	.ascii	"pY\000"
 	.byte	0x1
 	.byte	0xb3
@@ -6039,93 +5991,93 @@ MaxWalkVelocity:
 	.4byte	.LLST27
 	.4byte	.LVUS27
 	.uleb128 0x11
-	.4byte	0x1e68
+	.4byte	0x1e34
 	.4byte	.LBI141
 	.2byte	.LVU301
 	.4byte	.LLRL28
 	.byte	0xb2
 	.byte	0xe
-	.4byte	0x17a3
+	.4byte	0x176f
 	.uleb128 0x16
-	.4byte	0x1e76
+	.4byte	0x1e42
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1e68
+	.4byte	0x1e34
 	.4byte	.LBI148
 	.2byte	.LVU309
 	.4byte	.LLRL29
 	.byte	0xb4
 	.byte	0xe
-	.4byte	0x17be
+	.4byte	0x178a
 	.uleb128 0x16
-	.4byte	0x1e76
+	.4byte	0x1e42
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1e68
+	.4byte	0x1e34
 	.4byte	.LBI157
 	.2byte	.LVU305
 	.4byte	.LLRL30
 	.byte	0xb3
 	.byte	0xe
-	.4byte	0x17d9
+	.4byte	0x17a5
 	.uleb128 0x16
-	.4byte	0x1e76
+	.4byte	0x1e42
 	.byte	0
 	.uleb128 0x11
-	.4byte	0x1dd5
+	.4byte	0x1da1
 	.4byte	.LBI177
 	.2byte	.LVU332
 	.4byte	.LLRL31
 	.byte	0xb7
 	.byte	0xa
-	.4byte	0x1861
-	.uleb128 0x1e
-	.4byte	0x1e5c
+	.4byte	0x182d
+	.uleb128 0x1f
+	.4byte	0x1e28
 	.byte	0x4
 	.4byte	0x3f800000
-	.uleb128 0x1e
-	.4byte	0x1e51
+	.uleb128 0x1f
+	.4byte	0x1e1d
 	.byte	0x4
 	.4byte	0x3f800000
-	.uleb128 0x1e
-	.4byte	0x1e46
+	.uleb128 0x1f
+	.4byte	0x1e12
 	.byte	0x4
 	.4byte	0x3f800000
 	.uleb128 0x3
-	.4byte	0x1e3b
+	.4byte	0x1e07
 	.4byte	.LLST32
 	.4byte	.LVUS32
 	.uleb128 0x16
-	.4byte	0x1e30
+	.4byte	0x1dfc
 	.uleb128 0x3
-	.4byte	0x1e25
+	.4byte	0x1df1
 	.4byte	.LLST33
 	.4byte	.LVUS33
-	.uleb128 0x1e
-	.4byte	0x1e1a
+	.uleb128 0x1f
+	.4byte	0x1de6
 	.byte	0x4
 	.4byte	0x3f266666
-	.uleb128 0x1e
-	.4byte	0x1e0f
+	.uleb128 0x1f
+	.4byte	0x1ddb
 	.byte	0x4
 	.4byte	0x3fe66666
-	.uleb128 0x1e
-	.4byte	0x1e04
+	.uleb128 0x1f
+	.4byte	0x1dd0
 	.byte	0x4
 	.4byte	0x3f266666
 	.uleb128 0x16
-	.4byte	0x1df9
+	.4byte	0x1dc5
 	.uleb128 0x16
-	.4byte	0x1dee
+	.4byte	0x1dba
 	.uleb128 0x3
-	.4byte	0x1de3
+	.4byte	0x1daf
 	.4byte	.LLST34
 	.4byte	.LVUS34
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL45
 	.4byte	0xe34
-	.4byte	0x1881
+	.4byte	0x184d
 	.uleb128 0x4
 	.uleb128 0x1
 	.byte	0x51
@@ -6145,10 +6097,10 @@ MaxWalkVelocity:
 	.byte	0x74
 	.sleb128 0
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL51
 	.4byte	0xe34
-	.4byte	0x18a1
+	.4byte	0x186d
 	.uleb128 0x4
 	.uleb128 0x1
 	.byte	0x51
@@ -6202,15 +6154,15 @@ MaxWalkVelocity:
 	.4byte	.LFE151-.LFB151
 	.uleb128 0x1
 	.byte	0x9c
-	.4byte	0x1bf1
-	.uleb128 0x1d
+	.4byte	0x1bbd
+	.uleb128 0x1e
 	.4byte	.LASF244
 	.byte	0x59
 	.byte	0x1c
 	.4byte	0xeff
 	.4byte	.LLST7
 	.4byte	.LVUS7
-	.uleb128 0x1d
+	.uleb128 0x1e
 	.4byte	.LASF245
 	.byte	0x59
 	.byte	0x2b
@@ -6221,23 +6173,23 @@ MaxWalkVelocity:
 	.ascii	"dmg\000"
 	.byte	0x59
 	.byte	0x3a
-	.4byte	0x1bf1
+	.4byte	0x1bbd
 	.4byte	.LLST9
 	.4byte	.LVUS9
 	.uleb128 0x2d
 	.4byte	.LBB133
 	.4byte	.LBE133-.LBB133
-	.4byte	0x195b
-	.uleb128 0x20
+	.4byte	0x1927
+	.uleb128 0x21
 	.4byte	.LASF236
 	.4byte	0x2d
-	.4byte	0x192b
+	.4byte	0x18f7
 	.uleb128 0x17
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL34
 	.4byte	0xe22
-	.4byte	0x1942
+	.4byte	0x190e
 	.uleb128 0x4
 	.uleb128 0x1
 	.byte	0x50
@@ -6261,12 +6213,12 @@ MaxWalkVelocity:
 	.byte	0x3a
 	.byte	0
 	.byte	0
-	.uleb128 0x39
-	.4byte	0x19b1
-	.uleb128 0x20
+	.uleb128 0x37
+	.4byte	0x197d
+	.uleb128 0x21
 	.4byte	.LASF236
 	.4byte	0x2d
-	.4byte	0x196f
+	.4byte	0x193b
 	.uleb128 0x17
 	.byte	0
 	.uleb128 0x2e
@@ -6284,17 +6236,17 @@ MaxWalkVelocity:
 	.byte	0x8d
 	.byte	0xa
 	.4byte	0x3d5
-	.uleb128 0x39
-	.4byte	0x19a2
-	.uleb128 0x3a
+	.uleb128 0x37
+	.4byte	0x196e
+	.uleb128 0x38
 	.4byte	.LASF236
 	.byte	0x69
 	.4byte	0x2d
 	.uleb128 0x17
 	.byte	0
 	.byte	0
-	.uleb128 0x4f
-	.uleb128 0x3a
+	.uleb128 0x4e
+	.uleb128 0x38
 	.4byte	.LASF236
 	.byte	0x69
 	.4byte	0x2d
@@ -6304,22 +6256,22 @@ MaxWalkVelocity:
 	.byte	0
 	.uleb128 0x1c
 	.4byte	.LLRL13
-	.4byte	0x1a6a
-	.uleb128 0x1a
+	.4byte	0x1a36
+	.uleb128 0x1b
 	.4byte	.LASF198
 	.byte	0x98
 	.byte	0xd
 	.4byte	0xca1
 	.4byte	.LLST14
 	.4byte	.LVUS14
-	.uleb128 0x1a
+	.uleb128 0x1b
 	.4byte	.LASF269
 	.byte	0x99
 	.byte	0xa
 	.4byte	0x2d
 	.4byte	.LLST15
 	.4byte	.LVUS15
-	.uleb128 0x1a
+	.uleb128 0x1b
 	.4byte	.LASF270
 	.byte	0x9d
 	.byte	0xa
@@ -6329,11 +6281,11 @@ MaxWalkVelocity:
 	.uleb128 0x2d
 	.4byte	.LBB130
 	.4byte	.LBE130-.LBB130
-	.4byte	0x1a23
-	.uleb128 0x20
+	.4byte	0x19ef
+	.uleb128 0x21
 	.4byte	.LASF236
 	.4byte	0x2d
-	.4byte	0x1a0f
+	.4byte	0x19db
 	.uleb128 0x17
 	.byte	0
 	.uleb128 0x15
@@ -6350,11 +6302,11 @@ MaxWalkVelocity:
 	.uleb128 0x2d
 	.4byte	.LBB129
 	.4byte	.LBE129-.LBB129
-	.4byte	0x1a53
-	.uleb128 0x20
+	.4byte	0x1a1f
+	.uleb128 0x21
 	.4byte	.LASF236
 	.4byte	0x2d
-	.4byte	0x1a3f
+	.4byte	0x1a0b
 	.uleb128 0x17
 	.byte	0
 	.uleb128 0x15
@@ -6387,14 +6339,14 @@ MaxWalkVelocity:
 	.byte	0
 	.uleb128 0x1c
 	.4byte	.LLRL17
-	.4byte	0x1a96
-	.uleb128 0x20
+	.4byte	0x1a62
+	.uleb128 0x21
 	.4byte	.LASF236
 	.4byte	0x2d
-	.4byte	0x1a82
+	.4byte	0x1a4e
 	.uleb128 0x17
 	.byte	0
-	.uleb128 0x50
+	.uleb128 0x4f
 	.4byte	.LVL38
 	.4byte	0xe22
 	.uleb128 0x4
@@ -6405,8 +6357,8 @@ MaxWalkVelocity:
 	.4byte	.LC42
 	.byte	0
 	.byte	0
-	.uleb128 0x51
-	.4byte	0x1da6
+	.uleb128 0x50
+	.4byte	0x1d72
 	.4byte	.LBI127
 	.2byte	.LVU147
 	.4byte	.LBB127
@@ -6414,24 +6366,24 @@ MaxWalkVelocity:
 	.byte	0x1
 	.byte	0x5b
 	.byte	0x18
-	.4byte	0x1ad8
+	.4byte	0x1aa4
 	.uleb128 0x3
-	.4byte	0x1dca
+	.4byte	0x1d96
 	.4byte	.LLST10
 	.4byte	.LVUS10
 	.uleb128 0x3
-	.4byte	0x1dc0
+	.4byte	0x1d8c
 	.4byte	.LLST11
 	.4byte	.LVUS11
 	.uleb128 0x3
-	.4byte	0x1db6
+	.4byte	0x1d82
 	.4byte	.LLST12
 	.4byte	.LVUS12
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL12
 	.4byte	0xeaf
-	.4byte	0x1aee
+	.4byte	0x1aba
 	.uleb128 0x4
 	.uleb128 0x2
 	.byte	0x90
@@ -6441,10 +6393,10 @@ MaxWalkVelocity:
 	.uleb128 0x53
 	.uleb128 0x26
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL13
 	.4byte	0xe99
-	.4byte	0x1b04
+	.4byte	0x1ad0
 	.uleb128 0x4
 	.uleb128 0x2
 	.byte	0x90
@@ -6454,10 +6406,10 @@ MaxWalkVelocity:
 	.uleb128 0x51
 	.uleb128 0x26
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL14
 	.4byte	0xeaf
-	.4byte	0x1b1a
+	.4byte	0x1ae6
 	.uleb128 0x4
 	.uleb128 0x2
 	.byte	0x90
@@ -6467,10 +6419,10 @@ MaxWalkVelocity:
 	.uleb128 0x51
 	.uleb128 0x26
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL15
 	.4byte	0xe99
-	.4byte	0x1b30
+	.4byte	0x1afc
 	.uleb128 0x4
 	.uleb128 0x2
 	.byte	0x90
@@ -6480,10 +6432,10 @@ MaxWalkVelocity:
 	.uleb128 0x53
 	.uleb128 0x26
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL18
 	.4byte	0xe6f
-	.4byte	0x1b45
+	.4byte	0x1b11
 	.uleb128 0x4
 	.uleb128 0x1
 	.byte	0x51
@@ -6491,10 +6443,10 @@ MaxWalkVelocity:
 	.byte	0x74
 	.sleb128 172
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL19
 	.4byte	0xe34
-	.4byte	0x1b7a
+	.4byte	0x1b46
 	.uleb128 0x4
 	.uleb128 0x1
 	.byte	0x50
@@ -6535,10 +6487,10 @@ MaxWalkVelocity:
 	.byte	0xa8
 	.uleb128 0
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL20
 	.4byte	0xe01
-	.4byte	0x1b98
+	.4byte	0x1b64
 	.uleb128 0x4
 	.uleb128 0x6
 	.byte	0x50
@@ -6553,10 +6505,10 @@ MaxWalkVelocity:
 	.byte	0xa8
 	.uleb128 0x34
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xd
 	.4byte	.LVL31
 	.4byte	0xe01
-	.4byte	0x1bb6
+	.4byte	0x1b82
 	.uleb128 0x4
 	.uleb128 0x6
 	.byte	0x50
@@ -6627,8 +6579,8 @@ MaxWalkVelocity:
 	.4byte	.LFE150-.LFB150
 	.uleb128 0x1
 	.byte	0x9c
-	.4byte	0x1c81
-	.uleb128 0x52
+	.4byte	0x1c4d
+	.uleb128 0x51
 	.4byte	.LASF244
 	.byte	0x1
 	.byte	0x7
@@ -6636,7 +6588,7 @@ MaxWalkVelocity:
 	.4byte	0xeff
 	.uleb128 0x1
 	.byte	0x50
-	.uleb128 0x1d
+	.uleb128 0x1e
 	.4byte	.LASF198
 	.byte	0x7
 	.byte	0x29
@@ -6660,7 +6612,7 @@ MaxWalkVelocity:
 	.4byte	.LVUS2
 	.uleb128 0x1c
 	.4byte	.LLRL3
-	.4byte	0x1c68
+	.4byte	0x1c34
 	.uleb128 0xe
 	.ascii	"i\000"
 	.byte	0x35
@@ -6681,13 +6633,13 @@ MaxWalkVelocity:
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0x18
+	.uleb128 0x19
 	.4byte	.LASF274
 	.byte	0x4
 	.byte	0x9
 	.byte	0xc
 	.4byte	0xcf6
-	.4byte	0x1cce
+	.4byte	0x1c9a
 	.uleb128 0x7
 	.ascii	"x\000"
 	.byte	0x4
@@ -6725,33 +6677,33 @@ MaxWalkVelocity:
 	.byte	0x4a
 	.4byte	0x26
 	.byte	0
-	.uleb128 0x18
+	.uleb128 0x19
 	.4byte	.LASF275
 	.byte	0x2
 	.byte	0x19
 	.byte	0xf
 	.4byte	0x9d8
-	.4byte	0x1cf5
+	.4byte	0x1cc1
 	.uleb128 0x7
 	.ascii	"vec\000"
 	.byte	0x2
 	.byte	0x19
 	.byte	0x1d
 	.4byte	0x9d8
-	.uleb128 0x1f
+	.uleb128 0x20
 	.ascii	"m\000"
 	.byte	0x2
 	.byte	0x1a
 	.byte	0x8
 	.4byte	0x26
 	.byte	0
-	.uleb128 0x18
+	.uleb128 0x19
 	.4byte	.LASF276
 	.byte	0x2
 	.byte	0x17
 	.byte	0xe
 	.4byte	0x26
-	.4byte	0x1d12
+	.4byte	0x1cde
 	.uleb128 0x7
 	.ascii	"vec\000"
 	.byte	0x2
@@ -6759,13 +6711,13 @@ MaxWalkVelocity:
 	.byte	0x1c
 	.4byte	0x9d8
 	.byte	0
-	.uleb128 0x18
+	.uleb128 0x19
 	.4byte	.LASF277
 	.byte	0x2
 	.byte	0x14
 	.byte	0xe
 	.4byte	0x26
-	.4byte	0x1d37
+	.4byte	0x1d03
 	.uleb128 0x7
 	.ascii	"a\000"
 	.byte	0x2
@@ -6779,13 +6731,13 @@ MaxWalkVelocity:
 	.byte	0x26
 	.4byte	0x9d8
 	.byte	0
-	.uleb128 0x18
+	.uleb128 0x19
 	.4byte	.LASF278
 	.byte	0x2
 	.byte	0x12
 	.byte	0xf
 	.4byte	0x9d8
-	.4byte	0x1d5c
+	.4byte	0x1d28
 	.uleb128 0x7
 	.ascii	"a\000"
 	.byte	0x2
@@ -6799,13 +6751,13 @@ MaxWalkVelocity:
 	.byte	0x26
 	.4byte	0x26
 	.byte	0
-	.uleb128 0x18
+	.uleb128 0x19
 	.4byte	.LASF279
 	.byte	0x2
 	.byte	0x11
 	.byte	0xf
 	.4byte	0x9d8
-	.4byte	0x1d81
+	.4byte	0x1d4d
 	.uleb128 0x7
 	.ascii	"a\000"
 	.byte	0x2
@@ -6819,13 +6771,13 @@ MaxWalkVelocity:
 	.byte	0x27
 	.4byte	0x9d8
 	.byte	0
-	.uleb128 0x18
+	.uleb128 0x19
 	.4byte	.LASF280
 	.byte	0x2
 	.byte	0x10
 	.byte	0xf
 	.4byte	0x9d8
-	.4byte	0x1da6
+	.4byte	0x1d72
 	.uleb128 0x7
 	.ascii	"a\000"
 	.byte	0x2
@@ -6839,13 +6791,13 @@ MaxWalkVelocity:
 	.byte	0x27
 	.4byte	0x9d8
 	.byte	0
-	.uleb128 0x18
+	.uleb128 0x19
 	.4byte	.LASF281
 	.byte	0x2
 	.byte	0xe
 	.byte	0xf
 	.4byte	0x9d8
-	.4byte	0x1dd5
+	.4byte	0x1da1
 	.uleb128 0x7
 	.ascii	"x\000"
 	.byte	0x2
@@ -6865,11 +6817,11 @@ MaxWalkVelocity:
 	.byte	0x2e
 	.4byte	0x26
 	.byte	0
-	.uleb128 0x3b
+	.uleb128 0x39
 	.4byte	.LASF282
 	.byte	0x20
 	.4byte	0x3d5
-	.4byte	0x1e68
+	.4byte	0x1e34
 	.uleb128 0x7
 	.ascii	"x0\000"
 	.byte	0x3
@@ -6943,11 +6895,11 @@ MaxWalkVelocity:
 	.byte	0x94
 	.4byte	0x26
 	.byte	0
-	.uleb128 0x3b
+	.uleb128 0x39
 	.4byte	.LASF283
 	.byte	0x19
 	.4byte	0x2d
-	.4byte	0x1e81
+	.4byte	0x1e4d
 	.uleb128 0x7
 	.ascii	"x\000"
 	.byte	0x3
@@ -6955,24 +6907,24 @@ MaxWalkVelocity:
 	.byte	0x23
 	.4byte	0x26
 	.byte	0
-	.uleb128 0x53
-	.4byte	0x16b5
+	.uleb128 0x52
+	.4byte	0x1681
 	.4byte	.LFB153
 	.4byte	.LFE153-.LFB153
 	.uleb128 0x1
 	.byte	0x9c
-	.4byte	0x1ea4
-	.uleb128 0x3c
-	.4byte	0x16c2
+	.4byte	0x1e70
+	.uleb128 0x3a
+	.4byte	0x168e
 	.uleb128 0x1
 	.byte	0x50
-	.uleb128 0x3c
-	.4byte	0x16cd
+	.uleb128 0x3a
+	.4byte	0x1699
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -12
 	.byte	0
-	.uleb128 0x54
+	.uleb128 0x53
 	.4byte	.LASF288
 	.4byte	.LASF289
 	.byte	0x23
@@ -7083,17 +7035,6 @@ MaxWalkVelocity:
 	.byte	0
 	.byte	0
 	.uleb128 0xa
-	.uleb128 0x48
-	.byte	0x1
-	.uleb128 0x7d
-	.uleb128 0x1
-	.uleb128 0x7f
-	.uleb128 0x13
-	.uleb128 0x1
-	.uleb128 0x13
-	.byte	0
-	.byte	0
-	.uleb128 0xb
 	.uleb128 0x24
 	.byte	0
 	.uleb128 0xb
@@ -7104,7 +7045,7 @@ MaxWalkVelocity:
 	.uleb128 0xe
 	.byte	0
 	.byte	0
-	.uleb128 0xc
+	.uleb128 0xb
 	.uleb128 0x13
 	.byte	0x1
 	.uleb128 0xb
@@ -7119,7 +7060,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0xd
+	.uleb128 0xc
 	.uleb128 0xd
 	.byte	0
 	.uleb128 0x3
@@ -7134,6 +7075,17 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.uleb128 0x38
 	.uleb128 0xb
+	.byte	0
+	.byte	0
+	.uleb128 0xd
+	.uleb128 0x48
+	.byte	0x1
+	.uleb128 0x7d
+	.uleb128 0x1
+	.uleb128 0x7f
+	.uleb128 0x13
+	.uleb128 0x1
+	.uleb128 0x13
 	.byte	0
 	.byte	0
 	.uleb128 0xe
@@ -7271,6 +7223,24 @@ MaxWalkVelocity:
 	.byte	0
 	.byte	0
 	.uleb128 0x18
+	.uleb128 0x34
+	.byte	0
+	.uleb128 0x3
+	.uleb128 0xe
+	.uleb128 0x3a
+	.uleb128 0x21
+	.sleb128 1
+	.uleb128 0x3b
+	.uleb128 0xb
+	.uleb128 0x39
+	.uleb128 0xb
+	.uleb128 0x49
+	.uleb128 0x13
+	.uleb128 0x2
+	.uleb128 0x18
+	.byte	0
+	.byte	0
+	.uleb128 0x19
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -7294,7 +7264,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x19
+	.uleb128 0x1a
 	.uleb128 0x1d
 	.byte	0x1
 	.uleb128 0x31
@@ -7316,26 +7286,6 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x1a
-	.uleb128 0x34
-	.byte	0
-	.uleb128 0x3
-	.uleb128 0xe
-	.uleb128 0x3a
-	.uleb128 0x21
-	.sleb128 1
-	.uleb128 0x3b
-	.uleb128 0xb
-	.uleb128 0x39
-	.uleb128 0xb
-	.uleb128 0x49
-	.uleb128 0x13
-	.uleb128 0x2
-	.uleb128 0x17
-	.uleb128 0x2137
-	.uleb128 0x17
-	.byte	0
-	.byte	0
 	.uleb128 0x1b
 	.uleb128 0x34
 	.byte	0
@@ -7351,7 +7301,9 @@ MaxWalkVelocity:
 	.uleb128 0x49
 	.uleb128 0x13
 	.uleb128 0x2
-	.uleb128 0x18
+	.uleb128 0x17
+	.uleb128 0x2137
+	.uleb128 0x17
 	.byte	0
 	.byte	0
 	.uleb128 0x1c
@@ -7364,6 +7316,26 @@ MaxWalkVelocity:
 	.byte	0
 	.byte	0
 	.uleb128 0x1d
+	.uleb128 0x34
+	.byte	0
+	.uleb128 0x3
+	.uleb128 0xe
+	.uleb128 0x3a
+	.uleb128 0x21
+	.sleb128 1
+	.uleb128 0x3b
+	.uleb128 0x5
+	.uleb128 0x39
+	.uleb128 0xb
+	.uleb128 0x49
+	.uleb128 0x13
+	.uleb128 0x2
+	.uleb128 0x17
+	.uleb128 0x2137
+	.uleb128 0x17
+	.byte	0
+	.byte	0
+	.uleb128 0x1e
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -7383,7 +7355,7 @@ MaxWalkVelocity:
 	.uleb128 0x17
 	.byte	0
 	.byte	0
-	.uleb128 0x1e
+	.uleb128 0x1f
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x31
@@ -7392,7 +7364,7 @@ MaxWalkVelocity:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0x1f
+	.uleb128 0x20
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -7407,7 +7379,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x20
+	.uleb128 0x21
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -7431,7 +7403,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x21
+	.uleb128 0x22
 	.uleb128 0x16
 	.byte	0
 	.uleb128 0x3
@@ -7446,7 +7418,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x22
+	.uleb128 0x23
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -7468,7 +7440,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x23
+	.uleb128 0x24
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -7491,7 +7463,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x24
+	.uleb128 0x25
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -7513,26 +7485,6 @@ MaxWalkVelocity:
 	.uleb128 0x19
 	.uleb128 0x1
 	.uleb128 0x13
-	.byte	0
-	.byte	0
-	.uleb128 0x25
-	.uleb128 0x34
-	.byte	0
-	.uleb128 0x3
-	.uleb128 0xe
-	.uleb128 0x3a
-	.uleb128 0x21
-	.sleb128 1
-	.uleb128 0x3b
-	.uleb128 0x5
-	.uleb128 0x39
-	.uleb128 0xb
-	.uleb128 0x49
-	.uleb128 0x13
-	.uleb128 0x2
-	.uleb128 0x17
-	.uleb128 0x2137
-	.uleb128 0x17
 	.byte	0
 	.byte	0
 	.uleb128 0x26
@@ -7801,7 +7753,7 @@ MaxWalkVelocity:
 	.byte	0
 	.byte	0
 	.uleb128 0x36
-	.uleb128 0x34
+	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
 	.uleb128 0xe
@@ -7809,56 +7761,21 @@ MaxWalkVelocity:
 	.uleb128 0x21
 	.sleb128 1
 	.uleb128 0x3b
-	.uleb128 0x5
+	.uleb128 0xb
 	.uleb128 0x39
 	.uleb128 0xb
 	.uleb128 0x49
 	.uleb128 0x13
-	.uleb128 0x2
-	.uleb128 0x18
 	.byte	0
 	.byte	0
 	.uleb128 0x37
-	.uleb128 0x34
-	.byte	0
-	.uleb128 0x3
-	.uleb128 0xe
-	.uleb128 0x3a
-	.uleb128 0x21
-	.sleb128 1
-	.uleb128 0x3b
-	.uleb128 0x5
-	.uleb128 0x39
-	.uleb128 0x21
-	.sleb128 10
-	.uleb128 0x49
-	.uleb128 0x13
-	.byte	0
-	.byte	0
-	.uleb128 0x38
-	.uleb128 0x5
-	.byte	0
-	.uleb128 0x3
-	.uleb128 0xe
-	.uleb128 0x3a
-	.uleb128 0x21
-	.sleb128 1
-	.uleb128 0x3b
-	.uleb128 0xb
-	.uleb128 0x39
-	.uleb128 0xb
-	.uleb128 0x49
-	.uleb128 0x13
-	.byte	0
-	.byte	0
-	.uleb128 0x39
 	.uleb128 0xb
 	.byte	0x1
 	.uleb128 0x1
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x3a
+	.uleb128 0x38
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -7879,7 +7796,7 @@ MaxWalkVelocity:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0x3b
+	.uleb128 0x39
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3
@@ -7903,7 +7820,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x3c
+	.uleb128 0x3a
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x31
@@ -7912,7 +7829,7 @@ MaxWalkVelocity:
 	.uleb128 0x18
 	.byte	0
 	.byte	0
-	.uleb128 0x3d
+	.uleb128 0x3b
 	.uleb128 0x11
 	.byte	0x1
 	.uleb128 0x25
@@ -7931,7 +7848,7 @@ MaxWalkVelocity:
 	.uleb128 0x17
 	.byte	0
 	.byte	0
-	.uleb128 0x3e
+	.uleb128 0x3c
 	.uleb128 0x24
 	.byte	0
 	.uleb128 0xb
@@ -7942,14 +7859,14 @@ MaxWalkVelocity:
 	.uleb128 0x8
 	.byte	0
 	.byte	0
-	.uleb128 0x3f
+	.uleb128 0x3d
 	.uleb128 0xf
 	.byte	0
 	.uleb128 0xb
 	.uleb128 0xb
 	.byte	0
 	.byte	0
-	.uleb128 0x40
+	.uleb128 0x3e
 	.uleb128 0xd
 	.byte	0
 	.uleb128 0x3
@@ -7966,7 +7883,7 @@ MaxWalkVelocity:
 	.uleb128 0x5
 	.byte	0
 	.byte	0
-	.uleb128 0x41
+	.uleb128 0x3f
 	.uleb128 0x4
 	.byte	0x1
 	.uleb128 0x3e
@@ -7985,7 +7902,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x42
+	.uleb128 0x40
 	.uleb128 0x13
 	.byte	0
 	.uleb128 0xb
@@ -7998,7 +7915,7 @@ MaxWalkVelocity:
 	.uleb128 0xb
 	.byte	0
 	.byte	0
-	.uleb128 0x43
+	.uleb128 0x41
 	.uleb128 0xd
 	.byte	0
 	.uleb128 0x3
@@ -8013,7 +7930,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x44
+	.uleb128 0x42
 	.uleb128 0xd
 	.byte	0
 	.uleb128 0x3
@@ -8028,14 +7945,14 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x45
+	.uleb128 0x43
 	.uleb128 0xd
 	.byte	0
 	.uleb128 0x49
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x46
+	.uleb128 0x44
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -8056,7 +7973,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x47
+	.uleb128 0x45
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -8075,7 +7992,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x48
+	.uleb128 0x46
 	.uleb128 0xb
 	.byte	0x1
 	.uleb128 0x11
@@ -8084,7 +8001,24 @@ MaxWalkVelocity:
 	.uleb128 0x6
 	.byte	0
 	.byte	0
+	.uleb128 0x47
+	.uleb128 0x34
+	.byte	0
+	.uleb128 0x3
+	.uleb128 0xe
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0x5
+	.uleb128 0x39
+	.uleb128 0xb
 	.uleb128 0x49
+	.uleb128 0x13
+	.uleb128 0x2
+	.uleb128 0x18
+	.byte	0
+	.byte	0
+	.uleb128 0x48
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -8101,14 +8035,14 @@ MaxWalkVelocity:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0x4a
+	.uleb128 0x49
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x31
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x4b
+	.uleb128 0x4a
 	.uleb128 0x1d
 	.byte	0x1
 	.uleb128 0x31
@@ -8129,7 +8063,7 @@ MaxWalkVelocity:
 	.uleb128 0xb
 	.byte	0
 	.byte	0
-	.uleb128 0x4c
+	.uleb128 0x4b
 	.uleb128 0x1d
 	.byte	0x1
 	.uleb128 0x31
@@ -8148,7 +8082,7 @@ MaxWalkVelocity:
 	.uleb128 0xb
 	.byte	0
 	.byte	0
-	.uleb128 0x4d
+	.uleb128 0x4c
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -8169,7 +8103,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x4e
+	.uleb128 0x4d
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -8198,12 +8132,12 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x4f
+	.uleb128 0x4e
 	.uleb128 0xb
 	.byte	0x1
 	.byte	0
 	.byte	0
-	.uleb128 0x50
+	.uleb128 0x4f
 	.uleb128 0x48
 	.byte	0x1
 	.uleb128 0x7d
@@ -8214,7 +8148,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x51
+	.uleb128 0x50
 	.uleb128 0x1d
 	.byte	0x1
 	.uleb128 0x31
@@ -8237,7 +8171,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x52
+	.uleb128 0x51
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -8254,7 +8188,7 @@ MaxWalkVelocity:
 	.uleb128 0x18
 	.byte	0
 	.byte	0
-	.uleb128 0x53
+	.uleb128 0x52
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x31
@@ -8271,7 +8205,7 @@ MaxWalkVelocity:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x54
+	.uleb128 0x53
 	.uleb128 0x2e
 	.byte	0
 	.uleb128 0x3f
@@ -8297,45 +8231,45 @@ MaxWalkVelocity:
 	.byte	0
 	.4byte	0
 .Ldebug_loc0:
-.LVUS129:
+.LVUS131:
 	.uleb128 0
 	.uleb128 .LVU838
 	.uleb128 .LVU838
 	.uleb128 0
-.LLST129:
+.LLST131:
 	.byte	0x6
-	.4byte	.LVL149
+	.4byte	.LVL154
 	.byte	0x4
-	.uleb128 .LVL149-.LVL149
-	.uleb128 .LVL150-.LVL149
+	.uleb128 .LVL154-.LVL154
+	.uleb128 .LVL155-.LVL154
 	.uleb128 0x1
 	.byte	0x50
 	.byte	0x4
-	.uleb128 .LVL150-.LVL149
-	.uleb128 .LFE156-.LVL149
+	.uleb128 .LVL155-.LVL154
+	.uleb128 .LFE156-.LVL154
 	.uleb128 0x1
 	.byte	0x54
 	.byte	0
-.LVUS113:
+.LVUS115:
 	.uleb128 0
 	.uleb128 .LVU769
 	.uleb128 .LVU769
 	.uleb128 0
-.LLST113:
+.LLST115:
 	.byte	0x6
-	.4byte	.LVL127
+	.4byte	.LVL132
 	.byte	0x4
-	.uleb128 .LVL127-.LVL127
-	.uleb128 .LVL128-.LVL127
+	.uleb128 .LVL132-.LVL132
+	.uleb128 .LVL133-.LVL132
 	.uleb128 0x1
 	.byte	0x50
 	.byte	0x4
-	.uleb128 .LVL128-.LVL127
-	.uleb128 .LFE155-.LVL127
+	.uleb128 .LVL133-.LVL132
+	.uleb128 .LFE155-.LVL132
 	.uleb128 0x1
 	.byte	0x54
 	.byte	0
-.LVUS114:
+.LVUS116:
 	.uleb128 0
 	.uleb128 .LVU774
 	.uleb128 .LVU774
@@ -8344,17 +8278,17 @@ MaxWalkVelocity:
 	.uleb128 .LVU783
 	.uleb128 .LVU783
 	.uleb128 0
-.LLST114:
+.LLST116:
 	.byte	0x6
-	.4byte	.LVL127
+	.4byte	.LVL132
 	.byte	0x4
-	.uleb128 .LVL127-.LVL127
-	.uleb128 .LVL129-.LVL127
+	.uleb128 .LVL132-.LVL132
+	.uleb128 .LVL134-.LVL132
 	.uleb128 0x1
 	.byte	0x51
 	.byte	0x4
-	.uleb128 .LVL129-.LVL127
-	.uleb128 .LVL130-.LVL127
+	.uleb128 .LVL134-.LVL132
+	.uleb128 .LVL135-.LVL132
 	.uleb128 0xa
 	.byte	0xa3
 	.uleb128 0x3
@@ -8367,49 +8301,49 @@ MaxWalkVelocity:
 	.uleb128 0
 	.byte	0x9f
 	.byte	0x4
-	.uleb128 .LVL130-.LVL127
-	.uleb128 .LVL131-.LVL127
+	.uleb128 .LVL135-.LVL132
+	.uleb128 .LVL136-.LVL132
 	.uleb128 0x1
 	.byte	0x51
 	.byte	0x4
-	.uleb128 .LVL131-.LVL127
-	.uleb128 .LFE155-.LVL127
+	.uleb128 .LVL136-.LVL132
+	.uleb128 .LFE155-.LVL132
 	.uleb128 0x1
 	.byte	0x56
 	.byte	0
-.LVUS115:
+.LVUS117:
 	.uleb128 .LVU791
 	.uleb128 .LVU796
-.LLST115:
+.LLST117:
 	.byte	0x8
-	.4byte	.LVL132
-	.uleb128 .LVL133-.LVL132
+	.4byte	.LVL137
+	.uleb128 .LVL138-.LVL137
 	.uleb128 0x1
 	.byte	0x53
 	.byte	0
-.LVUS117:
+.LVUS119:
 	.uleb128 .LVU798
 	.uleb128 .LVU815
-.LLST117:
+.LLST119:
 	.byte	0x8
-	.4byte	.LVL134
-	.uleb128 .LVL143-.LVL134
+	.4byte	.LVL139
+	.uleb128 .LVL148-.LVL139
 	.uleb128 0x6
 	.byte	0x9e
 	.uleb128 0x4
 	.4byte	0x3f800000
 	.byte	0
-.LVUS120:
+.LVUS122:
 	.uleb128 .LVU798
 	.uleb128 .LVU810
 	.uleb128 .LVU810
 	.uleb128 .LVU815
-.LLST120:
+.LLST122:
 	.byte	0x6
-	.4byte	.LVL134
+	.4byte	.LVL139
 	.byte	0x4
-	.uleb128 .LVL134-.LVL134
-	.uleb128 .LVL140-.LVL134
+	.uleb128 .LVL139-.LVL139
+	.uleb128 .LVL145-.LVL139
 	.uleb128 0x7
 	.byte	0x73
 	.sleb128 0
@@ -8419,25 +8353,25 @@ MaxWalkVelocity:
 	.uleb128 0x26
 	.byte	0x9f
 	.byte	0x4
-	.uleb128 .LVL140-.LVL134
-	.uleb128 .LVL143-.LVL134
+	.uleb128 .LVL145-.LVL139
+	.uleb128 .LVL148-.LVL139
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x4f
 	.byte	0
-.LVUS121:
+.LVUS123:
 	.uleb128 .LVU798
 	.uleb128 .LVU804
 	.uleb128 .LVU804
 	.uleb128 .LVU809
 	.uleb128 .LVU809
 	.uleb128 .LVU815
-.LLST121:
+.LLST123:
 	.byte	0x6
-	.4byte	.LVL134
+	.4byte	.LVL139
 	.byte	0x4
-	.uleb128 .LVL134-.LVL134
-	.uleb128 .LVL136-.LVL134
+	.uleb128 .LVL139-.LVL139
+	.uleb128 .LVL141-.LVL139
 	.uleb128 0x7
 	.byte	0x72
 	.sleb128 0
@@ -8447,14 +8381,14 @@ MaxWalkVelocity:
 	.uleb128 0x26
 	.byte	0x9f
 	.byte	0x4
-	.uleb128 .LVL136-.LVL134
-	.uleb128 .LVL139-.LVL134
+	.uleb128 .LVL141-.LVL139
+	.uleb128 .LVL144-.LVL139
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x4f
 	.byte	0x4
-	.uleb128 .LVL139-.LVL134
-	.uleb128 .LVL143-.LVL134
+	.uleb128 .LVL144-.LVL139
+	.uleb128 .LVL148-.LVL139
 	.uleb128 0x7
 	.byte	0x72
 	.sleb128 0
@@ -8464,23 +8398,23 @@ MaxWalkVelocity:
 	.uleb128 0x26
 	.byte	0x9f
 	.byte	0
-.LVUS122:
+.LVUS124:
 	.uleb128 .LVU798
 	.uleb128 .LVU805
 	.uleb128 .LVU805
 	.uleb128 .LVU815
-.LLST122:
+.LLST124:
 	.byte	0x6
-	.4byte	.LVL134
+	.4byte	.LVL139
 	.byte	0x4
-	.uleb128 .LVL134-.LVL134
-	.uleb128 .LVL137-.LVL134
+	.uleb128 .LVL139-.LVL139
+	.uleb128 .LVL142-.LVL139
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x4e
 	.byte	0x4
-	.uleb128 .LVL137-.LVL134
-	.uleb128 .LVL143-.LVL134
+	.uleb128 .LVL142-.LVL139
+	.uleb128 .LVL148-.LVL139
 	.uleb128 0x7
 	.byte	0x71
 	.sleb128 0
@@ -8490,43 +8424,43 @@ MaxWalkVelocity:
 	.uleb128 0x26
 	.byte	0x9f
 	.byte	0
-.LVUS123:
+.LVUS125:
 	.uleb128 .LVU798
 	.uleb128 .LVU815
-.LLST123:
+.LLST125:
 	.byte	0x8
-	.4byte	.LVL134
-	.uleb128 .LVL143-.LVL134
+	.4byte	.LVL139
+	.uleb128 .LVL148-.LVL139
 	.uleb128 0x6
 	.byte	0x9e
 	.uleb128 0x4
 	.4byte	0x3f266666
 	.byte	0
-.LVUS124:
+.LVUS126:
 	.uleb128 .LVU798
 	.uleb128 .LVU815
-.LLST124:
+.LLST126:
 	.byte	0x8
-	.4byte	.LVL134
-	.uleb128 .LVL143-.LVL134
+	.4byte	.LVL139
+	.uleb128 .LVL148-.LVL139
 	.uleb128 0x6
 	.byte	0x9e
 	.uleb128 0x4
 	.4byte	0x3fe66666
 	.byte	0
-.LVUS126:
+.LVUS128:
 	.uleb128 .LVU798
 	.uleb128 .LVU811
 	.uleb128 .LVU811
 	.uleb128 .LVU814
 	.uleb128 .LVU814
 	.uleb128 .LVU815
-.LLST126:
+.LLST128:
 	.byte	0x6
-	.4byte	.LVL134
+	.4byte	.LVL139
 	.byte	0x4
-	.uleb128 .LVL134-.LVL134
-	.uleb128 .LVL141-.LVL134
+	.uleb128 .LVL139-.LVL139
+	.uleb128 .LVL146-.LVL139
 	.uleb128 0xc
 	.byte	0xa5
 	.uleb128 0x49
@@ -8538,14 +8472,14 @@ MaxWalkVelocity:
 	.byte	0x1c
 	.byte	0x9f
 	.byte	0x4
-	.uleb128 .LVL141-.LVL134
-	.uleb128 .LVL142-.LVL134
+	.uleb128 .LVL146-.LVL139
+	.uleb128 .LVL147-.LVL139
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x49
 	.byte	0x4
-	.uleb128 .LVL142-.LVL134
-	.uleb128 .LVL143-.LVL134
+	.uleb128 .LVL147-.LVL139
+	.uleb128 .LVL148-.LVL139
 	.uleb128 0xe
 	.byte	0x74
 	.sleb128 8
@@ -8559,44 +8493,44 @@ MaxWalkVelocity:
 	.byte	0x1c
 	.byte	0x9f
 	.byte	0
-.LVUS127:
+.LVUS129:
 	.uleb128 .LVU798
 	.uleb128 .LVU807
 	.uleb128 .LVU807
 	.uleb128 .LVU815
-.LLST127:
+.LLST129:
 	.byte	0x6
-	.4byte	.LVL134
+	.4byte	.LVL139
 	.byte	0x4
-	.uleb128 .LVL134-.LVL134
-	.uleb128 .LVL138-.LVL134
+	.uleb128 .LVL139-.LVL139
+	.uleb128 .LVL143-.LVL139
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x4a
 	.byte	0x4
-	.uleb128 .LVL138-.LVL134
-	.uleb128 .LVL143-.LVL134
+	.uleb128 .LVL143-.LVL139
+	.uleb128 .LVL148-.LVL139
 	.uleb128 0x2
 	.byte	0x74
 	.sleb128 4
 	.byte	0
-.LVUS128:
+.LVUS130:
 	.uleb128 .LVU798
 	.uleb128 .LVU802
 	.uleb128 .LVU802
 	.uleb128 .LVU815
-.LLST128:
+.LLST130:
 	.byte	0x6
-	.4byte	.LVL134
+	.4byte	.LVL139
 	.byte	0x4
-	.uleb128 .LVL134-.LVL134
-	.uleb128 .LVL135-.LVL134
+	.uleb128 .LVL139-.LVL139
+	.uleb128 .LVL140-.LVL139
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x4f
 	.byte	0x4
-	.uleb128 .LVL135-.LVL134
-	.uleb128 .LVL143-.LVL134
+	.uleb128 .LVL140-.LVL139
+	.uleb128 .LVL148-.LVL139
 	.uleb128 0xa
 	.byte	0x74
 	.sleb128 0
@@ -8613,10 +8547,20 @@ MaxWalkVelocity:
 	.uleb128 0
 	.uleb128 .LVU394
 	.uleb128 .LVU394
-	.uleb128 .LVU580
-	.uleb128 .LVU580
-	.uleb128 .LVU581
-	.uleb128 .LVU581
+	.uleb128 .LVU444
+	.uleb128 .LVU444
+	.uleb128 .LVU538
+	.uleb128 .LVU538
+	.uleb128 .LVU583
+	.uleb128 .LVU583
+	.uleb128 .LVU584
+	.uleb128 .LVU584
+	.uleb128 .LVU635
+	.uleb128 .LVU635
+	.uleb128 .LVU741
+	.uleb128 .LVU741
+	.uleb128 .LVU743
+	.uleb128 .LVU743
 	.uleb128 0
 .LLST35:
 	.byte	0x6
@@ -8628,12 +8572,22 @@ MaxWalkVelocity:
 	.byte	0x50
 	.byte	0x4
 	.uleb128 .LVL61-.LVL58
-	.uleb128 .LVL84-.LVL58
+	.uleb128 .LVL68-.LVL58
 	.uleb128 0x1
-	.byte	0x5b
+	.byte	0x58
 	.byte	0x4
-	.uleb128 .LVL84-.LVL58
-	.uleb128 .LVL85-.LVL58
+	.uleb128 .LVL68-.LVL58
+	.uleb128 .LVL83-.LVL58
+	.uleb128 0x1
+	.byte	0x59
+	.byte	0x4
+	.uleb128 .LVL83-.LVL58
+	.uleb128 .LVL88-.LVL58
+	.uleb128 0x1
+	.byte	0x58
+	.byte	0x4
+	.uleb128 .LVL88-.LVL58
+	.uleb128 .LVL89-.LVL58
 	.uleb128 0xa
 	.byte	0xa3
 	.uleb128 0x3
@@ -8646,10 +8600,25 @@ MaxWalkVelocity:
 	.uleb128 0
 	.byte	0x9f
 	.byte	0x4
-	.uleb128 .LVL85-.LVL58
+	.uleb128 .LVL89-.LVL58
+	.uleb128 .LVL99-.LVL58
+	.uleb128 0x1
+	.byte	0x59
+	.byte	0x4
+	.uleb128 .LVL99-.LVL58
+	.uleb128 .LVL126-.LVL58
+	.uleb128 0x1
+	.byte	0x58
+	.byte	0x4
+	.uleb128 .LVL126-.LVL58
+	.uleb128 .LVL127-.LVL58
+	.uleb128 0x1
+	.byte	0x59
+	.byte	0x4
+	.uleb128 .LVL127-.LVL58
 	.uleb128 .LFE154-.LVL58
 	.uleb128 0x1
-	.byte	0x5b
+	.byte	0x58
 	.byte	0
 .LVUS36:
 	.uleb128 0
@@ -8680,10 +8649,10 @@ MaxWalkVelocity:
 	.uleb128 .LVU377
 	.uleb128 .LVU394
 	.uleb128 .LVU394
-	.uleb128 .LVU580
-	.uleb128 .LVU580
-	.uleb128 .LVU581
-	.uleb128 .LVU581
+	.uleb128 .LVU583
+	.uleb128 .LVU583
+	.uleb128 .LVU584
+	.uleb128 .LVU584
 	.uleb128 0
 .LLST37:
 	.byte	0x6
@@ -8702,7 +8671,7 @@ MaxWalkVelocity:
 	.uleb128 0x4
 	.byte	0x4
 	.uleb128 .LVL61-.LVL59
-	.uleb128 .LVL84-.LVL59
+	.uleb128 .LVL88-.LVL59
 	.uleb128 0x8
 	.byte	0x93
 	.uleb128 0x4
@@ -8713,8 +8682,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL84-.LVL59
-	.uleb128 .LVL85-.LVL59
+	.uleb128 .LVL88-.LVL59
+	.uleb128 .LVL89-.LVL59
 	.uleb128 0x9
 	.byte	0x93
 	.uleb128 0x4
@@ -8725,7 +8694,7 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL85-.LVL59
+	.uleb128 .LVL89-.LVL59
 	.uleb128 .LFE154-.LVL59
 	.uleb128 0x8
 	.byte	0x93
@@ -8755,15 +8724,15 @@ MaxWalkVelocity:
 	.uleb128 0x4
 	.4byte	0x3f800000
 	.byte	0x4
-	.uleb128 .LVL118-.LVL62
-	.uleb128 .LVL119-.LVL62
+	.uleb128 .LVL123-.LVL62
+	.uleb128 .LVL124-.LVL62
 	.uleb128 0x6
 	.byte	0x9e
 	.uleb128 0x4
 	.4byte	0x3f800000
 	.byte	0x4
-	.uleb128 .LVL120-.LVL62
-	.uleb128 .LVL121-.LVL62
+	.uleb128 .LVL125-.LVL62
+	.uleb128 .LVL126-.LVL62
 	.uleb128 0x6
 	.byte	0x9e
 	.uleb128 0x4
@@ -8772,8 +8741,8 @@ MaxWalkVelocity:
 .LVUS40:
 	.uleb128 .LVU438
 	.uleb128 .LVU444
-	.uleb128 .LVU620
-	.uleb128 .LVU627
+	.uleb128 .LVU616
+	.uleb128 .LVU623
 .LLST40:
 	.byte	0x6
 	.4byte	.LVL67
@@ -8784,8 +8753,8 @@ MaxWalkVelocity:
 	.byte	0x30
 	.byte	0x9f
 	.byte	0x4
-	.uleb128 .LVL95-.LVL67
-	.uleb128 .LVL96-.LVL67
+	.uleb128 .LVL97-.LVL67
+	.uleb128 .LVL98-.LVL67
 	.uleb128 0x2
 	.byte	0x31
 	.byte	0x9f
@@ -8794,8 +8763,8 @@ MaxWalkVelocity:
 	.uleb128 .LVU438
 	.uleb128 .LVU444
 	.uleb128 .LVU444
-	.uleb128 .LVU580
-	.uleb128 .LVU581
+	.uleb128 .LVU583
+	.uleb128 .LVU584
 	.uleb128 .LVU728
 	.uleb128 .LVU734
 	.uleb128 .LVU736
@@ -8811,41 +8780,41 @@ MaxWalkVelocity:
 	.byte	0x54
 	.byte	0x4
 	.uleb128 .LVL68-.LVL67
-	.uleb128 .LVL84-.LVL67
+	.uleb128 .LVL88-.LVL67
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -248
 	.byte	0x4
-	.uleb128 .LVL85-.LVL67
-	.uleb128 .LVL117-.LVL67
+	.uleb128 .LVL89-.LVL67
+	.uleb128 .LVL122-.LVL67
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -248
 	.byte	0x4
-	.uleb128 .LVL119-.LVL67
-	.uleb128 .LVL120-.LVL67
+	.uleb128 .LVL124-.LVL67
+	.uleb128 .LVL125-.LVL67
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -248
 	.byte	0x4
-	.uleb128 .LVL121-.LVL67
+	.uleb128 .LVL126-.LVL67
 	.uleb128 .LFE154-.LVL67
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -248
 	.byte	0
 .LVUS42:
-	.uleb128 .LVU532
-	.uleb128 .LVU541
-	.uleb128 .LVU541
-	.uleb128 .LVU552
-	.uleb128 .LVU552
-	.uleb128 .LVU553
-	.uleb128 .LVU639
-	.uleb128 .LVU647
-	.uleb128 .LVU647
-	.uleb128 .LVU697
-	.uleb128 .LVU697
+	.uleb128 .LVU535
+	.uleb128 .LVU544
+	.uleb128 .LVU544
+	.uleb128 .LVU555
+	.uleb128 .LVU555
+	.uleb128 .LVU556
+	.uleb128 .LVU635
+	.uleb128 .LVU643
+	.uleb128 .LVU643
+	.uleb128 .LVU693
+	.uleb128 .LVU693
 	.uleb128 .LVU728
 	.uleb128 .LVU743
 	.uleb128 .LVU745
@@ -8857,10 +8826,10 @@ MaxWalkVelocity:
 	.uleb128 .LVU763
 .LLST42:
 	.byte	0x6
-	.4byte	.LVL79
+	.4byte	.LVL82
 	.byte	0x4
-	.uleb128 .LVL79-.LVL79
-	.uleb128 .LVL80-.LVL79
+	.uleb128 .LVL82-.LVL82
+	.uleb128 .LVL84-.LVL82
 	.uleb128 0x1e
 	.byte	0xa5
 	.uleb128 0x52
@@ -8893,8 +8862,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL80-.LVL79
-	.uleb128 .LVL81-.LVL79
+	.uleb128 .LVL84-.LVL82
+	.uleb128 .LVL85-.LVL82
 	.uleb128 0x16
 	.byte	0xa5
 	.uleb128 0x52
@@ -8919,8 +8888,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL81-.LVL79
-	.uleb128 .LVL82-.LVL79
+	.uleb128 .LVL85-.LVL82
+	.uleb128 .LVL86-.LVL82
 	.uleb128 0x1c
 	.byte	0x91
 	.sleb128 -208
@@ -8949,8 +8918,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL97-.LVL79
-	.uleb128 .LVL100-.LVL79
+	.uleb128 .LVL99-.LVL82
+	.uleb128 .LVL102-.LVL82
 	.uleb128 0x1e
 	.byte	0xa5
 	.uleb128 0x52
@@ -8983,8 +8952,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL100-.LVL79
-	.uleb128 .LVL114-1-.LVL79
+	.uleb128 .LVL102-.LVL82
+	.uleb128 .LVL115-1-.LVL82
 	.uleb128 0x20
 	.byte	0xa5
 	.uleb128 0x52
@@ -8999,7 +8968,7 @@ MaxWalkVelocity:
 	.byte	0xa5
 	.uleb128 0x53
 	.uleb128 0x26
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 4
 	.byte	0xa6
 	.byte	0x4
@@ -9019,8 +8988,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL114-1-.LVL79
-	.uleb128 .LVL117-.LVL79
+	.uleb128 .LVL115-1-.LVL82
+	.uleb128 .LVL122-.LVL82
 	.uleb128 0x16
 	.byte	0xa5
 	.uleb128 0x52
@@ -9045,8 +9014,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL122-.LVL79
-	.uleb128 .LVL123-.LVL79
+	.uleb128 .LVL127-.LVL82
+	.uleb128 .LVL128-.LVL82
 	.uleb128 0x16
 	.byte	0xa5
 	.uleb128 0x52
@@ -9071,8 +9040,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL123-.LVL79
-	.uleb128 .LVL124-.LVL79
+	.uleb128 .LVL128-.LVL82
+	.uleb128 .LVL129-.LVL82
 	.uleb128 0x19
 	.byte	0x91
 	.sleb128 -208
@@ -9099,8 +9068,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL124-.LVL79
-	.uleb128 .LVL125-.LVL79
+	.uleb128 .LVL129-.LVL82
+	.uleb128 .LVL130-.LVL82
 	.uleb128 0x1c
 	.byte	0x91
 	.sleb128 -208
@@ -9129,8 +9098,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL125-.LVL79
-	.uleb128 .LVL126-.LVL79
+	.uleb128 .LVL130-.LVL82
+	.uleb128 .LVL131-.LVL82
 	.uleb128 0x1b
 	.byte	0x73
 	.sleb128 0
@@ -9172,10 +9141,10 @@ MaxWalkVelocity:
 	.byte	0
 .LVUS60:
 	.uleb128 .LVU450
-	.uleb128 .LVU490
-	.uleb128 .LVU490
-	.uleb128 .LVU580
-	.uleb128 .LVU581
+	.uleb128 .LVU489
+	.uleb128 .LVU489
+	.uleb128 .LVU583
+	.uleb128 .LVU584
 	.uleb128 .LVU728
 	.uleb128 .LVU734
 	.uleb128 .LVU736
@@ -9191,24 +9160,24 @@ MaxWalkVelocity:
 	.byte	0x54
 	.byte	0x4
 	.uleb128 .LVL72-.LVL69
-	.uleb128 .LVL84-.LVL69
+	.uleb128 .LVL88-.LVL69
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -264
 	.byte	0x4
-	.uleb128 .LVL85-.LVL69
-	.uleb128 .LVL117-.LVL69
+	.uleb128 .LVL89-.LVL69
+	.uleb128 .LVL122-.LVL69
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -264
 	.byte	0x4
-	.uleb128 .LVL119-.LVL69
-	.uleb128 .LVL120-.LVL69
+	.uleb128 .LVL124-.LVL69
+	.uleb128 .LVL125-.LVL69
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -264
 	.byte	0x4
-	.uleb128 .LVL121-.LVL69
+	.uleb128 .LVL126-.LVL69
 	.uleb128 .LFE154-.LVL69
 	.uleb128 0x3
 	.byte	0x91
@@ -9216,13 +9185,15 @@ MaxWalkVelocity:
 	.byte	0
 .LVUS61:
 	.uleb128 .LVU451
-	.uleb128 .LVU490
-	.uleb128 .LVU490
-	.uleb128 .LVU541
-	.uleb128 .LVU581
-	.uleb128 .LVU689
+	.uleb128 .LVU489
+	.uleb128 .LVU489
+	.uleb128 .LVU583
+	.uleb128 .LVU584
+	.uleb128 .LVU728
+	.uleb128 .LVU734
+	.uleb128 .LVU736
 	.uleb128 .LVU741
-	.uleb128 .LVU743
+	.uleb128 0
 .LLST61:
 	.byte	0x6
 	.4byte	.LVL69
@@ -9234,23 +9205,28 @@ MaxWalkVelocity:
 	.byte	0x9f
 	.byte	0x4
 	.uleb128 .LVL72-.LVL69
-	.uleb128 .LVL80-.LVL69
+	.uleb128 .LVL88-.LVL69
 	.uleb128 0x1
-	.byte	0x55
+	.byte	0x5b
 	.byte	0x4
-	.uleb128 .LVL85-.LVL69
-	.uleb128 .LVL112-.LVL69
-	.uleb128 0x1
-	.byte	0x55
-	.byte	0x4
-	.uleb128 .LVL121-.LVL69
+	.uleb128 .LVL89-.LVL69
 	.uleb128 .LVL122-.LVL69
 	.uleb128 0x1
-	.byte	0x55
+	.byte	0x5b
+	.byte	0x4
+	.uleb128 .LVL124-.LVL69
+	.uleb128 .LVL125-.LVL69
+	.uleb128 0x1
+	.byte	0x5b
+	.byte	0x4
+	.uleb128 .LVL126-.LVL69
+	.uleb128 .LFE154-.LVL69
+	.uleb128 0x1
+	.byte	0x5b
 	.byte	0
 .LVUS70:
-	.uleb128 .LVU488
-	.uleb128 .LVU490
+	.uleb128 .LVU487
+	.uleb128 .LVU489
 .LLST70:
 	.byte	0x8
 	.4byte	.LVL71
@@ -9261,7 +9237,7 @@ MaxWalkVelocity:
 	.byte	0x9f
 	.byte	0
 .LVUS72:
-	.uleb128 .LVU490
+	.uleb128 .LVU489
 	.uleb128 .LVU492
 .LLST72:
 	.byte	0x8
@@ -9273,102 +9249,160 @@ MaxWalkVelocity:
 	.byte	0
 .LVUS74:
 	.uleb128 .LVU492
-	.uleb128 .LVU493
+	.uleb128 .LVU494
+	.uleb128 .LVU494
+	.uleb128 .LVU511
+	.uleb128 .LVU511
+	.uleb128 .LVU512
+	.uleb128 .LVU512
+	.uleb128 .LVU520
+	.uleb128 .LVU584
+	.uleb128 .LVU612
 .LLST74:
-	.byte	0x8
+	.byte	0x6
 	.4byte	.LVL73
+	.byte	0x4
+	.uleb128 .LVL73-.LVL73
 	.uleb128 .LVL74-.LVL73
 	.uleb128 0x3
 	.byte	0x9
 	.byte	0xff
 	.byte	0x9f
+	.byte	0x4
+	.uleb128 .LVL74-.LVL73
+	.uleb128 .LVL76-.LVL73
+	.uleb128 0x8
+	.byte	0x74
+	.sleb128 0
+	.byte	0x76
+	.sleb128 0
+	.byte	0x1c
+	.byte	0x23
+	.uleb128 0x2
+	.byte	0x9f
+	.byte	0x4
+	.uleb128 .LVL76-.LVL73
+	.uleb128 .LVL77-.LVL73
+	.uleb128 0x8
+	.byte	0x74
+	.sleb128 0
+	.byte	0x76
+	.sleb128 0
+	.byte	0x1c
+	.byte	0x23
+	.uleb128 0x3
+	.byte	0x9f
+	.byte	0x4
+	.uleb128 .LVL77-.LVL73
+	.uleb128 .LVL79-.LVL73
+	.uleb128 0x8
+	.byte	0x74
+	.sleb128 0
+	.byte	0x76
+	.sleb128 0
+	.byte	0x1c
+	.byte	0x23
+	.uleb128 0x2
+	.byte	0x9f
+	.byte	0x4
+	.uleb128 .LVL89-.LVL73
+	.uleb128 .LVL96-.LVL73
+	.uleb128 0x8
+	.byte	0x74
+	.sleb128 0
+	.byte	0x76
+	.sleb128 0
+	.byte	0x1c
+	.byte	0x23
+	.uleb128 0x2
+	.byte	0x9f
 	.byte	0
 .LVUS76:
-	.uleb128 .LVU504
-	.uleb128 .LVU511
-	.uleb128 .LVU511
-	.uleb128 .LVU519
-	.uleb128 .LVU581
-	.uleb128 .LVU616
+	.uleb128 .LVU505
+	.uleb128 .LVU512
+	.uleb128 .LVU512
+	.uleb128 .LVU520
+	.uleb128 .LVU584
+	.uleb128 .LVU612
 .LLST76:
 	.byte	0x6
 	.4byte	.LVL74
 	.byte	0x4
 	.uleb128 .LVL74-.LVL74
-	.uleb128 .LVL76-.LVL74
+	.uleb128 .LVL77-.LVL74
 	.uleb128 0x1
 	.byte	0x54
 	.byte	0x4
-	.uleb128 .LVL76-.LVL74
-	.uleb128 .LVL78-.LVL74
+	.uleb128 .LVL77-.LVL74
+	.uleb128 .LVL79-.LVL74
 	.uleb128 0x3
 	.byte	0x74
 	.sleb128 -1
 	.byte	0x9f
 	.byte	0x4
-	.uleb128 .LVL85-.LVL74
-	.uleb128 .LVL94-.LVL74
+	.uleb128 .LVL89-.LVL74
+	.uleb128 .LVL96-.LVL74
 	.uleb128 0x1
 	.byte	0x54
 	.byte	0
 .LVUS78:
-	.uleb128 .LVU612
-	.uleb128 .LVU614
+	.uleb128 .LVU608
+	.uleb128 .LVU610
 .LLST78:
 	.byte	0x8
-	.4byte	.LVL91
-	.uleb128 .LVL92-.LVL91
+	.4byte	.LVL93
+	.uleb128 .LVL94-.LVL93
 	.uleb128 0x1
 	.byte	0x50
 	.byte	0
 .LVUS80:
-	.uleb128 .LVU590
-	.uleb128 .LVU600
+	.uleb128 .LVU587
+	.uleb128 .LVU596
 .LLST80:
 	.byte	0x8
-	.4byte	.LVL89
-	.uleb128 .LVL90-.LVL89
+	.4byte	.LVL91
+	.uleb128 .LVL92-.LVL91
 	.uleb128 0x6
 	.byte	0x9e
 	.uleb128 0x4
 	.4byte	0x3f800000
 	.byte	0
 .LVUS83:
-	.uleb128 .LVU590
-	.uleb128 .LVU600
+	.uleb128 .LVU587
+	.uleb128 .LVU596
 .LLST83:
 	.byte	0x8
-	.4byte	.LVL89
-	.uleb128 .LVL90-.LVL89
+	.4byte	.LVL91
+	.uleb128 .LVL92-.LVL91
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x4d
 	.byte	0
 .LVUS84:
-	.uleb128 .LVU590
-	.uleb128 .LVU600
+	.uleb128 .LVU587
+	.uleb128 .LVU596
 .LLST84:
 	.byte	0x8
-	.4byte	.LVL89
-	.uleb128 .LVL90-.LVL89
+	.4byte	.LVL91
+	.uleb128 .LVL92-.LVL91
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x4f
 	.byte	0
 .LVUS85:
-	.uleb128 .LVU589
-	.uleb128 .LVU600
+	.uleb128 .LVU586
+	.uleb128 .LVU596
 .LLST85:
 	.byte	0x8
-	.4byte	.LVL88
-	.uleb128 .LVL90-.LVL88
+	.4byte	.LVL90
+	.uleb128 .LVL92-.LVL90
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x4e
 	.byte	0
 .LVUS87:
-	.uleb128 .LVU494
-	.uleb128 .LVU496
+	.uleb128 .LVU495
+	.uleb128 .LVU497
 .LLST87:
 	.byte	0x8
 	.4byte	.LVL74
@@ -9378,8 +9412,8 @@ MaxWalkVelocity:
 	.sleb128 -184
 	.byte	0
 .LVUS89:
-	.uleb128 .LVU502
-	.uleb128 .LVU504
+	.uleb128 .LVU503
+	.uleb128 .LVU505
 .LLST89:
 	.byte	0x8
 	.4byte	.LVL74
@@ -9389,8 +9423,8 @@ MaxWalkVelocity:
 	.sleb128 -176
 	.byte	0
 .LVUS91:
-	.uleb128 .LVU498
-	.uleb128 .LVU500
+	.uleb128 .LVU499
+	.uleb128 .LVU501
 .LLST91:
 	.byte	0x8
 	.4byte	.LVL74
@@ -9400,8 +9434,8 @@ MaxWalkVelocity:
 	.sleb128 -180
 	.byte	0
 .LVUS63:
-	.uleb128 .LVU474
-	.uleb128 .LVU485
+	.uleb128 .LVU472
+	.uleb128 .LVU484
 .LLST63:
 	.byte	0x8
 	.4byte	.LVL70
@@ -9412,8 +9446,8 @@ MaxWalkVelocity:
 	.4byte	0x3f266666
 	.byte	0
 .LVUS64:
-	.uleb128 .LVU474
-	.uleb128 .LVU485
+	.uleb128 .LVU472
+	.uleb128 .LVU484
 .LLST64:
 	.byte	0x8
 	.4byte	.LVL70
@@ -9424,8 +9458,8 @@ MaxWalkVelocity:
 	.4byte	0x3fe66666
 	.byte	0
 .LVUS66:
-	.uleb128 .LVU474
-	.uleb128 .LVU485
+	.uleb128 .LVU472
+	.uleb128 .LVU484
 .LLST66:
 	.byte	0x8
 	.4byte	.LVL70
@@ -9435,8 +9469,8 @@ MaxWalkVelocity:
 	.uleb128 0x48
 	.byte	0
 .LVUS67:
-	.uleb128 .LVU474
-	.uleb128 .LVU485
+	.uleb128 .LVU472
+	.uleb128 .LVU484
 .LLST67:
 	.byte	0x8
 	.4byte	.LVL70
@@ -9446,8 +9480,8 @@ MaxWalkVelocity:
 	.uleb128 0x4f
 	.byte	0
 .LVUS68:
-	.uleb128 .LVU474
-	.uleb128 .LVU485
+	.uleb128 .LVU472
+	.uleb128 .LVU484
 .LLST68:
 	.byte	0x8
 	.4byte	.LVL70
@@ -9457,32 +9491,32 @@ MaxWalkVelocity:
 	.uleb128 0x47
 	.byte	0
 .LVUS96:
+	.uleb128 .LVU657
+	.uleb128 .LVU660
+	.uleb128 .LVU660
 	.uleb128 .LVU661
-	.uleb128 .LVU664
-	.uleb128 .LVU664
-	.uleb128 .LVU665
-	.uleb128 .LVU665
-	.uleb128 .LVU667
-	.uleb128 .LVU667
-	.uleb128 .LVU670
-	.uleb128 .LVU670
-	.uleb128 .LVU672
-	.uleb128 .LVU672
-	.uleb128 .LVU675
-	.uleb128 .LVU675
-	.uleb128 .LVU676
+	.uleb128 .LVU661
+	.uleb128 .LVU663
+	.uleb128 .LVU663
+	.uleb128 .LVU666
+	.uleb128 .LVU666
+	.uleb128 .LVU668
+	.uleb128 .LVU668
+	.uleb128 .LVU671
+	.uleb128 .LVU671
+	.uleb128 .LVU673
 .LLST96:
 	.byte	0x6
-	.4byte	.LVL102
+	.4byte	.LVL104
 	.byte	0x4
-	.uleb128 .LVL102-.LVL102
-	.uleb128 .LVL103-.LVL102
+	.uleb128 .LVL104-.LVL104
+	.uleb128 .LVL105-.LVL104
 	.uleb128 0x1e
 	.byte	0xa5
 	.uleb128 0x5d
 	.uleb128 0x26
 	.byte	0xa5
-	.uleb128 0x4b
+	.uleb128 0x4c
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
@@ -9492,7 +9526,7 @@ MaxWalkVelocity:
 	.uleb128 0x5a
 	.uleb128 0x26
 	.byte	0xa5
-	.uleb128 0x4b
+	.uleb128 0x4c
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
@@ -9502,25 +9536,25 @@ MaxWalkVelocity:
 	.uleb128 0x5c
 	.uleb128 0x26
 	.byte	0xa5
-	.uleb128 0x4b
+	.uleb128 0x4c
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL103-.LVL102
-	.uleb128 .LVL104-.LVL102
+	.uleb128 .LVL105-.LVL104
+	.uleb128 .LVL106-.LVL104
 	.uleb128 0x18
 	.byte	0x90
-	.uleb128 0x4c
+	.uleb128 0x4d
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0xa5
 	.uleb128 0x5a
 	.uleb128 0x26
 	.byte	0xa5
-	.uleb128 0x4b
+	.uleb128 0x4c
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
@@ -9530,115 +9564,43 @@ MaxWalkVelocity:
 	.uleb128 0x5c
 	.uleb128 0x26
 	.byte	0xa5
-	.uleb128 0x4b
+	.uleb128 0x4c
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL104-.LVL102
-	.uleb128 .LVL105-.LVL102
+	.uleb128 .LVL106-.LVL104
+	.uleb128 .LVL107-.LVL104
 	.uleb128 0x12
 	.byte	0x90
+	.uleb128 0x4d
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0x90
+	.uleb128 0x4e
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0xa5
+	.uleb128 0x5c
+	.uleb128 0x26
+	.byte	0xa5
 	.uleb128 0x4c
-	.byte	0x93
-	.uleb128 0x4
-	.byte	0x90
-	.uleb128 0x4d
-	.byte	0x93
-	.uleb128 0x4
-	.byte	0xa5
-	.uleb128 0x5c
-	.uleb128 0x26
-	.byte	0xa5
-	.uleb128 0x4b
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL105-.LVL102
-	.uleb128 .LVL106-.LVL102
+	.uleb128 .LVL107-.LVL104
+	.uleb128 .LVL108-.LVL104
 	.uleb128 0x18
 	.byte	0xa5
 	.uleb128 0x5d
 	.uleb128 0x26
 	.byte	0xa5
-	.uleb128 0x4b
-	.uleb128 0x26
-	.byte	0x1b
-	.byte	0x9f
-	.byte	0x93
-	.uleb128 0x4
-	.byte	0x90
-	.uleb128 0x4d
-	.byte	0x93
-	.uleb128 0x4
-	.byte	0xa5
-	.uleb128 0x5c
-	.uleb128 0x26
-	.byte	0xa5
-	.uleb128 0x4b
-	.uleb128 0x26
-	.byte	0x1b
-	.byte	0x9f
-	.byte	0x93
-	.uleb128 0x4
-	.byte	0x4
-	.uleb128 .LVL106-.LVL102
-	.uleb128 .LVL107-.LVL102
-	.uleb128 0x1e
-	.byte	0xa5
-	.uleb128 0x5d
-	.uleb128 0x26
-	.byte	0xa5
-	.uleb128 0x4b
-	.uleb128 0x26
-	.byte	0x1b
-	.byte	0x9f
-	.byte	0x93
-	.uleb128 0x4
-	.byte	0xa5
-	.uleb128 0x5a
-	.uleb128 0x26
-	.byte	0xa5
-	.uleb128 0x4b
-	.uleb128 0x26
-	.byte	0x1b
-	.byte	0x9f
-	.byte	0x93
-	.uleb128 0x4
-	.byte	0xa5
-	.uleb128 0x5c
-	.uleb128 0x26
-	.byte	0xa5
-	.uleb128 0x4b
-	.uleb128 0x26
-	.byte	0x1b
-	.byte	0x9f
-	.byte	0x93
-	.uleb128 0x4
-	.byte	0x4
-	.uleb128 .LVL107-.LVL102
-	.uleb128 .LVL108-.LVL102
-	.uleb128 0x18
-	.byte	0xa5
-	.uleb128 0x5d
-	.uleb128 0x26
-	.byte	0xa5
-	.uleb128 0x4b
-	.uleb128 0x26
-	.byte	0x1b
-	.byte	0x9f
-	.byte	0x93
-	.uleb128 0x4
-	.byte	0xa5
-	.uleb128 0x5a
-	.uleb128 0x26
-	.byte	0xa5
-	.uleb128 0x4b
+	.uleb128 0x4c
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
@@ -9648,15 +9610,25 @@ MaxWalkVelocity:
 	.uleb128 0x4e
 	.byte	0x93
 	.uleb128 0x4
+	.byte	0xa5
+	.uleb128 0x5c
+	.uleb128 0x26
+	.byte	0xa5
+	.uleb128 0x4c
+	.uleb128 0x26
+	.byte	0x1b
+	.byte	0x9f
+	.byte	0x93
+	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL108-.LVL102
-	.uleb128 .LVL109-.LVL102
+	.uleb128 .LVL108-.LVL104
+	.uleb128 .LVL109-.LVL104
 	.uleb128 0x1e
 	.byte	0xa5
 	.uleb128 0x5d
 	.uleb128 0x26
 	.byte	0xa5
-	.uleb128 0x4b
+	.uleb128 0x4c
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
@@ -9666,7 +9638,7 @@ MaxWalkVelocity:
 	.uleb128 0x5a
 	.uleb128 0x26
 	.byte	0xa5
-	.uleb128 0x4b
+	.uleb128 0x4c
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
@@ -9676,24 +9648,106 @@ MaxWalkVelocity:
 	.uleb128 0x5c
 	.uleb128 0x26
 	.byte	0xa5
-	.uleb128 0x4b
+	.uleb128 0x4c
+	.uleb128 0x26
+	.byte	0x1b
+	.byte	0x9f
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0x4
+	.uleb128 .LVL109-.LVL104
+	.uleb128 .LVL110-.LVL104
+	.uleb128 0x18
+	.byte	0xa5
+	.uleb128 0x5d
+	.uleb128 0x26
+	.byte	0xa5
+	.uleb128 0x4c
+	.uleb128 0x26
+	.byte	0x1b
+	.byte	0x9f
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0xa5
+	.uleb128 0x5a
+	.uleb128 0x26
+	.byte	0xa5
+	.uleb128 0x4c
+	.uleb128 0x26
+	.byte	0x1b
+	.byte	0x9f
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0x90
+	.uleb128 0x4f
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0x4
+	.uleb128 .LVL110-.LVL104
+	.uleb128 .LVL111-.LVL104
+	.uleb128 0x1e
+	.byte	0xa5
+	.uleb128 0x5d
+	.uleb128 0x26
+	.byte	0xa5
+	.uleb128 0x4c
+	.uleb128 0x26
+	.byte	0x1b
+	.byte	0x9f
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0xa5
+	.uleb128 0x5a
+	.uleb128 0x26
+	.byte	0xa5
+	.uleb128 0x4c
+	.uleb128 0x26
+	.byte	0x1b
+	.byte	0x9f
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0xa5
+	.uleb128 0x5c
+	.uleb128 0x26
+	.byte	0xa5
+	.uleb128 0x4c
 	.uleb128 0x26
 	.byte	0x1b
 	.byte	0x9f
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0
+.LVUS97:
+	.uleb128 .LVU695
+	.uleb128 .LVU699
+.LLST97:
+	.byte	0x8
+	.4byte	.LVL116
+	.uleb128 .LVL118-.LVL116
+	.uleb128 0x1
+	.byte	0x55
+	.byte	0
 .LVUS98:
-	.uleb128 .LVU641
-	.uleb128 .LVU647
-	.uleb128 .LVU647
-	.uleb128 .LVU649
+	.uleb128 .LVU697
+	.uleb128 .LVU720
 .LLST98:
+	.byte	0x8
+	.4byte	.LVL117
+	.uleb128 .LVL121-.LVL117
+	.uleb128 0x1
+	.byte	0x50
+	.byte	0
+.LVUS100:
+	.uleb128 .LVU637
+	.uleb128 .LVU643
+	.uleb128 .LVU643
+	.uleb128 .LVU645
+.LLST100:
 	.byte	0x6
-	.4byte	.LVL97
+	.4byte	.LVL99
 	.byte	0x4
-	.uleb128 .LVL97-.LVL97
-	.uleb128 .LVL100-.LVL97
+	.uleb128 .LVL99-.LVL99
+	.uleb128 .LVL102-.LVL99
 	.uleb128 0xc
 	.byte	0x90
 	.uleb128 0x5e
@@ -9708,14 +9762,14 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL100-.LVL97
-	.uleb128 .LVL101-.LVL97
+	.uleb128 .LVL102-.LVL99
+	.uleb128 .LVL103-.LVL99
 	.uleb128 0xc
 	.byte	0x90
 	.uleb128 0x5e
 	.byte	0x93
 	.uleb128 0x4
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 4
 	.byte	0x93
 	.uleb128 0x4
@@ -9724,19 +9778,19 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0
-.LVUS99:
+.LVUS101:
+	.uleb128 .LVU637
+	.uleb128 .LVU640
+	.uleb128 .LVU640
 	.uleb128 .LVU641
-	.uleb128 .LVU644
-	.uleb128 .LVU644
+	.uleb128 .LVU641
 	.uleb128 .LVU645
-	.uleb128 .LVU645
-	.uleb128 .LVU649
-.LLST99:
+.LLST101:
 	.byte	0x6
-	.4byte	.LVL97
+	.4byte	.LVL99
 	.byte	0x4
-	.uleb128 .LVL97-.LVL97
-	.uleb128 .LVL98-.LVL97
+	.uleb128 .LVL99-.LVL99
+	.uleb128 .LVL100-.LVL99
 	.uleb128 0xc
 	.byte	0x90
 	.uleb128 0x5d
@@ -9751,8 +9805,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL98-.LVL97
-	.uleb128 .LVL99-.LVL97
+	.uleb128 .LVL100-.LVL99
+	.uleb128 .LVL101-.LVL99
 	.uleb128 0xd
 	.byte	0x90
 	.uleb128 0x5d
@@ -9767,8 +9821,8 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0x4
-	.uleb128 .LVL99-.LVL97
-	.uleb128 .LVL101-.LVL97
+	.uleb128 .LVL101-.LVL99
+	.uleb128 .LVL103-.LVL99
 	.uleb128 0xe
 	.byte	0x91
 	.sleb128 -220
@@ -9783,13 +9837,13 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0
-.LVUS101:
-	.uleb128 .LVU651
-	.uleb128 .LVU661
-.LLST101:
+.LVUS103:
+	.uleb128 .LVU647
+	.uleb128 .LVU657
+.LLST103:
 	.byte	0x8
-	.4byte	.LVL101
-	.uleb128 .LVL102-.LVL101
+	.4byte	.LVL103
+	.uleb128 .LVL104-.LVL103
 	.uleb128 0xc
 	.byte	0x90
 	.uleb128 0x5d
@@ -9804,31 +9858,20 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0
-.LVUS105:
-	.uleb128 .LVU667
-	.uleb128 .LVU682
-.LLST105:
-	.byte	0x8
-	.4byte	.LVL105
-	.uleb128 .LVL111-.LVL105
-	.uleb128 0x2
-	.byte	0x90
-	.uleb128 0x4c
-	.byte	0
 .LVUS107:
-	.uleb128 .LVU682
-	.uleb128 .LVU689
+	.uleb128 .LVU663
+	.uleb128 .LVU678
 .LLST107:
 	.byte	0x8
-	.4byte	.LVL111
-	.uleb128 .LVL112-.LVL111
+	.4byte	.LVL107
+	.uleb128 .LVL112-.LVL107
 	.uleb128 0x2
 	.byte	0x90
 	.uleb128 0x4d
 	.byte	0
 .LVUS109:
-	.uleb128 .LVU689
-	.uleb128 .LVU695
+	.uleb128 .LVU678
+	.uleb128 .LVU685
 .LLST109:
 	.byte	0x8
 	.4byte	.LVL112
@@ -9838,12 +9881,23 @@ MaxWalkVelocity:
 	.uleb128 0x4e
 	.byte	0
 .LVUS111:
-	.uleb128 .LVU701
-	.uleb128 .LVU716
+	.uleb128 .LVU685
+	.uleb128 .LVU691
 .LLST111:
 	.byte	0x8
-	.4byte	.LVL115
-	.uleb128 .LVL116-.LVL115
+	.4byte	.LVL113
+	.uleb128 .LVL114-.LVL113
+	.uleb128 0x2
+	.byte	0x90
+	.uleb128 0x4f
+	.byte	0
+.LVUS113:
+	.uleb128 .LVU701
+	.uleb128 .LVU717
+.LLST113:
+	.byte	0x8
+	.4byte	.LVL119
+	.uleb128 .LVL120-.LVL119
 	.uleb128 0xc
 	.byte	0x91
 	.sleb128 -244
@@ -9856,15 +9910,15 @@ MaxWalkVelocity:
 	.byte	0x93
 	.uleb128 0x4
 	.byte	0
-.LVUS112:
+.LVUS114:
 	.uleb128 .LVU701
-	.uleb128 .LVU716
-.LLST112:
+	.uleb128 .LVU717
+.LLST114:
 	.byte	0x8
-	.4byte	.LVL115
-	.uleb128 .LVL116-.LVL115
+	.4byte	.LVL119
+	.uleb128 .LVL120-.LVL119
 	.uleb128 0x1
-	.byte	0x5b
+	.byte	0x58
 	.byte	0
 .LVUS44:
 	.uleb128 .LVU413
@@ -9886,15 +9940,15 @@ MaxWalkVelocity:
 	.4byte	.LVL63
 	.uleb128 .LVL63-.LVL63
 	.uleb128 0xe
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 60
 	.byte	0x93
 	.uleb128 0x4
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 64
 	.byte	0x93
 	.uleb128 0x4
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 68
 	.byte	0x93
 	.uleb128 0x4
@@ -9967,7 +10021,7 @@ MaxWalkVelocity:
 	.4byte	.LVL63
 	.uleb128 .LVL63-.LVL63
 	.uleb128 0x32
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 60
 	.byte	0xa6
 	.byte	0x4
@@ -9980,7 +10034,7 @@ MaxWalkVelocity:
 	.byte	0x9f
 	.byte	0x93
 	.uleb128 0x4
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 64
 	.byte	0xa6
 	.byte	0x4
@@ -9993,7 +10047,7 @@ MaxWalkVelocity:
 	.byte	0x9f
 	.byte	0x93
 	.uleb128 0x4
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 68
 	.byte	0xa6
 	.byte	0x4
@@ -10021,7 +10075,7 @@ MaxWalkVelocity:
 	.uleb128 .LVL63-.LVL63
 	.uleb128 .LVL64-.LVL63
 	.uleb128 0x3f
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 60
 	.byte	0xa6
 	.byte	0x4
@@ -10056,7 +10110,7 @@ MaxWalkVelocity:
 	.byte	0x9f
 	.byte	0x93
 	.uleb128 0x4
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 68
 	.byte	0xa6
 	.byte	0x4
@@ -10081,7 +10135,7 @@ MaxWalkVelocity:
 	.uleb128 .LVL64-.LVL63
 	.uleb128 .LVL65-.LVL63
 	.uleb128 0x35
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 60
 	.byte	0xa6
 	.byte	0x4
@@ -10106,7 +10160,7 @@ MaxWalkVelocity:
 	.uleb128 0x4f
 	.byte	0x93
 	.uleb128 0x4
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 68
 	.byte	0xa6
 	.byte	0x4
@@ -10148,15 +10202,15 @@ MaxWalkVelocity:
 	.4byte	.LVL63
 	.uleb128 .LVL67-.LVL63
 	.uleb128 0xc
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 0
 	.byte	0x93
 	.uleb128 0x4
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 4
 	.byte	0x93
 	.uleb128 0x4
-	.byte	0x7b
+	.byte	0x78
 	.sleb128 8
 	.byte	0x93
 	.uleb128 0x4
@@ -10195,12 +10249,12 @@ MaxWalkVelocity:
 	.uleb128 0x5d
 	.byte	0
 .LVUS93:
-	.uleb128 .LVU530
-	.uleb128 .LVU532
+	.uleb128 .LVU533
+	.uleb128 .LVU535
 .LLST93:
 	.byte	0x8
-	.4byte	.LVL79
-	.uleb128 .LVL79-.LVL79
+	.4byte	.LVL82
+	.uleb128 .LVL82-.LVL82
 	.uleb128 0xc
 	.byte	0x90
 	.uleb128 0x5e
@@ -10216,12 +10270,42 @@ MaxWalkVelocity:
 	.uleb128 0x4
 	.byte	0
 .LVUS94:
-	.uleb128 .LVU530
+	.uleb128 .LVU531
 	.uleb128 .LVU532
+	.uleb128 .LVU532
+	.uleb128 .LVU533
+	.uleb128 .LVU533
+	.uleb128 .LVU535
 .LLST94:
-	.byte	0x8
-	.4byte	.LVL79
-	.uleb128 .LVL79-.LVL79
+	.byte	0x6
+	.4byte	.LVL80
+	.byte	0x4
+	.uleb128 .LVL80-.LVL80
+	.uleb128 .LVL81-.LVL80
+	.uleb128 0x6
+	.byte	0x90
+	.uleb128 0x52
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0x93
+	.uleb128 0x8
+	.byte	0x4
+	.uleb128 .LVL81-.LVL80
+	.uleb128 .LVL82-.LVL80
+	.uleb128 0xa
+	.byte	0x90
+	.uleb128 0x52
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0x90
+	.uleb128 0x53
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0x93
+	.uleb128 0x4
+	.byte	0x4
+	.uleb128 .LVL82-.LVL80
+	.uleb128 .LVL82-.LVL80
 	.uleb128 0xc
 	.byte	0x90
 	.uleb128 0x52
@@ -11390,14 +11474,14 @@ MaxWalkVelocity:
 	.uleb128 .LBB260-.LBB260
 	.uleb128 .LBE260-.LBB260
 	.byte	0x4
+	.uleb128 .LBB469-.LBB260
+	.uleb128 .LBE469-.LBB260
+	.byte	0x4
+	.uleb128 .LBB470-.LBB260
+	.uleb128 .LBE470-.LBB260
+	.byte	0x4
 	.uleb128 .LBB471-.LBB260
 	.uleb128 .LBE471-.LBB260
-	.byte	0x4
-	.uleb128 .LBB472-.LBB260
-	.uleb128 .LBE472-.LBB260
-	.byte	0x4
-	.uleb128 .LBB473-.LBB260
-	.uleb128 .LBE473-.LBB260
 	.byte	0
 .LLRL43:
 	.byte	0x5
@@ -11455,17 +11539,17 @@ MaxWalkVelocity:
 	.uleb128 .LBB284-.LBB284
 	.uleb128 .LBE284-.LBB284
 	.byte	0x4
-	.uleb128 .LBB401-.LBB284
-	.uleb128 .LBE401-.LBB284
+	.uleb128 .LBB399-.LBB284
+	.uleb128 .LBE399-.LBB284
 	.byte	0x4
-	.uleb128 .LBB402-.LBB284
-	.uleb128 .LBE402-.LBB284
+	.uleb128 .LBB400-.LBB284
+	.uleb128 .LBE400-.LBB284
 	.byte	0x4
-	.uleb128 .LBB406-.LBB284
-	.uleb128 .LBE406-.LBB284
+	.uleb128 .LBB404-.LBB284
+	.uleb128 .LBE404-.LBB284
 	.byte	0x4
-	.uleb128 .LBB469-.LBB284
-	.uleb128 .LBE469-.LBB284
+	.uleb128 .LBB467-.LBB284
+	.uleb128 .LBE467-.LBB284
 	.byte	0
 .LLRL59:
 	.byte	0x5
@@ -11474,14 +11558,14 @@ MaxWalkVelocity:
 	.uleb128 .LBB285-.LBB285
 	.uleb128 .LBE285-.LBB285
 	.byte	0x4
+	.uleb128 .LBB396-.LBB285
+	.uleb128 .LBE396-.LBB285
+	.byte	0x4
+	.uleb128 .LBB397-.LBB285
+	.uleb128 .LBE397-.LBB285
+	.byte	0x4
 	.uleb128 .LBB398-.LBB285
 	.uleb128 .LBE398-.LBB285
-	.byte	0x4
-	.uleb128 .LBB399-.LBB285
-	.uleb128 .LBE399-.LBB285
-	.byte	0x4
-	.uleb128 .LBB400-.LBB285
-	.uleb128 .LBE400-.LBB285
 	.byte	0
 .LLRL62:
 	.byte	0x5
@@ -11490,438 +11574,435 @@ MaxWalkVelocity:
 	.uleb128 .LBB286-.LBB286
 	.uleb128 .LBE286-.LBB286
 	.byte	0x4
-	.uleb128 .LBB385-.LBB286
-	.uleb128 .LBE385-.LBB286
+	.uleb128 .LBB389-.LBB286
+	.uleb128 .LBE389-.LBB286
 	.byte	0x4
 	.uleb128 .LBB391-.LBB286
 	.uleb128 .LBE391-.LBB286
 	.byte	0x4
 	.uleb128 .LBB393-.LBB286
 	.uleb128 .LBE393-.LBB286
-	.byte	0x4
-	.uleb128 .LBB395-.LBB286
-	.uleb128 .LBE395-.LBB286
 	.byte	0
 .LLRL69:
+	.byte	0x5
+	.4byte	.LBB291
+	.byte	0x4
+	.uleb128 .LBB291-.LBB291
+	.uleb128 .LBE291-.LBB291
+	.byte	0x4
+	.uleb128 .LBB384-.LBB291
+	.uleb128 .LBE384-.LBB291
+	.byte	0x4
+	.uleb128 .LBB385-.LBB291
+	.uleb128 .LBE385-.LBB291
+	.byte	0x4
+	.uleb128 .LBB386-.LBB291
+	.uleb128 .LBE386-.LBB291
+	.byte	0x4
+	.uleb128 .LBB387-.LBB291
+	.uleb128 .LBE387-.LBB291
+	.byte	0x4
+	.uleb128 .LBB388-.LBB291
+	.uleb128 .LBE388-.LBB291
+	.byte	0x4
+	.uleb128 .LBB390-.LBB291
+	.uleb128 .LBE390-.LBB291
+	.byte	0x4
+	.uleb128 .LBB392-.LBB291
+	.uleb128 .LBE392-.LBB291
+	.byte	0x4
+	.uleb128 .LBB394-.LBB291
+	.uleb128 .LBE394-.LBB291
+	.byte	0x4
+	.uleb128 .LBB395-.LBB291
+	.uleb128 .LBE395-.LBB291
+	.byte	0
+.LLRL71:
 	.byte	0x5
 	.4byte	.LBB292
 	.byte	0x4
 	.uleb128 .LBB292-.LBB292
 	.uleb128 .LBE292-.LBB292
 	.byte	0x4
-	.uleb128 .LBB386-.LBB292
-	.uleb128 .LBE386-.LBB292
+	.uleb128 .LBB375-.LBB292
+	.uleb128 .LBE375-.LBB292
 	.byte	0x4
-	.uleb128 .LBB387-.LBB292
-	.uleb128 .LBE387-.LBB292
+	.uleb128 .LBB376-.LBB292
+	.uleb128 .LBE376-.LBB292
 	.byte	0x4
-	.uleb128 .LBB388-.LBB292
-	.uleb128 .LBE388-.LBB292
+	.uleb128 .LBB377-.LBB292
+	.uleb128 .LBE377-.LBB292
 	.byte	0x4
-	.uleb128 .LBB389-.LBB292
-	.uleb128 .LBE389-.LBB292
+	.uleb128 .LBB378-.LBB292
+	.uleb128 .LBE378-.LBB292
 	.byte	0x4
-	.uleb128 .LBB390-.LBB292
-	.uleb128 .LBE390-.LBB292
+	.uleb128 .LBB379-.LBB292
+	.uleb128 .LBE379-.LBB292
 	.byte	0x4
-	.uleb128 .LBB392-.LBB292
-	.uleb128 .LBE392-.LBB292
+	.uleb128 .LBB380-.LBB292
+	.uleb128 .LBE380-.LBB292
 	.byte	0x4
-	.uleb128 .LBB394-.LBB292
-	.uleb128 .LBE394-.LBB292
+	.uleb128 .LBB381-.LBB292
+	.uleb128 .LBE381-.LBB292
 	.byte	0x4
-	.uleb128 .LBB396-.LBB292
-	.uleb128 .LBE396-.LBB292
+	.uleb128 .LBB382-.LBB292
+	.uleb128 .LBE382-.LBB292
 	.byte	0x4
-	.uleb128 .LBB397-.LBB292
-	.uleb128 .LBE397-.LBB292
+	.uleb128 .LBB383-.LBB292
+	.uleb128 .LBE383-.LBB292
 	.byte	0
-.LLRL71:
+.LLRL73:
 	.byte	0x5
 	.4byte	.LBB293
 	.byte	0x4
 	.uleb128 .LBB293-.LBB293
 	.uleb128 .LBE293-.LBB293
 	.byte	0x4
-	.uleb128 .LBB376-.LBB293
-	.uleb128 .LBE376-.LBB293
+	.uleb128 .LBB365-.LBB293
+	.uleb128 .LBE365-.LBB293
 	.byte	0x4
-	.uleb128 .LBB377-.LBB293
-	.uleb128 .LBE377-.LBB293
+	.uleb128 .LBB366-.LBB293
+	.uleb128 .LBE366-.LBB293
 	.byte	0x4
-	.uleb128 .LBB378-.LBB293
-	.uleb128 .LBE378-.LBB293
+	.uleb128 .LBB367-.LBB293
+	.uleb128 .LBE367-.LBB293
 	.byte	0x4
-	.uleb128 .LBB379-.LBB293
-	.uleb128 .LBE379-.LBB293
+	.uleb128 .LBB368-.LBB293
+	.uleb128 .LBE368-.LBB293
 	.byte	0x4
-	.uleb128 .LBB380-.LBB293
-	.uleb128 .LBE380-.LBB293
+	.uleb128 .LBB369-.LBB293
+	.uleb128 .LBE369-.LBB293
 	.byte	0x4
-	.uleb128 .LBB381-.LBB293
-	.uleb128 .LBE381-.LBB293
+	.uleb128 .LBB370-.LBB293
+	.uleb128 .LBE370-.LBB293
 	.byte	0x4
-	.uleb128 .LBB382-.LBB293
-	.uleb128 .LBE382-.LBB293
+	.uleb128 .LBB371-.LBB293
+	.uleb128 .LBE371-.LBB293
 	.byte	0x4
-	.uleb128 .LBB383-.LBB293
-	.uleb128 .LBE383-.LBB293
+	.uleb128 .LBB372-.LBB293
+	.uleb128 .LBE372-.LBB293
 	.byte	0x4
-	.uleb128 .LBB384-.LBB293
-	.uleb128 .LBE384-.LBB293
+	.uleb128 .LBB373-.LBB293
+	.uleb128 .LBE373-.LBB293
+	.byte	0x4
+	.uleb128 .LBB374-.LBB293
+	.uleb128 .LBE374-.LBB293
 	.byte	0
-.LLRL73:
+.LLRL75:
 	.byte	0x5
 	.4byte	.LBB294
 	.byte	0x4
 	.uleb128 .LBB294-.LBB294
 	.uleb128 .LBE294-.LBB294
 	.byte	0x4
-	.uleb128 .LBB366-.LBB294
-	.uleb128 .LBE366-.LBB294
+	.uleb128 .LBB354-.LBB294
+	.uleb128 .LBE354-.LBB294
 	.byte	0x4
-	.uleb128 .LBB367-.LBB294
-	.uleb128 .LBE367-.LBB294
+	.uleb128 .LBB355-.LBB294
+	.uleb128 .LBE355-.LBB294
 	.byte	0x4
-	.uleb128 .LBB368-.LBB294
-	.uleb128 .LBE368-.LBB294
+	.uleb128 .LBB356-.LBB294
+	.uleb128 .LBE356-.LBB294
 	.byte	0x4
-	.uleb128 .LBB369-.LBB294
-	.uleb128 .LBE369-.LBB294
+	.uleb128 .LBB357-.LBB294
+	.uleb128 .LBE357-.LBB294
 	.byte	0x4
-	.uleb128 .LBB370-.LBB294
-	.uleb128 .LBE370-.LBB294
+	.uleb128 .LBB358-.LBB294
+	.uleb128 .LBE358-.LBB294
 	.byte	0x4
-	.uleb128 .LBB371-.LBB294
-	.uleb128 .LBE371-.LBB294
+	.uleb128 .LBB359-.LBB294
+	.uleb128 .LBE359-.LBB294
 	.byte	0x4
-	.uleb128 .LBB372-.LBB294
-	.uleb128 .LBE372-.LBB294
+	.uleb128 .LBB360-.LBB294
+	.uleb128 .LBE360-.LBB294
 	.byte	0x4
-	.uleb128 .LBB373-.LBB294
-	.uleb128 .LBE373-.LBB294
+	.uleb128 .LBB361-.LBB294
+	.uleb128 .LBE361-.LBB294
 	.byte	0x4
-	.uleb128 .LBB374-.LBB294
-	.uleb128 .LBE374-.LBB294
+	.uleb128 .LBB362-.LBB294
+	.uleb128 .LBE362-.LBB294
 	.byte	0x4
-	.uleb128 .LBB375-.LBB294
-	.uleb128 .LBE375-.LBB294
+	.uleb128 .LBB363-.LBB294
+	.uleb128 .LBE363-.LBB294
+	.byte	0x4
+	.uleb128 .LBB364-.LBB294
+	.uleb128 .LBE364-.LBB294
 	.byte	0
-.LLRL75:
+.LLRL77:
 	.byte	0x5
 	.4byte	.LBB295
 	.byte	0x4
 	.uleb128 .LBB295-.LBB295
 	.uleb128 .LBE295-.LBB295
 	.byte	0x4
-	.uleb128 .LBB356-.LBB295
-	.uleb128 .LBE356-.LBB295
+	.uleb128 .LBB349-.LBB295
+	.uleb128 .LBE349-.LBB295
 	.byte	0x4
-	.uleb128 .LBB357-.LBB295
-	.uleb128 .LBE357-.LBB295
-	.byte	0x4
-	.uleb128 .LBB358-.LBB295
-	.uleb128 .LBE358-.LBB295
-	.byte	0x4
-	.uleb128 .LBB359-.LBB295
-	.uleb128 .LBE359-.LBB295
-	.byte	0x4
-	.uleb128 .LBB360-.LBB295
-	.uleb128 .LBE360-.LBB295
-	.byte	0x4
-	.uleb128 .LBB361-.LBB295
-	.uleb128 .LBE361-.LBB295
-	.byte	0x4
-	.uleb128 .LBB362-.LBB295
-	.uleb128 .LBE362-.LBB295
-	.byte	0x4
-	.uleb128 .LBB363-.LBB295
-	.uleb128 .LBE363-.LBB295
-	.byte	0x4
-	.uleb128 .LBB364-.LBB295
-	.uleb128 .LBE364-.LBB295
-	.byte	0x4
-	.uleb128 .LBB365-.LBB295
-	.uleb128 .LBE365-.LBB295
+	.uleb128 .LBB353-.LBB295
+	.uleb128 .LBE353-.LBB295
 	.byte	0
-.LLRL77:
+.LLRL79:
 	.byte	0x5
 	.4byte	.LBB296
 	.byte	0x4
 	.uleb128 .LBB296-.LBB296
 	.uleb128 .LBE296-.LBB296
 	.byte	0x4
-	.uleb128 .LBB353-.LBB296
-	.uleb128 .LBE353-.LBB296
+	.uleb128 .LBB302-.LBB296
+	.uleb128 .LBE302-.LBB296
 	.byte	0x4
-	.uleb128 .LBB354-.LBB296
-	.uleb128 .LBE354-.LBB296
+	.uleb128 .LBB303-.LBB296
+	.uleb128 .LBE303-.LBB296
 	.byte	0x4
-	.uleb128 .LBB355-.LBB296
-	.uleb128 .LBE355-.LBB296
-	.byte	0
-.LLRL79:
-	.byte	0x5
-	.4byte	.LBB297
+	.uleb128 .LBB304-.LBB296
+	.uleb128 .LBE304-.LBB296
 	.byte	0x4
-	.uleb128 .LBB297-.LBB297
-	.uleb128 .LBE297-.LBB297
-	.byte	0x4
-	.uleb128 .LBB304-.LBB297
-	.uleb128 .LBE304-.LBB297
-	.byte	0x4
-	.uleb128 .LBB305-.LBB297
-	.uleb128 .LBE305-.LBB297
-	.byte	0x4
-	.uleb128 .LBB306-.LBB297
-	.uleb128 .LBE306-.LBB297
-	.byte	0x4
-	.uleb128 .LBB307-.LBB297
-	.uleb128 .LBE307-.LBB297
-	.byte	0x4
-	.uleb128 .LBB308-.LBB297
-	.uleb128 .LBE308-.LBB297
+	.uleb128 .LBB305-.LBB296
+	.uleb128 .LBE305-.LBB296
 	.byte	0
 .LLRL86:
 	.byte	0x5
-	.4byte	.LBB309
+	.4byte	.LBB306
 	.byte	0x4
-	.uleb128 .LBB309-.LBB309
-	.uleb128 .LBE309-.LBB309
+	.uleb128 .LBB306-.LBB306
+	.uleb128 .LBE306-.LBB306
 	.byte	0x4
-	.uleb128 .LBB326-.LBB309
-	.uleb128 .LBE326-.LBB309
+	.uleb128 .LBB315-.LBB306
+	.uleb128 .LBE315-.LBB306
 	.byte	0x4
-	.uleb128 .LBB335-.LBB309
-	.uleb128 .LBE335-.LBB309
+	.uleb128 .LBB325-.LBB306
+	.uleb128 .LBE325-.LBB306
 	.byte	0x4
-	.uleb128 .LBB337-.LBB309
-	.uleb128 .LBE337-.LBB309
+	.uleb128 .LBB335-.LBB306
+	.uleb128 .LBE335-.LBB306
 	.byte	0x4
-	.uleb128 .LBB340-.LBB309
-	.uleb128 .LBE340-.LBB309
+	.uleb128 .LBB338-.LBB306
+	.uleb128 .LBE338-.LBB306
 	.byte	0x4
-	.uleb128 .LBB342-.LBB309
-	.uleb128 .LBE342-.LBB309
+	.uleb128 .LBB339-.LBB306
+	.uleb128 .LBE339-.LBB306
 	.byte	0x4
-	.uleb128 .LBB344-.LBB309
-	.uleb128 .LBE344-.LBB309
+	.uleb128 .LBB342-.LBB306
+	.uleb128 .LBE342-.LBB306
 	.byte	0x4
-	.uleb128 .LBB350-.LBB309
-	.uleb128 .LBE350-.LBB309
+	.uleb128 .LBB350-.LBB306
+	.uleb128 .LBE350-.LBB306
 	.byte	0
 .LLRL88:
 	.byte	0x5
-	.4byte	.LBB318
+	.4byte	.LBB316
 	.byte	0x4
-	.uleb128 .LBB318-.LBB318
-	.uleb128 .LBE318-.LBB318
+	.uleb128 .LBB316-.LBB316
+	.uleb128 .LBE316-.LBB316
 	.byte	0x4
-	.uleb128 .LBB336-.LBB318
-	.uleb128 .LBE336-.LBB318
+	.uleb128 .LBB334-.LBB316
+	.uleb128 .LBE334-.LBB316
 	.byte	0x4
-	.uleb128 .LBB339-.LBB318
-	.uleb128 .LBE339-.LBB318
+	.uleb128 .LBB337-.LBB316
+	.uleb128 .LBE337-.LBB316
 	.byte	0x4
-	.uleb128 .LBB341-.LBB318
-	.uleb128 .LBE341-.LBB318
+	.uleb128 .LBB340-.LBB316
+	.uleb128 .LBE340-.LBB316
 	.byte	0x4
-	.uleb128 .LBB345-.LBB318
-	.uleb128 .LBE345-.LBB318
+	.uleb128 .LBB343-.LBB316
+	.uleb128 .LBE343-.LBB316
 	.byte	0x4
-	.uleb128 .LBB347-.LBB318
-	.uleb128 .LBE347-.LBB318
+	.uleb128 .LBB345-.LBB316
+	.uleb128 .LBE345-.LBB316
 	.byte	0x4
-	.uleb128 .LBB352-.LBB318
-	.uleb128 .LBE352-.LBB318
+	.uleb128 .LBB346-.LBB316
+	.uleb128 .LBE346-.LBB316
+	.byte	0x4
+	.uleb128 .LBB352-.LBB316
+	.uleb128 .LBE352-.LBB316
 	.byte	0
 .LLRL90:
 	.byte	0x5
-	.4byte	.LBB327
+	.4byte	.LBB326
 	.byte	0x4
-	.uleb128 .LBB327-.LBB327
-	.uleb128 .LBE327-.LBB327
+	.uleb128 .LBB326-.LBB326
+	.uleb128 .LBE326-.LBB326
 	.byte	0x4
-	.uleb128 .LBB338-.LBB327
-	.uleb128 .LBE338-.LBB327
+	.uleb128 .LBB336-.LBB326
+	.uleb128 .LBE336-.LBB326
 	.byte	0x4
-	.uleb128 .LBB343-.LBB327
-	.uleb128 .LBE343-.LBB327
+	.uleb128 .LBB341-.LBB326
+	.uleb128 .LBE341-.LBB326
 	.byte	0x4
-	.uleb128 .LBB346-.LBB327
-	.uleb128 .LBE346-.LBB327
+	.uleb128 .LBB344-.LBB326
+	.uleb128 .LBE344-.LBB326
 	.byte	0x4
-	.uleb128 .LBB348-.LBB327
-	.uleb128 .LBE348-.LBB327
+	.uleb128 .LBB347-.LBB326
+	.uleb128 .LBE347-.LBB326
 	.byte	0x4
-	.uleb128 .LBB349-.LBB327
-	.uleb128 .LBE349-.LBB327
+	.uleb128 .LBB348-.LBB326
+	.uleb128 .LBE348-.LBB326
 	.byte	0x4
-	.uleb128 .LBB351-.LBB327
-	.uleb128 .LBE351-.LBB327
+	.uleb128 .LBB351-.LBB326
+	.uleb128 .LBE351-.LBB326
 	.byte	0
 .LLRL92:
 	.byte	0x5
-	.4byte	.LBB403
+	.4byte	.LBB401
 	.byte	0x4
-	.uleb128 .LBB403-.LBB403
-	.uleb128 .LBE403-.LBB403
+	.uleb128 .LBB401-.LBB401
+	.uleb128 .LBE401-.LBB401
 	.byte	0x4
-	.uleb128 .LBB470-.LBB403
-	.uleb128 .LBE470-.LBB403
+	.uleb128 .LBB468-.LBB401
+	.uleb128 .LBE468-.LBB401
 	.byte	0
 .LLRL95:
 	.byte	0x5
-	.4byte	.LBB407
+	.4byte	.LBB405
 	.byte	0x4
-	.uleb128 .LBB407-.LBB407
-	.uleb128 .LBE407-.LBB407
+	.uleb128 .LBB405-.LBB405
+	.uleb128 .LBE405-.LBB405
 	.byte	0x4
-	.uleb128 .LBB468-.LBB407
-	.uleb128 .LBE468-.LBB407
+	.uleb128 .LBB466-.LBB405
+	.uleb128 .LBE466-.LBB405
 	.byte	0
-.LLRL97:
+.LLRL99:
 	.byte	0x5
-	.4byte	.LBB408
+	.4byte	.LBB406
 	.byte	0x4
-	.uleb128 .LBB408-.LBB408
-	.uleb128 .LBE408-.LBB408
+	.uleb128 .LBB406-.LBB406
+	.uleb128 .LBE406-.LBB406
 	.byte	0x4
-	.uleb128 .LBB424-.LBB408
-	.uleb128 .LBE424-.LBB408
+	.uleb128 .LBB422-.LBB406
+	.uleb128 .LBE422-.LBB406
 	.byte	0
-.LLRL100:
+.LLRL102:
+	.byte	0x5
+	.4byte	.LBB409
+	.byte	0x4
+	.uleb128 .LBB409-.LBB409
+	.uleb128 .LBE409-.LBB409
+	.byte	0x4
+	.uleb128 .LBB423-.LBB409
+	.uleb128 .LBE423-.LBB409
+	.byte	0x4
+	.uleb128 .LBB424-.LBB409
+	.uleb128 .LBE424-.LBB409
+	.byte	0x4
+	.uleb128 .LBB434-.LBB409
+	.uleb128 .LBE434-.LBB409
+	.byte	0
+.LLRL104:
 	.byte	0x5
 	.4byte	.LBB411
 	.byte	0x4
 	.uleb128 .LBB411-.LBB411
 	.uleb128 .LBE411-.LBB411
 	.byte	0x4
-	.uleb128 .LBB425-.LBB411
-	.uleb128 .LBE425-.LBB411
-	.byte	0x4
-	.uleb128 .LBB426-.LBB411
-	.uleb128 .LBE426-.LBB411
-	.byte	0x4
-	.uleb128 .LBB436-.LBB411
-	.uleb128 .LBE436-.LBB411
+	.uleb128 .LBB418-.LBB411
+	.uleb128 .LBE418-.LBB411
 	.byte	0
-.LLRL102:
+.LLRL105:
 	.byte	0x5
 	.4byte	.LBB413
 	.byte	0x4
 	.uleb128 .LBB413-.LBB413
 	.uleb128 .LBE413-.LBB413
 	.byte	0x4
-	.uleb128 .LBB420-.LBB413
-	.uleb128 .LBE420-.LBB413
-	.byte	0
-.LLRL103:
-	.byte	0x5
-	.4byte	.LBB415
-	.byte	0x4
-	.uleb128 .LBB415-.LBB415
-	.uleb128 .LBE415-.LBB415
-	.byte	0x4
-	.uleb128 .LBB418-.LBB415
-	.uleb128 .LBE418-.LBB415
-	.byte	0
-.LLRL104:
-	.byte	0x5
-	.4byte	.LBB427
-	.byte	0x4
-	.uleb128 .LBB427-.LBB427
-	.uleb128 .LBE427-.LBB427
-	.byte	0x4
-	.uleb128 .LBB435-.LBB427
-	.uleb128 .LBE435-.LBB427
-	.byte	0x4
-	.uleb128 .LBB437-.LBB427
-	.uleb128 .LBE437-.LBB427
-	.byte	0x4
-	.uleb128 .LBB451-.LBB427
-	.uleb128 .LBE451-.LBB427
-	.byte	0x4
-	.uleb128 .LBB453-.LBB427
-	.uleb128 .LBE453-.LBB427
-	.byte	0x4
-	.uleb128 .LBB456-.LBB427
-	.uleb128 .LBE456-.LBB427
-	.byte	0x4
-	.uleb128 .LBB459-.LBB427
-	.uleb128 .LBE459-.LBB427
+	.uleb128 .LBB416-.LBB413
+	.uleb128 .LBE416-.LBB413
 	.byte	0
 .LLRL106:
 	.byte	0x5
-	.4byte	.LBB438
+	.4byte	.LBB425
 	.byte	0x4
-	.uleb128 .LBB438-.LBB438
-	.uleb128 .LBE438-.LBB438
+	.uleb128 .LBB425-.LBB425
+	.uleb128 .LBE425-.LBB425
 	.byte	0x4
-	.uleb128 .LBB452-.LBB438
-	.uleb128 .LBE452-.LBB438
+	.uleb128 .LBB433-.LBB425
+	.uleb128 .LBE433-.LBB425
 	.byte	0x4
-	.uleb128 .LBB455-.LBB438
-	.uleb128 .LBE455-.LBB438
+	.uleb128 .LBB442-.LBB425
+	.uleb128 .LBE442-.LBB425
 	.byte	0x4
-	.uleb128 .LBB457-.LBB438
-	.uleb128 .LBE457-.LBB438
+	.uleb128 .LBB449-.LBB425
+	.uleb128 .LBE449-.LBB425
 	.byte	0x4
-	.uleb128 .LBB460-.LBB438
-	.uleb128 .LBE460-.LBB438
+	.uleb128 .LBB451-.LBB425
+	.uleb128 .LBE451-.LBB425
 	.byte	0x4
-	.uleb128 .LBB462-.LBB438
-	.uleb128 .LBE462-.LBB438
+	.uleb128 .LBB454-.LBB425
+	.uleb128 .LBE454-.LBB425
+	.byte	0x4
+	.uleb128 .LBB457-.LBB425
+	.uleb128 .LBE457-.LBB425
 	.byte	0
 .LLRL108:
 	.byte	0x5
-	.4byte	.LBB445
+	.4byte	.LBB435
 	.byte	0x4
-	.uleb128 .LBB445-.LBB445
-	.uleb128 .LBE445-.LBB445
+	.uleb128 .LBB435-.LBB435
+	.uleb128 .LBE435-.LBB435
 	.byte	0x4
-	.uleb128 .LBB454-.LBB445
-	.uleb128 .LBE454-.LBB445
+	.uleb128 .LBB450-.LBB435
+	.uleb128 .LBE450-.LBB435
 	.byte	0x4
-	.uleb128 .LBB458-.LBB445
-	.uleb128 .LBE458-.LBB445
+	.uleb128 .LBB453-.LBB435
+	.uleb128 .LBE453-.LBB435
 	.byte	0x4
-	.uleb128 .LBB461-.LBB445
-	.uleb128 .LBE461-.LBB445
+	.uleb128 .LBB455-.LBB435
+	.uleb128 .LBE455-.LBB435
 	.byte	0x4
-	.uleb128 .LBB463-.LBB445
-	.uleb128 .LBE463-.LBB445
+	.uleb128 .LBB458-.LBB435
+	.uleb128 .LBE458-.LBB435
+	.byte	0x4
+	.uleb128 .LBB460-.LBB435
+	.uleb128 .LBE460-.LBB435
 	.byte	0
 .LLRL110:
 	.byte	0x5
-	.4byte	.LBB464
+	.4byte	.LBB443
 	.byte	0x4
-	.uleb128 .LBB464-.LBB464
-	.uleb128 .LBE464-.LBB464
+	.uleb128 .LBB443-.LBB443
+	.uleb128 .LBE443-.LBB443
 	.byte	0x4
-	.uleb128 .LBB467-.LBB464
-	.uleb128 .LBE467-.LBB464
+	.uleb128 .LBB452-.LBB443
+	.uleb128 .LBE452-.LBB443
+	.byte	0x4
+	.uleb128 .LBB456-.LBB443
+	.uleb128 .LBE456-.LBB443
+	.byte	0x4
+	.uleb128 .LBB459-.LBB443
+	.uleb128 .LBE459-.LBB443
+	.byte	0x4
+	.uleb128 .LBB461-.LBB443
+	.uleb128 .LBE461-.LBB443
 	.byte	0
-.LLRL116:
+.LLRL112:
 	.byte	0x5
-	.4byte	.LBB475
+	.4byte	.LBB462
 	.byte	0x4
-	.uleb128 .LBB475-.LBB475
-	.uleb128 .LBE475-.LBB475
+	.uleb128 .LBB462-.LBB462
+	.uleb128 .LBE462-.LBB462
 	.byte	0x4
-	.uleb128 .LBB481-.LBB475
-	.uleb128 .LBE481-.LBB475
-	.byte	0x4
-	.uleb128 .LBB482-.LBB475
-	.uleb128 .LBE482-.LBB475
-	.byte	0x4
-	.uleb128 .LBB483-.LBB475
-	.uleb128 .LBE483-.LBB475
-	.byte	0x4
-	.uleb128 .LBB484-.LBB475
-	.uleb128 .LBE484-.LBB475
+	.uleb128 .LBB465-.LBB462
+	.uleb128 .LBE465-.LBB462
 	.byte	0
-.LLRL130:
+.LLRL118:
+	.byte	0x5
+	.4byte	.LBB473
+	.byte	0x4
+	.uleb128 .LBB473-.LBB473
+	.uleb128 .LBE473-.LBB473
+	.byte	0x4
+	.uleb128 .LBB479-.LBB473
+	.uleb128 .LBE479-.LBB473
+	.byte	0x4
+	.uleb128 .LBB480-.LBB473
+	.uleb128 .LBE480-.LBB473
+	.byte	0x4
+	.uleb128 .LBB481-.LBB473
+	.uleb128 .LBE481-.LBB473
+	.byte	0x4
+	.uleb128 .LBB482-.LBB473
+	.uleb128 .LBE482-.LBB473
+	.byte	0
+.LLRL132:
 	.byte	0x7
 	.4byte	.LFB150
 	.uleb128 .LFE150-.LFB150

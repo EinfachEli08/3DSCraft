@@ -19053,131 +19053,131 @@ void Player_Move(Player* player, float dt, float3 accl) {
   float3 newPos = f3_add(player->position, f3_add(f3_scl(player->velocity, SimStep), f3_scl(accl, SimStep * speedFactor)));
   float3 finalPos = player->position;
 
-  
+    
 # 231 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
- _Bool 
+   _Bool 
 # 231 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-      wallCollision = 
+        wallCollision = 
 # 231 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-                      0
+                        0
 # 231 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-                           , wasGrounded = player->grounded;
+                             , wasGrounded = player->grounded;
 
-  player->grounded = 
+    player->grounded = 
 # 233 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-                    0
+                      0
 # 233 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-                         ;
-  for (int j = 0; j < 3; j++) {
-   int i = (int[]){0, 2, 1}[j];
-   
+                           ;
+    for (int j = 0; j < 3; j++) {
+      int i = (int[]){0, 2, 1}[j];
+      
 # 236 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-  _Bool 
+     _Bool 
 # 236 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-       collision = 
+          collision = 
 # 236 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-                   0
+                      0
 # 236 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-                        ;
-   float3 axisStep =
-                                                 finalPos;
-   axisStep.v[i] = newPos.v[i];
-   Box playerBox =
-       Box_Create(axisStep.x - (0.65f) / 2.f, axisStep.y, axisStep.z - (0.65f) / 2.f,
-           (0.65f), (1.8f), (0.65f));
+                           ;
+      float3 axisStep =
+                                                                         finalPos;
+      axisStep.v[i] = newPos.v[i];
+      Box playerBox =
+          Box_Create(axisStep.x - (0.65f) / 2.f, axisStep.y, axisStep.z - (0.65f) / 2.f,
+                     (0.65f), (1.8f), (0.65f));
 
-   for (int x = -1; x < 2; x++) {
-    for (int y = 0; y < 3; y++) {
-     for (int z = -1; z < 2; z++) {
-      int pX = FastFloor(axisStep.x) + x;
-      int pY = FastFloor(axisStep.y) + y;
-      int pZ = FastFloor(axisStep.z) + z;
-      if (World_GetBlock(player->world, pX, pY, pZ) != Block_Air&&World_GetBlock(player->world, pX, pY, pZ)!=Block_Lava
-      &&World_GetBlock(player->world, pX, pY, pZ) != Block_Water) {
-       Box blockBox = Box_Create(pX, pY, pZ, 1, 1, 1);
+      for (int x = -1; x < 2; x++) {
+        for (int y = 0; y < 3; y++) {
+          for (int z = -1; z < 2; z++) {
+            int pX = FastFloor(axisStep.x) + x;
+            int pY = FastFloor(axisStep.y) + y;
+            int pZ = FastFloor(axisStep.z) + z;
+            if (World_GetBlock(player->world, pX, pY, pZ) != Block_Air) {
+              Box blockBox = Box_Create(pX, pY, pZ, 1, 1, 1);
 
-       float3 normal = f3_new(0.f, 0.f, 0.f);
-       float depth = 0.f;
-       int face = 0;
+              float3 normal = f3_new(0.f, 0.f, 0.f);
+              float depth = 0.f;
+              int face = 0;
 
-       
-# 258 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-      _Bool 
-# 258 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-           intersects = Collision_BoxIntersect(blockBox, playerBox, 0, &normal, &depth, &face);
-       collision |= intersects;
+              
+# 257 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
+             _Bool 
+# 257 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
+                  intersects =Collision_BoxIntersect(blockBox, playerBox, 0, &normal, &depth, &face);
+              collision |= intersects;
+            }
+          }
+        }
       }
-     }
-    }
-   }
-   if (!collision)
-    finalPos.v[i] = newPos.v[i];
-   else if (i == 1) {
-    if (player->velocity.y < 0.f || accl.y < 0.f) player->grounded = 
+      if (!collision)
+        finalPos.v[i] = newPos.v[i];
+      else if (i == 1) {
+        if (player->velocity.y < 0.f || accl.y < 0.f) player->grounded = 
+# 266 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
+                                                                        1
+# 266 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
+                                                                            ;
+        player->jumped = 
 # 267 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-                                                                    1
+                        0
 # 267 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-                                                                        ;
-    player->jumped = 
-# 268 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-                    0
-# 268 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-                         ;
-    player->velocity.x = 0.f;
-    player->velocity.y = 0.f;
-    player->velocity.z = 0.f;
-   } else {
-    wallCollision = 
-# 273 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-                   1
-# 273 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-                       ;
-    if (i == 0)
-     player->velocity.x = 0.f;
-    else
-     player->velocity.z = 0.f;
-   }
+                             ;
+        player->velocity.x = 0.f;
+        player->velocity.y = 0.f;
+        player->velocity.z = 0.f;
+      } else {
+        wallCollision = 
+# 272 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
+                       1
+# 272 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
+                           ;
+        if (i == 0)
+          player->velocity.x = 0.f;
+        else
+          player->velocity.z = 0.f;
+      }
+    }
+
+    float3 movDiff = f3_sub(finalPos, player->position);
+
+    if (player->grounded && player->flying) player->flying = 
+# 282 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
+                                                            0
+# 282 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
+                                                                 ;
+
+    if (wallCollision && player->autoJumpEnabled) {
+      float3 nrmDiff = f3_nrm(f3_sub(newPos, player->position));
+      Block block = World_GetBlock(player->world, FastFloor(finalPos.x + nrmDiff.x),
+                                   FastFloor(finalPos.y + nrmDiff.y) + 2, FastFloor(finalPos.z + nrmDiff.z));
+      Block landingBlock = World_GetBlock(player->world, FastFloor(finalPos.x + nrmDiff.x),
+                                          FastFloor(finalPos.y + nrmDiff.y) + 1, FastFloor(finalPos.z + nrmDiff.z));
+      if (block == Block_Air && landingBlock != Block_Air) Player_Jump(player, accl);
+    }
+
+    if (player->crouching && player->crouchAdd > -0.3f) player->crouchAdd -= SimStep * 2.f;
+    if (!player->crouching && player->crouchAdd < 0.0f) player->crouchAdd += SimStep * 2.f;
+
+    if (player->crouching && !player->grounded && wasGrounded && finalPos.y < player->position.y && movDiff.x != 0.f &&
+        movDiff.z != 0.f) {
+      finalPos = player->position;
+      player->grounded = 
+# 299 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
+                        1
+# 299 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
+                            ;
+      player->velocity.y = 0.f;
+    }
+
+    player->position = finalPos;
+    player->velocity = f3_new(player->velocity.x * 0.95f, player->velocity.y, player->velocity.z * 0.95f);
+    if (((player->velocity.x) < 0 ? -(player->velocity.x) : (player->velocity.x)) < 0.1f) player->velocity.x = 0.f;
+    if (((player->velocity.z) < 0 ? -(player->velocity.z) : (player->velocity.z)) < 0.1f) player->velocity.z = 0.f;
+
+    player->simStepAccum -= SimStep;
   }
-
-  float3 movDiff = f3_sub(finalPos, player->position);
-
-  if (player->grounded && player->flying) player->flying = 
-# 283 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-                                                          0
-# 283 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-                                                               ;
-
-  if (wallCollision && player->autoJumpEnabled) {
-   float3 nrmDiff = f3_nrm(f3_sub(newPos, player->position));
-   Block block = World_GetBlock(player->world, FastFloor(finalPos.x + nrmDiff.x),
-           FastFloor(finalPos.y + nrmDiff.y) + 2, FastFloor(finalPos.z + nrmDiff.z));
-   Block landingBlock = World_GetBlock(player->world, FastFloor(finalPos.x + nrmDiff.x),
-           FastFloor(finalPos.y + nrmDiff.y) + 1, FastFloor(finalPos.z + nrmDiff.z));
-   if (block == Block_Air||block==Block_Lava||block==Block_Water && landingBlock != Block_Air||landingBlock!=Block_Lava||landingBlock!=Block_Water) Player_Jump(player, accl);
-  }
-
-  if (player->crouching && player->crouchAdd > -0.3f) player->crouchAdd -= SimStep * 2.f;
-  if (!player->crouching && player->crouchAdd < 0.0f) player->crouchAdd += SimStep * 2.f;
-
-  if (player->crouching && !player->grounded && wasGrounded && finalPos.y < player->position.y && movDiff.x != 0.f &&
-      movDiff.z != 0.f) {
-   finalPos = player->position;
-   player->grounded = 
-# 300 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c" 3 4
-                     1
-# 300 "C:/Users/Elias/CLionProjects/3DSCraft/source/entity/Player.c"
-                         ;
-   player->velocity.y = 0.f;
-  }
-
-  player->position = finalPos;
-  player->velocity = f3_new(player->velocity.x * 0.95f, player->velocity.y, player->velocity.z * 0.95f);
-  if (((player->velocity.x) < 0 ? -(player->velocity.x) : (player->velocity.x)) < 0.1f) player->velocity.x = 0.f;
-  if (((player->velocity.z) < 0 ? -(player->velocity.z) : (player->velocity.z)) < 0.1f) player->velocity.z = 0.f;
-
-  player->simStepAccum -= SimStep;
- }
 }
+
 
 void Player_PlaceBlock(Player* player, Sound* sound) {
  if (player->world && player->blockInActionRange && player->breakPlaceTimeout < 0.f) {

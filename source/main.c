@@ -24,8 +24,12 @@
 
 #include <sino/sino.h>
 #include <citro3d.h>
+#include <gui/state_machine/state_machine.h>
 
 bool showDebugInfo = true;
+
+void state1(state_machine_t *machine);
+void state2(state_machine_t *machine);
 
 void releaseWorld(ChunkWorker* chunkWorker, SaveManager* savemgr, World* world) {
 	for (int i = 0; i < CHUNKCACHE_SIZE; i++) {
@@ -96,6 +100,11 @@ int main() {
 	float dt = 0.f, timeAccum = 0.f, fpsClock = 0.f;
 	int frameCounter = 0, fps = 0;
 	bool initBackgroundSound = true;
+
+	state_machine_t *machine;
+	machine = state_machine_create();
+	state_machine_set_current_state(machine, state1);
+
 	while (aptMainLoop()) 
 	{
 		if (initBackgroundSound)
@@ -107,6 +116,8 @@ int main() {
 			strncat(BackgroundSound.path, soundfile, sizeof(BackgroundSound.path) - 1);
 			playopus(&BackgroundSound);
 		}
+
+
 		
 		//DebugUI_Text("%d FPS  Usage: CPU: %5.2f%% GPU: %5.2f%% Buf: %5.2f%% Lin: %d", fps, C3D_GetProcessingTime() * 6.f,
 		//C3D_GetDrawingTime() * 6.f, C3D_GetCmdBufUsage() * 100.f, linearSpaceFree());
@@ -120,6 +131,9 @@ int main() {
 		//DebugUI_Text("quickbar %i",player.quickSelectBarSlot);
 
 		Renderer_Render();
+
+		state_machine_run(machine);
+
 
 		uint64_t currentTime = svcGetSystemTick();
 		dt = ((float)(currentTime / (float)TICKS_PER_MSEC) - (float)(lastTime / (float)TICKS_PER_MSEC)) / 1000.f;
@@ -236,6 +250,8 @@ int main() {
 
 	free(world);
 
+	state_machine_delete(machine);
+
 	if (BackgroundSound.threaid != NULL)
 	{
 		DoQuit(0);
@@ -274,4 +290,18 @@ int main() {
 
 	gfxExit();
 	return 0;
+}
+
+void state1(state_machine_t *machine)
+{
+	DebugUI_Text("state1");
+		state_machine_set_current_state(machine, state2);
+
+}
+
+void state2(state_machine_t *machine)
+{
+	DebugUI_Text("state2");
+	state_machine_set_current_state(machine, state1);
+
 }
