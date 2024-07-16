@@ -181,12 +181,12 @@ void SelectWorldScreen(state_machine_t *sm) {
 
 		Gui_Offset(0, 2 * 32 + 5 + BUTTON_TEXT_PADDING);
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 1);
-		clicked_play = Gui_Button(1.f, "Play selected world");
+		clicked_play = Gui_Button(1.f, "Play selected world",true);
 		Gui_EndRow();
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 2);
-		clicked_new_world = Gui_Button(0.33f, "New");
-		clicked_delete_world = Gui_Button(0.33f, "Delete");
-		clicked_back = Gui_Button(0.33f, "Back");
+		clicked_new_world = Gui_Button(0.33f, "New",true);
+		clicked_delete_world = Gui_Button(0.33f, "Delete",true);
+		clicked_back = Gui_Button(0.33f, "Back",true);
 		Gui_EndRow();
 	} else if (menustate == MenuState_ConfirmDeletion) {
 		Gui_Offset(0, 10);
@@ -195,16 +195,16 @@ void SelectWorldScreen(state_machine_t *sm) {
 		Gui_EndRow();
 		Gui_VerticalSpace(Gui_RelativeHeight(0.4f));
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.8f), 3);
-		canceled_deletion = Gui_Button(0.4f, "No");
+		canceled_deletion = Gui_Button(0.4f, "No",true);
 		Gui_Space(0.2f);
-		confirmed_deletion = Gui_Button(0.4f, "Yes");
+		confirmed_deletion = Gui_Button(0.4f, "Yes",true);
 		Gui_EndRow();
 	} else if (menustate == MenuState_WorldOptions) {
 		Gui_Offset(0, 10);
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
 		Gui_Label(0.45f, true, INT16_MAX, false, "World type:");
 		Gui_Space(0.1f);
-		if (Gui_Button(0.45f, "%s", worldGenTypesStr[worldGenType])) {
+		if (Gui_Button(0.45f, worldGenTypesStr[worldGenType] ,true)) {
 			worldGenType++;
 			if (worldGenType == WorldGenTypes_Count) worldGenType = 0;
 		}
@@ -213,9 +213,9 @@ void SelectWorldScreen(state_machine_t *sm) {
 		Gui_VerticalSpace(Gui_RelativeHeight(0.4f));
 
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
-		canceled_world_options = Gui_Button(0.45f, "Cancel");
+		canceled_world_options = Gui_Button(0.45f, "Cancel",true);
 		Gui_Space(0.1f);
-		confirmed_world_options = Gui_Button(0.45f, "Continue");
+		confirmed_world_options = Gui_Button(0.45f, "Continue",true);
 	}
 }
 
