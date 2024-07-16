@@ -19628,7 +19628,9 @@ void Inventory_DrawQuickSelect(int x, int y, ItemStack* stacks, int count, int* 
   SpriteBatch_SetScale(1);
   int rx = (i * 20 + x + 3) * 2;
   int ry = (y + 3) * 2;
-  if (stacks[i].amount > 0) SpriteBatch_PushIcon(stacks[i].block, stacks[i].meta, rx, ry, 11);
+  if (stacks[i].amount > 0) {
+   SpriteBatch_PushIcon(stacks[i].block, stacks[i].meta, rx, ry, 11);
+  }
   if (Gui_EnteredCursorInside(rx - 4, ry - 4, 18 * 2, 18 * 2)) {
    *selected = i;
    clickAtStack(&stacks[i]);
@@ -19657,22 +19659,22 @@ int Inventory_Draw(int x, int y, int w, ItemStack* stacks, int count, int _site)
  int headY = y;
  int site = _site;
  
-# 56 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
+# 58 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
 _Bool 
-# 56 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
+# 58 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
      even = 
-# 56 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
+# 58 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
             0
-# 56 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
+# 58 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
                  ;
  
-# 57 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
+# 59 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
 _Bool 
-# 57 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
+# 59 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
      newLine = 
-# 57 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
+# 59 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
                0
-# 57 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
+# 59 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
                     ;
 
  const int16_t colors[2] = {(((((int)(((((21 & 0x1f)) | (((20)&0x1f) << 5) | (((20)&0x1f) << 10)))&0x1f)) * 9 / 16 & 0x1f)) | (((((int)((((((21 & 0x1f)) | (((20)&0x1f) << 5) | (((20)&0x1f) << 10))) >> 5) & 0x1f)) * 9 / 16)&0x1f) << 5) | (((((int)((((((21 & 0x1f)) | (((20)&0x1f) << 5) | (((20)&0x1f) << 10))) >> 10) & 0x1f)) * 9 / 16)&0x1f) << 10)), (((((int)(((((21 & 0x1f)) | (((20)&0x1f) << 5) | (((20)&0x1f) << 10)))&0x1f)) * 8 / 16 & 0x1f)) | (((((int)((((((21 & 0x1f)) | (((20)&0x1f) << 5) | (((20)&0x1f) << 10))) >> 5) & 0x1f)) * 8 / 16)&0x1f) << 5) | (((((int)((((((21 & 0x1f)) | (((20)&0x1f) << 5) | (((20)&0x1f) << 10))) >> 10) & 0x1f)) * 8 / 16)&0x1f) << 10))};
@@ -19696,38 +19698,37 @@ _Bool
   if (stacks[i].block && stacks[i].amount > 0)
   {
    newLine = 
-# 79 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
+# 81 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
             0
-# 79 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
+# 81 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
                  ;
    if ((headX + 16) >= w)
    {
     headX = x;
     headY += 17;
     newLine = 
-# 84 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
+# 86 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
              1
-# 84 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
+# 86 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
                  ;
    }
    if (stacks[i].amount > 0)
     SpriteBatch_PushIcon(stacks[i].block, stacks[i].meta, headX * 2, headY * 2, 10);
    if (Gui_EnteredCursorInside(headX * 2, headY * 2, 16 * 2, 16 * 2))
     clickAtStack(&stacks[i]);
-   SpriteBatch_PushSingleColorQuad(headX * 2, headY * 2, 9, 16 * 2, 16 * 2,
-    sourceStack == &stacks[i] ? (((2 & 0x1f)) | (((5)&0x1f) << 5) | (((20)&0x1f) << 10)) : colors[even]);
+   SpriteBatch_PushSingleColorQuad(headX * 2, headY * 2, 9, 16 * 2, 16 * 2,sourceStack == &stacks[i] ? (((2 & 0x1f)) | (((5)&0x1f) << 5) | (((20)&0x1f) << 10)) : colors[even]);
    even ^= 
-# 92 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
+# 93 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
           1
-# 92 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
+# 93 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
               ;
    headX += 16;
    if (newLine)
    {
     even = 
-# 96 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
+# 97 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c" 3 4
           0
-# 96 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
+# 97 "C:/Users/Elias/CLionProjects/3DSCraft/source/gui/Inventory.c"
                ;
 
     SpriteBatch_PushSingleColorQuad(x * 2, (headY - 1) * 2, 10, (w - 32) * 2, 2, (((7 & 0x1f)) | (((7)&0x1f) << 5) | (((7)&0x1f) << 10)));
