@@ -3,11 +3,14 @@
 *.elf
 *.smdh
 *.lst
+*.cxi
+*.cfa
 *.o
 *.png
 *.t3x
 
 backup_cpp/build
+build
 lib/libgame.a
 resources/OUTPUT
 resources/TMP

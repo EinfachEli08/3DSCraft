@@ -3,13 +3,13 @@
 #include <stdbool.h>
 #include <world/World.h>
 
+#include <entity/Damage.h>
 #include <gui/Inventory.h>
 #include <inventory/ItemStack.h>
-#include <entity/Damage.h>
 
 #include <misc/Raycast.h>
-#include <misc/VecMath.h>
 #include <misc/Sound.h>
+#include <misc/VecMath.h>
 
 #define PLAYER_EYEHEIGHT (1.65f)
 #define PLAYER_HEIGHT (1.8f)
@@ -19,50 +19,50 @@
 #define PLAYER_PLACE_REPLACE_TIMEOUT (0.2f)
 
 typedef struct {
-	float3 position;
-	float pitch, yaw;
-	float bobbing, fovAdd, crouchAdd;
-	bool grounded, jumped, sprinting, flying, crouching;
-	World* world;
+		float3 position;
+		float pitch, yaw;
+		float bobbing, fovAdd, crouchAdd;
+		bool grounded, jumped, sprinting, flying, crouching;
+		World* world;
 
-	float3 view;
+		float3 view;
 
-	bool autoJumpEnabled;
+		bool autoJumpEnabled;
 
-	float3 velocity;
-	float simStepAccum;
+		float3 velocity;
+		float simStepAccum;
 
-	float breakPlaceTimeout;
-	int hungertimer;
+		float breakPlaceTimeout;
+		int hungertimer;
 
-	int hp;
-	int armour;
-	int oxygen;
-	int hunger;
-	int difficulty;
-	float rndy;
+		int hp;
+		int armour;
+		int oxygen;
+		int hunger;
+		int difficulty;
+		float rndy;
 
-	float spawnx;
-	float spawny;
-	float spawnz;
-	int spawnset;
+		float spawnx;
+		float spawny;
+		float spawnz;
+		int spawnset;
 
-	int gamemode;
-	bool cheats;	
+		int gamemode;
+		bool cheats;
 
-	int quickSelectBarSlots;
-	int quickSelectBarSlot;
-	int inventorySite;
-	ItemStack quickSelectBar[INVENTORY_QUICKSELECT_MAXSLOTS];
+		int quickSelectBarSlots;
+		int quickSelectBarSlot;
+		int inventorySite;
+		ItemStack quickSelectBar[INVENTORY_QUICKSELECT_MAXSLOTS];
 
-	Raycast_Result viewRayCast;
-	bool blockInSight, blockInActionRange;
-	ItemStack inventory[64];
+		Raycast_Result viewRayCast;
+		bool blockInSight, blockInActionRange;
+		ItemStack inventory[64];
 } Player;
 
 void Player_Init(Player* player, World* world);
 
-void Player_Update(Player* player,Sound* sound, Damage* dmg);
+void Player_Update(Player* player, Sound* sound, Damage* dmg);
 
 void Player_Move(Player* player, float dt, float3 accl);
 

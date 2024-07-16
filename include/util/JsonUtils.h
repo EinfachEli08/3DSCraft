@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <cJSON/cJSON.h>
 #include <string>
@@ -31,3 +31,4 @@ cJSON* getJsonFile(const char* filename);
 const char* toString(const cJSON* jsonElement);
 
 }  // namespace JsonUtils
+*/
