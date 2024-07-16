@@ -20847,16 +20847,62 @@ void C3D_SyncTextureCopy(u32* inadr, u32 indim, u32* outadr, u32 outdim, u32 siz
 void C3D_SyncMemoryFill(u32* buf0a, u32 buf0v, u32* buf0e, u16 control0, u32* buf1a, u32 buf1v, u32* buf1e, u16 control1);
 # 31 "C:/devkitPro/libctru/include/citro3d.h" 2
 # 27 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 2
+# 1 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/state_machine/state_machine.h" 1
+# 9 "C:/Users/Elias/CLionProjects/3DSCraft/include/gui/state_machine/state_machine.h"
+typedef struct state_machine_s {
+  void (*current_state)(struct state_machine_s *);
 
 
-# 28 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+
+
+
+  void *context;
+} state_machine_t;
+
+typedef void (*state_func)(state_machine_t *);
+
+
+state_machine_t *state_machine_create(void);
+
+
+void state_machine_delete(state_machine_t *machine);
+
+
+state_func state_machine_get_current_state(const state_machine_t *machine);
+
+
+void state_machine_set_current_state(state_machine_t *machine, state_func state);
+
+
+void state_machine_run(state_machine_t *machine);
+
+
+int state_machine_state_is_valid(const state_machine_t *machine);
+
+
+
+
+void state_machine_exit(state_machine_t *machine);
+
+
+void state_machine_set_context(state_machine_t *machine, void *context);
+
+
+void *state_machine_get_context(const state_machine_t *machine);
+# 28 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 2
+
+
+# 29 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
 _Bool 
-# 28 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 29 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
     showDebugInfo = 
-# 28 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 29 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                     1
-# 28 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 29 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                         ;
+
+void state1(state_machine_t *machine);
+void state2(state_machine_t *machine);
 
 void releaseWorld(ChunkWorker* chunkWorker, SaveManager* savemgr, World* world) {
  for (int i = 0; i < (9); i++) {
@@ -20877,16 +20923,16 @@ int main() {
 
 
  osSetSpeedupEnable(
-# 48 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 52 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                    1
-# 48 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 52 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                        );
 
 
  gfxSet3D(
-# 51 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 55 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
          1
-# 51 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 55 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
              );
 
  romfsInit();
@@ -20901,23 +20947,23 @@ int main() {
  ChunkWorker chunkWorker;
  ChunkWorker_Init(&chunkWorker);
  ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_PolyGen, (WorkerFuncObj){&PolyGen_GeneratePolygons, 
-# 64 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 68 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                                                                                                         ((void *)0)
-# 64 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 68 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                                                                                             , 
-# 64 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 68 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                                                                                                               1
-# 64 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 68 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                                                                                                   });
  ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_BaseGen, (WorkerFuncObj){&SuperFlatGen_Generate, &flatGen, 
-# 65 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 69 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                                                                                                                1
-# 65 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 69 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                                                                                                    });
  ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_BaseGen, (WorkerFuncObj){&SmeaGen_Generate, &smeaGen, 
-# 66 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 70 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                                                                                                           1
-# 66 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 70 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                                                                                               });
 
  sino_init();
@@ -20945,49 +20991,57 @@ int main() {
  SaveManager savemgr;
  SaveManager_Init(&savemgr, &player);
  ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_Load, (WorkerFuncObj){&SaveManager_LoadChunk, &savemgr, 
-# 92 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 96 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                                                                                                             1
-# 92 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 96 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                                                                                                 });
  ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_Save, (WorkerFuncObj){&SaveManager_SaveChunk, &savemgr, 
-# 93 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 97 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                                                                                                             1
-# 93 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 97 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                                                                                                 });
 
  uint64_t lastTime = svcGetSystemTick();
  float dt = 0.f, timeAccum = 0.f, fpsClock = 0.f;
  int frameCounter = 0, fps = 0;
  
-# 98 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 102 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
 _Bool 
-# 98 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 102 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
      initBackgroundSound = 
-# 98 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 102 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                            1
-# 98 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 102 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                ;
+
+ state_machine_t *machine;
+ machine = state_machine_create();
+ state_machine_set_current_state(machine, state1);
+
  while (aptMainLoop())
  {
   if (initBackgroundSound)
   {
    initBackgroundSound = 
-# 103 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 112 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                         0
-# 103 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 112 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                              ;
    BackgroundSound.background = 
-# 104 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 113 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                                1
-# 104 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 113 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                    ;
    char *soundfile = "romfs:/assets/sound/music/1.opus";
    BackgroundSound.path[0] = '\0';
    strncat(BackgroundSound.path, soundfile, sizeof(BackgroundSound.path) - 1);
    playopus(&BackgroundSound);
   }
-# 122 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 133 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
   Renderer_Render();
+
+  state_machine_run(machine);
+
 
   uint64_t currentTime = svcGetSystemTick();
   dt = ((float)(currentTime / (float)268111.856) - (float)(lastTime / (float)268111.856)) / 1000.f;
@@ -21046,13 +21100,13 @@ _Bool
    char name[12] = {'\0'};
    WorldGenType worldType;
    
-# 180 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 194 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
   _Bool 
-# 180 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 194 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
        newWorld = 
-# 180 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 194 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                   0
-# 180 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 194 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                        ;
    if (WorldSelect_Update(path, name, &worldType, &newWorld)) {
     strcpy(world->name, name);
@@ -21112,10 +21166,12 @@ _Bool
 
  free(world);
 
+ state_machine_delete(machine);
+
  if (BackgroundSound.threaid != 
-# 239 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 255 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                                ((void *)0)
-# 239 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 255 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                    )
  {
   DoQuit(0);
@@ -21128,9 +21184,9 @@ _Bool
   audioExit(0);
  }
  if (PlayerSound.threaid != 
-# 250 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
+# 266 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c" 3 4
                            ((void *)0)
-# 250 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
+# 266 "C:/Users/Elias/CLionProjects/3DSCraft/source/main.c"
                                )
  {
   DoQuit(1);
@@ -21158,4 +21214,18 @@ _Bool
 
  gfxExit();
  return 0;
+}
+
+void state1(state_machine_t *machine)
+{
+ DebugUI_Text("state1");
+  state_machine_set_current_state(machine, state2);
+
+}
+
+void state2(state_machine_t *machine)
+{
+ DebugUI_Text("state2");
+ state_machine_set_current_state(machine, state1);
+
 }
