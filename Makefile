@@ -194,7 +194,7 @@ DEPENDS	:=	$(OFILES:.o=.d)
 BANNERTOOL   ?= ../tools/bannertool.exe
 MAKEROM      ?= ../tools/makerom.exe
 
-MAKEROM_ARGS += -elf "$(OUTPUT).elf" -rsf "../$(RSF_PATH)" -banner "banner.bnr" -icon "icon.icn"
+MAKEROM_ARGS += -elf "$(OUTPUT).elf" -rsf "../$(RSF_PATH)" -banner "banner.bnr" -icon "../$(TARGET).smdh"
 MAKEROM_ARGS += -major $(VERSION_MAJOR) -minor $(VERSION_MINOR) -micro $(VERSION_MICRO)
 
 ifneq ($(strip $(LOGO)),)
@@ -229,17 +229,20 @@ endif
 #---------------------------------------------------------------------------------
 
 $(OUTPUT).3dsx	:	$(OUTPUT).elf $(OUTPUT).smdh
+
+$(OUTPUT).cia:
 	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "../$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "../$(BANNER_AUDIO)" -o "banner.bnr"
 	@echo building $(TARGET).cxi...
 	@$(MAKEROM) -o "$(OUTPUT).cxi" -target t -exefslogo $(MAKEROM_ARGS)
 	@echo building $(TARGET).cfa...
 	@$(MAKEROM) -o "$(OUTPUT).cfa" -target t -rsf "../$(RSF_PATH)"
 	@echo building $(TARGET).cia...
-	@$(MAKEROM) -f cia -o "../$(TARGET).cia" -target t -i "../$(TARGET).cxi:0:0" -i "../$(TARGET).cfa:1:1"
-	@echo Built cia package for $(TARGET), $(VERSION_BUILD).
+	@$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -i "../$(TARGET).cxi:0:0" -i "../$(TARGET).cfa:1:1"
+	@echo Built ... $(TARGET).cia, $(VERSION_BUILD).
 
 $(OUTPUT).smdh:
-	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "icon.icn"
+	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "../$(TARGET).smdh"
+	@$(MAKE) --no-print-directory -f $(CURDIR)/../Makefile $(OUTPUT).cia
 
 $(OUTPUT).elf	:	$(OFILES)
 
