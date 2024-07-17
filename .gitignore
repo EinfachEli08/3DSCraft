@@ -2,17 +2,12 @@
 *.cia
 *.cfa
 *.elf
-*.smdh
 *.lst
-*.cxi
-*.cfa
 *.o
-*.png
 *.t3x
 
 build
 backup_cpp/build
-build
 resources/OUTPUT
 resources/TMP
 resources/assets
