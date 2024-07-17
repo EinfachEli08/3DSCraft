@@ -185,11 +185,11 @@ endif
 #---------------------------------------------------------------------------------------
 all: 3dsx cia
 
-3dsx: greetings lib
+3dsx: greetings
 	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 cia:
-	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(BUILD)/icon.icn"
+	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(OUTPUT).smdh"
 	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "$(BANNER_AUDIO)" -o "$(BUILD)/banner.bnr"
 	@echo building $(TARGET).cia...
 	@$(MAKEROM) -f cia -o "$(OUTPUT).cia" -target t -exefslogo $(MAKEROM_ARGS)
@@ -224,14 +224,6 @@ greetings:
 	@echo made by $(APP_AUTHOR)
 	@echo $(VERSION_BUILD)
 	@echo
-
-
-#---------------------------------------------------------------------------------------
-# Library files
-#---------------------------------------------------------------------------------------
-LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
-LIBSOURCES += $(wildcard lib/*/*/*.cpp lib/*/*/*.c)
-LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
 
 #---------------------------------------------------------------------------------
 else
@@ -284,26 +276,3 @@ endef
 
 #---------------------------------------------------------------------------------------
 endif
-
-#---------------------------------------------------------------------------------------
-# Library
-#---------------------------------------------------------------------------------------
-
-AR := $(DEVKITARM)/bin/arm-none-eabi-ar.exe
-
-lib: lib/libgame.a
-
-lib/libgame.a: $(LIBOBJS)
-	@echo Building library file...
-	@$(AR) rcs lib/libgame.a $^
-
-lib/%.o: lib/%.cpp
-	@echo $@...
-	@$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
-
-lib/%.o: lib/%.c
-	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
-
-clean-libs:
-	rm -f lib/**/*.o
-	rm -f lib/libgame.o

@@ -4,8 +4,8 @@
 #include <gui/DebugUI.h>
 #include <gui/Gui.h>
 #include <gui/Inventory.h>
-#include <gui/SpriteBatch.h>
 #include <gui/SelectWorldScreen.h>
+#include <gui/SpriteBatch.h>
 #include <rendering/Camera.h>
 #include <rendering/Clouds.h>
 #include <rendering/Cursor.h>
@@ -15,17 +15,17 @@
 
 #include <citro3d.h>
 
-#include <gui_shbin.h>
-#include <world_shbin.h>
 #include <gui/State1.h>
 #include <gui/State2.h>
+#include <gui_shbin.h>
+#include <world_shbin.h>
 
-#define DISPLAY_TRANSFER_FLAGS                                                                                                          \
-    (GX_TRANSFER_FLIP_VERT(0) | GX_TRANSFER_OUT_TILED(0) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) | \
-     GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGB8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO))
+#define DISPLAY_TRANSFER_FLAGS                                                                                                             \
+	(GX_TRANSFER_FLIP_VERT(0) | GX_TRANSFER_OUT_TILED(0) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |        \
+	 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGB8) | GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO))
 
 #define CLEAR_COLOR_SKY 0x90d9ffff
-//#define CLEAR_COLOR_SKY 0x06070cff
+// #define CLEAR_COLOR_SKY 0x06070cff
 #define CLEAR_COLOR_BLACK 0x000000ff
 
 static C3D_RenderTarget* renderTargets[2];
@@ -45,20 +45,19 @@ static WorkQueue* workqueue;
 
 static GameState* gamestate;
 
-static state_machine_t *machine;
+static state_machine_t* machine;
 
 extern bool showDebugInfo;
 
-extern void TitleScreen(state_machine_t *machine);
-extern void SelectWorldScreen(state_machine_t *machine);
+extern void TitleScreen(state_machine_t* machine);
+extern void SelectWorldScreen(state_machine_t* machine);
 
 void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* gamestate_) {
-
 	machine = state_machine_create();
 	state_machine_set_current_state(machine, TitleScreen);
 
-	world = world_;
-	player = player_;
+	world	  = world_;
+	player	  = player_;
 	workqueue = queue;
 	gamestate = gamestate_;
 
@@ -110,7 +109,6 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 }
 
 void Renderer_Deinit() {
-
 	state_machine_delete(machine);
 
 	C3D_TexDelete(&logoTex);
@@ -140,7 +138,8 @@ void Renderer_Render() {
 
 	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
-	if (*gamestate == GameState_Playing) PolyGen_Harvest();
+	if (*gamestate == GameState_Playing)
+		PolyGen_Harvest();
 
 	for (int i = 0; i < 2; i++) {
 		C3D_RenderTargetClear(renderTargets[i], C3D_CLEAR_ALL, CLEAR_COLOR_SKY, 0);
@@ -162,11 +161,12 @@ void Renderer_Render() {
 			WorldRenderer_Render(!i ? -iod : iod);
 
 			SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
-			if (iod == 0.f) SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 240, 0, 16, 16);
+			if (iod == 0.f)
+				SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 240, 0, 16, 16);
 		} else {
 			C3D_Mtx projection;
-			Mtx_PerspStereoTilt(&projection, C3D_AngleFromDegrees(90.f), ((400.f) / (240.f)), 0.22f, 4.f * CHUNK_SIZE,
-								!i ? -iod : iod, 3.f, false);
+			Mtx_PerspStereoTilt(&projection, C3D_AngleFromDegrees(90.f), ((400.f) / (240.f)), 0.22f, 4.f * CHUNK_SIZE, !i ? -iod : iod, 3.f,
+								false);
 
 			C3D_Mtx view;
 			Mtx_Identity(&view);
@@ -182,9 +182,9 @@ void Renderer_Render() {
 			SpriteBatch_BindTexture(&logoTex);
 
 			SpriteBatch_SetScale(2);
-			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0,0, 1024, 256);
+			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0, 0, 1024, 256);
 
-			SpriteBatch_PushText(0, 112, 0, INT16_MAX, false, INT_MAX, NULL,"0.0.INDEV");
+			SpriteBatch_PushText(0, 112, 0, INT16_MAX, false, INT_MAX, NULL, APP_VERSION);
 
 			SpriteBatch_SetScale(1);
 		}
@@ -194,15 +194,14 @@ void Renderer_Render() {
 
 		SpriteBatch_Render(GFX_TOP);
 
-		if (iod <= 0.f) break;
+		if (iod <= 0.f)
+			break;
 	}
 
 	C3D_RenderTargetClear(lowerScreen, C3D_CLEAR_ALL, CLEAR_COLOR_BLACK, 0);
 	C3D_FrameDrawOn(lowerScreen);
 
 	SpriteBatch_StartFrame(320, 240);
-
-
 
 	if (*gamestate == GameState_SelectWorld) {
 		state_machine_run(machine);
@@ -212,12 +211,12 @@ void Renderer_Render() {
 		Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth(player->quickSelectBarSlots) / 2,
 								  120 - INVENTORY_QUICKSELECT_HEIGHT, player->quickSelectBar, player->quickSelectBarSlots,
 								  &player->quickSelectBarSlot);
-		player->inventorySite = Inventory_Draw(16, 0, 160, player->inventory, sizeof(player->inventory) / sizeof(ItemStack),player->inventorySite);
+		player->inventorySite =
+			Inventory_Draw(16, 0, 160, player->inventory, sizeof(player->inventory) / sizeof(ItemStack), player->inventorySite);
 	}
 
-
-
-	if (showDebugInfo) DebugUI_Draw();
+	if (showDebugInfo)
+		DebugUI_Draw();
 
 	Gui_Frame();
 

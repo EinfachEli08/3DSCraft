@@ -27,50 +27,67 @@ include $(DEVKITARM)/3ds_rules
 #     - icon.png
 #     - <libctru folder>/default_icon.png
 #---------------------------------------------------------------------------------
-TARGET		:=	$(notdir $(CURDIR))
-SOURCES		:=	source source/misc source/world/worldgen source/blocks source/rendering source/gui source/gui/state_machine source/world source/world/savegame source/entity source/savegame dependencies/mpack dependencies/vec dependencies/sino dependencies/lodepng dependencies/miniz dependencies/ini
-DATA		:=	data
-INCLUDES	:=	dependencies include
-ROMFS		:=	romfs
 
-APP_AUTHOR	:= Silentstorm
-APP_TITLE	:= Craftus
-APP_DESCRIPTION := Minecraft clone
-BANNER_AUDIO := romfs/theme.wav
-ICON		:=	icon/craftus.png
+VERSION_MAJOR	:= 0
+VERSION_MINOR	:= 5
+VERSION_MICRO	:= 4
 
-DEBUG		?=	0
-ifeq ($(DEBUG), 0)
-BUILD		:=	build
-CFLAGS_ADD	:=	-fomit-frame-pointer -O2
-LIBS	:= -lcitro3d -lctru -lm `$(PREFIX)pkg-config opusfile --libs`
-else
-BUILD		:=	debug_build
-CFLAGS_ADD	:=	-Og -D_DEBUG
-LIBS	:= -lcitro3dd -lctrud -lm `$(PREFIX)pkg-config opusfile --libs`
-endif
+export DEBUG			?=	1
+
+TARGET			:=	3DSCraft
+BUILD			:=	build
+DATA			:=	data
+META			:=	project
+ROMFS			:=	romfs
+INCLUDES		:=	dependencies include
+SOURCES 		:= $(shell find $(realpath dependencies) $(realpath source) -type d)
+SOURCES 		:= $(foreach dir, $(SOURCES), $(patsubst $(CURDIR)/%, %, $(dir)))
+
+# 3dsx
+APP_DESCRIPTION :=  3DSCraft
+APP_AUTHOR		:=  Omega
+ICON			:=	$(META)/icon.png
+
+# CIA
+BANNER_AUDIO	:=	$(META)/banner.wav
+BANNER_IMAGE	:=	$(META)/banner.cgfx
+RSF_PATH		:=	$(META)/app.rsf
+LOGO			:=	$(META)/logo.bcma.lz
+ICON_FLAGS		:=	nosavebackups,visible
+
 
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
 ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
-CFLAGS	:=	-g -Wall -mword-relocations \
-			 -ffunction-sections $(CFLAGS_ADD)\
-			$(ARCH) -save-temps
+CFLAGS	:=	-g -Wall -Wno-psabi -O2 -mword-relocations \
+			-DC_V=\"$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_MICRO)\" \
+			-fomit-frame-pointer -ffunction-sections \
+			$(ARCH)
 
-CFLAGS	+=	$(INCLUDE) -DARM11 -D_3DS `$(PREFIX)pkg-config opusfile --cflags`
+CFLAGS	+=	$(INCLUDE) -D__3DS__ -D_GNU_SOURCE=1 `$(PREFIX)pkg-config opusfile --cflags`
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 
 ASFLAGS	:=	-g $(ARCH)
-LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
+LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map) -include -$(DEVKITPRO)/libctru/include/3ds/types.h
+
+ifeq ($(DEBUG), 0)
+CFLAGS		+=	-fomit-frame-pointer -O2
+LIBS		:= -lcitro3d -lctru 
+else
+CFLAGS		+=	-Og -D_DEBUG
+LIBS		:= -lcitro3dd -lctrud
+endif
+
+LIBS		+= -lm `$(PREFIX)pkg-config opusfile --libs`
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS) $(CTRULIB)
+LIBDIRS	:= $(CURDIR) $(PORTLIBS) $(CTRULIB)
 
 
 #---------------------------------------------------------------------------------
@@ -88,12 +105,12 @@ export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
-CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
-CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
-SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-PICAFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.v.pica)))
-SHLISTFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.shlist)))
-BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+CFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
+CPPFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
+SFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+PICAFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.v.pica)))
+SHLISTFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.shlist)))
+BINFILES		:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -140,10 +157,26 @@ ifneq ($(ROMFS),)
 	export _3DSXFLAGS += --romfs=$(CURDIR)/$(ROMFS)
 endif
 
+#---------------------------------------------------------------------------------------
+# Cia building preparation
+#---------------------------------------------------------------------------------------
+BANNERTOOL   ?= tools/bannertool.exe
+MAKEROM      ?= tools/makerom.exe
+
+MAKEROM_ARGS += -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(OUTPUT).smdh" -desc app:4
+MAKEROM_ARGS += -major $(VERSION_MAJOR) -minor $(VERSION_MINOR) -micro $(VERSION_MICRO)
+
+ifneq ($(strip $(LOGO)),)
+	MAKEROM_ARGS += -logo "$(LOGO)"
+endif
+ifneq ($(strip $(ROMFS)),)
+	MAKEROM_ARGS += -DAPP_ROMFS="$(CURDIR)/$(ROMFS)"
+endif
+
 .PHONY: $(BUILD) clean all
 
 #---------------------------------------------------------------------------------
-all: $(BUILD)
+all: $(BUILD) cxi cfa cia
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
@@ -151,21 +184,21 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf
+	@rm -rf $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf $(TARGET).cia $(TARGET).cxi $(TARGET).cfa
 #---------------------------------------------------------------------------------
 run:
 	@echo running...
 	@3dslink $(TARGET).3dsx
 
-make_cxi:
-	@makerom -o $(TARGET).cxi -rsf $(TARGET).rsf -target t -elf $(TARGET).elf -icon $(TARGET).smdh -banner banner.bin -desc app:4
+cxi:
+	@$(MAKEROM) -o $(OUTPUT).cxi $(MAKEROM_ARGS)
 	@echo built ... $(TARGET).cxi
-make_cfa:
-	@makerom -o $(TARGET).cfa -rsf $(TARGET).rsf -target t
+cfa:
+	@$(MAKEROM) -o $(TARGET).cfa -rsf $(RSF_PATH) -target t
 	@echo built ... $(TARGET).cfa
 
-make_cia:
-	@makerom -f cia -o $(TARGET).cia -rsf $(TARGET).rsf -target t -exefslogo -elf $(TARGET).elf -icon $(TARGET).smdh -banner banner.bin
+cia:
+	@$(MAKEROM) -f cia -o $(OUTPUT).cia -target t -i $(TARGET).cxi:0:0 -i $(TARGET).cfa:1:1
 	@echo built ... $(TARGET).cia
 
 
@@ -174,16 +207,38 @@ else
 
 DEPENDS	:=	$(OFILES:.o=.d)
 
+BANNERTOOL   ?= ../tools/bannertool.exe
+MAKEROM      ?= ../tools/makerom.exe
+
+
+ifeq ($(suffix $(BANNER_IMAGE)),.cgfx)
+	BANNER_IMAGE_ARG := -ci
+else
+	BANNER_IMAGE_ARG := -i
+endif
+
+ifeq ($(suffix $(BANNER_AUDIO)),.cwav)
+	BANNER_AUDIO_ARG := -ca
+else
+	BANNER_AUDIO_ARG := -a
+endif
+
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
 ifeq ($(strip $(NO_SMDH)),)
-$(OUTPUT).3dsx	:	$(OUTPUT).elf $(OUTPUT).smdh
+$(OUTPUT).3dsx	:	$(OUTPUT).elf $(OUTPUT).smdh $(BUILD)/banner.bnr
 else
-$(OUTPUT).3dsx	:	$(OUTPUT).elf
+$(OUTPUT).3dsx	:	$(OUTPUT).elf $(BUILD)/banner.bnr
 endif
 
 $(OUTPUT).elf	:	$(OFILES)
+
+$(BUILD)/banner.bnr:
+	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "../$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "../$(BANNER_AUDIO)" -o "../$(BUILD)/banner.bnr"
+
+$(OUTPUT).smdh:
+	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(OUTPUT).smdh"
 
 #---------------------------------------------------------------------------------
 # you need a rule like this for each extension you use as binary data
