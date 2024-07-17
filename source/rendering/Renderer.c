@@ -182,9 +182,14 @@ void Renderer_Render() {
 			SpriteBatch_BindTexture(&logoTex);
 
 			SpriteBatch_SetScale(2);
+
 			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0, 0, 1024, 256);
 
 			SpriteBatch_PushText(0, 112, 0, INT16_MAX, false, INT_MAX, NULL, APP_VERSION);
+
+			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0, 0, 1024, 256);
+
+			SpriteBatch_PushText(210 - 70, 112, 0, INT16_MAX, false, INT_MAX, NULL, AUTHOR);
 
 			SpriteBatch_SetScale(1);
 		}

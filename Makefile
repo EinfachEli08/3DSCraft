@@ -45,7 +45,7 @@ SOURCES 		:= $(foreach dir, $(SOURCES), $(patsubst $(CURDIR)/%, %, $(dir)))
 
 # 3dsx
 APP_DESCRIPTION :=  3DSCraft
-APP_AUTHOR		:=  Omega
+APP_AUTHOR		:=  Team-Omega
 ICON			:=	$(META)/icon.png
 
 # CIA
@@ -66,7 +66,8 @@ CFLAGS	:=	-g -Wall -Wno-psabi -O2 -mword-relocations \
 			-fomit-frame-pointer -ffunction-sections \
 			$(ARCH)
 
-CFLAGS	+=	$(INCLUDE) -D__3DS__ -D_GNU_SOURCE=1 `$(PREFIX)pkg-config opusfile --cflags`
+CFLAGS	+=	$(INCLUDE) -D__3DS__ -D_3DS=1 -D_VER_MAJ=$(VERSION_MAJOR) -D_VER_MIN=$(VERSION_MINOR) -D_VER_MIC=$(VERSION_MICRO) -D_AUTHOR=$(APP_AUTHOR) -D_GNU_SOURCE=1
+CFLAGS  +=  `$(PREFIX)pkg-config opusfile --cflags`
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 

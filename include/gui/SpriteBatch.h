@@ -4,7 +4,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-
 #include <misc/InputData.h>
 #include <world/World.h>
 
@@ -13,7 +12,13 @@
 void SpriteBatch_Init(int projUniform_);
 void SpriteBatch_Deinit();
 
-typedef enum { GuiTexture_Blank, GuiTexture_Font, GuiTexture_Icons, GuiTexture_Widgets, GuiTexture_MenuBackground } GuiTexture;
+typedef enum {
+	GuiTexture_Blank,
+	GuiTexture_Font,
+	GuiTexture_Icons,
+	GuiTexture_Widgets,
+	GuiTexture_MenuBackground
+} GuiTexture;
 
 void SpriteBatch_BindGuiTexture(GuiTexture texture);
 void SpriteBatch_BindTexture(C3D_Tex* texture);
