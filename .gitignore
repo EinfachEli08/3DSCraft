@@ -5,8 +5,6 @@
 *.smdh
 *.lst
 *.o
-*.png
-*.t3x
 
 build
 backup_cpp/build
