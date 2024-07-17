@@ -1,4 +1,4 @@
-/*#pragma once
+#pragma once
 
 #include <cstdio>
 
@@ -14,4 +14,4 @@ inline const char* getText(const char* filepath, const char* perms = "r") {
 	FILE* f = getFile(filepath, perms);
 	return getText(f);
 }
-}  // namespace FileIO*/
+}  // namespace FileIO

@@ -2,9 +2,9 @@
 
 #include <vec/vec.h>
 
-#include "world/chunk/Chunk.h"
+#include <world/Chunk.h>
 
-#include "util/math/Xorshift.h"
+#include <misc/Xorshift.h>
 
 #include <stdbool.h>
 
@@ -20,16 +20,16 @@ typedef enum {
 } WorkerItemType;
 
 typedef struct {
-		WorkerItemType type;
-		Chunk* chunk;
-		uint32_t uuid;
+	WorkerItemType type;
+	Chunk* chunk;
+	uint32_t uuid;
 } WorkerItem;
 
 typedef struct {
-		vec_t(WorkerItem) queue;
+	vec_t(WorkerItem) queue;
 
-		LightEvent itemAddedEvent;
-		LightLock listInUse;
+	LightEvent itemAddedEvent;
+	LightLock listInUse;
 } WorkQueue;
 
 inline void WorkQueue_Init(WorkQueue* queue) {
@@ -37,15 +37,12 @@ inline void WorkQueue_Init(WorkQueue* queue) {
 	LightLock_Init(&queue->listInUse);
 	LightEvent_Init(&queue->itemAddedEvent, RESET_STICKY);
 }
-inline void WorkQueue_Deinit(WorkQueue* queue) {
-	vec_deinit(&queue->queue);
-}
+inline void WorkQueue_Deinit(WorkQueue* queue) { vec_deinit(&queue->queue); }
 
 inline void WorkQueue_AddItem(WorkQueue* queue, WorkerItem item) {
 	item.uuid = item.chunk->uuid;
 	++item.chunk->tasksRunning;
-	if (item.type == WorkerItemType_PolyGen)
-		++item.chunk->graphicalTasksRunning;
+	if (item.type == WorkerItemType_PolyGen) ++item.chunk->graphicalTasksRunning;
 	LightLock_Lock(&queue->listInUse);
 	vec_push(&queue->queue, item);
 	LightLock_Unlock(&queue->listInUse);
