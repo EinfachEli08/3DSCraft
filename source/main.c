@@ -3,27 +3,27 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <3ds.h>
+#include <citro3d.h>
+#include <sino/sino.h>
+
 #include "GameStates.h"
-#include "entity/Damage.h"
-#include "entity/Player.h"
-#include "entity/PlayerController.h"
-#include "gui/DebugUI.h"
-#include "gui/Gui.h"
-#include "gui/SelectWorldScreen.h"
-#include "misc/Crash.h"
-#include "misc/NumberUtils.h"
-#include "rendering/PolyGen.h"
-#include "rendering/Renderer.h"
-#include "world/ChunkWorker.h"
+#include "client/Crash.h"
+#include "client/gui/Gui.h"
+#include "client/gui/screens/SelectWorldScreen.h"
+#include "client/player/Damage.h"
+#include "client/player/Player.h"
+#include "client/player/PlayerController.h"
+#include "client/renderer/PolyGen.h"
+#include "client/renderer/Renderer.h"
+#include "client/renderer/debug/DebugUI.h"
+#include "util/math/NumberUtils.h"
 #include "world/World.h"
+#include "world/chunk/ChunkWorker.h"
 #include "world/savegame/SaveManager.h"
 #include "world/savegame/SuperChunk.h"
 #include "world/worldgen/SmeaGen.h"
 #include "world/worldgen/SuperFlatGen.h"
-#include <3ds.h>
-
-#include <citro3d.h>
-#include <sino/sino.h>
 
 bool showDebugInfo = true;
 
