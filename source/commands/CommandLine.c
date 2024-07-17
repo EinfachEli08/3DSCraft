@@ -1,9 +1,9 @@
-#include <commands/CommandLine.h>
-#include <world/savegame/SaveManager.h>
+#include "commands/CommandLine.h"
+#include "world/savegame/SaveManager.h"
 
 #include <3ds.h>
 
-#include <client/renderer/debug/DebugUI.h>
+#include "client/renderer/debug/DebugUI.h"
 #include <mpack/mpack.h>
 
 #include <stdio.h>

@@ -7,7 +7,7 @@
 #include <cstring>    // std::memcpy()
 #include <new>
 #include <type_traits>
-#include <utility>
+#include "utility"
 #include <algorithm>  // std::swap, std::reverse, std::qsort
 
 // Helper functions

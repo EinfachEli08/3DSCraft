@@ -1,15 +1,15 @@
-﻿#pragma once
+#pragma once
 
 #include <stdbool.h>
-#include <world/World.h>
+#include "world/World.h"
 
-#include <client/gui/screens/Inventory.h>
-#include <client/player/Damage.h>
-#include <world/level/item/ItemStack.h>
+#include "client/gui/screens/Inventory.h"
+#include "client/player/Damage.h"
+#include "world/level/item/ItemStack.h"
 
-#include <sounds/Sound.h>
-#include <util/math/VecMath.h>
-#include <world/Raycast.h>
+#include "sounds/Sound.h"
+#include "util/math/VecMath.h"
+#include "world/Raycast.h"
 
 #define PLAYER_EYEHEIGHT (1.65f)
 #define PLAYER_HEIGHT (1.8f)

@@ -1,12 +1,12 @@
-#include <client/player/PlayerController.h>
+#include "client/player/PlayerController.h"
 
-#include <commands/CommandLine.h>
-#include <util/math/NumberUtils.h>
+#include "commands/CommandLine.h"
+#include "util/math/NumberUtils.h"
 
-#include <client/renderer/debug/DebugUI.h>
+#include "client/renderer/debug/DebugUI.h"
 
+#include "sounds/Sound.h"
 #include <ini/ini.h>
-#include <sounds/Sound.h>
 #include <unistd.h>
 
 #ifdef __3DS__
@@ -64,11 +64,11 @@ const PlayerControlScheme n3ds_default_scheme	  = {.forward		   = K3DS_CPAD_UP,
 													 .lookRight		   = K3DS_CSTICK_RIGHT,
 													 .lookUp		   = K3DS_CSTICK_UP,
 													 .lookDown		   = K3DS_CSTICK_DOWN,
-													 .placeBlock	   = K3DS_ZL,
-													 .breakBlock	   = K3DS_ZR,
+													 .placeBlock	   = K3DS_L,
+													 .breakBlock	   = K3DS_R,
 													 .jump			   = K3DS_A && K3DS_B && K3DS_DUP,
-													 .switchBlockLeft  = K3DS_L && K3DS_DLEFT,
-													 .switchBlockRight = K3DS_R && K3DS_DRIGHT,
+													 .switchBlockLeft  = K3DS_ZL && K3DS_DLEFT,
+													 .switchBlockRight = K3DS_ZR && K3DS_DRIGHT,
 													 .openCmd		   = K3DS_SELECT,
 													 .crouch		   = K3DS_Y && K3DS_X && K3DS_DDOWN};
 static void convertPlatformInput(InputData* input, float ctrls[], bool keysdown[], bool keysup[]) {
@@ -272,9 +272,12 @@ void PlayerController_Update(PlayerController* ctrl, Sound* sound, InputData inp
 		movement = f3_add(movement, f3_new(0.f, jump, 0.f));
 		movement = f3_sub(movement, f3_new(0.f, crouch, 0.f));
 	}
+#define MOVE_SPEED 4.3f
+#define MOVE_BOBBING 1.5f
+
 	if (f3_magSqr(movement) > 0.f) {
-		float speed = 4.3f * f3_mag(f3_new(-strafeLeft + strafeRight, -crouch + jump, -forward + backward));
-		player->bobbing += speed * 1.5f * dt;
+		float speed = MOVE_SPEED * f3_mag(f3_new(-strafeLeft + strafeRight, -crouch + jump, -forward + backward));
+		player->bobbing += speed * MOVE_BOBBING * dt;
 		movement = f3_scl(f3_nrm(movement), speed);
 	}
 

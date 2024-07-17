@@ -1,11 +1,11 @@
-#include <client/renderer/Clouds.h>
+#include "client/renderer/Clouds.h"
 
-#include <client/renderer/VertexFmt.h>
+#include "client/renderer/VertexFmt.h"
 
 #include <sino/sino.h>
 #include <stdint.h>
 
-#include <client/renderer/texture/TextureMap.h>
+#include "client/renderer/texture/TextureMap.h"
 
 #include <stdio.h>
 

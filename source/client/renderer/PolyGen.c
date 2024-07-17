@@ -1,10 +1,10 @@
-#include <client/renderer/PolyGen.h>
+#include "client/renderer/PolyGen.h"
 
-#include <client/renderer/VBOCache.h>
-#include <client/renderer/debug/DebugUI.h>
-#include <core/Direction.h>
+#include "client/renderer/VBOCache.h"
+#include "client/renderer/debug/DebugUI.h"
+#include "core/Direction.h"
 
-#include <client/player/Player.h>
+#include "client/player/Player.h"
 
 #include <stdbool.h>
 #include <vec/vec.h>

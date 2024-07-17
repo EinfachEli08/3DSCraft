@@ -1,6 +1,6 @@
 #pragma once
 
-#include <world/level/item/ItemStack.h>
+#include "world/level/item/ItemStack.h"
 
 #include <util/math/NumberUtils.h>
 

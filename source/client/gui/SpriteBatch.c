@@ -1,9 +1,9 @@
-#include <client/gui/SpriteBatch.h>
+#include "client/gui/SpriteBatch.h"
 
-#include <client/gui/font/FontLoader.h>
-#include <client/renderer/VertexFmt.h>
-#include <client/renderer/debug/DebugUI.h>
-#include <client/renderer/texture/TextureMap.h>
+#include "client/gui/font/FontLoader.h"
+#include "client/renderer/VertexFmt.h"
+#include "client/renderer/debug/DebugUI.h"
+#include "client/renderer/texture/TextureMap.h"
 
 #include <stdarg.h>
 

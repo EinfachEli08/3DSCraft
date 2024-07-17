@@ -1,11 +1,11 @@
 //
 // Created by Elias on 16.07.2024.
 //
-#include <client/gui/Gui.h>
-#include <client/gui/SpriteBatch.h>
-#include <client/gui/State1.h>
-#include <client/gui/state_machine/state_machine.h>
-#include <client/renderer/VertexFmt.h>
+#include "client/gui/Gui.h"
+#include "client/gui/SpriteBatch.h"
+#include "client/gui/State1.h"
+#include "client/gui/state_machine/state_machine.h"
+#include "client/renderer/VertexFmt.h"
 
 extern void SelectWorldScreen(state_machine_t *machine);  // Forward declare state2
 

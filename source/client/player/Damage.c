@@ -1,5 +1,5 @@
-#include <client/player/Damage.h>
-#include <client/player/Player.h>
+#include "client/player/Damage.h"
+#include "client/player/Player.h"
 
 void OvertimeDamage(cause, time) {
 	Player* player;

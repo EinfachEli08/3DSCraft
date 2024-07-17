@@ -2,10 +2,10 @@
 
 #include <stdbool.h>
 
-#include <world/level/block/Block.h>
-#include <world/level/item/Item.h>
+#include "world/level/block/Block.h"
+#include "world/level/item/Item.h"
 
-#include <util/math/NumberUtils.h>
+#include "util/math/NumberUtils.h"
 
 typedef struct {
 		Block block;

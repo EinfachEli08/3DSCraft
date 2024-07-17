@@ -2,7 +2,7 @@
 // Created by Elias on 15.07.2024.
 //
 
-#include <client/gui/state_machine/state_machine.h>
+#include "client/gui/state_machine/state_machine.h"
 #include <stdlib.h>
 
 state_machine_t *state_machine_create(void) {

@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include <client/player/InputData.h>
-#include <world/World.h>
+#include "client/player/InputData.h"
+#include "world/World.h"
 
 #include <citro3d.h>
 

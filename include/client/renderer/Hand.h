@@ -2,8 +2,8 @@
 
 #include <citro3d.h>
 
-#include <client/player/Player.h>
-#include <world/level/block/Block.h>
+#include "client/player/Player.h"
+#include "world/level/block/Block.h"
 
 void Hand_Init();
 void Hand_Deinit();

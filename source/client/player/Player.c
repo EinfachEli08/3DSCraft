@@ -1,7 +1,7 @@
-#include <client/player/Damage.h>
-#include <client/player/Player.h>
-#include <sounds/Sound.h>
-#include <world/phys/Collision.h>
+#include "client/player/Damage.h"
+#include "client/player/Player.h"
+#include "sounds/Sound.h"
+#include "world/phys/Collision.h"
 
 void Player_Init(Player* player, World* world) {
 	player->position = f3_new(0.f, 0.f, 0.f);
@@ -204,7 +204,7 @@ void Player_Jump(Player* player, float3 accl) {
 		player->crouching  = false;
 	}
 }
-#include <client/renderer/debug/DebugUI.h>
+#include "client/renderer/debug/DebugUI.h"
 const float MaxWalkVelocity		= 4.3f;
 const float MaxFallVelocity		= -50.f;
 const float GravityPlusFriction = 10.f;

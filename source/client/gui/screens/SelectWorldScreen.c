@@ -1,12 +1,12 @@
 //
 // Created by Elias on 16.07.2024.
 //
-#include <client/gui/Gui.h>
-#include <client/gui/SpriteBatch.h>
-#include <client/gui/state_machine/state_machine.h>
-#include <client/renderer/VertexFmt.h>
+#include "client/gui/Gui.h"
+#include "client/gui/SpriteBatch.h"
+#include "client/gui/state_machine/state_machine.h"
+#include "client/renderer/VertexFmt.h"
 
-#include <client/gui/screens/SelectWorldScreen.h>
+#include "client/gui/screens/SelectWorldScreen.h"
 
 #include <vec/vec.h>
 
@@ -15,7 +15,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <client/player/Player.h>
+#include "client/player/Player.h"
 
 #include <mpack/mpack.h>
 

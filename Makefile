@@ -12,9 +12,9 @@ endif
 TOPDIR ?= $(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
-VERSION_MAJOR	:= 1
-VERSION_MINOR	:= 0
-VERSION_MICRO	:= 0
+VERSION_MAJOR	:= 0
+VERSION_MINOR	:= 5
+VERSION_MICRO	:= 4
 
 DEBUG			?=	1
 
@@ -150,15 +150,17 @@ endif
 #---------------------------------------------------------------------------------------
 # Main targets
 #---------------------------------------------------------------------------------------
-all: greetings 
+all: greetings clean-exe
 	@[ -d $(BUILD) ] || mkdir -p $(BUILD)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 #---------------------------------------------------------------------------------
-clean:
-	rm -rf $(BUILD)/
-	rm -f *.elf *.smdh *.lst *.cia *.3dsx *.cxi *.cfa
+clean : clean-exe
+	@rm -rf $(BUILD)/
+	@rm -r *.3dsx
+	@echo Clean...
 
-clean-all: clean-libs clean-pack clean´
+clean-exe:
+	@rm -f *.elf *.smdh *.lst *.cia *.cxi *.cfa
 
 #---------------------------------------------------------------------------------------
 # Testing

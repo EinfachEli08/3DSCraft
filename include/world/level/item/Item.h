@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include <core/Direction.h>
+#include "core/Direction.h"
 
 typedef uint8_t Item;
 

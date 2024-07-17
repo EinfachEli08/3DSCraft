@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include <client/player/InputData.h>
+#include "client/player/InputData.h"
 
 void Gui_Init();
 void Gui_Deinit();

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <world/WorkQueue.h>
-#include <world/chunk/Chunk.h>
+#include "world/WorkQueue.h"
+#include "world/chunk/Chunk.h"
 
-#include <util/math/NumberUtils.h>
-#include <util/math/Xorshift.h>
+#include "util/math/NumberUtils.h"
+#include "util/math/Xorshift.h"
 #include <vec/vec.h>
 
 #define CHUNKCACHE_SIZE (9)

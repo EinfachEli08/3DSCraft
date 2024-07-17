@@ -1,8 +1,8 @@
-#include <world/phys/Collision.h>
+#include "world/phys/Collision.h"
 
 #include <math.h>
 
-#include <util/math/NumberUtils.h>
+#include "util/math/NumberUtils.h"
 
 bool Collision_BoxIntersect(Box a, Box b, int ignore_faces,
 							float3* ncoll,	// normal of collision.

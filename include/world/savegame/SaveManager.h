@@ -4,9 +4,9 @@
 
 #include <vec/vec.h>
 
-#include <client/player/Player.h>
+#include "client/player/Player.h"
 
-#include <world/savegame/SuperChunk.h>
+#include "world/savegame/SuperChunk.h"
 
 typedef struct {
 		Player* player;

@@ -1,16 +1,16 @@
-#include <client/renderer/WorldRenderer.h>
+#include "client/renderer/WorldRenderer.h"
 
-#include <client/renderer/VertexFmt.h>
+#include "client/renderer/VertexFmt.h"
 
-#include <client/renderer/Cursor.h>
-#include <world/level/block/Block.h>
+#include "client/renderer/Cursor.h"
+#include "world/level/block/Block.h"
 
-#include <client/renderer/debug/DebugUI.h>
+#include "client/renderer/debug/DebugUI.h"
 
 #include <citro3d.h>
 
-#include <client/renderer/Clouds.h>
-#include <client/renderer/Hand.h>
+#include "client/renderer/Clouds.h"
+#include "client/renderer/Hand.h"
 
 #include <stdio.h>
 #include <stdlib.h>

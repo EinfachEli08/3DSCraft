@@ -1,8 +1,8 @@
-#include <client/renderer/Cursor.h>
+#include "client/renderer/Cursor.h"
 
-#include <client/renderer/VertexFmt.h>
+#include "client/renderer/VertexFmt.h"
 
-#include <util/math/NumberUtils.h>
+#include "util/math/NumberUtils.h"
 
 static WorldVertex* cursorVBO;
 

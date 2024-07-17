@@ -1,7 +1,7 @@
-#include <client/gui/SpriteBatch.h>
-#include <client/renderer/VertexFmt.h>
+#include "client/gui/SpriteBatch.h"
+#include "client/renderer/VertexFmt.h"
 
-#include <client/renderer/debug/DebugUI.h>
+#include "client/renderer/debug/DebugUI.h"
 
 #include <stdarg.h>
 #include <stdlib.h>

@@ -2,7 +2,7 @@
 
 #include <3ds.h>
 
-#include <world/WorkQueue.h>
+#include "world/WorkQueue.h"
 
 #define CHUNKWORKER_THREAD_STACKSIZE (16 * 1024)
 

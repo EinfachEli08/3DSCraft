@@ -1,8 +1,8 @@
-#include <client/Camera.h>
+#include "client/Camera.h"
 
-#include <world/chunk/Chunk.h>
+#include "world/chunk/Chunk.h"
 
-#include <client/renderer/debug/DebugUI.h>
+#include "client/renderer/debug/DebugUI.h"
 
 void Camera_Init(Camera* cam) {
 	Mtx_Identity(&cam->view);

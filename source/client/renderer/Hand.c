@@ -1,9 +1,9 @@
-#include <client/renderer/Hand.h>
+#include "client/renderer/Hand.h"
 
-#include <client/renderer/VertexFmt.h>
-#include <util/math/NumberUtils.h>
+#include "client/renderer/VertexFmt.h"
+#include "util/math/NumberUtils.h"
 
-#include <client/renderer/texture/TextureMap.h>
+#include "client/renderer/texture/TextureMap.h"
 
 #include <string.h>
 

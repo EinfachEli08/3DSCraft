@@ -1,4 +1,4 @@
-#include <core/Direction.h>
+#include "core/Direction.h"
 
 int DirectionToOffset[7][3]	   = {{-1, 0, 0}, {1, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}, {0, 0, 0}};
 Direction DirectionOpposite[7] = {Direction_East,  Direction_West,	Direction_Top,	  Direction_Bottom,

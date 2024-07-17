@@ -106,7 +106,7 @@ int main() {
 			strncat(BackgroundSound.path, soundfile, sizeof(BackgroundSound.path) - 1);
 			playopus(&BackgroundSound);
 		}
-
+		DebugUI_Text("v%s", APP_VERSION);
 		// DebugUI_Text("%d FPS  Usage: CPU: %5.2f%% GPU: %5.2f%% Buf: %5.2f%% Lin: %d", fps, C3D_GetProcessingTime() * 6.f,
 		// C3D_GetDrawingTime() * 6.f, C3D_GetCmdBufUsage() * 100.f, linearSpaceFree());
 		// DebugUI_Text("X: %f, Y: %f, Z: %f", f3_unpack(player.position));

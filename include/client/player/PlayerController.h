@@ -1,8 +1,8 @@
-#include <client/player/Player.h>
+#include "client/player/Player.h"
 
-#include <client/player/InputData.h>
+#include "client/player/InputData.h"
 
-#include <sounds/Sound.h>
+#include "sounds/Sound.h"
 #include <stdbool.h>
 #include <stdint.h>
 

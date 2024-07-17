@@ -1,10 +1,10 @@
 #pragma once
 
-#include <client/player/Player.h>
-#include <world/WorkQueue.h>
-#include <world/World.h>
+#include "client/player/Player.h"
+#include "world/WorkQueue.h"
+#include "world/World.h"
 
-#include <client/renderer/VertexFmt.h>
+#include "client/renderer/VertexFmt.h"
 
 void PolyGen_Init(World* world_, Player* player_);
 void PolyGen_Deinit();

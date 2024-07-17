@@ -2,7 +2,7 @@
 
 #include <stdbool.h>
 
-#include <util/math/VecMath.h>
+#include "util/math/VecMath.h"
 
 typedef struct {
 		float3 min, max;
