@@ -40,7 +40,7 @@ DATA			:=	data
 META			:=	project
 ROMFS			:=	romfs
 INCLUDES		:=	dependencies include
-SOURCES 		:= $(shell find $(realpath dependencies) $(realpath source) -type d)
+SOURCES 		:= $(shell find $(realpath dependencies) $(realpath source) $(realpath assets) -type d)
 SOURCES 		:= $(foreach dir, $(SOURCES), $(patsubst $(CURDIR)/%, %, $(dir)))
 
 # 3dsx

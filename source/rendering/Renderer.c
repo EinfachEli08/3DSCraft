@@ -8,6 +8,7 @@
 #include <gui/SpriteBatch.h>
 #include <rendering/Camera.h>
 #include <rendering/Clouds.h>
+#include <rendering/CubeMap.h>
 #include <rendering/Cursor.h>
 #include <rendering/PolyGen.h>
 #include <rendering/TextureMap.h>
@@ -17,6 +18,8 @@
 
 #include <gui/State1.h>
 #include <gui/State2.h>
+
+#include <cubemap_shbin.h>
 #include <gui_shbin.h>
 #include <world_shbin.h>
 
@@ -31,11 +34,11 @@
 static C3D_RenderTarget* renderTargets[2];
 static C3D_RenderTarget* lowerScreen;
 
-static DVLB_s *world_dvlb, *gui_dvlb;
-static shaderProgram_s world_shader, gui_shader;
-static int world_shader_uLocProjection, gui_shader_uLocProjection;
+static DVLB_s *world_dvlb, *gui_dvlb, *cubemap_dvlb;
+static shaderProgram_s world_shader, gui_shader, cubemap_shader;
+static int world_shader_uLocProjection, gui_shader_uLocProjection, cubemap_shader_uLocProjection;
 
-static C3D_AttrInfo world_vertexAttribs, gui_vertexAttribs;
+static C3D_AttrInfo world_vertexAttribs, gui_vertexAttribs, cubemap_vertexAttribs;
 
 static C3D_Tex logoTex;
 
@@ -81,6 +84,11 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 	shaderProgramSetVsh(&gui_shader, &gui_dvlb->DVLE[0]);
 	gui_shader_uLocProjection = shaderInstanceGetUniformLocation(gui_shader.vertexShader, "projection");
 
+	cubemap_dvlb = DVLB_ParseFile((u32*)cubemap_shbin, cubemap_shbin_size);
+	shaderProgramInit(&cubemap_shader);
+	shaderProgramSetVsh(&cubemap_shader, &cubemap_dvlb->DVLE[0]);
+	cubemap_shader_uLocProjection = shaderInstanceGetUniformLocation(cubemap_shader.vertexShader, "projection");
+
 	AttrInfo_Init(&world_vertexAttribs);
 	AttrInfo_AddLoader(&world_vertexAttribs, 0, GPU_SHORT, 3);
 	AttrInfo_AddLoader(&world_vertexAttribs, 1, GPU_SHORT, 2);
@@ -90,6 +98,9 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 	AttrInfo_Init(&gui_vertexAttribs);
 	AttrInfo_AddLoader(&gui_vertexAttribs, 0, GPU_SHORT, 3);
 	AttrInfo_AddLoader(&gui_vertexAttribs, 1, GPU_SHORT, 3);
+
+	AttrInfo_Init(&cubemap_vertexAttribs);
+	AttrInfo_AddLoader(&cubemap_vertexAttribs, 0, GPU_SHORT, 3);
 
 	PolyGen_Init(world, player_);
 
