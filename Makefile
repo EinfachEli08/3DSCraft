@@ -32,7 +32,7 @@ VERSION_MAJOR	:= 0
 VERSION_MINOR	:= 5
 VERSION_MICRO	:= 4
 
-export DEBUG			?=	1
+DEBUG			?=	1
 
 TARGET			:=	3DSCraft
 BUILD			:=	build
@@ -188,6 +188,9 @@ clean:
 run:
 	@echo running...
 	@3dslink $(TARGET).3dsx
+	
+rund: #run dima
+	@3dslink $(TARGET).3dsx -a 192.168.178.37
 
 cxi:
 	@$(MAKEROM) -o $(TARGET).cxi $(MAKEROM_ARGS)
