@@ -91,6 +91,7 @@ LIBS		+= -lm `$(PREFIX)pkg-config opusfile --libs`
 LIBDIRS	:= $(CURDIR) $(PORTLIBS) $(CTRULIB)
 
 
+
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
 # rules for different file extensions
@@ -106,12 +107,12 @@ export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
-CFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
-CPPFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
-SFILES			:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-PICAFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.v.pica)))
-SHLISTFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.shlist)))
-BINFILES		:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
+CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
+SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
+PICAFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.v.pica)))
+SHLISTFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.shlist)))
+BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -164,14 +165,11 @@ endif
 BANNERTOOL   ?= tools/bannertool.exe
 MAKEROM      ?= tools/makerom.exe
 
-MAKEROM_ARGS += -elf "$(OUTPUT).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(OUTPUT).smdh" -desc app:4
-MAKEROM_ARGS += -major $(VERSION_MAJOR) -minor $(VERSION_MINOR) -micro $(VERSION_MICRO)
+MAKEROM_ARGS += -elf "$(TARGET).elf" -rsf "$(RSF_PATH)" -banner "$(BUILD)/banner.bnr" -icon "$(TARGET).smdh"
+MAKEROM_ARGS += -major $(VERSION_MAJOR) -minor $(VERSION_MINOR) -micro $(VERSION_MICRO) -desc app:4
 
 ifneq ($(strip $(LOGO)),)
 	MAKEROM_ARGS += -logo "$(LOGO)"
-endif
-ifneq ($(strip $(ROMFS)),)
-	MAKEROM_ARGS += -DAPP_ROMFS="$(CURDIR)/$(ROMFS)"
 endif
 
 .PHONY: $(BUILD) clean all
@@ -192,14 +190,14 @@ run:
 	@3dslink $(TARGET).3dsx
 
 cxi:
-	@$(MAKEROM) -o $(OUTPUT).cxi $(MAKEROM_ARGS)
+	@$(MAKEROM) -o $(TARGET).cxi $(MAKEROM_ARGS)
 	@echo built ... $(TARGET).cxi
 cfa:
 	@$(MAKEROM) -o $(TARGET).cfa -rsf $(RSF_PATH) -target t
 	@echo built ... $(TARGET).cfa
 
 cia:
-	@$(MAKEROM) -f cia -o $(OUTPUT).cia -target t -i $(TARGET).cxi:0:0 -i $(TARGET).cfa:1:1
+	@$(MAKEROM) -f cia -o $(TARGET).cia -target t -i $(TARGET).cxi:0:0 -i $(TARGET).cfa:1:1
 	@echo built ... $(TARGET).cia
 
 
@@ -236,10 +234,10 @@ endif
 $(OUTPUT).elf	:	$(OFILES)
 
 $(BUILD)/banner.bnr:
-	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "../$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "../$(BANNER_AUDIO)" -o "../$(BUILD)/banner.bnr"
+	@$(BANNERTOOL) makebanner $(BANNER_IMAGE_ARG) "../$(BANNER_IMAGE)" $(BANNER_AUDIO_ARG) "../$(BANNER_AUDIO)" -o "banner.bnr"
 
 $(OUTPUT).smdh:
-	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "$(OUTPUT).smdh"
+	@$(BANNERTOOL) makesmdh -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -i "$(APP_ICON)" -f "$(ICON_FLAGS)" -o "../$(TARGET).smdh"
 
 #---------------------------------------------------------------------------------
 # you need a rule like this for each extension you use as binary data

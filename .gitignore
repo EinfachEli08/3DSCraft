@@ -2,9 +2,9 @@
 *.cia
 *.cfa
 *.elf
-*.smdh
 *.lst
 *.o
+*.t3x
 
 build
 backup_cpp/build

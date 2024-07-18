@@ -240,52 +240,156 @@ void Renderer_Render() {
 
 	C3D_FrameEnd(0);
 }
-
 /*
-static bool clicked_play = false;
+//CUBEMAP STUFF
 
-#include <gui/Gui.h>
-#include <gui/SpriteBatch.h>
 
-void state1(state_machine_t *machine) {
-	//WorldSelect_Render();
-	/*SpriteBatch_SetScale(2);
+typedef struct { float position[3]; } vertex;
 
-	SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
-	for (int i = 0; i < 160 / 32 + 1; i++) {
-		for (int j = 0; j < 120 / 32 + 1; j++) {
-			bool overlay = j >= 2;
-			SpriteBatch_PushQuadColor(i * 32, j * 32, overlay ? -4 : -10, 32, 32, 0, 0, 32, 32,
-									  overlay ? INT16_MAX : SHADER_RGB(12, 12, 12));
-		}
-	}
-	Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 1);
-	clicked_play = Gui_Button(1.f, "Test scene management with gui");
-	Gui_EndRow();
+static const vertex vertex_list[] =
+		{
+				// First face (PZ)
+				// First triangle
+				{ {-0.5f, -0.5f, +0.5f} },
+				{ {+0.5f, -0.5f, +0.5f} },
+				{ {+0.5f, +0.5f, +0.5f} },
+				// Second triangle
+				{ {+0.5f, +0.5f, +0.5f} },
+				{ {-0.5f, +0.5f, +0.5f} },
+				{ {-0.5f, -0.5f, +0.5f} },
 
-	if (clicked_play) {
-		state_machine_set_current_state(machine, state2);
-	}
+				// Second face (MZ)
+				// First triangle
+				{ {-0.5f, -0.5f, -0.5f} },
+				{ {-0.5f, +0.5f, -0.5f} },
+				{ {+0.5f, +0.5f, -0.5f} },
+				// Second triangle
+				{ {+0.5f, +0.5f, -0.5f} },
+				{ {+0.5f, -0.5f, -0.5f} },
+				{ {-0.5f, -0.5f, -0.5f} },
+
+				// Third face (PX)
+				// First triangle
+				{ {+0.5f, -0.5f, -0.5f} },
+				{ {+0.5f, +0.5f, -0.5f} },
+				{ {+0.5f, +0.5f, +0.5f} },
+				// Second triangle
+				{ {+0.5f, +0.5f, +0.5f} },
+				{ {+0.5f, -0.5f, +0.5f} },
+				{ {+0.5f, -0.5f, -0.5f} },
+
+				// Fourth face (MX)
+				// First triangle
+				{ {-0.5f, -0.5f, -0.5f} },
+				{ {-0.5f, -0.5f, +0.5f} },
+				{ {-0.5f, +0.5f, +0.5f} },
+				// Second triangle
+				{ {-0.5f, +0.5f, +0.5f} },
+				{ {-0.5f, +0.5f, -0.5f} },
+				{ {-0.5f, -0.5f, -0.5f} },
+
+				// Fifth face (PY)
+				// First triangle
+				{ {-0.5f, +0.5f, -0.5f} },
+				{ {-0.5f, +0.5f, +0.5f} },
+				{ {+0.5f, +0.5f, +0.5f} },
+				// Second triangle
+				{ {+0.5f, +0.5f, +0.5f} },
+				{ {+0.5f, +0.5f, -0.5f} },
+				{ {-0.5f, +0.5f, -0.5f} },
+
+				// Sixth face (MY)
+				// First triangle
+				{ {-0.5f, -0.5f, -0.5f} },
+				{ {+0.5f, -0.5f, -0.5f} },
+				{ {+0.5f, -0.5f, +0.5f} },
+				// Second triangle
+				{ {+0.5f, -0.5f, +0.5f} },
+				{ {-0.5f, -0.5f, +0.5f} },
+				{ {-0.5f, -0.5f, -0.5f} },
+		};
+
+
+
+// Helper function for loading a texture from a t3x file
+static bool loadTextureFromFile(C3D_Tex* tex, C3D_TexCube* cube, const char* path)
+{
+	FILE* f = fopen(path, "rb");
+	if (!f)
+		return false;
+
+	Tex3DS_Texture t3x = Tex3DS_TextureImportStdio(f, tex, cube, false);
+	fclose(f);
+	if (!t3x)
+		return false;
+
+	// Delete the t3x object since we don't need it
+	Tex3DS_TextureFree(t3x);
+	return true;
 }
 
-void state2(state_machine_t *machine) {
-	SpriteBatch_SetScale(2);
+void BG_Init(void)
+{
+	// Load the vertex shader, create a shader program and bind it
+	skybox_dvlb = DVLB_ParseFile((u32*)skybox_shbin, skybox_shbin_size);
+	shaderProgramInit(&program);
+	shaderProgramSetVsh(&program, &skybox_dvlb->DVLE[0]);
+	C3D_BindProgram(&program);
+	C3D_DepthTest(false, GPU_ALWAYS, GPU_WRITE_COLOR);
 
-	SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
-	for (int i = 0; i < 160 / 32 + 1; i++) {
-		for (int j = 0; j < 120 / 32 + 1; j++) {
-			bool overlay = j >= 2;
-			SpriteBatch_PushQuadColor(i * 32, j * 32, overlay ? -4 : -10, 32, 32, 0, 0, 32, 32,
-									  overlay ? INT16_MAX : SHADER_RGB(12, 12, 12));
-		}
-	}
+	// Get the location of the uniforms
+	uLoc_projection = shaderInstanceGetUniformLocation(program.vertexShader, "projection");
+	uLoc_modelView  = shaderInstanceGetUniformLocation(program.vertexShader, "modelView");
 
-	Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 1);
-	clicked_play = Gui_Button(1.f, "it works!");
-	Gui_EndRow();
+	// Configure attributes for use with the vertex shader
+	C3D_AttrInfo* attrInfo = C3D_GetAttrInfo();
+	AttrInfo_Init(attrInfo);
+	AttrInfo_AddLoader(attrInfo, 0, GPU_FLOAT, 3); // v0=position
 
-	if (clicked_play) {
-		state_machine_set_current_state(machine, state1);
-	}
+	// Compute the projection matrix
+	Mtx_PerspTilt(&projection, C3D_AngleFromDegrees(45.0f), C3D_AspectRatioTop, 0.01f, 1000.0f, false);
+
+	// Create the VBO (vertex buffer object)
+	vbo_data = linearAlloc(sizeof(vertex_list));
+	memcpy(vbo_data, vertex_list, sizeof(vertex_list));
+
+	// Configure buffers
+	C3D_BufInfo* bufInfo = C3D_GetBufInfo();
+	BufInfo_Init(bufInfo);
+	BufInfo_Add(bufInfo, vbo_data, sizeof(vertex), 1, 0x0);
+
+	// Load the skybox texture and bind it to the first texture unit
+	if (!loadTextureFromFile(&skybox_tex, &skybox_cube, "romfs:/gfx/skybox.t3x"))
+		svcBreak(USERBREAK_PANIC);
+	C3D_TexSetFilter(&skybox_tex, GPU_LINEAR, GPU_LINEAR);
+	C3D_TexSetWrap(&skybox_tex, GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
+	C3D_TexBind(0, &skybox_tex);
+
+
+	C3D_TexEnv* env = C3D_GetTexEnv(0);
+	C3D_TexEnvInit(env);
+	C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0,0,0);
+	C3D_TexEnvFunc(env, C3D_Both, GPU_REPLACE);
 }
+
+void BG_Render(void)
+{
+
+
+}
+
+void BG_Exit(void)
+{
+	// Free the texture
+	C3D_TexDelete(&skybox_tex);
+
+	// Free the VBO
+	linearFree(vbo_data);
+
+	// Free the shader program
+	shaderProgramFree(&program);
+	DVLB_Free(skybox_dvlb);
+}
+
+
 */

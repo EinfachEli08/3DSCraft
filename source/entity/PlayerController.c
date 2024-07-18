@@ -9,7 +9,7 @@
 #include <misc/Sound.h>
 #include <unistd.h>
 
-#ifdef __3DS__
+#ifdef _3DS
 #include <3ds.h>
 #define PLATFORM_BUTTONS 23
 const char* platform_key_names[PLATFORM_BUTTONS] = {"Not Set",	  "A",			"B",		   "X",		   "Y",			"L",

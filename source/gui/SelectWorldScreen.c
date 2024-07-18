@@ -1,9 +1,9 @@
 //
 // Created by Elias on 16.07.2024.
 //
-#include <gui/state_machine/state_machine.h>
 #include <gui/Gui.h>
 #include <gui/SpriteBatch.h>
+#include <gui/state_machine/state_machine.h>
 #include <rendering/VertexFmt.h>
 
 #include <gui/SelectWorldScreen.h>
@@ -30,7 +30,7 @@ typedef struct {
 static vec_t(WorldInfo) worlds;
 
 // Declare machine as a global variable
-static state_machine_t *machine;
+static state_machine_t* machine;
 
 void SelectWorldScreen_ScanWorlds() {
 	vec_clear(&worlds);
@@ -74,7 +74,8 @@ static void delete_folder(const char* path) {
 	int pathLen = strlen(path);
 
 	while ((entry = readdir(dir))) {
-		if (!strcmp(entry->d_name, "..") || !strcmp(entry->d_name, ".")) continue;
+		if (!strcmp(entry->d_name, "..") || !strcmp(entry->d_name, "."))
+			continue;
 
 		int entryLen = strlen(entry->d_name);
 
@@ -92,39 +93,44 @@ static void delete_folder(const char* path) {
 	rmdir(path);
 }
 
-void SelectWorldScreen_Init(state_machine_t *sm) {
+void SelectWorldScreen_Init(state_machine_t* sm) {
 	vec_init(&worlds);
 	machine = sm;  // Assign the state machine pointer
 
 	SelectWorldScreen_ScanWorlds();
 }
 
-void SelectWorldScreen_Deinit() { vec_deinit(&worlds); }
+void SelectWorldScreen_Deinit() {
+	vec_deinit(&worlds);
+}
 
+// TODO: Separate menu states
+typedef enum {
+	MenuState_SelectWorld,
+	MenuState_ConfirmDeletion,
+	MenuState_WorldOptions
+} MenuState;
 
-//TODO: Separate menu states
-typedef enum { MenuState_SelectWorld, MenuState_ConfirmDeletion, MenuState_WorldOptions } MenuState;
-
-static int scroll = 0;
-static float velocity = 0.f;
+static int scroll		 = 0;
+static float velocity	 = 0.f;
 static int selectedWorld = -1;
 
-static bool clicked_play = false;
-static bool clicked_new_world = false;
+static bool clicked_play		 = false;
+static bool clicked_new_world	 = false;
 static bool clicked_delete_world = false;
-static bool clicked_back = false;
+static bool clicked_back		 = false;
 
 static bool confirmed_world_options = false;
-static bool canceled_world_options = false;
+static bool canceled_world_options	= false;
 
 static bool confirmed_deletion = false;
-static bool canceled_deletion = false;
+static bool canceled_deletion  = false;
 
 static WorldGenType worldGenType = WorldGen_SuperFlat;
 
-static gamemode gamemode1=Gamemode_Survival;
+static gamemode gamemode1 = Gamemode_Survival;
 
-static char* gamemodestr[]={"Survival","Creative","Adventure","Spectator"};
+static char* gamemodestr[] = {"Survival", "Creative", "Adventure", "Spectator"};
 
 static char* worldGenTypesStr[] = {"Smea", "Superflat"};
 
@@ -132,9 +138,9 @@ static MenuState menustate = MenuState_SelectWorld;
 
 static float max_velocity = 20.f;
 
-extern void TitleScreen(state_machine_t *machine); // Forward declare state1
+extern void TitleScreen(state_machine_t* machine);	// Forward declare state1
 
-void SelectWorldScreen(state_machine_t *sm) {
+void SelectWorldScreen(state_machine_t* sm) {
 	machine = sm;  // Update machine when state2 is called with a new state_machine_t
 
 	SpriteBatch_SetScale(2);
@@ -157,11 +163,14 @@ void SelectWorldScreen(state_machine_t *sm) {
 		}
 		scroll += velocity;
 		velocity *= 0.75f;
-		if (ABS(velocity) < 0.001f) velocity = 0.f;
+		if (ABS(velocity) < 0.001f)
+			velocity = 0.f;
 
 		int maximumSize = CHAR_HEIGHT * 2 * worlds.length;
-		if (scroll < -maximumSize) scroll = -maximumSize;
-		if (scroll > 0) scroll = 0;
+		if (scroll < -maximumSize)
+			scroll = -maximumSize;
+		if (scroll > 0)
+			scroll = 0;
 
 		WorldInfo info;
 		int i = 0;
@@ -181,12 +190,12 @@ void SelectWorldScreen(state_machine_t *sm) {
 
 		Gui_Offset(0, 2 * 32 + 5 + BUTTON_TEXT_PADDING);
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 1);
-		clicked_play = Gui_Button(1.f, "Play selected world",true);
+		clicked_play = Gui_Button(1.f, "Play selected world");
 		Gui_EndRow();
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 2);
-		clicked_new_world = Gui_Button(0.33f, "New",true);
-		clicked_delete_world = Gui_Button(0.33f, "Delete",true);
-		clicked_back = Gui_Button(0.33f, "Back",true);
+		clicked_new_world	 = Gui_Button(0.33f, "New");
+		clicked_delete_world = Gui_Button(0.33f, "Delete");
+		clicked_back		 = Gui_Button(0.33f, "Back");
 		Gui_EndRow();
 	} else if (menustate == MenuState_ConfirmDeletion) {
 		Gui_Offset(0, 10);
@@ -195,42 +204,43 @@ void SelectWorldScreen(state_machine_t *sm) {
 		Gui_EndRow();
 		Gui_VerticalSpace(Gui_RelativeHeight(0.4f));
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.8f), 3);
-		canceled_deletion = Gui_Button(0.4f, "No",true);
+		canceled_deletion = Gui_Button(0.4f, "No");
 		Gui_Space(0.2f);
-		confirmed_deletion = Gui_Button(0.4f, "Yes",true);
+		confirmed_deletion = Gui_Button(0.4f, "Yes");
 		Gui_EndRow();
 	} else if (menustate == MenuState_WorldOptions) {
 		Gui_Offset(0, 10);
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
 		Gui_Label(0.45f, true, INT16_MAX, false, "World type:");
 		Gui_Space(0.1f);
-		if (Gui_Button(0.45f, worldGenTypesStr[worldGenType] ,true)) {
+		if (Gui_Button(0.45f, worldGenTypesStr[worldGenType])) {
 			worldGenType++;
-			if (worldGenType == WorldGenTypes_Count) worldGenType = 0;
+			if (worldGenType == WorldGenTypes_Count)
+				worldGenType = 0;
 		}
 		Gui_EndRow();
 
 		Gui_VerticalSpace(Gui_RelativeHeight(0.4f));
 
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
-		canceled_world_options = Gui_Button(0.45f, "Cancel",true);
+		canceled_world_options = Gui_Button(0.45f, "Cancel");
 		Gui_Space(0.1f);
-		confirmed_world_options = Gui_Button(0.45f, "Continue",true);
+		confirmed_world_options = Gui_Button(0.45f, "Continue");
 	}
 }
 
 bool SelectWorldScreen_Update(char* out_worldpath, char* out_name, WorldGenType* worldType, bool* newWorld) {
-	if(clicked_back){
+	if (clicked_back) {
 		state_machine_set_current_state(machine, TitleScreen);
 	}
 	if (clicked_new_world) {
 		clicked_new_world = false;
-		menustate = MenuState_WorldOptions;
+		menustate		  = MenuState_WorldOptions;
 	}
 	if (confirmed_world_options) {
 		confirmed_world_options = false;
-		*worldType = worldGenType;
-		//player->gamemode=gamemode3;
+		*worldType				= worldGenType;
+		// player->gamemode=gamemode3;
 
 		static SwkbdState swkbd;
 		static char name[WORLD_NAME_SIZE];
@@ -254,9 +264,8 @@ bool SelectWorldScreen_Update(char* out_worldpath, char* out_name, WorldGenType*
 			int length = strlen(out_worldpath);
 
 			for (int i = 0; i < length; i++) {
-				if (out_worldpath[i] == '/' || out_worldpath[i] == '\\' || out_worldpath[i] == '?' ||
-					out_worldpath[i] == ':' || out_worldpath[i] == '|' || out_worldpath[i] == '<' ||
-					out_worldpath[i] == '>')
+				if (out_worldpath[i] == '/' || out_worldpath[i] == '\\' || out_worldpath[i] == '?' || out_worldpath[i] == ':' ||
+					out_worldpath[i] == '|' || out_worldpath[i] == '<' || out_worldpath[i] == '>')
 					out_worldpath[i] = '_';
 			}
 
@@ -268,9 +277,10 @@ bool SelectWorldScreen_Update(char* out_worldpath, char* out_name, WorldGenType*
 					alreadyExisting = true;
 					break;
 				}
-				if (!alreadyExisting) break;
+				if (!alreadyExisting)
+					break;
 
-				out_worldpath[length] = '_';
+				out_worldpath[length]	  = '_';
 				out_worldpath[length + 1] = '\0';
 				++length;
 			}
@@ -291,7 +301,7 @@ bool SelectWorldScreen_Update(char* out_worldpath, char* out_name, WorldGenType*
 	}
 	if (clicked_delete_world && selectedWorld != -1) {
 		clicked_delete_world = false;
-		menustate = MenuState_ConfirmDeletion;
+		menustate			 = MenuState_ConfirmDeletion;
 	}
 	if (confirmed_deletion) {
 		confirmed_deletion = false;
@@ -304,11 +314,11 @@ bool SelectWorldScreen_Update(char* out_worldpath, char* out_name, WorldGenType*
 	}
 	if (canceled_deletion) {
 		canceled_deletion = false;
-		menustate = MenuState_SelectWorld;
+		menustate		  = MenuState_SelectWorld;
 	}
 	if (canceled_world_options) {
 		canceled_world_options = false;
-		menustate = MenuState_SelectWorld;
+		menustate			   = MenuState_SelectWorld;
 	}
 
 	return false;

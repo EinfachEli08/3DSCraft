@@ -35,6 +35,11 @@ static inline int relativeToAbsoluteSize(float s) {
 void Gui_Deinit() {
 }
 
+void Gui_SetPadding(newPaddingX, newPaddingY) {
+	paddingX = newPaddingX;
+	paddingY = newPaddingY;
+}
+
 void Gui_Frame() {
 	relativeX = 0;
 	relativeY = 0;
@@ -87,7 +92,7 @@ void Gui_Label(float size, bool shadow, int16_t color, bool center, const char* 
 	currentRow.highestElement = MAX(currentRow.highestElement, yTextSize);
 }
 
-bool Gui_Button(float size, const char* label, bool hasBG) {
+bool Gui_Button(float size, const char* label) {
 	// TODO: Redesign
 #define SLICE_SIZE 8
 #define textureY 66
@@ -104,20 +109,44 @@ bool Gui_Button(float size, const char* label, bool hasBG) {
 
 	SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
 
-	if (hasBG) {
-		SpriteBatch_PushQuad(x, y, -3, SLICE_SIZE, 20, 0, 66 + (pressed * BUTTON_HEIGHT), SLICE_SIZE, 20);
-		SpriteBatch_PushQuad(x + SLICE_SIZE, y, -3, middlePieceSize, 20, SLICE_SIZE, 66 + (pressed * BUTTON_HEIGHT), middlePieceSize, 20);
-		SpriteBatch_PushQuad(x + SLICE_SIZE + middlePieceSize, y, -3, SLICE_SIZE, 20, 192, 66 + (pressed * BUTTON_HEIGHT), SLICE_SIZE, 20);
+	SpriteBatch_PushQuad(x, y, -3, SLICE_SIZE, 20, 0, 66 + (pressed * BUTTON_HEIGHT), SLICE_SIZE, 20);
+	SpriteBatch_PushQuad(x + SLICE_SIZE, y, -3, middlePieceSize, 20, SLICE_SIZE, 66 + (pressed * BUTTON_HEIGHT), middlePieceSize, 20);
+	SpriteBatch_PushQuad(x + SLICE_SIZE + middlePieceSize, y, -3, SLICE_SIZE, 20, 192, 66 + (pressed * BUTTON_HEIGHT), SLICE_SIZE, 20);
 
-		SpriteBatch_PushText(x + (w / 2 - textWidth / 2),
-							 pressed ? (y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2) + 1 : y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2, -1,
-							 pressed ? SHADER_RGB(31, 31, 31) : SHADER_RGB(4, 4, 4), false, INT_MAX, NULL, label);
-	} else {
-		if (pressed) {
-			DrawTint(x, y, w, BUTTON_HEIGHT, SHADER_RGB(20, 20, 20));
-		}
-		SpriteBatch_PushText(x + 24, (y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2), -1, SHADER_RGB(31, 31, 31), false, INT_MAX, NULL, label);
+	SpriteBatch_PushText(x + (w / 2 - textWidth / 2),
+						 pressed ? (y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2) + 1 : y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2, -1,
+						 pressed ? SHADER_RGB(31, 31, 31) : SHADER_RGB(4, 4, 4), false, INT_MAX, NULL, label);
+
+	relativeX += w + paddingX;
+	currentRow.highestElement = MAX(currentRow.highestElement, BUTTON_HEIGHT);
+
+	if (input.keysup & KEY_TOUCH && Gui_WasCursorInside(x, y, w, BUTTON_HEIGHT))
+		return true;
+
+	return false;
+}
+
+bool Gui_IconButton(float size, const char* label) {
+	// TODO: Redesign
+#define SLICE_SIZE 8
+#define textureY 66
+
+	int textWidth = SpriteBatch_CalcTextWidth(label);  // Adjust this call as necessary
+
+	int x = windowX + relativeX;
+	int y = windowY + relativeY - BUTTON_TEXT_PADDING;
+	int w = (size <= 0.f) ? textWidth + SLICE_SIZE : relativeToAbsoluteSize(size);
+
+	bool pressed = Gui_IsCursorInside(x, y, w, BUTTON_HEIGHT);
+
+	int middlePieceSize = w - SLICE_SIZE * 2;
+
+	SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
+
+	if (pressed) {
+		DrawTint(x, y, w, BUTTON_HEIGHT, SHADER_RGB(20, 20, 20));
 	}
+	SpriteBatch_PushText(x + 24, (y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2), -1, SHADER_RGB(31, 31, 31), false, INT_MAX, NULL, label);
 
 	relativeX += w + paddingX;
 	currentRow.highestElement = MAX(currentRow.highestElement, BUTTON_HEIGHT);

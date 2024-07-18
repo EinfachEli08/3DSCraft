@@ -3,10 +3,7 @@
 #include <c3d/texture.h>
 #include <stdint.h>
 
-static inline void Texture_Load(C3D_Tex* result, char* filename) {
-	Texture_LoadCube(result, filename, NULL);
-}
-void Texture_LoadCube(C3D_Tex* result, char* filename, C3D_TexCube* cube);
+void Texture_Load(C3D_Tex* result, char* filename);
 
 #define TEXTURE_MAPSIZE 128
 #define TEXTURE_TILESIZE 16

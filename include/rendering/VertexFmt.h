@@ -31,4 +31,4 @@ typedef struct {
 #define SHADER_RGB_DARKEN(a, f) SHADER_RGB(((int)SHADER_R(a)) * f / 16, ((int)SHADER_G(a)) * f / 16, ((int)SHADER_B(a)) * f / 16)
 
 s16 HSV16_ToRGB(s16 hsv);
-s16 RGB16_ToHSV(s16 rgb);
+s16 RGB16_ToHSV(u16 rgb);
