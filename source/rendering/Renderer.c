@@ -116,7 +116,7 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 
 	Item_Init();
 
-	Texture_Load(&logoTex, "romfs:/assets/textures/gui/title/img.png");
+	Texture_Load(&logoTex, "romfs:/assets/textures/gui/title/minecraft.png");
 }
 
 void Renderer_Deinit() {
@@ -175,6 +175,7 @@ void Renderer_Render() {
 			if (iod == 0.f)
 				SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 240, 0, 16, 16);
 		} else {
+            //start skymap
 			C3D_Mtx projection;
 			Mtx_PerspStereoTilt(&projection, C3D_AngleFromDegrees(90.f), ((400.f) / (240.f)), 0.22f, 4.f * CHUNK_SIZE, !i ? -iod : iod, 3.f,
 								false);
@@ -189,16 +190,14 @@ void Renderer_Render() {
 			Mtx_Multiply(&vp, &projection, &view);
 
 			Clouds_Render(world_shader_uLocProjection, &vp, world, 0.f, 0.f);
+            //end skymap
+			SpriteBatch_SetScale(2);
 
 			SpriteBatch_BindTexture(&logoTex);
-
-			SpriteBatch_SetScale(2);
 
 			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0, 0, 1024, 256);
 
 			SpriteBatch_PushText(0, 112, 0, INT16_MAX, false, INT_MAX, NULL, APP_VERSION);
-
-			SpriteBatch_PushQuad(36, 35, 0, 128, 32, 0, 0, 1024, 256);
 
 			SpriteBatch_PushText(210 - 70, 112, 0, INT16_MAX, false, INT_MAX, NULL, AUTHOR);
 
