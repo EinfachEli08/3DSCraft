@@ -8,8 +8,8 @@ RomFs:
   RootPath: romfs
 
 TitleInfo:
-  Category                : Application
   UniqueId                : 0x0000A69F
+  Category                : Application
 
 CardInfo:
   MediaSize               : 128MB # 128MB / 256MB / 512MB / 1GB / 2GB / 4GB

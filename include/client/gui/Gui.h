@@ -33,3 +33,8 @@ bool Gui_IsCursorInside(int x, int y, int w, int h);
 bool Gui_WasCursorInside(int x, int y, int w, int h);
 void Gui_GetCursorMovement(int* x, int* y);
 bool Gui_EnteredCursorInside(int x, int y, int w, int h);
+
+void Gui_DrawOutline(int x, int y, int width, int height, uint32_t color);
+void Gui_DrawTint(int x, int y, int width, int height, uint32_t color);
+// No, this is not 3D, Z is referring to the Z-Index
+void Gui_DrawBackground(int background, int x, int y, int z);

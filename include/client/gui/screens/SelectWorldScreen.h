@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "world/World.h"
+#include <world/World.h>
 
 typedef struct {
 		char worldName[WORLD_NAME_SIZE];
