@@ -39,8 +39,8 @@ BUILD			:=	build
 DATA			:=	data
 META			:=	project
 ROMFS			:=	romfs
-INCLUDES		:=	dependencies include
-SOURCES 		:= $(shell find $(realpath dependencies) $(realpath source) $(realpath assets) -type d)
+INCLUDES		:=	lib include
+SOURCES 		:= $(shell find $(realpath source) $(realpath assets) -type d)
 SOURCES 		:= $(foreach dir, $(SOURCES), $(patsubst $(CURDIR)/%, %, $(dir)))
 
 # 3dsx
@@ -82,7 +82,7 @@ CFLAGS		+=	-Og -D_DEBUG
 LIBS		:= -lcitro3dd -lctrud
 endif
 
-LIBS		+= -lm `$(PREFIX)pkg-config opusfile --libs`
+LIBS		+= -lgame -lm `$(PREFIX)pkg-config opusfile --libs`
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -175,13 +175,13 @@ endif
 .PHONY: $(BUILD) clean all
 
 #---------------------------------------------------------------------------------
-all: $(BUILD) cxi cfa cia
+all: lib $(BUILD) cxi cfa cia
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 #---------------------------------------------------------------------------------
-clean:
+clean: clean-lib
 	@echo clean ...
 	@rm -rf $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf $(TARGET).cia $(TARGET).cxi $(TARGET).cfa
 #---------------------------------------------------------------------------------
@@ -203,6 +203,35 @@ cia:
 	@$(MAKEROM) -f cia -o $(TARGET).cia -target t -i $(TARGET).cxi:0:0 -i $(TARGET).cfa:1:1
 	@echo built ... $(TARGET).cia
 
+
+#---------------------------------------------------------------------------------------
+# Library
+#---------------------------------------------------------------------------------------
+
+LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
+LIBSOURCES += $(wildcard lib/*/*/*.cpp lib/*/*/*.c)
+LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
+
+AR := $(DEVKITARM)/bin/arm-none-eabi-ar.exe
+
+lib: lib/libgame.a
+
+lib/libgame.a: $(LIBOBJS)
+	@echo Building libraries...
+	@$(AR) rcs lib/libgame.a $^
+	@echo built ... lib/libgame.a
+
+#lib/%.o: lib/%.cpp
+#	@echo $@...
+#	@$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+
+lib/%.o: lib/%.c
+	@echo $@...
+	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+clean-lib:
+	@rm -f lib/**/*.o
+	@rm -f lib/libgame.o
 
 #---------------------------------------------------------------------------------
 else

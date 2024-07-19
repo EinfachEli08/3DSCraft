@@ -2,9 +2,9 @@
 
 #include <vec/vec.h>
 
-#include <world/Chunk.h>
+#include "world/chunk/Chunk.h"
 
-#include <misc/Xorshift.h>
+#include "util/math/Xorshift.h"
 
 #include <stdbool.h>
 
