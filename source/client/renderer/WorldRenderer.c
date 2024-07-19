@@ -10,7 +10,6 @@
 #include <citro3d.h>
 
 #include "client/renderer/Clouds.h"
-#include "client/renderer/CubeMap.h"
 #include "client/renderer/Hand.h"
 
 #include <stdio.h>

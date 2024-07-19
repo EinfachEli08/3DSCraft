@@ -1,27 +1,27 @@
 #include "client/renderer/Renderer.h"
 
-#include "client/Camera.h"
-#include "client/gui/DebugUI.h"
-#include "client/gui/Gui.h"
-#include "client/gui/Inventory.h"
-#include "client/gui/screens/SelectWorldScreen.h"
-#include "client/renderer/Clouds.h"
-#include "client/renderer/CubeMap.h"
-#include "client/renderer/Cursor.h"
-#include "client/renderer/PolyGen.h"
-#include "client/renderer/WorldRenderer.h"
-#include "client/renderer/texture/SpriteBatch.h"
-#include "client/renderer/texture/TextureMap.h"
-#include "world/level/block/Block.h"
+#include <client/Camera.h>
+#include <client/gui/DebugUI.h>
+#include <client/gui/Gui.h>
+#include <client/gui/Inventory.h>
+#include <client/gui/screens/SelectWorldScreen.h>
+#include <client/renderer/Clouds.h>
+#include <client/renderer/CubeMap.h>
+#include <client/renderer/Cursor.h>
+#include <client/renderer/PolyGen.h>
+#include <client/renderer/WorldRenderer.h>
+#include <client/renderer/texture/SpriteBatch.h>
+#include <client/renderer/texture/TextureMap.h>
+#include <world/level/block/Block.h>
 
 #include <citro3d.h>
 
-#include "client/gui/State1.h"
-#include "client/gui/State2.h"
+#include <client/gui/screens/SelectWorldScreen.h>
+#include <client/gui/screens/TitleScreen.h>
 
-#include "world_shbin.h"
 #include <cubemap_shbin.h>
 #include <gui_shbin.h>
+#include <world_shbin.h>
 
 #define DISPLAY_TRANSFER_FLAGS                                                                                                             \
 	(GX_TRANSFER_FLIP_VERT(0) | GX_TRANSFER_OUT_TILED(0) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |        \
@@ -218,7 +218,7 @@ void Renderer_Render() {
 		state_machine_run(machine);
 	} else {
 		SpriteBatch_SetScale(2);
-		player->quickSelectBarSlots = Inventory_QuickSelectCalcSlots(160);
+		player->quickSelectBarSlots = 9;
 		Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth(player->quickSelectBarSlots) / 2,
 								  120 - INVENTORY_QUICKSELECT_HEIGHT, player->quickSelectBar, player->quickSelectBarSlots,
 								  &player->quickSelectBarSlot);

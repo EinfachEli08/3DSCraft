@@ -21,7 +21,7 @@ static void clickAtStack(ItemStack* stack) {
 
 void Inventory_DrawQuickSelect(int x, int y, ItemStack* stacks, int count, int* selected) {
 	SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
-
+	// TODO: Hotbar kleiner machen
 	for (int i = 0; i < count; i++) {
 		SpriteBatch_SetScale(1);  // TODO: muss verbessert werden für Ports
 		int rx = (i * 20 + x + 3) * 2;
@@ -47,7 +47,7 @@ void Inventory_DrawQuickSelect(int x, int y, ItemStack* stacks, int count, int* 
 	SpriteBatch_PushQuad(x, y, 10, 21, 22, 0, 0, 21, 22);
 	SpriteBatch_PushQuad(21 + 20 * (count - 2) + x, y, 10, 21, 22, 161, 0, 21, 22);
 
-	SpriteBatch_PushQuad(x + *selected * 20 - 1, y - 1, 14, 24, 24, 0, 22, 24, 24);
+	SpriteBatch_PushQuad(x + *selected * 20 - 1, y - 1, 11, 24, 24, 0, 22, 24, 24);
 }
 
 int Inventory_Draw(int x, int y, int w, ItemStack* stacks, int count, int _site) {

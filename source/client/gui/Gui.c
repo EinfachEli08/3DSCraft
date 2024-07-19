@@ -144,7 +144,7 @@ bool Gui_IconButton(float size, const char* label) {
 	SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
 
 	if (pressed) {
-		DrawTint(x, y, w, BUTTON_HEIGHT, SHADER_RGB(20, 20, 20));
+		Gui_DrawTint(x, y, w, BUTTON_HEIGHT, SHADER_RGB(20, 20, 20));
 	}
 	SpriteBatch_PushText(x + 24, (y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2), -1, SHADER_RGB(31, 31, 31), false, INT_MAX, NULL, label);
 
@@ -194,7 +194,7 @@ void Gui_GetCursorMovement(int* x, int* y) {
 	*x = input.touchX / SpriteBatch_GetScale() - oldInput.touchX / SpriteBatch_GetScale();
 	*y = input.touchY / SpriteBatch_GetScale() - oldInput.touchY / SpriteBatch_GetScale();
 }
-void DrawOutline(int x, int y, int width, int height, uint32_t color) {
+void Gui_DrawOutline(int x, int y, int width, int height, uint32_t color) {
 	// Top border
 	SpriteBatch_PushSingleColorQuad(x, y, -3, width, 1, color);
 	// Bottom border
@@ -204,6 +204,29 @@ void DrawOutline(int x, int y, int width, int height, uint32_t color) {
 	// Right border
 	SpriteBatch_PushSingleColorQuad(x + width, y, -3, 1, height, color);
 }
-void DrawTint(int x, int y, int width, int height, uint32_t color) {
+void Gui_DrawTint(int x, int y, int width, int height, uint32_t color) {
 	SpriteBatch_PushSingleColorQuad(x, y, -3, width, height, color);
+}
+void Gui_DrawBackground(int background, int x, int y, int z) {
+	if (background <= 0)
+		background = 0;
+
+	if (background == 0) {
+		SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
+		SpriteBatch_PushQuadColor(x * 32, y * 32, z, 32, 32, 0, 0, 16, 16, INT16_MAX);
+	}
+	if (background == 1) {
+		SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
+		SpriteBatch_PushQuadColor(x * 32, y * 32, z, 32, 32, 16, 0, 16, 16, INT16_MAX);
+	}
+	if (background == 2) {
+		SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
+		SpriteBatch_PushQuadColor(x * 32, y * 32, z, 32, 32, 0, 16, 16, 16, INT16_MAX);
+	}
+	if (background == 3) {
+		SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
+		SpriteBatch_PushQuadColor(x * 32, y * 32, z, 32, 32, 16, 16, 16, 16, INT16_MAX);
+	}
+	if (background >= 3)
+		background = 3;
 }
