@@ -11,10 +11,12 @@
 
 ; Outputs
 .out out_position       position
+.out out_color          color
 .out out_uv             texcoord0
 
 ; Inputs
 .alias in_xyz       v0
+.alias in_uv 		v1
 
 .entry main
 .proc main
@@ -26,7 +28,12 @@
     dp4 out_position.z, projection[2], r0
     dp4 out_position.w, projection[3], r0
 
-	mul out_uv, div2p15, r0.xy
+	mul out_uv, div2p15, in_uv.xy
+    
+	mov out_color.x, ones
+	mov out_color.y, ones
+	mov out_color.z, ones
+	mov out_color.w, ones
 
     end
 .end

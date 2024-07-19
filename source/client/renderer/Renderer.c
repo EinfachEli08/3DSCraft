@@ -19,9 +19,9 @@
 #include "client/gui/State1.h"
 #include "client/gui/State2.h"
 
+#include "world_shbin.h"
 #include <cubemap_shbin.h>
 #include <gui_shbin.h>
-#include "world_shbin.h"
 
 #define DISPLAY_TRANSFER_FLAGS                                                                                                             \
 	(GX_TRANSFER_FLIP_VERT(0) | GX_TRANSFER_OUT_TILED(0) | GX_TRANSFER_RAW_COPY(0) | GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) |        \
@@ -54,6 +54,8 @@ extern bool showDebugInfo;
 
 extern void TitleScreen(state_machine_t* machine);
 extern void SelectWorldScreen(state_machine_t* machine);
+
+extern Camera camera;
 
 void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* gamestate_) {
 	machine = state_machine_create();
@@ -101,8 +103,11 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 
 	AttrInfo_Init(&cubemap_vertexAttribs);
 	AttrInfo_AddLoader(&cubemap_vertexAttribs, 0, GPU_SHORT, 3);
+	AttrInfo_AddLoader(&cubemap_vertexAttribs, 1, GPU_SHORT, 2);
 
 	PolyGen_Init(world, player_);
+
+	CubeMap_Init(world_shader_uLocProjection);
 
 	WorldRenderer_Init(player, world, workqueue, world_shader_uLocProjection);
 
@@ -117,6 +122,8 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 	Item_Init();
 
 	Texture_Load(&logoTex, "romfs:/assets/textures/gui/title/minecraft.png");
+
+	CubeMap_Set("gui/title/background/panorama", f3_new(0.f, 0.f, 0.f));
 }
 
 void Renderer_Deinit() {
@@ -129,6 +136,8 @@ void Renderer_Deinit() {
 	Block_Deinit();
 
 	PolyGen_Deinit();
+
+	CubeMap_Deinit();
 
 	WorldRenderer_Deinit();
 
@@ -175,23 +184,9 @@ void Renderer_Render() {
 			if (iod == 0.f)
 				SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 240, 0, 16, 16);
 		} else {
-			/*start skymap
-			C3D_Mtx projection;
-			Mtx_PerspStereoTilt(&projection, C3D_AngleFromDegrees(90.f), ((400.f) / (240.f)), 0.22f, 4.f * CHUNK_SIZE, !i ? -iod : iod, 3.f,
-								false);
+			if (i == 0)
+				CubeMap_Draw(&camera.projection, f3_new(0.f, -0.01f, 0.f));
 
-			C3D_Mtx view;
-			Mtx_Identity(&view);
-			Mtx_Translate(&view, 0.f, -70.f, 0.f, false);
-
-			Mtx_RotateX(&view, -C3D_AngleFromDegrees(30.f), true);
-
-			C3D_Mtx vp;
-			Mtx_Multiply(&vp, &projection, &view);
-
-			Clouds_Render(world_shader_uLocProjection, &vp, world, 0.f, 0.f);
-			 end skymap
-			*/
 			SpriteBatch_SetScale(2);
 
 			SpriteBatch_BindTexture(&logoTex);

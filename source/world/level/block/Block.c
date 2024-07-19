@@ -6,7 +6,7 @@
 static Texture_Map textureMap;
 
 // PATH PREFIX
-#define PPRX "romfs:/assets/textures/blocks/"
+#define PPRX "romfs:/assets/textures/block/"
 
 #define TEXTURE_FILES                                                                                                                      \
 	A(stone, "stone.png"), A(dirt, "dirt.png"), A(cobblestone, "cobblestone.png"), A(grass_side, "grass_side.png"),                        \

@@ -3,26 +3,85 @@
 #include "client/Crash.h"
 #include "client/renderer/VertexFmt.h"
 #include "client/renderer/texture/TextureMap.h"
+#include "util/Paths.h"
 #include "util/math/NumberUtils.h"
 
 #include <stdio.h>
 
-#define rotationSpeed 1
+#define vSize 1.0f
 
-int projUniform;
-static CubeMapVertex* cubeVBO;
+static WorldVertex vertices[6 * 6] = {
+	// Front face
+	{{-vSize, -vSize, vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, -vSize, vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	{{-vSize, -vSize, vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{-vSize, vSize, vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	// Back face
+	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, -vSize, -vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, -vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, -vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{-vSize, vSize, -vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	// Left face
+	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{-vSize, -vSize, vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{-vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{-vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{-vSize, vSize, -vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	// Right face
+	{{vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, -vSize, vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	{{vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, -vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	// Top face
+	{{-vSize, vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, -vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	{{-vSize, vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{-vSize, vSize, vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	// Bottom face
+	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, -vSize, -vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, -vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+
+	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{vSize, -vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{{-vSize, -vSize, vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+};
+
+static int projUniform;
+static WorldVertex* cubeVBO;
 static C3D_Tex cubeTextures[6];
-static C3D_TexCube cubemap;
+static float3 rotation;
 
-extern const WorldVertex cube_sides_lut[6 * 6];
-
-void CubeMap_Init(int projUniform_, const char* filename) {
+void CubeMap_Init(int projUniform_) {
 	projUniform = projUniform_;
-	cubeVBO		= linearAlloc(sizeof(cube_sides_lut));
+	cubeVBO		= linearAlloc(sizeof(vertices));
+}
 
-	char outName[50];
+void CubeMap_Set(const char* filename, float3 rotation_) {
+	rotation = rotation_;
+
+	char outName[60];
 	for (u8 i = 0; i < 6; i++) {
-		snprintf(outName, sizeof(outName), "romfs:/assets/textures/%s_%d.png", filename, i);
+		snprintf(outName, sizeof(outName), gPathRomAssTextures "%s_%i.png", filename, i);
 		Texture_Load(&cubeTextures[i], outName);
 		C3D_TexSetFilter(&cubeTextures[i], GPU_LINEAR, GPU_LINEAR);
 		C3D_TexSetWrap(&cubeTextures[i], GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
@@ -36,31 +95,33 @@ void CubeMap_Deinit() {
 	}
 }
 
-void CubeMap_Draw(C3D_Mtx* projection) {
+void CubeMap_Draw(C3D_Mtx* projection, float3 rotationOffset) {
 	if (cubeVBO == NULL) {
-		Crash("CubeMap not initialized!");
+		Crash("CubeMap not set!");
 		return;
 	}
 
-	C3D_Mtx model, modelView;
+	C3D_Mtx model, out;
 	Mtx_Identity(&model);
-	Mtx_RotateY(&model, rotationSpeed, true);
-	Mtx_Multiply(&modelView, projection, &model);
+	Mtx_Translate(&model, 0, 0, -1.f, true);
 
-	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projUniform, &modelView);
+	rotation = f3_add(rotation, rotationOffset);
+	Mtx_RotateX(&model, rotation.x, true);
+	Mtx_RotateY(&model, rotation.y, true);
+	Mtx_RotateZ(&model, rotation.z, true);
 
-	memcpy(cubeVBO, cube_sides_lut, sizeof(cube_sides_lut));
+	Mtx_Multiply(&out, projection, &model);
 
-	C3D_AlphaTest(true, GPU_GEQUAL, 255);
+	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projUniform, &out);
+
+	memcpy(cubeVBO, vertices, sizeof(vertices));
 
 	C3D_BufInfo* bufInfo = C3D_GetBufInfo();
 	BufInfo_Init(bufInfo);
-	BufInfo_Add(bufInfo, cubeVBO, sizeof(CubeMapVertex), 1, 0x10);
+	BufInfo_Add(bufInfo, cubeVBO, sizeof(WorldVertex), 4, 0x3210);
 
 	for (u8 i = 0; i < 6; i++) {
-		C3D_TexBind(i, &cubeTextures[i]);
+		C3D_TexBind(0, &cubeTextures[i]);
 		C3D_DrawArrays(GPU_TRIANGLES, i * 6, 6);
 	}
-
-	C3D_AlphaTest(false, GPU_GREATER, 0);
 }

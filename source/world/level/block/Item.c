@@ -6,7 +6,7 @@
 static Texture_Map textureMap;
 
 // PATH PREFIX
-#define PPRX "romfs:/assets/textures/blocks/"
+#define PPRX "romfs:/assets/textures/block/"
 
 #define ITEM_TEXTURE_FILES A(totem, "dirt.png")
 

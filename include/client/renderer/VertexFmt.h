@@ -19,6 +19,7 @@ typedef struct {
 
 typedef struct {
 		s16 xyz[3];
+		s16 uv[2];
 } CubeMapVertex;
 
 #define SHADER_RGB(r, g, b) (((b & 0x1f)) | (((g) & 0x1f) << 5) | (((r) & 0x1f) << 10))
