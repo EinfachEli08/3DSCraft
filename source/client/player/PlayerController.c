@@ -4,9 +4,10 @@
 #include "util/math/NumberUtils.h"
 
 #include "client/gui/DebugUI.h"
+#include "util/Paths.h"
 
-#include <ini/ini.h>
 #include "sounds/Sound.h"
+#include <ini/ini.h>
 #include <unistd.h>
 
 #ifdef _3DS
@@ -161,7 +162,7 @@ void PlayerController_Init(PlayerController* ctrl, Player* player) {
 
 	bool elementMissing = false;
 
-	const char path[] = "sdmc:/craftus_redesigned/options.ini";
+	const char path[] = gPathSdCraft "options.ini";
 	if (access(path, F_OK) != -1) {
 		ini_t* cfg = ini_load(path);
 

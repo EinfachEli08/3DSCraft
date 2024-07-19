@@ -1,6 +1,7 @@
 
 #include "client/gui/screens/SelectWorldScreen.h"
 
+#include "client/Crash.h"
 #include "client/gui/Gui.h"
 #include "client/gui/state_machine/state_machine.h"
 #include "client/renderer/VertexFmt.h"
@@ -41,7 +42,7 @@ void SelectWorldScreen_ScanWorlds() {
 	struct dirent* entry;
 
 	while ((entry = readdir(directory))) {
-		sprintf(buffer, gPathSdSaves " %s/level.mp", entry->d_name);
+		sprintf(buffer, gPathSdSaves "%s/level.mp", entry->d_name);
 		if (access(buffer, F_OK) != -1) {
 			mpack_tree_t tree;
 			mpack_tree_init_file(&tree, buffer, 0);
@@ -50,7 +51,9 @@ void SelectWorldScreen_ScanWorlds() {
 			char name[WORLD_NAME_SIZE];
 			mpack_node_copy_utf8_cstr(mpack_node_map_cstr(root, "name"), name, WORLD_NAME_SIZE);
 
-			if (mpack_tree_destroy(&tree) != mpack_ok) {
+			u8 err = mpack_tree_destroy(&tree);
+			if (err != mpack_ok) {
+				Crash("Mpack failure \'%d\' while loading world %s", err, entry->d_name);
 				continue;
 			}
 
@@ -304,7 +307,7 @@ bool SelectWorldScreen_Update(char* out_worldpath, char* out_name, WorldGenType*
 	if (confirmed_deletion) {
 		confirmed_deletion = false;
 		char buffer[512];
-		sprintf(buffer, "sdmc:/craftus_redesigned/saves/%s", worlds.data[selectedWorld].path);
+		sprintf(buffer, gPathSdSaves "%s", worlds.data[selectedWorld].path);
 		delete_folder(buffer);
 
 		SelectWorldScreen_ScanWorlds();

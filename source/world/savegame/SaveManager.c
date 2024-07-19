@@ -8,12 +8,13 @@
 
 #include "client/Crash.h"
 #include "client/gui/DebugUI.h"
+#include "util/Paths.h"
 
 #define mkdirFlags S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH
 
 void SaveManager_InitFileSystem() {
-	mkdir("sdmc:/craftus_redesigned", mkdirFlags);
-	mkdir("sdmc:/craftus_redesigned/saves", mkdirFlags);
+	mkdir(gPathSdCraft, mkdirFlags);
+	mkdir(gPathSdSaves, mkdirFlags);
 }
 
 void SaveManager_Init(SaveManager* mgr, Player* player) {
@@ -34,7 +35,7 @@ void SaveManager_Deinit(SaveManager* mgr) {
 void SaveManager_Load(SaveManager* mgr, char* path) {
 	char buffer[256];
 
-	sprintf(buffer, "sdmc:/craftus_redesigned/saves/%s", path);
+	sprintf(buffer, gPathSdSaves "%s", path);
 	mkdir(buffer, mkdirFlags);
 	chdir(buffer);
 
@@ -104,7 +105,7 @@ void SaveManager_Unload(SaveManager* mgr) {
 
 	mpack_write_cstr(&writer, "players");
 	mpack_start_array(&writer, 1);
-	mpack_start_map(&writer, 9);
+	mpack_start_map(&writer, 11);
 
 	mpack_write_cstr(&writer, "x");
 	mpack_write_float(&writer, mgr->player->position.x);
@@ -138,6 +139,8 @@ void SaveManager_Unload(SaveManager* mgr) {
 
 	mpack_write_cstr(&writer, "worldType");
 	mpack_write_uint(&writer, mgr->world->genSettings.type);
+
+	mpack_finish_map(&writer);
 
 	mpack_error_t err = mpack_writer_destroy(&writer);
 	if (err != mpack_ok) {

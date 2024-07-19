@@ -10,8 +10,8 @@ You'll need a hacked system that can load homebrew for this to run (citra is goo
 Craftus Redisigned is a modified version of Craftus Reloaded : https://github.com/RSDuck/craftus_reloaded.
 
 
-After launching it for the first time, you can change the controls in `sd:/craftus_redesigned/options.ini`.
-You can also change the settings in `sd:/craftus_redesigned/options.ini`.
+After launching it for the first time, you can change the controls in `sd:/3dscraft/options.ini`.
+You can also change the settings in `sd:/3dscraft/options.ini`.
 
 ## Controls
 

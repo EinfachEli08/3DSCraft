@@ -5,6 +5,7 @@
 #include <3ds.h>
 
 #include "client/Crash.h"
+#include "util/Paths.h"
 
 void Crash(const char* reason, ...) {
 	consoleInit(GFX_TOP, NULL);
@@ -13,7 +14,7 @@ void Crash(const char* reason, ...) {
 	va_start(vl, reason);
 	vprintf(reason, vl);
 
-	FILE* f = fopen("sdmc:/craftus_redesigned/crash.txt", "w");
+	FILE* f = fopen(gPathSdCraft "crash.txt", "w");
 	vfprintf(f, reason, vl);
 	fclose(f);
 
@@ -37,7 +38,7 @@ void Log(const char* reason, ...) {
 	va_start(vl, reason);
 	vprintf(reason, vl);
 
-	FILE* f = fopen("sdmc:/craftus_redesigned/Log.txt", "a");
+	FILE* f = fopen(gPathSdCraft "Log.txt", "a");
 	vfprintf(f, reason, vl);
 	fclose(f);
 

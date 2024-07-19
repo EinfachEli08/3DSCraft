@@ -40,7 +40,7 @@ DATA			:=	data
 META			:=	project
 ROMFS			:=	romfs
 INCLUDES		:=	lib include
-SOURCES 		:= $(shell find $(realpath source) $(realpath assets) -type d)
+SOURCES 		:= $(shell find $(realpath lib) $(realpath source) $(realpath assets) -type d)
 SOURCES 		:= $(foreach dir, $(SOURCES), $(patsubst $(CURDIR)/%, %, $(dir)))
 
 # 3dsx
@@ -82,7 +82,7 @@ CFLAGS		+=	-Og -D_DEBUG
 LIBS		:= -lcitro3dd -lctrud
 endif
 
-LIBS		+= -lgame -lm `$(PREFIX)pkg-config opusfile --libs`
+LIBS		+= -lm `$(PREFIX)pkg-config opusfile --libs`
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -175,7 +175,7 @@ endif
 .PHONY: $(BUILD) clean all
 
 #---------------------------------------------------------------------------------
-all: lib $(BUILD) cxi cfa cia
+all: $(BUILD) cxi cfa cia
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
@@ -208,11 +208,11 @@ cia:
 # Library
 #---------------------------------------------------------------------------------------
 
-LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
-LIBSOURCES += $(wildcard lib/*/*/*.cpp lib/*/*/*.c)
-LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
+#LIBSOURCES := $(wildcard lib/**/*.cpp lib/**/*.c)
+#LIBSOURCES += $(wildcard lib/*/*/*.cpp lib/*/*/*.c)
+#LIBOBJS := $(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(LIBSOURCES)))
 
-AR := $(DEVKITARM)/bin/arm-none-eabi-ar.exe
+#AR := $(DEVKITARM)/bin/arm-none-eabi-ar.exe
 
 lib: lib/libgame.a
 

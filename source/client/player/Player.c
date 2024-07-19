@@ -1,6 +1,8 @@
-#include "client/player/Damage.h"
 #include "client/player/Player.h"
+
+#include "client/player/Damage.h"
 #include "sounds/Sound.h"
+#include "util/Paths.h"
 #include "world/phys/Collision.h"
 
 void Player_Init(Player* player, World* world) {
@@ -168,7 +170,7 @@ void Player_Update(Player* player, Sound* sound, Damage* dmg) {
 		} else {
 			DebugUI_Log("lol ur world is gone");
 			/*char buffer[512];
-			sprintf(buffer, "sdmc:/craftus_redesigned/saves/%s", worlds.data[selectedWorld].path);
+			sprintf(buffer, gPathSdSaves "%s", worlds.data[selectedWorld].path);
 			delete_folder(buffer);*/
 		}
 	}

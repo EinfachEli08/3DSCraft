@@ -5,7 +5,6 @@
 
 #include <3ds.h>
 
-#include <Globals.h>
 #include "client/Crash.h"
 #include "client/gui/DebugUI.h"
 #include "client/gui/Gui.h"
@@ -15,12 +14,15 @@
 #include "client/player/PlayerController.h"
 #include "client/renderer/PolyGen.h"
 #include "client/renderer/Renderer.h"
+#include "util/Paths.h"
 #include "world/World.h"
 #include "world/chunk/ChunkWorker.h"
 #include "world/savegame/SaveManager.h"
 #include "world/savegame/SuperChunk.h"
 #include "world/worldgen/SmeaGen.h"
 #include "world/worldgen/SuperFlatGen.h"
+
+#include <Globals.h>
 
 #include <citro3d.h>
 #include <sino/sino.h>
@@ -101,7 +103,7 @@ int main() {
 		if (initBackgroundSound) {
 			initBackgroundSound		   = false;
 			BackgroundSound.background = true;
-			char* soundfile			   = "romfs:/assets/sound/music/1.opus";
+			char* soundfile			   = gPathRomAssSounds "music/1.opus";
 			BackgroundSound.path[0]	   = '\0';
 			strncat(BackgroundSound.path, soundfile, sizeof(BackgroundSound.path) - 1);
 			playopus(&BackgroundSound);
