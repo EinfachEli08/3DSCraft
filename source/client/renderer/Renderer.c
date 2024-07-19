@@ -223,7 +223,7 @@ void Renderer_Render() {
 		state_machine_run(machine);
 	} else {
 		SpriteBatch_SetScale(2);
-		player->quickSelectBarSlots = Inventory_QuickSelectCalcSlots(160);
+		player->quickSelectBarSlots = 9;
 		Inventory_DrawQuickSelect(160 / 2 - Inventory_QuickSelectCalcWidth(player->quickSelectBarSlots) / 2,
 								  120 - INVENTORY_QUICKSELECT_HEIGHT, player->quickSelectBar, player->quickSelectBarSlots,
 								  &player->quickSelectBarSlot);
