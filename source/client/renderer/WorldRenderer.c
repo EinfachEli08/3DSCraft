@@ -210,11 +210,11 @@ void WorldRenderer_Render(float iod) {
 
 	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projectionUniform, &camera.vp);
 
-	// renderWorld();
+	renderWorld();
 
 	Clouds_Render(projectionUniform, &camera.vp, world, player->position.x, player->position.z);
 
-	// Hand_Draw(projectionUniform, &camera.projection, player->quickSelectBar[player->quickSelectBarSlot], player);
+	Hand_Draw(projectionUniform, &camera.projection, player->quickSelectBar[player->quickSelectBarSlot], player);
 
 	if (player->blockInActionRange)
 		Cursor_Draw(projectionUniform, &camera.vp, world, player->viewRayCast.x, player->viewRayCast.y, player->viewRayCast.z,
