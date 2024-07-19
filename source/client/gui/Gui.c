@@ -220,11 +220,11 @@ void Gui_DrawBackground(int background, int x, int y, int z){
     }
     if(background == 2){
         SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
-        SpriteBatch_PushQuadColor(x * 32, y * 32, z, 32, 32, 0, 0, 16, 16, INT16_MAX);
+        SpriteBatch_PushQuadColor(x * 32, y * 32, z, 32, 32, 0, 16, 16, 16, INT16_MAX);
     }
     if(background == 3){
         SpriteBatch_BindGuiTexture(GuiTexture_MenuBackground);
-        SpriteBatch_PushQuadColor(x * 32, y * 32, z, 32, 32, 0, 0, 16, 16, INT16_MAX);
+        SpriteBatch_PushQuadColor(x * 32, y * 32, z, 32, 32, 16, 16, 16, 16, INT16_MAX);
     }
     if(background >= 3) background = 3;
 }
