@@ -63,9 +63,9 @@ int main() {
 
 	ChunkWorker chunkWorker;
 	ChunkWorker_Init(&chunkWorker);
-	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_PolyGen, (WorkerFuncObj){&PolyGen_GeneratePolygons, NULL, true});
-	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_BaseGen, (WorkerFuncObj){&SuperFlatGen_Generate, &flatGen, true});
-	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_BaseGen, (WorkerFuncObj){&SmeaGen_Generate, &smeaGen, true});
+	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_PolyGen, (WorkerFuncObj){ &PolyGen_GeneratePolygons, NULL, true });
+	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_BaseGen, (WorkerFuncObj){ &SuperFlatGen_Generate, &flatGen, true });
+	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_BaseGen, (WorkerFuncObj){ &SmeaGen_Generate, &smeaGen, true });
 
 	sino_init();
 
@@ -91,10 +91,10 @@ int main() {
 
 	SaveManager savemgr;
 	SaveManager_Init(&savemgr, &player);
-	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_Load, (WorkerFuncObj){&SaveManager_LoadChunk, &savemgr, true});
-	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_Save, (WorkerFuncObj){&SaveManager_SaveChunk, &savemgr, true});
+	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_Load, (WorkerFuncObj){ &SaveManager_LoadChunk, &savemgr, true });
+	ChunkWorker_AddHandler(&chunkWorker, WorkerItemType_Save, (WorkerFuncObj){ &SaveManager_SaveChunk, &savemgr, true });
 
-	uint64_t lastTime = svcGetSystemTick();
+	u64 lastTime = svcGetSystemTick();
 	float dt = 0.f, timeAccum = 0.f, fpsClock = 0.f;
 	int frameCounter = 0, fps = 0;
 	bool initBackgroundSound = true;
@@ -109,8 +109,8 @@ int main() {
 			playopus(&BackgroundSound);
 		}
 
-		// DebugUI_Text("%d FPS  Usage: CPU: %5.2f%% GPU: %5.2f%% Buf: %5.2f%% Lin: %d", fps, C3D_GetProcessingTime() * 6.f,
-		// C3D_GetDrawingTime() * 6.f, C3D_GetCmdBufUsage() * 100.f, linearSpaceFree());
+		DebugUI_Text("%d FPS  Usage: CPU: %5.2f%% GPU: %5.2f%% Buf: %5.2f%% Lin: %d", fps, C3D_GetProcessingTime() * 6.f,
+					 C3D_GetDrawingTime() * 6.f, C3D_GetCmdBufUsage() * 100.f, linearSpaceFree());
 		// DebugUI_Text("X: %f, Y: %f, Z: %f", f3_unpack(player.position));
 		// DebugUI_Text("HP: %i",player.hp);
 		// DebugUI_Text("velocity: %f rndy: %f",player.velocity.y,player.rndy);
@@ -122,9 +122,9 @@ int main() {
 
 		Renderer_Render();
 
-		uint64_t currentTime = svcGetSystemTick();
-		dt					 = ((float)(currentTime / (float)CPU_TICKS_PER_MSEC) - (float)(lastTime / (float)CPU_TICKS_PER_MSEC)) / 1000.f;
-		lastTime			 = currentTime;
+		u64 currentTime = svcGetSystemTick();
+		dt				= ((float)(currentTime / (float)CPU_TICKS_PER_MSEC) - (float)(lastTime / (float)CPU_TICKS_PER_MSEC)) / 1000.f;
+		lastTime		= currentTime;
 		timeAccum += dt;
 
 		frameCounter++;
@@ -160,8 +160,8 @@ int main() {
 		touchPosition touchPos;
 		hidTouchRead(&touchPos);
 
-		InputData inputData =
-			(InputData){keysheld, keysdown, hidKeysUp(), circlePos.dx, circlePos.dy, touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy};
+		InputData inputData = (InputData){ keysheld,	keysdown,	 hidKeysUp(),  circlePos.dx, circlePos.dy,
+										   touchPos.px, touchPos.py, cstickPos.dx, cstickPos.dy };
 
 		if (gamestate == GameState_Playing) {
 			while (timeAccum >= 1.f / 20.f) {
@@ -175,7 +175,7 @@ int main() {
 			World_UpdateChunkCache(world, WorldToChunkCoord(FastFloor(player.position.x)), WorldToChunkCoord(FastFloor(player.position.z)));
 		} else if (gamestate == GameState_SelectWorld) {
 			char path[256];
-			char name[WORLD_NAME_SIZE] = {'\0'};
+			char name[WORLD_NAME_SIZE] = { '\0' };
 			WorldGenType worldType;
 			bool newWorld = false;
 			if (SelectWorldScreen_Update(path, name, &worldType, &newWorld)) {

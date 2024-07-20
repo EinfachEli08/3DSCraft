@@ -180,7 +180,7 @@ void Renderer_Render() {
 
 			WorldRenderer_Render(!i ? -iod : iod);
 
-            Renderer_RenderGameOverlay();
+			// Renderer_RenderGameOverlay();
 
 		} else {
 			if (i == 0)
@@ -235,51 +235,45 @@ void Renderer_Render() {
 	C3D_FrameEnd(0);
 }
 
-void Renderer_RenderGameOverlay(){
-    SpriteBatch_BindGuiTexture(GuiTexture_Icons);
-    SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 0, 0, 16, 16);
+void Renderer_RenderGameOverlay() {
+	SpriteBatch_BindGuiTexture(GuiTexture_Icons);
+	SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 0, 0, 16, 16);
 
-    renderExpBar();
+	renderExpBar();
 }
 
-//this is actual minecraft ported code
+// this is actual minecraft ported code
 
-void renderExpBar(){
-//harcoded cap for now
-    int barCap = 10;
+void renderExpBar() {
+	// harcoded cap for now
+	int barCap = 10;
 
-    SpriteBatch_BindGuiTexture(GuiTexture_Icons);
+	SpriteBatch_BindGuiTexture(GuiTexture_Icons);
 
-    if(barCap > 0)
-    {
-        int barLength = 182;
-        int xpFill = (int)(player->experience * (float)(barLength + 1));
+	if (barCap > 0) {
+		int barLength = 182;
+		int xpFill	  = (int)(player->experience * (float)(barLength + 1));
 
-        int y = 120 - 8;
-        SpriteBatch_PushQuad(200 / 2 - 182 / 2, y, 0, barLength, 5, 0, 64, barLength, 5);
+		int y = 120 - 8;
+		SpriteBatch_PushQuad(200 / 2 - 182 / 2, y, 0, barLength, 5, 0, 64, barLength, 5);
 
-        if(xpFill > 0)
-        {
-            SpriteBatch_PushQuad(200 / 2 - 182 / 2, y, 1, xpFill, 5, 0, 69, xpFill, 5);
-        }
-    }
+		if (xpFill > 0) {
+			SpriteBatch_PushQuad(200 / 2 - 182 / 2, y, 1, xpFill, 5, 0, 69, xpFill, 5);
+		}
+	}
 
-    if(player->experienceLevel > 0) {
+	if (player->experienceLevel > 0) {
+		char experienceStr[20];	 // buffer to hold the string representation of experience level
 
-        char experienceStr[20];  // buffer to hold the string representation of experience level
+		int experienceInt = (int)player->experienceLevel;
+		snprintf(experienceStr, sizeof(experienceStr), "%d", experienceInt);  // Format as integer
 
-        int experienceInt = (int)player->experienceLevel;
-        snprintf(experienceStr, sizeof(experienceStr), "%d", experienceInt);  // Format as integer
+		int textWidth = SpriteBatch_CalcTextWidth(experienceStr);
 
-        int textWidth = SpriteBatch_CalcTextWidth(experienceStr);
-
-        SpriteBatch_PushText(200 / 2 - textWidth/2 + 1, 120 - 17, 2, SHADER_RGB(0,0,0), false, INT_MAX,1, experienceStr);
-        SpriteBatch_PushText(200 / 2 - textWidth/2 - 1, 120 - 17, 2, SHADER_RGB(0,0,0), false, INT_MAX,1, experienceStr);
-        SpriteBatch_PushText(200 / 2 - textWidth/2, 120 - 17 + 1, 2, SHADER_RGB(0,0,0), false, INT_MAX,1, experienceStr);
-        SpriteBatch_PushText(200 / 2 - textWidth/2, 120 - 17 - 1, 2, SHADER_RGB(0,0,0), false, INT_MAX,1, experienceStr);
-        SpriteBatch_PushText(200 / 2 - textWidth/2, 120 - 17, 3, SHADER_RGB(100,255,32), false, INT_MAX, 1, experienceStr);
-    }
+		SpriteBatch_PushText(200 / 2 - textWidth / 2 + 1, 120 - 17, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 1, experienceStr);
+		SpriteBatch_PushText(200 / 2 - textWidth / 2 - 1, 120 - 17, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 1, experienceStr);
+		SpriteBatch_PushText(200 / 2 - textWidth / 2, 120 - 17 + 1, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 1, experienceStr);
+		SpriteBatch_PushText(200 / 2 - textWidth / 2, 120 - 17 - 1, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 1, experienceStr);
+		SpriteBatch_PushText(200 / 2 - textWidth / 2, 120 - 17, 3, SHADER_RGB(100, 255, 32), false, INT_MAX, 1, experienceStr);
+	}
 }
-
-
-

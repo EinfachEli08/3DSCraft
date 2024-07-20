@@ -1,17 +1,20 @@
 #include "client/renderer/texture/TextureMap.h"
 
-#include "lodepng/lodepng.h"
+#include <lodepng/lodepng.h>
 
 #include <3ds.h>
 #include <citro3d.h>
+#include <dirent.h>
 #include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "client/Crash.h"
+#include "util/Paths.h"
 
-uint32_t hash(char* str) {
+u32 hash(char* str) {
 	unsigned long hash = 5381;
 	int c;
 	while ((c = *str++))
@@ -21,12 +24,21 @@ uint32_t hash(char* str) {
 
 void tileImage32(u32* src, u8* dst, int sizex, int sizez);
 
-void Texture_Load(C3D_Tex* result, char* filename) {
-	uint32_t* image	   = NULL;
+void Texture_Load(C3D_Tex* result, const char* filename) {
+	char filepath[255];
+
+	if (access(filename, F_OK) != -1) {
+		strcpy(filepath, filename);
+	} else {
+		strcpy(filepath, gPathRomAssTextures);
+		strcat(filepath, filename);
+	}
+
+	u32* image		   = NULL;
 	unsigned int width = 255, height = 255;
-	uint32_t error = lodepng_decode32_file((uint8_t**)&image, &width, &height, filename);
+	u32 error = lodepng_decode32_file((u32**)&image, &width, &height, filepath);
 	if (error == 0 && image != NULL) {
-		uint32_t* imgInLinRam = (uint32_t*)linearAlloc(width * height * sizeof(uint32_t));
+		u32* imgInLinRam = (u32*)linearAlloc(width * height * sizeof(u32));
 
 		if (width < 64 || height < 64) {
 			for (int j = 0; j < height; j++)
@@ -35,10 +47,10 @@ void Texture_Load(C3D_Tex* result, char* filename) {
 				}
 		} else {
 			for (int i = 0; i < width * height; i++) {
-				/*uint8_t r = ((image[i] << 0) & 0xff) >> 4;
-				uint8_t g = ((image[i] << 8) & 0xff) >> 4;
-				uint8_t b = ((image[i] << 16) & 0xff) >> 4;
-				uint8_t a = ((image[i] << 24) & 0xff) >> 4;
+				/*u32 r = ((image[i] << 0) & 0xff) >> 4;
+				u32 g = ((image[i] << 8) & 0xff) >> 4;
+				u32 b = ((image[i] << 16) & 0xff) >> 4;
+				u32 a = ((image[i] << 24) & 0xff) >> 4;
 				imgInLinRam[i] = r | (g << 4) | (b << 8) | (a << 12);*/
 				imgInLinRam[i] = __builtin_bswap32(image[i]);
 			}
@@ -47,18 +59,18 @@ void Texture_Load(C3D_Tex* result, char* filename) {
 		C3D_TexInitVRAM(result, width, height, GPU_RGBA8);
 
 		if (result == NULL)
-			Crash("Failed to allocate texture in VRAM:\n %s\n Dimensions: %dx%d", filename, width, height);
+			Crash("Failed to allocate texture in VRAM:\n %s\n Dimensions: %dx%d", filepath, width, height);
 
 		if (width < 64 || height < 64)
 			tileImage32(image, (u8*)imgInLinRam, width, height);
 
-		GSPGPU_FlushDataCache(imgInLinRam, width * height * sizeof(uint32_t));
+		GSPGPU_FlushDataCache(imgInLinRam, width * height * sizeof(u32));
 		free(image);
 
 		if (width < 64 || height < 64) {
-			C3D_SyncTextureCopy(imgInLinRam, 0, result->data, 0, width * height * sizeof(uint32_t), 8);
+			C3D_SyncTextureCopy(imgInLinRam, 0, result->data, 0, width * height * sizeof(u32), 8);
 		} else {
-			C3D_SyncDisplayTransfer((uint32_t*)imgInLinRam, GX_BUFFER_DIM(width, height), result->data, GX_BUFFER_DIM(width, height),
+			C3D_SyncDisplayTransfer((u32*)imgInLinRam, GX_BUFFER_DIM(width, height), result->data, GX_BUFFER_DIM(width, height),
 									(GX_TRANSFER_FLIP_VERT(1) | GX_TRANSFER_OUT_TILED(1) | GX_TRANSFER_RAW_COPY(0) |
 									 GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGBA8) | GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGBA8) |
 									 GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)));
@@ -66,7 +78,7 @@ void Texture_Load(C3D_Tex* result, char* filename) {
 
 		linearFree(imgInLinRam);
 	} else {
-		Crash("Failed to load texture %s\n", filename);
+		Crash("Failed to load texture %s\nCode %d", filepath, error);
 	}
 }
 
@@ -96,7 +108,7 @@ void tileImage32(u32* src, u8* dst, int sizex, int sizey) {
 		}
 	}
 }
-void Texture_TileImage8(uint8_t* src, uint8_t* dst, int size) {
+void Texture_TileImage8(u8* src, u8* dst, int size) {
 	for (int j = 0; j < size; j++) {
 		for (int i = 0; i < size; i++) {
 			u32 coarse_y   = j & ~7;
@@ -138,7 +150,7 @@ void Texture_MapInit(Texture_Map* map, const char** files, int num_files) {
 	const int mipmapLevels = 2;
 	const int maxSize	   = 4 * TEXTURE_MAPSIZE * TEXTURE_MAPSIZE;
 
-	uint32_t* buffer = (uint32_t*)linearAlloc(maxSize);
+	u32* buffer = (u32*)linearAlloc(maxSize);
 	for (int i = 0; i < maxSize; i++)
 		buffer[i] = 0x000000FF;
 
@@ -146,8 +158,8 @@ void Texture_MapInit(Texture_Map* map, const char** files, int num_files) {
 	const char* filename = files[filei];
 	int c				 = 0;
 	while (filename != NULL && c < (TEXTURE_MAPTILES * TEXTURE_MAPTILES) && filei < num_files) {
-		uint32_t *image, w, h;
-		uint32_t error = lodepng_decode32_file((uint8_t**)&image, &w, &h, filename);
+		u8 *image, w, h;
+		u32 error = lodepng_decode32_file((u32**)&image, &w, &h, filename);
 		if (w == TEXTURE_TILESIZE && h == TEXTURE_TILESIZE && image != NULL && !error) {
 			for (int x = 0; x < TEXTURE_TILESIZE; x++) {
 				for (int y = 0; y < TEXTURE_TILESIZE; y++) {
@@ -178,7 +190,7 @@ void Texture_MapInit(Texture_Map* map, const char** files, int num_files) {
 
 	GSPGPU_FlushDataCache(buffer, maxSize);
 	if (!C3D_TexInitWithParams(&map->texture, NULL,
-							   (C3D_TexInitParams){TEXTURE_MAPSIZE, TEXTURE_MAPSIZE, mipmapLevels, GPU_RGBA8, GPU_TEX_2D, true}))
+							   (C3D_TexInitParams){ TEXTURE_MAPSIZE, TEXTURE_MAPSIZE, mipmapLevels, GPU_RGBA8, GPU_TEX_2D, true }))
 		printf("Couldn't alloc texture memory\n");
 	C3D_TexSetFilter(&map->texture, GPU_NEAREST, GPU_NEAREST);
 
@@ -211,11 +223,11 @@ void Texture_MapInit(Texture_Map* map, const char** files, int num_files) {
 }
 
 Texture_MapIcon Texture_MapGetIcon(Texture_Map* map, char* filename) {
-	uint32_t h = hash(filename);
+	u32 h = hash(filename);
 	for (size_t i = 0; i < TEXTURE_MAPTILES * TEXTURE_MAPTILES; i++) {
 		if (h == map->icons[i].textureHash) {
 			return map->icons[i];
 		}
 	}
-	return (Texture_MapIcon){0};
+	return (Texture_MapIcon){ 0 };
 }

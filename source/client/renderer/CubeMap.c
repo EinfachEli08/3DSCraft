@@ -12,58 +12,58 @@
 
 static WorldVertex vertices[6 * 6] = {
 	// Front face
-	{{-vSize, -vSize, vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, -vSize, vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, -vSize, vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{{-vSize, -vSize, vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{-vSize, vSize, vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, -vSize, vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Back face
-	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, -vSize, -vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, -vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, -vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, -vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, -vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{-vSize, vSize, -vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, -vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, -vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Left face
-	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{-vSize, -vSize, vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{-vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{-vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{-vSize, vSize, -vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, -vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Right face
-	{{vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, -vSize, vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{{vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, -vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, -vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Top face
-	{{-vSize, vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, -vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, -vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{{-vSize, vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{-vSize, vSize, vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Bottom face
-	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, -vSize, -vSize}, {1.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, -vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, -vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{{-vSize, -vSize, -vSize}, {0.0f, 1.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{vSize, -vSize, vSize}, {1.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
-	{{-vSize, -vSize, vSize}, {0.0f, 0.0f}, {255, 255, 255}, {0, 0, 0}},
+	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
 };
 
 static int projUniform;

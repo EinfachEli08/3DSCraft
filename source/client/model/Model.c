@@ -6,6 +6,14 @@
 extern Camera camera;
 
 Model* Model_Init(ModelUnbaked* in) {
+	if (!in) {
+		Crash("Passed unbaked Model is NULL!");
+		return NULL;
+	} else if (!in->cubes) {
+		Crash("Passed cubes for unbaked Model is NULL");
+		return NULL;
+	}
+
 	Model* model = linearAlloc(sizeof(Model));
 	if (!model) {
 		Crash("Could not allocate memory for model");
@@ -24,8 +32,17 @@ Model* Model_Init(ModelUnbaked* in) {
 	}
 
 	for (u8 i = 0; i < model->cubeNum; ++i) {
-		model->cubes[i] = *Cube_Init(&in->cubes[i]);
+		if (!in->cubes[i]) {
+			Crash(
+				"Cube %d for Model is NULL!\n Total: %d\n in->cubes: %08x\n in->cubes[]: %08x, %08x, %08x, %08x, %08x, %08x, %08x, %08x, "
+				"%08x, %08x ... ",
+				i, model->cubeNum, in->cubes, in->cubes[0], in->cubes[1], in->cubes[2], in->cubes[3], in->cubes[4], in->cubes[5],
+				in->cubes[6], in->cubes[7], in->cubes[8], in->cubes[9]);
+		}
+		model->cubes[i] = *Cube_Init(in->cubes[i]);
 	}
+
+	return model;
 }
 
 void Model_Deinit(Model* model) {

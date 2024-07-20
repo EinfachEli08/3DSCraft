@@ -14,58 +14,58 @@
 const WorldVertex cube_sides_lut[] = {
 	// Fourth face (MX)
 	// First triangle
-	{{0, 0, 0}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	{ { 0, 0, 0 }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 0, 1 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 1, 1 }, { 1, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Second triangle
-	{{0, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 0, 0}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	{ { 0, 1, 1 }, { 1, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 1, 0 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 0, 0 }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Third face (PX)
 	// First triangle
-	{{1, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 1, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 1, 1}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{ { 1, 0, 0 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 1, 0 }, { 1, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 1, 1 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Second triangle
-	{{1, 1, 1}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{ { 1, 1, 1 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 0, 1 }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 0, 0 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Sixth face (MY)
 	// First triangle
-	{{0, 0, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 0, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{ { 0, 0, 0 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 0, 0 }, { 1, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 0, 1 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Second triangle
-	{{1, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 0, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{ { 1, 0, 1 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 0, 1 }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 0, 0 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Fifth face (PY)
 	// First triangle
-	{{0, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 1, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 1, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{ { 0, 1, 0 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 1, 1 }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 1, 1 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Second triangle
-	{{1, 1, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 1, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{ { 1, 1, 1 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 1, 0 }, { 1, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 1, 0 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Second face (MZ)
 	// First triangle
-	{{0, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 1, 0}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
+	{ { 0, 0, 0 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 1, 0 }, { 1, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 1, 0 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Second triangle
-	{{1, 1, 0}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 0, 0}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 0, 0}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
+	{ { 1, 1, 0 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 0, 0 }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 0, 0 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// First face (PZ)
 	// First triangle
-	{{0, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 0, 1}, {1, 0}, {255, 255, 255}, {0, 0, 0}},
-	{{1, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
+	{ { 0, 0, 1 }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 0, 1 }, { 1, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 1, 1, 1 }, { 1, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
 	// Second triangle
-	{{1, 1, 1}, {1, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 1, 1}, {0, 1}, {255, 255, 255}, {0, 0, 0}},
-	{{0, 0, 1}, {0, 0}, {255, 255, 255}, {0, 0, 0}},
+	{ { 1, 1, 1 }, { 1, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 1, 1 }, { 0, 1 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { 0, 0, 1 }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 };
 
 typedef struct {
@@ -165,7 +165,7 @@ static uint8_t floodfill_visited[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 
 static inline void addFace(int x, int y, int z, Direction dir, Block block, uint8_t metadata, int ao, bool transparent) {
 	if (x >= 0 && y >= 0 && z >= 0 && x < CHUNK_SIZE && y < CHUNK_SIZE && z < CHUNK_SIZE) {
-		faceBuffer[currentFace++] = (Face){x, y, z, dir, block, ao, metadata, transparent};
+		faceBuffer[currentFace++] = (Face){ x, y, z, dir, block, ao, metadata, transparent };
 		transparentFaces += transparent;
 	}
 }
@@ -174,15 +174,15 @@ static uint16_t floodFill(World* world, Chunk* chunk, Cluster* cluster, int x, i
 						  Direction entrySide2) {
 	if (floodfill_visited[x][y][z] & 1)
 		return 0;
-	uint8_t exitPoints[6] = {false};
-	if (entrySide0 != Direction_Invalid)
+	uint8_t exitPoints[6] = { false };
+	if (entrySide0 != Direction_None)
 		exitPoints[entrySide0] = true;
-	if (entrySide1 != Direction_Invalid)
+	if (entrySide1 != Direction_None)
 		exitPoints[entrySide1] = true;
-	if (entrySide2 != Direction_Invalid)
+	if (entrySide2 != Direction_None)
 		exitPoints[entrySide2] = true;
 	vec_clear(&floodfill_queue);
-	vec_push(&floodfill_queue, ((QueueElement){x, y, z}));
+	vec_push(&floodfill_queue, ((QueueElement){ x, y, z }));
 
 	while (floodfill_queue.length > 0) {
 		QueueElement item = vec_pop(&floodfill_queue);
@@ -195,7 +195,7 @@ static uint16_t floodFill(World* world, Chunk* chunk, Cluster* cluster, int x, i
 			} else {
 				if (!Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf) && !(floodfill_visited[x][y][z] & 1)) {
 					floodfill_visited[x][y][z] |= 1;
-					vec_push(&floodfill_queue, ((QueueElement){x, y, z}));
+					vec_push(&floodfill_queue, ((QueueElement){ x, y, z }));
 				}
 				if ((cluster->blocks[item.x][item.y][item.z] == Block_Air ||
 					 Block_Opaque(cluster->blocks[x][y][z], cluster->metadataLight[x][y][z] & 0xf)) &&
@@ -232,13 +232,13 @@ void PolyGen_GeneratePolygons(WorkQueue* queue, WorkerItem item, void* this) {
 			for (int x = 0; x < CHUNK_SIZE; x += CHUNK_SIZE - 1) {
 				Direction xDir = !x ? Direction_West : Direction_East;
 				for (int z = 0; z < CHUNK_SIZE; z++) {
-					Direction zDir = Direction_Invalid;
+					Direction zDir = Direction_None;
 					if (z == 0)
 						zDir = Direction_North;
 					else if (z == CHUNK_SIZE - 1)
 						zDir = Direction_South;
 					for (int y = 0; y < CHUNK_SIZE; y++) {
-						Direction yDir = Direction_Invalid;
+						Direction yDir = Direction_None;
 						if (y == 0)
 							yDir = Direction_Bottom;
 						else if (y == CHUNK_SIZE - 1)
@@ -258,13 +258,13 @@ void PolyGen_GeneratePolygons(WorkQueue* queue, WorkerItem item, void* this) {
 			for (int y = 0; y < CHUNK_SIZE; y += CHUNK_SIZE - 1) {
 				Direction yDir = !y ? Direction_Bottom : Direction_Top;
 				for (int x = 0; x < CHUNK_SIZE; x++) {
-					Direction xDir = Direction_Invalid;
+					Direction xDir = Direction_None;
 					if (x == 0)
 						xDir = Direction_West;
 					else if (x == CHUNK_SIZE - 1)
 						xDir = Direction_East;
 					for (int z = 0; z < CHUNK_SIZE; z++) {
-						Direction zDir = Direction_Invalid;
+						Direction zDir = Direction_None;
 						if (z == 0)
 							zDir = Direction_South;
 						else if (z == CHUNK_SIZE - 1)
@@ -283,13 +283,13 @@ void PolyGen_GeneratePolygons(WorkQueue* queue, WorkerItem item, void* this) {
 			for (int z = 0; z < CHUNK_SIZE; z += CHUNK_SIZE - 1) {
 				Direction zDir = !z ? Direction_North : Direction_South;
 				for (int x = 0; x < CHUNK_SIZE; x++) {
-					Direction xDir = Direction_Invalid;
+					Direction xDir = Direction_None;
 					if (x == 0)
 						xDir = Direction_West;
 					else if (x == CHUNK_SIZE - 1)
 						xDir = Direction_East;
 					for (int y = 0; y < CHUNK_SIZE; y++) {
-						Direction yDir = Direction_Invalid;
+						Direction yDir = Direction_None;
 						if (y == 0)
 							yDir = Direction_Bottom;
 						else if (y == CHUNK_SIZE - 1)
@@ -308,8 +308,8 @@ void PolyGen_GeneratePolygons(WorkQueue* queue, WorkerItem item, void* this) {
 			int py = FastFloor(player->position.y);
 			int pz = FastFloor(player->position.z);
 			if (WorldToChunkCoord(px) == item.chunk->x && WorldToChunkCoord(pz) == item.chunk->z && WorldToChunkCoord(py) == i) {
-				floodFill(world, item.chunk, cluster, WorldToLocalCoord(px), WorldToLocalCoord(py), WorldToLocalCoord(pz),
-						  Direction_Invalid, Direction_Invalid, Direction_Invalid);
+				floodFill(world, item.chunk, cluster, WorldToLocalCoord(px), WorldToLocalCoord(py), WorldToLocalCoord(pz), Direction_None,
+						  Direction_None, Direction_None);
 			}
 
 			int transparentVertices = transparentFaces * 6;

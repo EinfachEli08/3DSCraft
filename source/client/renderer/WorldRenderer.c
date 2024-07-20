@@ -28,18 +28,18 @@ Camera camera;
 static int projectionUniform;
 
 typedef struct {
-		Cluster* cluster;
-		Chunk* chunk;
-		Direction enteredFrom;
+	Cluster* cluster;
+	Chunk* chunk;
+	Direction enteredFrom;
 } RenderStep;
 
 typedef struct {
-		Cluster* cluster;
-		Chunk* chunk;
+	Cluster* cluster;
+	Chunk* chunk;
 } TransparentRender;
 
 static vec_t(RenderStep) renderingQueue;
-static uint8_t chunkRendered[CHUNKCACHE_SIZE][CLUSTER_PER_CHUNK][CHUNKCACHE_SIZE];
+static u8 chunkRendered[CHUNKCACHE_SIZE][CLUSTER_PER_CHUNK][CHUNKCACHE_SIZE];
 static vec_t(TransparentRender) transparentClusters;
 
 static C3D_FogLut fogLut;
@@ -57,6 +57,8 @@ void WorldRenderer_Init(Player* player_, World* world_, WorkQueue* workqueue_, i
 	vec_init(&transparentClusters);
 
 	Camera_Init(&camera);
+
+	Player_InitModel(player, projectionUniform);
 
 	Cursor_Init();
 	Hand_Init();
@@ -95,16 +97,21 @@ static void renderWorld() {
 
 	memset(chunkRendered, 0, sizeof(chunkRendered));
 
-	int polysTotal = 0, clustersDrawn = 0, steps = 0;
+	u64 polysTotal	  = 0;
+	u32 clustersDrawn = 0, steps = 0;
 
 	vec_clear(&renderingQueue);
 	vec_clear(&transparentClusters);
 
-	int pY = CLAMP(WorldToChunkCoord(FastFloor(player->position.y)), 0, CLUSTER_PER_CHUNK - 1);
-	Chunk* pChunk =
-		World_GetChunk(world, WorldToChunkCoord(FastFloor(player->position.x)), WorldToChunkCoord(FastFloor(player->position.z)));
-	vec_push(&renderingQueue, ((RenderStep){&pChunk->clusters[pY], pChunk, Direction_Invalid}));
-	chunkRendered[CHUNKCACHE_SIZE / 2][pY][CHUNKCACHE_SIZE / 2] = 1;
+	int playerY = CLAMP(WorldToChunkCoord(FastFloor(player->position.y)), 0, CLUSTER_PER_CHUNK - 1);
+	int playerX = WorldToChunkCoord(FastFloor(player->position.x));
+	int playerZ = WorldToChunkCoord(FastFloor(player->position.z));
+
+	Chunk* pChunk = World_GetChunk(world, playerX, playerZ);
+
+	vec_push(&renderingQueue, ((RenderStep){ &pChunk->clusters[playerY], pChunk, Direction_None }));
+
+	chunkRendered[CHUNKCACHE_SIZE / 2][playerY][CHUNKCACHE_SIZE / 2] = 1;
 
 	float3 playerPos = player->position;
 
@@ -127,7 +134,7 @@ static void renderWorld() {
 			clustersDrawn++;
 		}
 		if (cluster->transparentVertices > 0 && cluster->transparentVBO.size) {
-			vec_push(&transparentClusters, ((TransparentRender){cluster, chunk}));
+			vec_push(&transparentClusters, ((TransparentRender){ cluster, chunk }));
 		}
 		// if (polysTotal >= 150000) break;
 
@@ -150,7 +157,7 @@ static void renderWorld() {
 			if (clusterWasRendered(newX, newY, newZ) & 1)
 				continue;
 
-			if (!ChunkCanBeSeenThrough(cluster->seeThrough, step.enteredFrom, i) && step.enteredFrom != Direction_Invalid)
+			if (!ChunkCanBeSeenThrough(cluster->seeThrough, step.enteredFrom, i) && step.enteredFrom != Direction_None)
 				continue;
 
 			C3D_FVec chunkPosition = FVec3_New(newX * CHUNK_SIZE, newY * CHUNK_SIZE, newZ * CHUNK_SIZE);
@@ -160,7 +167,7 @@ static void renderWorld() {
 			clusterWasRendered(newX, newY, newZ) |= 1;
 
 			Chunk* newChunk		= World_GetChunk(world, newX, newZ);
-			RenderStep nextStep = (RenderStep){&newChunk->clusters[newY], newChunk, DirectionOpposite[dir]};
+			RenderStep nextStep = (RenderStep){ &newChunk->clusters[newY], newChunk, DirectionOpposite[dir] };
 			if (newChunk)
 				vec_push(&renderingQueue, nextStep);
 		}
@@ -178,7 +185,7 @@ static void renderWorld() {
 							clear = false;
 
 				if (clear)
-					WorkQueue_AddItem(workqueue, (WorkerItem){WorkerItemType_PolyGen, chunk});
+					WorkQueue_AddItem(workqueue, (WorkerItem){ WorkerItemType_PolyGen, chunk });
 			}
 		}
 	}

@@ -9,13 +9,12 @@
 #define CUBE_VERTICE_NUM 6 * 6
 
 typedef struct {
-	float3 from;
-	float3 to;
+	float3 from, to;
 	s16 faceUV[6][4];  // pixel based coordinates
 	u8 faceTexIdx[6];  // index of texture per face
 	u8 texNum;		   // number of textures
 	const char* texPath[6];
-	C3D_Mtx* matrix;
+	float3 position, rotation;
 } CubeModel;
 
 typedef struct {
@@ -24,16 +23,23 @@ typedef struct {
 	C3D_Tex* textures[6];
 } Cube;
 
-inline void Cube_Clean(CubeModel* model) {
-	if (model == NULL)
-		return;
-
-	for (u8 i = 0; i < model->texNum; ++i) {
-		if (model->texPath[i]) {
-			free((void*)model->texPath[i]);
-		}
+static inline CubeModel** cubeModels(CubeModel* models, u8 numModels) {
+	CubeModel** pointers = (CubeModel**)malloc(sizeof(CubeModel*) * numModels);
+	if (!pointers) {
+		return NULL;  // Memory allocation failed
 	}
 
+	for (u8 i = 0; i < numModels; ++i) {
+		pointers[i] = &models[i];
+	}
+
+	return pointers;
+}
+static inline void Cube_Clean(CubeModel* model) {
+	if (model == NULL)
+		return;
+	// fuck this, memory leak time.
+	// file paths
 	linearFree(model);
 }
 

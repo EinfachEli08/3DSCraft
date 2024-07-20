@@ -1,5 +1,6 @@
 #include "client/model/Cube.h"
 
+#include "client/Crash.h"
 #include "client/renderer/texture/TextureMap.h"
 
 extern const WorldVertex cube_sides_lut[CUBE_VERTICE_NUM];
@@ -7,6 +8,11 @@ extern const WorldVertex cube_sides_lut[CUBE_VERTICE_NUM];
 #define toTexCrd(x, tw) (s16)(((float)(x) / (float)(tw)) * (float)(1 << 15))
 
 Cube* Cube_Init(CubeModel* in) {
+	if (!in) {
+		Crash("Passed unbaked CubeModel is NULL!");
+		return NULL;
+	}
+
 	Cube* cube = linearAlloc(sizeof(Cube));
 	if (!cube) {
 		Crash("Could not allocate memory for cube");
@@ -20,20 +26,25 @@ Cube* Cube_Init(CubeModel* in) {
 		return NULL;
 	}
 
-	C3D_Tex* textures[in->texNum];
+	C3D_Tex textures[in->texNum];
 	for (u8 i = 0; i < in->texNum; ++i) {
 		if (in->texPath[i] == NULL)
-			break;
+			continue;
 
-		Texture_Load(textures[i], in->texPath[i]);
-		C3D_TexSetFilter(textures[i], GPU_NEAREST, GPU_NEAREST);
-		C3D_TexSetWrap(textures[i], GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
+		Texture_Load(&textures[i], in->texPath[i]);
+		if (&textures[i] == NULL) {
+			Crash("Cube Texture No. %d failed to initialize:\n %s", i, in->texPath[i]);
+			return NULL;
+		}
+		C3D_TexSetFilter(&textures[i], GPU_NEAREST, GPU_NEAREST);
+		C3D_TexSetWrap(&textures[i], GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
 	}
 	for (u8 i = 0; i < 6; ++i) {
-		cube->textures[i] = textures[in->faceTexIdx[i]];
+		memcpy(&cube->textures[i], &textures[in->faceTexIdx[i]], sizeof(C3D_Tex));
 
 		if (cube->textures[i] == NULL)
-			Crash("Cube Texture for face %d invalid,\n which has %d textures in total.", i, in->texNum);
+			Crash("Cube Texture for face %d invalid,\n which has %d textures in total.\n Textures: %08x, %08x, %08x, %08x, %08x, %08x", i,
+				  in->texNum, textures[0], textures[1], textures[2], textures[3], textures[4], textures[5]);
 	}
 
 	for (u8 face = 0; face < 6; ++face) {
@@ -68,7 +79,13 @@ Cube* Cube_Init(CubeModel* in) {
 			vertex->rgb[2] = 255;*/
 		}
 	}
-	cube->matrix = *in->matrix;
+	C3D_Mtx matrix;
+	Mtx_Translate(&matrix, in->position.x, in->position.y, in->position.z, true);
+	Mtx_RotateX(&matrix, in->rotation.x, true);
+	Mtx_RotateY(&matrix, in->rotation.y, true);
+	Mtx_RotateZ(&matrix, in->rotation.z, true);
+
+	cube->matrix = matrix;
 
 	return cube;
 }
@@ -91,13 +108,23 @@ void Cube_Draw(Cube* cube) {
 	if (cube == NULL) {
 		Crash("Cube is NULL!");
 		return;
-	}
+	} /* else if (cube->vbo == NULL) {
+		 Crash("Cube VBO is NULL!");
+		 return;
+	 } else if (cube->textures == NULL) {
+		 Crash("Cube Textures are NULL!");
+		 return;
+	 } else if (cube->textures[0]->data == NULL) {
+		 Crash("Cube TextureData 0 is NULL!\n %08x, %08x, %08x, %08x, %08x", cube->textures[0]->data, cube->textures[1]->data,
+			   cube->textures[2]->data, cube->textures[3]->data, cube->textures[4]->data);
+	 }*/
+
 	C3D_BufInfo* bufInfo = C3D_GetBufInfo();
 	BufInfo_Init(bufInfo);
 	BufInfo_Add(bufInfo, cube->vbo, sizeof(WorldVertex), 4, 0x3210);
 
 	for (u8 i = 0; i < 6; i++) {
-		C3D_TexBind(0, &cube->textures[i]);
+		C3D_TexBind(0, cube->textures[i]);
 		C3D_DrawArrays(GPU_TRIANGLES, i * 6, 6);
 	}
 }

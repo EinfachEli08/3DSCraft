@@ -5,6 +5,48 @@
 #include "util/Paths.h"
 #include "world/phys/Collision.h"
 
+#define cubeNo 2
+
+void Player_InitModel(Player* player, int shaderUniform) {
+	C3D_Mtx matrix;
+	Mtx_Translate(&matrix, player->position.x, player->position.y, player->position.z, true);
+
+	CubeModel cubes[cubeNo] = {
+		{ f3_new(0, 0, 0),
+		  f3_new(10, 10, 10),
+		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
+		  { 0, 1, 0, 1, 0, 1 },
+		  2,
+		  { "block/bedrock.png", "block/grass_top.png", 0, 0, 0, 0 },
+		  f3_new(0, 0, 0),
+		  f3_new(0, 0, -10) },
+		{ f3_new(0, 0, 0),
+		  f3_new(10, 10, 10),
+		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
+		  { 0, 1, 0, 1, 0, 1 },
+		  2,
+		  { "block/stone.png", "block/grass_top.png", 0, 0, 0, 0 },
+		  f3_new(0, 10, 10),
+		  f3_new(0, 0, 0) }
+	};
+
+	CubeModel** cubePtrs = cubeModels(cubes, cubeNo);
+
+	ModelUnbaked preModel = { .rootMatrix = &matrix, .cubeNum = cubeNo, .cubes = cubePtrs, .shaderUniform = shaderUniform };
+
+	player->model = Model_Init(&preModel);
+
+	Model_Clean(&preModel);
+}
+
+static void Player_Draw(Player* player) {
+	Model_Draw(player->model);
+}
+
+void Player_Deinit(Player* player) {
+	Model_Deinit(player->model);
+}
+
 void Player_Init(Player* player, World* world) {
 	player->position = f3_new(0.f, 0.f, 0.f);
 
@@ -40,58 +82,58 @@ void Player_Init(Player* player, World* world) {
 	player->inventorySite		= 1;
 	{
 		int l				   = 0;
-		player->inventory[l++] = (ItemStack){Block_Stone, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Dirt, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Grass, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Cobblestone, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Sand, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Log, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Leaves, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Glass, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Stonebrick, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Brick, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Planks, 0, 1};
+		player->inventory[l++] = (ItemStack){ Block_Stone, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Dirt, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Grass, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Cobblestone, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Sand, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Log, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Leaves, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Glass, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Stonebrick, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Brick, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Planks, 0, 1 };
 		for (int i = 0; i < 16; i++)
-			player->inventory[l++] = (ItemStack){Block_Wool, i, 1};
-		player->inventory[l++] = (ItemStack){Block_Bedrock, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Gravel, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Coarse, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Door_Top, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Door_Bottom, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Snow_Grass, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Snow, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Obsidian, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Netherrack, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Sandstone, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Smooth_Stone, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Crafting_Table, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Grass_Path, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Lava, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Water, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Iron_Block, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Iron_Ore, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Coal_Block, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Coal_Ore, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Gold_Block, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Gold_Ore, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Diamond_Block, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Diamond_Ore, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Emerald_Block, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Emerald_Ore, 0, 1};
-		player->inventory[l++] = (ItemStack){Block_Furnace, 0, 1};
+			player->inventory[l++] = (ItemStack){ Block_Wool, i, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Bedrock, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Gravel, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Coarse, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Door_Top, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Door_Bottom, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Snow_Grass, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Snow, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Obsidian, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Netherrack, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Sandstone, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Smooth_Stone, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Crafting_Table, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Grass_Path, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Lava, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Water, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Iron_Block, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Iron_Ore, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Coal_Block, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Coal_Ore, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Gold_Block, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Gold_Ore, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Diamond_Block, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Diamond_Ore, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Emerald_Block, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Emerald_Ore, 0, 1 };
+		player->inventory[l++] = (ItemStack){ Block_Furnace, 0, 1 };
 		// player->inventory[l++] = (ItemStack){Item_Totem, 0, 1};
 
 		for (int i = 0; i < INVENTORY_QUICKSELECT_MAXSLOTS; i++)
-			player->quickSelectBar[i] = (ItemStack){Block_Air, 0, 0};
+			player->quickSelectBar[i] = (ItemStack){ Block_Air, 0, 0 };
 	}
 	extern bool showDebugInfo;
 
 	player->autoJumpEnabled = false;
 
-    //hardcoded values for now
-    //experience is a value between 0 and 0.99*
-    player->experience = 0.1;
-    player->experienceLevel = 5000000;
+	// hardcoded values for now
+	// experience is a value between 0 and 0.99*
+	player->experience		= 0.1;
+	player->experienceLevel = 5000000;
 }
 
 void Player_Update(Player* player, Sound* sound, Damage* dmg) {
@@ -180,6 +222,7 @@ void Player_Update(Player* player, Sound* sound, Damage* dmg) {
 		}
 	}
 	//}
+	Player_Draw(player);
 }
 
 bool Player_CanMove(Player* player, float3 new) {
@@ -244,7 +287,7 @@ void Player_Move(Player* player, float dt, float3 accl) {
 
 		player->grounded = false;
 		for (int j = 0; j < 3; j++) {
-			int i			= (int[]){0, 2, 1}[j];
+			int i			= (int[]){ 0, 2, 1 }[j];
 			bool collision	= false;
 			float3 axisStep = /*f3_new(i == 0 ? newPos.x : player->position.x, i == 1 ? newPos.y : player->position.y,
 									 i == 2 ? newPos.z : player->position.z)*/
@@ -298,7 +341,7 @@ void Player_Move(Player* player, float dt, float3 accl) {
 		if (wallCollision && player->autoJumpEnabled) {
 			float3 nrmDiff	   = f3_nrm(f3_sub(newPos, player->position));
 			Block block		   = World_GetBlock(player->world, FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 2,
-												FastFloor(finalPos.z + nrmDiff.z));
+											FastFloor(finalPos.z + nrmDiff.z));
 			Block landingBlock = World_GetBlock(player->world, FastFloor(finalPos.x + nrmDiff.x), FastFloor(finalPos.y + nrmDiff.y) + 1,
 												FastFloor(finalPos.z + nrmDiff.z));
 			if (block == Block_Air && landingBlock != Block_Air)

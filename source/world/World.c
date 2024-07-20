@@ -53,7 +53,7 @@ Chunk* World_LoadChunk(World* world, int x, int z) {
 			vec_splice(&world->freeChunks, i, 1);
 
 			Chunk_Init(chunk, x, z);
-			WorkQueue_AddItem(world->workqueue, (WorkerItem){WorkerItemType_Load, chunk});
+			WorkQueue_AddItem(world->workqueue, (WorkerItem){ WorkerItemType_Load, chunk });
 
 			chunk->references++;
 			return chunk;
@@ -63,12 +63,16 @@ Chunk* World_LoadChunk(World* world, int x, int z) {
 	return NULL;
 }
 void World_UnloadChunk(World* world, Chunk* chunk) {
-	WorkQueue_AddItem(world->workqueue, (WorkerItem){WorkerItemType_Save, chunk});
+	WorkQueue_AddItem(world->workqueue, (WorkerItem){ WorkerItemType_Save, chunk });
 	vec_push(&world->freeChunks, chunk);
 	chunk->references--;
 }
 
 Chunk* World_GetChunk(World* world, int x, int z) {
+	if (world == NULL) {
+		Crash("World is NULL when calling GetChunk x%d z%d", x, z);
+		return NULL;
+	}
 	int halfS = CHUNKCACHE_SIZE / 2;
 	int lowX  = world->cacheTranslationX - halfS;
 	int lowZ  = world->cacheTranslationZ - halfS;
@@ -216,7 +220,7 @@ void World_Tick(World* world) {
 			Chunk* chunk = world->chunkCache[x][z];
 
 			if (chunk->genProgress == ChunkGen_Empty && !chunk->tasksRunning)
-				WorkQueue_AddItem(world->workqueue, (WorkerItem){WorkerItemType_BaseGen, chunk});
+				WorkQueue_AddItem(world->workqueue, (WorkerItem){ WorkerItemType_BaseGen, chunk });
 
 			if (x > 0 && z > 0 && x < CHUNKCACHE_SIZE - 1 && z < CHUNKCACHE_SIZE - 1 && chunk->genProgress == ChunkGen_Terrain &&
 				!chunk->tasksRunning) {
@@ -228,7 +232,7 @@ void World_Tick(World* world) {
 							clear = false;
 					}
 				if (clear)
-					WorkQueue_AddItem(world->workqueue, (WorkerItem){WorkerItemType_Decorate, chunk});
+					WorkQueue_AddItem(world->workqueue, (WorkerItem){ WorkerItemType_Decorate, chunk });
 
 				int xVals[RANDOMTICKS_PER_CHUNK];
 				int yVals[RANDOMTICKS_PER_CHUNK];
