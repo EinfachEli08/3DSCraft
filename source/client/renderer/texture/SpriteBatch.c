@@ -45,7 +45,7 @@ void SpriteBatch_Init(int projUniform_) {
 	font = (Font*)malloc(sizeof(Font));
 	FontLoader_Init(font, "romfs:/assets/textures/font/ascii.png");
 	Texture_Load(&widgetsTex, "romfs:/assets/textures/gui/widgets.png");
-
+    Texture_Load(&iconsTex, "romfs:/assets/textures/gui/icons.png");
 	uint8_t data[16 * 16];
 	memset(data, 0xff, 16 * 16 * sizeof(uint8_t));
 	C3D_TexInit(&whiteTex, 16, 16, GPU_L8);

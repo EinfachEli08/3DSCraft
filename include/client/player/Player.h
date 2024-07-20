@@ -39,6 +39,8 @@ typedef struct {
 		int armour;
 		int oxygen;
 		int hunger;
+        float experience;
+        float experienceLevel;
 		int difficulty;
 		float rndy;
 
