@@ -180,12 +180,11 @@ void Renderer_Render() {
 
 			WorldRenderer_Render(!i ? -iod : iod);
 
-			SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
-			if (iod == 0.f)
-				SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 240, 0, 16, 16);
+            Renderer_RenderGameOverlay();
+
 		} else {
 			if (i == 0)
-				CubeMap_Draw(&camera.projection, f3_new(0.f, -0.01f, 0.f));
+				CubeMap_Draw(&camera.projection, f3_new(0.f, 0.002f, 0.f));
 
 			SpriteBatch_SetScale(2);
 
@@ -235,156 +234,52 @@ void Renderer_Render() {
 
 	C3D_FrameEnd(0);
 }
-/*
-//CUBEMAP STUFF
 
+void Renderer_RenderGameOverlay(){
+    SpriteBatch_BindGuiTexture(GuiTexture_Icons);
+    SpriteBatch_PushQuad(200 / 2 - 16 / 2, 120 / 2 - 16 / 2, 0, 16, 16, 0, 0, 16, 16);
 
-typedef struct { float position[3]; } vertex;
-
-static const vertex vertex_list[] =
-		{
-				// First face (PZ)
-				// First triangle
-				{ {-0.5f, -0.5f, +0.5f} },
-				{ {+0.5f, -0.5f, +0.5f} },
-				{ {+0.5f, +0.5f, +0.5f} },
-				// Second triangle
-				{ {+0.5f, +0.5f, +0.5f} },
-				{ {-0.5f, +0.5f, +0.5f} },
-				{ {-0.5f, -0.5f, +0.5f} },
-
-				// Second face (MZ)
-				// First triangle
-				{ {-0.5f, -0.5f, -0.5f} },
-				{ {-0.5f, +0.5f, -0.5f} },
-				{ {+0.5f, +0.5f, -0.5f} },
-				// Second triangle
-				{ {+0.5f, +0.5f, -0.5f} },
-				{ {+0.5f, -0.5f, -0.5f} },
-				{ {-0.5f, -0.5f, -0.5f} },
-
-				// Third face (PX)
-				// First triangle
-				{ {+0.5f, -0.5f, -0.5f} },
-				{ {+0.5f, +0.5f, -0.5f} },
-				{ {+0.5f, +0.5f, +0.5f} },
-				// Second triangle
-				{ {+0.5f, +0.5f, +0.5f} },
-				{ {+0.5f, -0.5f, +0.5f} },
-				{ {+0.5f, -0.5f, -0.5f} },
-
-				// Fourth face (MX)
-				// First triangle
-				{ {-0.5f, -0.5f, -0.5f} },
-				{ {-0.5f, -0.5f, +0.5f} },
-				{ {-0.5f, +0.5f, +0.5f} },
-				// Second triangle
-				{ {-0.5f, +0.5f, +0.5f} },
-				{ {-0.5f, +0.5f, -0.5f} },
-				{ {-0.5f, -0.5f, -0.5f} },
-
-				// Fifth face (PY)
-				// First triangle
-				{ {-0.5f, +0.5f, -0.5f} },
-				{ {-0.5f, +0.5f, +0.5f} },
-				{ {+0.5f, +0.5f, +0.5f} },
-				// Second triangle
-				{ {+0.5f, +0.5f, +0.5f} },
-				{ {+0.5f, +0.5f, -0.5f} },
-				{ {-0.5f, +0.5f, -0.5f} },
-
-				// Sixth face (MY)
-				// First triangle
-				{ {-0.5f, -0.5f, -0.5f} },
-				{ {+0.5f, -0.5f, -0.5f} },
-				{ {+0.5f, -0.5f, +0.5f} },
-				// Second triangle
-				{ {+0.5f, -0.5f, +0.5f} },
-				{ {-0.5f, -0.5f, +0.5f} },
-				{ {-0.5f, -0.5f, -0.5f} },
-		};
-
-
-
-// Helper function for loading a texture from a t3x file
-static bool loadTextureFromFile(C3D_Tex* tex, C3D_TexCube* cube, const char* path)
-{
-	FILE* f = fopen(path, "rb");
-	if (!f)
-		return false;
-
-	Tex3DS_Texture t3x = Tex3DS_TextureImportStdio(f, tex, cube, false);
-	fclose(f);
-	if (!t3x)
-		return false;
-
-	// Delete the t3x object since we don't need it
-	Tex3DS_TextureFree(t3x);
-	return true;
+    renderExpBar();
 }
 
-void BG_Init(void)
-{
-	// Load the vertex shader, create a shader program and bind it
-	skybox_dvlb = DVLB_ParseFile((u32*)skybox_shbin, skybox_shbin_size);
-	shaderProgramInit(&program);
-	shaderProgramSetVsh(&program, &skybox_dvlb->DVLE[0]);
-	C3D_BindProgram(&program);
-	C3D_DepthTest(false, GPU_ALWAYS, GPU_WRITE_COLOR);
+//this is actual minecraft ported code
 
-	// Get the location of the uniforms
-	uLoc_projection = shaderInstanceGetUniformLocation(program.vertexShader, "projection");
-	uLoc_modelView  = shaderInstanceGetUniformLocation(program.vertexShader, "modelView");
+void renderExpBar(){
+//harcoded cap for now
+    int barCap = 10;
 
-	// Configure attributes for use with the vertex shader
-	C3D_AttrInfo* attrInfo = C3D_GetAttrInfo();
-	AttrInfo_Init(attrInfo);
-	AttrInfo_AddLoader(attrInfo, 0, GPU_FLOAT, 3); // v0=position
+    SpriteBatch_BindGuiTexture(GuiTexture_Icons);
 
-	// Compute the projection matrix
-	Mtx_PerspTilt(&projection, C3D_AngleFromDegrees(45.0f), C3D_AspectRatioTop, 0.01f, 1000.0f, false);
+    if(barCap > 0)
+    {
+        int barLength = 182;
+        int xpFill = (int)(player->experience * (float)(barLength + 1));
 
-	// Create the VBO (vertex buffer object)
-	vbo_data = linearAlloc(sizeof(vertex_list));
-	memcpy(vbo_data, vertex_list, sizeof(vertex_list));
+        int y = 120 - 8;
+        SpriteBatch_PushQuad(200 / 2 - 182 / 2, y, 0, barLength, 5, 0, 64, barLength, 5);
 
-	// Configure buffers
-	C3D_BufInfo* bufInfo = C3D_GetBufInfo();
-	BufInfo_Init(bufInfo);
-	BufInfo_Add(bufInfo, vbo_data, sizeof(vertex), 1, 0x0);
+        if(xpFill > 0)
+        {
+            SpriteBatch_PushQuad(200 / 2 - 182 / 2, y, 1, xpFill, 5, 0, 69, xpFill, 5);
+        }
+    }
 
-	// Load the skybox texture and bind it to the first texture unit
-	if (!loadTextureFromFile(&skybox_tex, &skybox_cube, "romfs:/gfx/skybox.t3x"))
-		svcBreak(USERBREAK_PANIC);
-	C3D_TexSetFilter(&skybox_tex, GPU_LINEAR, GPU_LINEAR);
-	C3D_TexSetWrap(&skybox_tex, GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
-	C3D_TexBind(0, &skybox_tex);
+    if(player->experienceLevel > 0) {
 
+        char experienceStr[20];  // buffer to hold the string representation of experience level
 
-	C3D_TexEnv* env = C3D_GetTexEnv(0);
-	C3D_TexEnvInit(env);
-	C3D_TexEnvSrc(env, C3D_Both, GPU_TEXTURE0,0,0);
-	C3D_TexEnvFunc(env, C3D_Both, GPU_REPLACE);
-}
+        int experienceInt = (int)player->experienceLevel;
+        snprintf(experienceStr, sizeof(experienceStr), "%d", experienceInt);  // Format as integer
 
-void BG_Render(void)
-{
+        int textWidth = SpriteBatch_CalcTextWidth(experienceStr);
 
-
-}
-
-void BG_Exit(void)
-{
-	// Free the texture
-	C3D_TexDelete(&skybox_tex);
-
-	// Free the VBO
-	linearFree(vbo_data);
-
-	// Free the shader program
-	shaderProgramFree(&program);
-	DVLB_Free(skybox_dvlb);
+        SpriteBatch_PushText(200 / 2 - textWidth/2 + 1, 120 - 17, 2, SHADER_RGB(0,0,0), false, INT_MAX,1, experienceStr);
+        SpriteBatch_PushText(200 / 2 - textWidth/2 - 1, 120 - 17, 2, SHADER_RGB(0,0,0), false, INT_MAX,1, experienceStr);
+        SpriteBatch_PushText(200 / 2 - textWidth/2, 120 - 17 + 1, 2, SHADER_RGB(0,0,0), false, INT_MAX,1, experienceStr);
+        SpriteBatch_PushText(200 / 2 - textWidth/2, 120 - 17 - 1, 2, SHADER_RGB(0,0,0), false, INT_MAX,1, experienceStr);
+        SpriteBatch_PushText(200 / 2 - textWidth/2, 120 - 17, 3, SHADER_RGB(100,255,32), false, INT_MAX, 1, experienceStr);
+    }
 }
 
 
-*/
+

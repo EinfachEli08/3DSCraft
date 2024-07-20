@@ -86,7 +86,12 @@ void Player_Init(Player* player, World* world) {
 	}
 	extern bool showDebugInfo;
 
-	player->autoJumpEnabled = true;
+	player->autoJumpEnabled = false;
+
+    //hardcoded values for now
+    //experience is a value between 0 and 0.99*
+    player->experience = 0.1;
+    player->experienceLevel = 5000000;
 }
 
 void Player_Update(Player* player, Sound* sound, Damage* dmg) {
