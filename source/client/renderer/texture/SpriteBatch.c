@@ -10,12 +10,12 @@
 #include <vec/vec.h>
 
 typedef struct {
-		int depth;
-		C3D_Tex* texture;
-		int16_t x0, y0, x1, y1;	 // top left, right
-		int16_t x2, y2, x3, y3;	 // bottom left, right
-		int16_t u0, v0, u1, v1;
-		int16_t color;
+	int depth;
+	C3D_Tex* texture;
+	int16_t x0, y0, x1, y1;	 // top left, right
+	int16_t x2, y2, x3, y3;	 // bottom left, right
+	int16_t u0, v0, u1, v1;
+	int16_t color;
 } Sprite;
 
 static vec_t(Sprite) cmdList;
@@ -126,10 +126,10 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 
 		for (int j = 0; j < 5; j++) {
 			int k	   = i * 6 + j;
-			C3D_FVec p = FVec3_New((float)vertices[k].xyz[0] - 0.5f, (float)vertices[k].xyz[1] - 0.5f, (float)vertices[k].xyz[2] - 0.5f);
+			C3D_FVec p = FVec3_New((float)vertices[k].pos[0] - 0.5f, (float)vertices[k].pos[1] - 0.5f, (float)vertices[k].pos[2] - 0.5f);
 			C3D_FVec v = Mtx_MultiplyFVec3(&iconModelMtx, p);
-			vertices[k].xyz[0] = FastFloor(v.x * 20.f * guiScale) + (x + 16) * guiScale;
-			vertices[k].xyz[1] = -FastFloor(v.y * 20.f * guiScale) + (y + 16) * guiScale;  // invertieren auf der Y-Achse
+			vertices[k].pos[0] = FastFloor(v.x * 20.f * guiScale) + (x + 16) * guiScale;
+			vertices[k].pos[1] = -FastFloor(v.y * 20.f * guiScale) + (y + 16) * guiScale;  // invertieren auf der Y-Achse
 		}
 
 		WorldVertex bottomLeft	= vertices[i * 6 + 0];
@@ -145,7 +145,7 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 		else if (i == Direction_West)
 			color16 = SHADER_RGB_DARKEN(color16, 10);
 
-#define unpackP(x) (x).xyz[0], (x).xyz[1]
+#define unpackP(x) (x).pos[0], (x).pos[1]
 		vec_push(&cmdList,
 				 ((Sprite){z, texture, unpackP(topLeft), unpackP(topRight), unpackP(bottomLeft), unpackP(bottomRight), iconUV[0] / 256,
 						   iconUV[1] / 256 + TEXTURE_TILESIZE, iconUV[0] / 256 + TEXTURE_TILESIZE, iconUV[1] / 256, color16}));

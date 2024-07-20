@@ -63,7 +63,7 @@ void Clouds_Render(int projUniform, C3D_Mtx* projectionview, World* world, float
 	const int stepZ = 6;
 	if (((int)cloudVBO[0].uv[0]) - stepX < -INT16_MAX) {
 		for (int i = 0; i < 6; i++) {
-			if (cloudVBO[i].xyz[0] == -1)
+			if (cloudVBO[i].pos[0] == -1)
 				cloudVBO[i].uv[0] = 0;
 			else
 				cloudVBO[i].uv[0] = INT16_MAX;
@@ -75,7 +75,7 @@ void Clouds_Render(int projUniform, C3D_Mtx* projectionview, World* world, float
 	}
 	if (((int)cloudVBO[0].uv[1]) + stepZ > INT16_MAX) {
 		for (int i = 0; i < 6; i++) {
-			if (cloudVBO[i].xyz[2] == 1)
+			if (cloudVBO[i].pos[2] == 1)
 				cloudVBO[i].uv[1] = -INT16_MAX;
 			else
 				cloudVBO[i].uv[1] = 0;

@@ -69,11 +69,11 @@ const WorldVertex cube_sides_lut[] = {
 };
 
 typedef struct {
-		VBO_Block vbo, transparentVBO;
-		int x, y, z;
-		size_t vertices, transparentVertices;
-		uint8_t delay;
-		uint16_t visibility;
+	VBO_Block vbo, transparentVBO;
+	int x, y, z;
+	size_t vertices, transparentVertices;
+	uint8_t delay;
+	uint16_t visibility;
 } VBOUpdate;
 
 static vec_t(VBOUpdate) vboUpdates;
@@ -81,12 +81,12 @@ static vec_t(VBOUpdate) vboUpdates;
 #define MAX_FACES_PER_CLUSTER (CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE / 2 * 6)
 
 typedef struct {
-		int8_t x, y, z;
-		Direction direction;
-		Block block;
-		int8_t ao;
-		uint8_t metadata;
-		bool transparent;
+	int8_t x, y, z;
+	Direction direction;
+	Block block;
+	int8_t ao;
+	uint8_t metadata;
+	bool transparent;
 } Face;
 
 static inline Block fastBlockFetch(World* world, Chunk* chunk, Cluster* cluster, int x, int y, int z) {
@@ -104,7 +104,7 @@ static World* world;
 static Player* player;
 
 typedef struct {
-		int8_t x, y, z;
+	int8_t x, y, z;
 } QueueElement;
 
 static vec_t(QueueElement) floodfill_queue;
@@ -346,9 +346,9 @@ void PolyGen_GeneratePolygons(WorkQueue* queue, WorkerItem item, void* this) {
 					Block_GetColor(face.block, face.metadata, face.direction, color);
 
 					for (int k = 0; k < 6; k++) {
-						data[k].xyz[0] += offsetX;
-						data[k].xyz[1] += offsetY;
-						data[k].xyz[2] += offsetZ;
+						data[k].pos[0] += offsetX;
+						data[k].pos[1] += offsetY;
+						data[k].pos[2] += offsetZ;
 						data[k].uv[0] = (data[k].uv[0] == 1 ? (oneDivIconsPerRow - 1) : 1) + iconUV[0];
 						data[k].uv[1] = (data[k].uv[1] == 1 ? (oneDivIconsPerRow - 1) : 1) + iconUV[1];
 

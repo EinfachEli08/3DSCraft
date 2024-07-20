@@ -1,6 +1,7 @@
 #pragma once
 
 #include <citro3d.h>
+#include <stdlib.h>
 
 #include "client/model/VertexFmt.h"
 #include "util/math/VecMath.h"

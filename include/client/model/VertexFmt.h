@@ -4,9 +4,10 @@
 #include <stdint.h>
 
 #include "util/math/NumberUtils.h"
+#include "util/math/VecMath.h"
 
 typedef struct {
-	float3 pos;
+	float pos[3];
 	s16 uv[2];
 	u8 rgb[3];
 	u8 fxyz[3];

@@ -25,9 +25,9 @@ Cube* Cube_Init(CubeModel* in) {
 		if (in->texPath[i] == NULL)
 			break;
 
-		Texture_Load(&textures[i], in->texPath[i]);
-		C3D_TexSetFilter(&textures[i], GPU_NEAREST, GPU_NEAREST);
-		C3D_TexSetWrap(&textures[i], GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
+		Texture_Load(textures[i], in->texPath[i]);
+		C3D_TexSetFilter(textures[i], GPU_NEAREST, GPU_NEAREST);
+		C3D_TexSetWrap(textures[i], GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
 	}
 	for (u8 i = 0; i < 6; ++i) {
 		cube->textures[i] = textures[in->faceTexIdx[i]];
@@ -50,11 +50,14 @@ Cube* Cube_Init(CubeModel* in) {
 			int idx				= lutStartIndex + i;
 			WorldVertex* vertex = &cube->vbo[idx];
 
-			float3 lutPosition = cube_sides_lut[idx].pos;
+			float lutPosition[3];
+			lutPosition[0] = cube_sides_lut[idx].pos[0];
+			lutPosition[1] = cube_sides_lut[idx].pos[1];
+			lutPosition[2] = cube_sides_lut[idx].pos[2];
 
-			vertex->pos.x = min.x + (max.x - min.x) * lutPosition.x;
-			vertex->pos.y = min.y + (max.y - min.y) * lutPosition.y;
-			vertex->pos.z = min.z + (max.z - min.z) * lutPosition.z;
+			vertex->pos[0] = min.x + (max.x - min.x) * lutPosition[0];
+			vertex->pos[1] = min.y + (max.y - min.y) * lutPosition[1];
+			vertex->pos[2] = min.z + (max.z - min.z) * lutPosition[2];
 
 			vertex->uv[0] = toTexCrd(uv[cube_sides_lut[idx].uv[0]], cube->textures[face]->width);
 			vertex->uv[1] = toTexCrd(uv[cube_sides_lut[idx].uv[1]], cube->textures[face]->width);
