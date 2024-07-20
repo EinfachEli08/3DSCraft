@@ -1,4 +1,4 @@
-#include "client/renderer/VertexFmt.h"
+#include "client/model/VertexFmt.h"
 #include "client/renderer/texture/SpriteBatch.h"
 
 #include "client/gui/DebugUI.h"

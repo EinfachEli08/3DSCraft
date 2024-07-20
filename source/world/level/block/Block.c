@@ -1,6 +1,6 @@
 #include "world/level/block/Block.h"
 
-#include "client/renderer/VertexFmt.h"
+#include "client/model/VertexFmt.h"
 #include "client/renderer/texture/TextureMap.h"
 
 static Texture_Map textureMap;

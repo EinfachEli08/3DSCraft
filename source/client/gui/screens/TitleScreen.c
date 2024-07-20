@@ -4,7 +4,7 @@
 #include <client/gui/state_machine/state_machine.h>
 #include <client/renderer/texture/SpriteBatch.h>
 
-#include <client/renderer/VertexFmt.h>
+#include <client/model/VertexFmt.h>
 
 extern void SelectWorldScreen(state_machine_t *machine);  // Forward declare state2
 
@@ -12,12 +12,11 @@ static bool clicked_play = false;
 static bool clicked_quit = false;
 
 void TitleScreen(state_machine_t *machine) {
-
-    for (int i = 0; i < 160 / 16 + 1; i++) {
-        for (int j = 0; j < 120 / 16 + 1; j++) {
-            Gui_DrawBackground(0,i,j,-4);
-        }
-    }
+	for (int i = 0; i < 160 / 16 + 1; i++) {
+		for (int j = 0; j < 120 / 16 + 1; j++) {
+			Gui_DrawBackground(0, i, j, -4);
+		}
+	}
 
 	Gui_SetPadding(0, 0);
 	Gui_Offset(0, 2 * 32);

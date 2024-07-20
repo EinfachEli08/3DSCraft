@@ -1,4 +1,4 @@
-#include "client/renderer/VertexFmt.h"
+#include "client/model/VertexFmt.h"
 
 #define HUE_DEGREE 512
 

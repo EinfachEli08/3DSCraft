@@ -46,6 +46,9 @@ void Texture_Load(C3D_Tex* result, char* filename) {
 
 		C3D_TexInitVRAM(result, width, height, GPU_RGBA8);
 
+		if (result == NULL)
+			Crash("Failed to allocate texture in VRAM:\n %s\n Dimensions: %dx%d", filename, width, height);
+
 		if (width < 64 || height < 64)
 			tileImage32(image, (u8*)imgInLinRam, width, height);
 

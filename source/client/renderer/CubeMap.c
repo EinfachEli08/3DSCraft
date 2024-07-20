@@ -1,7 +1,7 @@
 #include "client/renderer/CubeMap.h"
 
 #include "client/Crash.h"
-#include "client/renderer/VertexFmt.h"
+#include "client/model/VertexFmt.h"
 #include "client/renderer/texture/TextureMap.h"
 #include "util/Paths.h"
 #include "util/math/NumberUtils.h"

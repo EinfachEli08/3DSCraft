@@ -1,6 +1,6 @@
 #include "client/renderer/WorldRenderer.h"
 
-#include "client/renderer/VertexFmt.h"
+#include "client/model/VertexFmt.h"
 
 #include "client/renderer/Cursor.h"
 #include "world/level/block/Block.h"

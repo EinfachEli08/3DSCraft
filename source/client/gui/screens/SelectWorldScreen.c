@@ -4,7 +4,7 @@
 #include "client/Crash.h"
 #include "client/gui/Gui.h"
 #include "client/gui/state_machine/state_machine.h"
-#include "client/renderer/VertexFmt.h"
+#include "client/model/VertexFmt.h"
 #include "client/renderer/texture/SpriteBatch.h"
 #include "util/Paths.h"
 

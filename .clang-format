@@ -25,14 +25,13 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
 Cpp11BracedListStyle: true
-DerivePointerAlignment: true
+DerivePointerAlignment: true 
 DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
 ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH, vec_foreach ]
 IndentCaseLabels: true
 IndentWidth: 4
 IndentWrappedFunctionNames: false
-IndentAccessModifiers: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 MacroBlockBegin: ''
 MacroBlockEnd: ''

@@ -1,6 +1,6 @@
 #include "client/renderer/Clouds.h"
 
-#include "client/renderer/VertexFmt.h"
+#include "client/model/VertexFmt.h"
 
 #include <sino/sino.h>
 #include <stdint.h>

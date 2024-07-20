@@ -1,6 +1,6 @@
 #include "client/renderer/Cursor.h"
 
-#include "client/renderer/VertexFmt.h"
+#include "client/model/VertexFmt.h"
 
 #include "util/math/NumberUtils.h"
 
