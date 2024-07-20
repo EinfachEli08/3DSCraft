@@ -19,7 +19,7 @@ typedef struct {
 
 typedef struct {
 	WorldVertex* vbo;
-	C3D_Mtx matrix;
+	C3D_Mtx localMatrix;
 	C3D_Tex* textures[6];
 } Cube;
 
@@ -45,6 +45,6 @@ static inline void Cube_Clean(CubeModel* model) {
 
 Cube* Cube_Init(CubeModel* in);
 
-void Cube_Draw(Cube* cube);
+void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix);
 
 void Cube_Deinit(Cube* cube);

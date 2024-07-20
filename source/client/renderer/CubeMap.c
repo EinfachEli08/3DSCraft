@@ -8,62 +8,63 @@
 
 #include <stdio.h>
 
-#define vSize 1.0f
+#define vSize 1
+#define vUV 32
 
 static WorldVertex vertices[6 * 6] = {
 	// Front face
-	{ { -vSize, -vSize, vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, -vSize, vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, vSize }, { vUV, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{ { -vSize, -vSize, vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { -vSize, vSize, vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, vSize }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Back face
-	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, -vSize, -vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, -vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, -vSize }, { vUV, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, -vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, -vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { -vSize, vSize, -vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, -vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, -vSize }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Left face
-	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { -vSize, -vSize, vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { -vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, vSize }, { vUV, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { -vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { -vSize, vSize, -vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, -vSize }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Right face
-	{ { vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, -vSize, vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, vSize }, { vUV, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{ { vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, -vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, -vSize }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Top face
-	{ { -vSize, vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, -vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, -vSize }, { vUV, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{ { -vSize, vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { -vSize, vSize, vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, vSize, vSize }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
 	// Bottom face
-	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, -vSize, -vSize }, { 1.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, -vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, -vSize }, { vUV, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 
-	{ { -vSize, -vSize, -vSize }, { 0.0f, 1.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { vSize, -vSize, vSize }, { 1.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
-	{ { -vSize, -vSize, vSize }, { 0.0f, 0.0f }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, -vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { vSize, -vSize, vSize }, { vUV, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
+	{ { -vSize, -vSize, vSize }, { 0, 0 }, { 255, 255, 255 }, { 0, 0, 0 } },
 };
 
 static int projUniform;
@@ -116,6 +117,8 @@ void CubeMap_Draw(C3D_Mtx* projection, float3 rotationOffset) {
 
 	memcpy(cubeVBO, vertices, sizeof(vertices));
 
+	C3D_CullFace(GPU_CULL_NONE);
+
 	C3D_BufInfo* bufInfo = C3D_GetBufInfo();
 	BufInfo_Init(bufInfo);
 	BufInfo_Add(bufInfo, cubeVBO, sizeof(WorldVertex), 4, 0x3210);
@@ -124,4 +127,6 @@ void CubeMap_Draw(C3D_Mtx* projection, float3 rotationOffset) {
 		C3D_TexBind(0, &cubeTextures[i]);
 		C3D_DrawArrays(GPU_TRIANGLES, i * 6, 6);
 	}
+
+	C3D_CullFace(GPU_CULL_BACK_CCW);
 }

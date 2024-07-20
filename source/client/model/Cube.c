@@ -85,7 +85,7 @@ Cube* Cube_Init(CubeModel* in) {
 	Mtx_RotateY(&matrix, in->rotation.y, true);
 	Mtx_RotateZ(&matrix, in->rotation.z, true);
 
-	cube->matrix = matrix;
+	cube->localMatrix = matrix;
 
 	return cube;
 }
@@ -104,20 +104,27 @@ void Cube_Deinit(Cube* cube) {
 	linearFree(cube);
 }
 
-void Cube_Draw(Cube* cube) {
+void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
 	if (cube == NULL) {
 		Crash("Cube is NULL!");
 		return;
-	} /* else if (cube->vbo == NULL) {
-		 Crash("Cube VBO is NULL!");
-		 return;
-	 } else if (cube->textures == NULL) {
-		 Crash("Cube Textures are NULL!");
-		 return;
-	 } else if (cube->textures[0]->data == NULL) {
-		 Crash("Cube TextureData 0 is NULL!\n %08x, %08x, %08x, %08x, %08x", cube->textures[0]->data, cube->textures[1]->data,
-			   cube->textures[2]->data, cube->textures[3]->data, cube->textures[4]->data);
-	 }*/
+	} else if (cube->vbo == NULL) {
+		Crash("Cube VBO is NULL!");
+		return;
+	} else if (cube->textures == NULL) {
+		Crash("Cube Textures are NULL!");
+		return;
+	} else if (cube->textures[0]->data == NULL) {
+		Crash("Cube TextureData 0 is NULL!\n %08x, %08x, %08x, %08x, %08x", cube->textures[0]->data, cube->textures[1]->data,
+			  cube->textures[2]->data, cube->textures[3]->data, cube->textures[4]->data);
+	}
+
+	GSPGPU_FlushDataCache(cube->vbo, sizeof(cube_sides_lut));
+
+	C3D_Mtx outMatrix;
+	Mtx_Identity(&outMatrix);
+	Mtx_Multiply(&outMatrix, matrix, &cube->localMatrix);
+	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, shaderUniform, &outMatrix);
 
 	C3D_BufInfo* bufInfo = C3D_GetBufInfo();
 	BufInfo_Init(bufInfo);
@@ -125,6 +132,6 @@ void Cube_Draw(Cube* cube) {
 
 	for (u8 i = 0; i < 6; i++) {
 		C3D_TexBind(0, cube->textures[i]);
-		C3D_DrawArrays(GPU_TRIANGLES, i * 6, 6);
+		// C3D_DrawArrays(GPU_TRIANGLES, i * 6, 6);
 	}
 }

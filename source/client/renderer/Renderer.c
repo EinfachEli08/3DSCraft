@@ -180,7 +180,7 @@ void Renderer_Render() {
 
 			WorldRenderer_Render(!i ? -iod : iod);
 
-			// Renderer_RenderGameOverlay();
+			Renderer_RenderGameOverlay();
 
 		} else {
 			if (i == 0)
