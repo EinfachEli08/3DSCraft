@@ -12,7 +12,7 @@ void Player_InitModel(Player* player) {
 	C3D_Mtx matrix;
 	Mtx_Translate(&matrix, player->position.x, player->position.y, player->position.z, true);
 
-#define cTo 2
+#define cTo 3
 
 	CubeModel cubes[cubeNo] = {
 		{ f3_new(0, 0, 0),
@@ -22,14 +22,14 @@ void Player_InitModel(Player* player) {
 		  2,
 		  { "block/bedrock.png", "block/grass_top.png", 0, 0, 0, 0 },
 		  f3_new(0, 0, 0),
-		  f3_new(0, 1, -2) },
+		  f3_new(1, 1, 1) },
 		{ f3_new(0, 0, 0),
 		  f3_new(cTo, cTo, cTo),
 		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
 		  { 0, 1, 0, 1, 0, 1 },
 		  2,
 		  { "block/stone.png", "block/grass_top.png", 0, 0, 0, 0 },
-		  f3_new(0, 1, 2),
+		  f3_new(-1, -1, -1),
 		  f3_new(0, 0, 0) }
 	};
 
@@ -45,7 +45,7 @@ void Player_InitModel(Player* player) {
 void Player_Draw(Player* player, int projectionUniform) {
 	Model_SetMutual(player->model);
 	Model_SetPos(player->model, player->position);
-	Model_SetRotY(player->model, player->view.y);
+	// Model_SetRotY(player->model, player->view.y);
 	Model_Draw(player->model, projectionUniform);
 }
 

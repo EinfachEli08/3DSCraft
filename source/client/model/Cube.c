@@ -19,7 +19,8 @@ Cube* Cube_Init(CubeModel* in) {
 		return NULL;
 	}
 
-	// Crash("Cube Data: Size VBO: %d, Size LUT: %d, Expected Size: %d, sizeof WorldVertex: %d", sizeof(cube->vbo), sizeof(cube_sides_lut),
+	// Crash("Cube Data: Size VBO: %d, Size LUT: %d, Expected Size: %d, sizeof WorldVertex: %d", sizeof(cube->vertices),
+	// sizeof(cube_sides_lut),
 	//	  CUBE_VERTICE_NUM * sizeof(WorldVertex), sizeof(WorldVertex));
 
 	C3D_Tex** textures = linearAlloc(sizeof(C3D_Tex*) * in->texNum);
@@ -72,6 +73,8 @@ Cube* Cube_Init(CubeModel* in) {
 				textures[0], textures[1], textures[2], textures[3], textures[4], textures[5]);
 	}
 
+	cube->vbo = linearAlloc(sizeof(cube_sides_lut));
+
 	for (u8 face = 0; face < 6; ++face) {
 		int lutStartIndex = face * 6;
 
@@ -84,7 +87,7 @@ Cube* Cube_Init(CubeModel* in) {
 		// Apply transformations for each vertex in the LUT
 		for (int i = 0; i < 6; ++i) {
 			int idx				= lutStartIndex + i;
-			WorldVertex* vertex = &cube->vbo[idx];
+			WorldVertex* vertex = &cube->vertices[idx];
 
 			float lutPosition[3];
 			lutPosition[0] = cube_sides_lut[idx].pos[0];
@@ -123,7 +126,7 @@ void Cube_Deinit(Cube* cube) {
 	if (cube == NULL)
 		return;
 
-	linearFree(cube->vbo);
+	linearFree(cube->vertices);
 	for (u8 i = 0; i < 6; ++i) {
 		if (cube->textures[i]) {
 			C3D_TexDelete(cube->textures[i]);
@@ -137,12 +140,17 @@ void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
 	if (cube == NULL) {
 		Crash("Cube is NULL!");
 		return;
+	} else if (cube->vbo == NULL) {
+		Crash("Cube VBO is NULL!");
+		return;
 	} else if (cube->textures[0]->data == NULL) {
 		Crash("Cube TextureData 0 is NULL!\n %08x, %08x, %08x, %08x, %08x", cube->textures[0]->data, cube->textures[1]->data,
 			  cube->textures[2]->data, cube->textures[3]->data, cube->textures[4]->data);
 	}
 
-	// GSPGPU_FlushDataCache(cube->vbo, sizeof(cube_sides_lut));
+	GSPGPU_FlushDataCache(cube->vbo, sizeof(cube_sides_lut));
+
+	memcpy(cube->vbo, cube->vertices, sizeof(cube_sides_lut));
 
 	C3D_Mtx outMatrix;
 	Mtx_Identity(&outMatrix);

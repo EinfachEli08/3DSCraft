@@ -185,8 +185,6 @@ void Renderer_Render() {
 		} else {
 			CubeMap_Draw(&camera.projection, f3_new(0.f, 0.002f, 0.f));
 
-			Player_Draw(player, world_shader_uLocProjection);
-
 			SpriteBatch_SetScale(2);
 
 			SpriteBatch_BindTexture(&logoTex);
