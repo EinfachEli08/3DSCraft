@@ -23,4 +23,4 @@ typedef enum {
 #endif
 #define APP_VERSION VERSION_STRING_BAKER(_VER_MAJ, _VER_MIN, _VER_MIC)
 
-#define AUTHOR "Team-Omega"
+#define AUTHOR "Team Omega"

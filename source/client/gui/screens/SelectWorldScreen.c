@@ -238,7 +238,7 @@ void SelectWorldScreen(state_machine_t* sm) {
         }
         Gui_EndRow();
 
-        Gui_Offset(0, 74);
+        Gui_Offset(0, 54);
         Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
         Gui_Label(0.45f, true, INT16_MAX, false, "Difficulty:");
         Gui_Space(0.1f);
@@ -251,8 +251,8 @@ void SelectWorldScreen(state_machine_t* sm) {
         }
         Gui_EndRow();
 
-
-		Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
+        Gui_Offset(0, 3 * 31 + BUTTON_TEXT_PADDING);
+		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 3);
 		canceled_world_options = Gui_Button(0.45f, "Cancel");
 		Gui_Space(0.1f);
 		confirmed_world_options = Gui_Button(0.45f, "Continue");
