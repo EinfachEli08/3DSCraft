@@ -16,6 +16,8 @@ typedef struct {
 	CubeModel** cubes;
 } ModelUnbaked;
 
+Model* Model_Init(ModelUnbaked* model);
+
 static inline Model* createModel(C3D_Mtx* matrix, CubeModel* models, u8 numModels) {
 	CubeModel** pointers = (CubeModel**)malloc(sizeof(CubeModel*) * numModels);
 	if (!pointers)
@@ -40,8 +42,6 @@ static inline void Model_Clean(ModelUnbaked* model) {
 	linearFree(model->cubes);
 	linearFree(model);
 }
-
-Model* Model_Init(ModelUnbaked* model);
 
 void Model_Draw(Model* model, int shaderUniform);
 
