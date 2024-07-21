@@ -3,6 +3,6 @@
 
 #include "client/gui/state_machine/state_machine.h"
 
-void state1(state_machine_t *machine);
+void TitleScreen(state_machine_t *machine);
 
 #endif
