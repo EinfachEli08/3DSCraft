@@ -34,7 +34,7 @@ bool Gui_Rev_Button(int x, int y,int width, int height, int z,float size, const 
 
 	int textWidth = SpriteBatch_CalcTextWidth(label);  // Adjust this call as necessary
 
-	bool pressed = Gui_IsCursorInside(x, y, width, height);
+	bool pressed = Gui_Rev_IsCursorInside(x, y, width, height);
 
 	int middlePieceSize = width - height * 2;
 
@@ -59,7 +59,7 @@ bool Gui_Rev_Button(int x, int y,int width, int height, int z,float size, const 
 bool Gui_Rev_IconButton(int x, int y,int width, int height, const char* label) {
 	// TODO: Redesign
 
-	bool pressed = Gui_IsCursorInside(x, y, width, height);
+	bool pressed = Gui_Rev_IsCursorInside(x, y, width, height);
 
 	SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
 
@@ -69,7 +69,7 @@ bool Gui_Rev_IconButton(int x, int y,int width, int height, const char* label) {
 	SpriteBatch_PushText(x + 24, (y + (height - CHAR_HEIGHT) / 2), -1, SHADER_RGB(31, 31, 31), false, INT_MAX, NULL, label);
 
 
-	if (input.keysup & KEY_TOUCH && Gui_WasCursorInside(x, y, width, height))
+	if (input.keysup & KEY_TOUCH && Gui_Rev_WasCursorInside(x, y, width, height))
 		return true;
 
 	return false;
