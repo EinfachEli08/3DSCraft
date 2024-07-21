@@ -67,7 +67,9 @@ typedef struct {
 
 void Player_Init(Player* player, World* world);
 
-void Player_InitModel(Player* player, int shaderUniform);
+void Player_InitModel(Player* player);
+
+void Player_Draw(Player* player, int projectionUniform);
 
 void Player_Update(Player* player, Sound* sound, Damage* dmg);
 

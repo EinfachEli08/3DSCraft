@@ -1,13 +1,15 @@
 #include "client/player/Player.h"
 
+#include "client/Crash.h"
 #include "client/player/Damage.h"
 #include "sounds/Sound.h"
 #include "util/Paths.h"
 #include "world/phys/Collision.h"
 
+
 #define cubeNo 2
 
-void Player_InitModel(Player* player, int shaderUniform) {
+void Player_InitModel(Player* player) {
 	C3D_Mtx matrix;
 	Mtx_Translate(&matrix, player->position.x, player->position.y, player->position.z, true);
 
@@ -32,15 +34,15 @@ void Player_InitModel(Player* player, int shaderUniform) {
 
 	CubeModel** cubePtrs = cubeModels(cubes, cubeNo);
 
-	ModelUnbaked preModel = { .rootMatrix = &matrix, .cubeNum = cubeNo, .cubes = cubePtrs, .shaderUniform = shaderUniform };
+	ModelUnbaked preModel = { .rootMatrix = &matrix, .cubeNum = cubeNo, .cubes = cubePtrs };
 
 	player->model = Model_Init(&preModel);
 
 	Model_Clean(&preModel);
 }
 
-static void Player_Draw(Player* player) {
-	Model_Draw(player->model);
+void Player_Draw(Player* player, int projectionUniform) {
+	Model_Draw(player->model, projectionUniform);
 }
 
 void Player_Deinit(Player* player) {
@@ -222,7 +224,6 @@ void Player_Update(Player* player, Sound* sound, Damage* dmg) {
 		}
 	}
 	//}
-	Player_Draw(player);
 }
 
 bool Player_CanMove(Player* player, float3 new) {

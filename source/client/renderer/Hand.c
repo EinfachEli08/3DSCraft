@@ -70,8 +70,8 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 
 			if (i == Direction_East || i == Direction_West) {  // eines der dümmsten Dinge, die ich jemals in meinem Leben getan habe
 				const int16_t uvRotationTable[2][2][2][2] = {
-					{{{0, 1}, {0, 0}}, {{1, 1}, {1, 0}}},
-					{{{1, 0}, {1, 1}}, {{0, 0}, {0, 1}}},
+					{ { { 0, 1 }, { 0, 0 } }, { { 1, 1 }, { 1, 0 } } },
+					{ { { 1, 0 }, { 1, 1 } }, { { 0, 0 }, { 0, 1 } } },
 				};
 				for (int j = 0; j < 6; j++) {
 					int idx			   = i * 6 + j;
@@ -85,12 +85,12 @@ void Hand_Draw(int projUniform, C3D_Mtx* projection, ItemStack stack, Player* pl
 				int idx = i * 6 + j;
 #define toTexCoord(x, tw) (int16_t)(((float)(x) / (float)(tw)) * (float)(1 << 15))
 				const int16_t uvLookUp[6][4] = {
-					{toTexCoord(48, 64), toTexCoord(52, 64), toTexCoord(20, 64), toTexCoord(32, 64)},  // west = inside
-					{toTexCoord(40, 64), toTexCoord(44, 64), toTexCoord(20, 64), toTexCoord(32, 64)},  // east = outside
-					{toTexCoord(52, 64), toTexCoord(56, 64), toTexCoord(20, 64), toTexCoord(32, 64)},  // bottom = back
-					{toTexCoord(44, 64), toTexCoord(48, 64), toTexCoord(20, 64), toTexCoord(32, 64)},  // top = front
-					{toTexCoord(48, 64), toTexCoord(52, 64), toTexCoord(16, 64), toTexCoord(20, 64)},  // south = bottom
-					{toTexCoord(44, 64), toTexCoord(48, 64), toTexCoord(16, 64), toTexCoord(20, 64)},  // north = top
+					{ toTexCoord(48, 64), toTexCoord(52, 64), toTexCoord(20, 64), toTexCoord(32, 64) },	 // west = inside
+					{ toTexCoord(40, 64), toTexCoord(44, 64), toTexCoord(20, 64), toTexCoord(32, 64) },	 // east = outside
+					{ toTexCoord(52, 64), toTexCoord(56, 64), toTexCoord(20, 64), toTexCoord(32, 64) },	 // bottom = back
+					{ toTexCoord(44, 64), toTexCoord(48, 64), toTexCoord(20, 64), toTexCoord(32, 64) },	 // top = front
+					{ toTexCoord(48, 64), toTexCoord(52, 64), toTexCoord(16, 64), toTexCoord(20, 64) },	 // south = bottom
+					{ toTexCoord(44, 64), toTexCoord(48, 64), toTexCoord(16, 64), toTexCoord(20, 64) },	 // north = top
 				};
 
 				handVBO[idx].uv[0] = uvLookUp[i][handVBO[idx].uv[0]];

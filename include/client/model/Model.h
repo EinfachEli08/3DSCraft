@@ -5,16 +5,12 @@
 typedef struct {
 	C3D_Mtx rootMatrix;
 
-	int shaderUniform;
-
 	u8 cubeNum;
 	Cube* cubes;
 } Model;
 
 typedef struct {
 	C3D_Mtx* rootMatrix;
-
-	int shaderUniform;
 
 	u8 cubeNum;
 	CubeModel** cubes;
@@ -33,6 +29,6 @@ static inline void Model_Clean(ModelUnbaked* model) {
 
 Model* Model_Init(ModelUnbaked* model);
 
-void Model_Draw(Model* model);
+void Model_Draw(Model* model, int shaderUniform);
 
 void Model_Deinit(Model* model);

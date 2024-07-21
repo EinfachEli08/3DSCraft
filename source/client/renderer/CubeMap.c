@@ -102,6 +102,8 @@ void CubeMap_Draw(C3D_Mtx* projection, float3 rotationOffset) {
 		return;
 	}
 
+	GSPGPU_FlushDataCache(cubeVBO, sizeof(vertices));
+
 	C3D_Mtx model, out;
 	Mtx_Identity(&model);
 	Mtx_Translate(&model, 0, 0, -1.f, true);

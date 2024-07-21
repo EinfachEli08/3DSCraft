@@ -57,12 +57,12 @@ void Model_Deinit(Model* model) {
 	linearFree(model);
 }
 
-void Model_Draw(Model* model) {
+void Model_Draw(Model* model, int projectionUniform) {
 	C3D_AlphaTest(true, GPU_GREATER, 0);
 
 	for (u8 i = 0; i < model->cubeNum; ++i) {
 		Cube* cube = &model->cubes[i];
-		Cube_Draw(cube, model->shaderUniform, &model->rootMatrix);
+		Cube_Draw(cube, projectionUniform, &model->rootMatrix);
 	}
 
 	C3D_AlphaTest(false, GPU_GREATER, 0);

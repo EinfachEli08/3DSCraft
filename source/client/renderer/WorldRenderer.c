@@ -58,7 +58,7 @@ void WorldRenderer_Init(Player* player_, World* world_, WorkQueue* workqueue_, i
 
 	Camera_Init(&camera);
 
-	Player_InitModel(player, projectionUniform);
+	Player_InitModel(player);
 
 	Cursor_Init();
 	Hand_Init();
@@ -221,6 +221,7 @@ void WorldRenderer_Render(float iod) {
 
 	Clouds_Render(projectionUniform, &camera.vp, world, player->position.x, player->position.z);
 
+	Player_Draw(player, projectionUniform);
 	Hand_Draw(projectionUniform, &camera.projection, player->quickSelectBar[player->quickSelectBarSlot], player);
 
 	if (player->blockInActionRange)
