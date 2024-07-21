@@ -57,8 +57,8 @@ Cube* Cube_Init(CubeModel* in) {
 			linearFree(textures);
 			return NULL;
 		}
-		C3D_TexSetFilter(&textures[i], GPU_NEAREST, GPU_NEAREST);
-		C3D_TexSetWrap(&textures[i], GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
+		C3D_TexSetFilter(textures[i], GPU_NEAREST, GPU_NEAREST);
+		C3D_TexSetWrap(textures[i], GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
 	}
 	for (u8 i = 0; i < 6; ++i) {
 		cube->textures[i] = textures[in->faceTexIdx[i]];
