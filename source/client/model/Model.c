@@ -42,6 +42,13 @@ Model* Model_Init(ModelUnbaked* in) {
 		model->cubes[i] = *Cube_Init(in->cubes[i]);
 	}
 
+	Model_Clean(in);
+
+	if (!model) {
+		Crash("Model generation returns NULL.");
+		return NULL;
+	}
+
 	return model;
 }
 

@@ -45,7 +45,7 @@ void SpriteBatch_Init(int projUniform_) {
 	font = (Font*)malloc(sizeof(Font));
 	FontLoader_Init(font, "romfs:/assets/textures/font/ascii.png");
 	Texture_Load(&widgetsTex, "romfs:/assets/textures/gui/widgets.png");
-    Texture_Load(&iconsTex, "romfs:/assets/textures/gui/icons.png");
+	Texture_Load(&iconsTex, "romfs:/assets/textures/gui/icons.png");
 	uint8_t data[16 * 16];
 	memset(data, 0xff, 16 * 16 * sizeof(uint8_t));
 	C3D_TexInit(&whiteTex, 16, 16, GPU_L8);
@@ -103,8 +103,8 @@ void SpriteBatch_PushQuad(int x, int y, int z, int w, int h, int rx, int ry, int
 	SpriteBatch_PushQuadColor(x, y, z, w, h, rx, ry, rw, rh, INT16_MAX);
 }
 void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry, int rw, int rh, int16_t color) {
-	vec_push(&cmdList, ((Sprite){z, currentTexture, x * guiScale, y * guiScale, (x + w) * guiScale, y * guiScale, x * guiScale,
-								 (y + h) * guiScale, (x + w) * guiScale, (y + h) * guiScale, rx, ry, rx + rw, ry + rh, color}));
+	vec_push(&cmdList, ((Sprite){ z, currentTexture, x * guiScale, y * guiScale, (x + w) * guiScale, y * guiScale, x * guiScale,
+								  (y + h) * guiScale, (x + w) * guiScale, (y + h) * guiScale, rx, ry, rx + rw, ry + rh, color }));
 }
 
 static float rot = 0.f;
@@ -147,8 +147,8 @@ void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 
 #define unpackP(x) (x).pos[0], (x).pos[1]
 		vec_push(&cmdList,
-				 ((Sprite){z, texture, unpackP(topLeft), unpackP(topRight), unpackP(bottomLeft), unpackP(bottomRight), iconUV[0] / 256,
-						   iconUV[1] / 256 + TEXTURE_TILESIZE, iconUV[0] / 256 + TEXTURE_TILESIZE, iconUV[1] / 256, color16}));
+				 ((Sprite){ z, texture, unpackP(topLeft), unpackP(topRight), unpackP(bottomLeft), unpackP(bottomRight), iconUV[0] / 256,
+							iconUV[1] / 256 + TEXTURE_TILESIZE, iconUV[0] / 256 + TEXTURE_TILESIZE, iconUV[1] / 256, color16 }));
 
 #undef unpackP
 	}
@@ -201,7 +201,7 @@ int SpriteBatch_PushTextVargs(int x, int y, int z, int16_t color, bool shadow, i
 
 	maxWidth = MAX(maxWidth, offsetX);
 
-	if (ySize != NULL)
+	if (ySize != NULL && (*ySize = 1) != NULL)
 		*ySize = offsetY + CHAR_HEIGHT;
 
 	return maxWidth;
@@ -297,13 +297,13 @@ void SpriteBatch_Render(gfxScreen_t screen) {
 			int16_t u0 = (int16_t)((float)cmd.u0 * divW), v0 = (int16_t)((float)cmd.v0 * divH);
 			int16_t u1 = (int16_t)((float)cmd.u1 * divW), v1 = (int16_t)((float)cmd.v1 * divH);
 
-			usedVertexList[vtx++] = (GuiVertex){{cmd.x3, cmd.y3, 0}, {u1, v1, color}};
-			usedVertexList[vtx++] = (GuiVertex){{cmd.x1, cmd.y1, 0}, {u1, v0, color}};
-			usedVertexList[vtx++] = (GuiVertex){{cmd.x0, cmd.y0, 0}, {u0, v0, color}};
+			usedVertexList[vtx++] = (GuiVertex){ { cmd.x3, cmd.y3, 0 }, { u1, v1, color } };
+			usedVertexList[vtx++] = (GuiVertex){ { cmd.x1, cmd.y1, 0 }, { u1, v0, color } };
+			usedVertexList[vtx++] = (GuiVertex){ { cmd.x0, cmd.y0, 0 }, { u0, v0, color } };
 
-			usedVertexList[vtx++] = (GuiVertex){{cmd.x0, cmd.y0, 0}, {u0, v0, color}};
-			usedVertexList[vtx++] = (GuiVertex){{cmd.x2, cmd.y2, 0}, {u0, v1, color}};
-			usedVertexList[vtx++] = (GuiVertex){{cmd.x3, cmd.y3, 0}, {u1, v1, color}};
+			usedVertexList[vtx++] = (GuiVertex){ { cmd.x0, cmd.y0, 0 }, { u0, v0, color } };
+			usedVertexList[vtx++] = (GuiVertex){ { cmd.x2, cmd.y2, 0 }, { u0, v1, color } };
+			usedVertexList[vtx++] = (GuiVertex){ { cmd.x3, cmd.y3, 0 }, { u1, v1, color } };
 		}
 
 		C3D_TexBind(0, texture);

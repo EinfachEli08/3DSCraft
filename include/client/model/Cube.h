@@ -24,18 +24,6 @@ typedef struct {
 	C3D_Tex* textures[6];
 } Cube;
 
-static inline CubeModel** cubeModels(CubeModel* models, u8 numModels) {
-	CubeModel** pointers = (CubeModel**)malloc(sizeof(CubeModel*) * numModels);
-	if (!pointers) {
-		return NULL;  // Memory allocation failed
-	}
-
-	for (u8 i = 0; i < numModels; ++i) {
-		pointers[i] = &models[i];
-	}
-
-	return pointers;
-}
 static inline void Cube_Clean(CubeModel* model) {
 	if (model == NULL)
 		return;

@@ -16,6 +16,20 @@ typedef struct {
 	CubeModel** cubes;
 } ModelUnbaked;
 
+static inline Model* createModel(C3D_Mtx* matrix, CubeModel* models, u8 numModels) {
+	CubeModel** pointers = (CubeModel**)malloc(sizeof(CubeModel*) * numModels);
+	if (!pointers)
+		return NULL;
+
+	for (u8 i = 0; i < numModels; ++i) {
+		pointers[i] = &models[i];
+	}
+
+	ModelUnbaked preModel = { .rootMatrix = matrix, .cubeNum = numModels, .cubes = pointers };
+
+	return Model_Init(&preModel);
+}
+
 static inline void Model_Clean(ModelUnbaked* model) {
 	if (model == NULL)
 		return;

@@ -33,13 +33,7 @@ void Player_InitModel(Player* player) {
 		  f3_new(0, 0, 0) }
 	};
 
-	CubeModel** cubePtrs = cubeModels(cubes, cubeNo);
-
-	ModelUnbaked preModel = { .rootMatrix = &matrix, .cubeNum = cubeNo, .cubes = cubePtrs };
-
-	player->model = Model_Init(&preModel);
-
-	Model_Clean(&preModel);
+	player->model = createModel(&matrix, cubes, cubeNo);
 }
 
 void Player_Draw(Player* player, int projectionUniform) {

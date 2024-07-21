@@ -269,10 +269,10 @@ void renderExpBar() {
 
 		int textWidth = SpriteBatch_CalcTextWidth(experienceStr);
 
-		SpriteBatch_PushText(200 / 2 - textWidth / 2 + 1, 120 - 17, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 1, experienceStr);
-		SpriteBatch_PushText(200 / 2 - textWidth / 2 - 1, 120 - 17, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 1, experienceStr);
-		SpriteBatch_PushText(200 / 2 - textWidth / 2, 120 - 17 + 1, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 1, experienceStr);
-		SpriteBatch_PushText(200 / 2 - textWidth / 2, 120 - 17 - 1, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 1, experienceStr);
-		SpriteBatch_PushText(200 / 2 - textWidth / 2, 120 - 17, 3, SHADER_RGB(100, 255, 32), false, INT_MAX, 1, experienceStr);
+		SpriteBatch_PushText(200 / 2 - textWidth / 2 + 1, 120 - 17, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 0, experienceStr);
+		SpriteBatch_PushText(200 / 2 - textWidth / 2 - 1, 120 - 17, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 0, experienceStr);
+		SpriteBatch_PushText(200 / 2 - textWidth / 2, 120 - 17 + 1, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 0, experienceStr);
+		SpriteBatch_PushText(200 / 2 - textWidth / 2, 120 - 17 - 1, 2, SHADER_RGB(0, 0, 0), false, INT_MAX, 0, experienceStr);
+		SpriteBatch_PushText(200 / 2 - textWidth / 2, 120 - 17, 3, SHADER_RGB(100, 255, 32), false, INT_MAX, 0, experienceStr);
 	}
 }
