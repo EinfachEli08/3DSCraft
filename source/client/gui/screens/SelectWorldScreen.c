@@ -128,15 +128,19 @@ static bool canceled_world_options	= false;
 static bool confirmed_deletion = false;
 static bool canceled_deletion  = false;
 
+static MenuState menustate = MenuState_SelectWorld;
+
 static WorldGenType worldGenType = WorldGen_SuperFlat;
 
 static Gamemode gamemode = Gamemode_Survival;
 
-static char* gamemodeTypesStr[] = {"Survival", "Creative", "Adventure", "Spectator"};
+static Difficulty difficulty = Difficulty_Normal;
 
 static char* worldGenTypesStr[] = {"Default", "Superflat"};
 
-static MenuState menustate = MenuState_SelectWorld;
+static char* gamemodeTypesStr[] = {"Survival", "Creative", "Adventure", "Spectator"};
+
+static char* difficultyTypesStr[] = {"Normal","Peaceful","Easy","Hard","Hardcore"};
 
 static float max_velocity = 20.f;
 
@@ -227,8 +231,23 @@ void SelectWorldScreen(state_machine_t* sm) {
         Gui_Space(0.1f);
         if (Gui_Button(0.45f, gamemodeTypesStr[gamemode])) {
             gamemode++;
+
+            //player->gamemode = gamemode;
             if (gamemode == Gamemode_Count)
                 gamemode = 0;
+        }
+        Gui_EndRow();
+
+        Gui_Offset(0, 74);
+        Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
+        Gui_Label(0.45f, true, INT16_MAX, false, "Difficulty:");
+        Gui_Space(0.1f);
+        if (Gui_Button(0.45f, difficultyTypesStr[difficulty])) {
+            difficulty++;
+
+            //player->difficulty = difficulty;
+            if (difficulty == Difficulty_Count)
+                difficulty = 0;
         }
         Gui_EndRow();
 

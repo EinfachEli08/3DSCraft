@@ -25,6 +25,14 @@ typedef enum {
 	Gamemode_Spectator,
 	Gamemode_Count
 } Gamemode;
+typedef enum {
+    Difficulty_Normal,
+    Difficulty_Peaceful,
+    Difficulty_Easy,
+    Difficulty_Hard,
+    Difficulty_Hardcore,
+    Difficulty_Count
+} Difficulty;
 typedef struct {
 		uint64_t seed;
 		WorldGenType type;
