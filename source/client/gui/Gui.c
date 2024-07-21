@@ -6,13 +6,13 @@
 #include "client/renderer/texture/SpriteBatch.h"
 #include "util/math/NumberUtils.h"
 
-InputData oldInput;
-InputData input;
+static InputData oldInput;
+static InputData input;
 
 typedef struct {
-	int width;
-	int highestElement;
-	int unpaddedWidth;
+		int width;
+		int highestElement;
+		int unpaddedWidth;
 } Row;
 
 static Row currentRow;
@@ -65,7 +65,7 @@ void Gui_BeginRowCenter(int width, int count) {
 }
 
 void Gui_BeginRow(int width, int count) {
-	currentRow = (Row){ width, 0, width - paddingX * 2 - paddingX * count };
+	currentRow = (Row){width, 0, width - paddingX * 2 - paddingX * count};
 	relativeX  = paddingX;
 	relativeY  = 0;
 }
