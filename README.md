@@ -1,6 +1,10 @@
+# 3DSCraft
 Yet another revival of craftus, updating to more recent behavior and rebrandings.
 
-To build from source, it's like building any other 3ds homebrew app. Just run make and if you've got devkitpro setup right, it'll give you craftus.3dsx
+## Building
+- Install Devkitpro
+- run make, read the errors properly.
+- Get 3DSCraft.cia/.3dsx :)
 
 You'll need a hacked system that can load homebrew for this to run (citra is good for testing but i haven't been able to get most of the controls working there)
 
