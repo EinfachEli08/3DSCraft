@@ -19,7 +19,6 @@ typedef struct {
 
 typedef struct {
 	WorldVertex vbo[CUBE_VERTICE_NUM];
-	WorldVertex vboUse[CUBE_VERTICE_NUM];
 	C3D_Mtx localMatrix;
 	C3D_Tex* textures[6];
 } Cube;

@@ -142,7 +142,7 @@ void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
 			  cube->textures[2]->data, cube->textures[3]->data, cube->textures[4]->data);
 	}
 
-	GSPGPU_FlushDataCache(cube->vbo, sizeof(cube_sides_lut));
+	// GSPGPU_FlushDataCache(cube->vbo, sizeof(cube_sides_lut));
 
 	C3D_Mtx outMatrix;
 	Mtx_Identity(&outMatrix);
@@ -151,11 +151,9 @@ void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
 
 	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, shaderUniform, &outMatrix);
 
-	memcpy(cube->vboUse, cube->vbo, sizeof(cube_sides_lut));
-
 	C3D_BufInfo* bufInfo = C3D_GetBufInfo();
 	BufInfo_Init(bufInfo);
-	BufInfo_Add(bufInfo, cube->vboUse, sizeof(WorldVertex), 4, 0x3210);
+	BufInfo_Add(bufInfo, cube->vbo, sizeof(WorldVertex), 4, 0x3210);
 
 	for (u8 i = 0; i < 6; i++) {
 		C3D_TexBind(0, cube->textures[i]);

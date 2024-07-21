@@ -32,3 +32,10 @@ Model* Model_Init(ModelUnbaked* model);
 void Model_Draw(Model* model, int shaderUniform);
 
 void Model_Deinit(Model* model);
+
+void Model_SetMutual(Model* model);
+
+void Model_SetPos(Model* model, float3 pos);
+
+void Model_SetRotY(Model* model, float rotY);
+void Model_SetRot(Model* model, float3 rot);

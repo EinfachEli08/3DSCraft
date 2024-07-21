@@ -180,11 +180,12 @@ void Renderer_Render() {
 
 			WorldRenderer_Render(!i ? -iod : iod);
 
-			// Renderer_RenderGameOverlay();
+			Renderer_RenderGameOverlay();
 
 		} else {
-			if (i == 0)
-				CubeMap_Draw(&camera.projection, f3_new(0.f, 0.002f, 0.f));
+			CubeMap_Draw(&camera.projection, f3_new(0.f, 0.002f, 0.f));
+
+			Player_Draw(player, world_shader_uLocProjection);
 
 			SpriteBatch_SetScale(2);
 

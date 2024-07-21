@@ -67,3 +67,21 @@ void Model_Draw(Model* model, int projectionUniform) {
 
 	C3D_AlphaTest(false, GPU_GREATER, 0);
 }
+
+void Model_SetMutual(Model* m) {
+	Mtx_Zeros(&m->rootMatrix);
+	Mtx_Identity(&m->rootMatrix);
+}
+
+void Model_SetPos(Model* m, float3 pos) {
+	Mtx_Translate(&m->rootMatrix, pos.x, pos.y, pos.z, true);
+}
+
+void Model_SetRot(Model* m, float3 rot) {
+	Mtx_RotateX(&m->rootMatrix, rot.x, true);
+	Mtx_RotateX(&m->rootMatrix, rot.y, true);
+	Mtx_RotateX(&m->rootMatrix, rot.z, true);
+}
+void Model_SetRotY(Model* m, float rotY) {
+	Mtx_RotateY(&m->rootMatrix, rotY, true);
+}

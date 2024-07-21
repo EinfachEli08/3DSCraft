@@ -221,7 +221,6 @@ void WorldRenderer_Render(float iod) {
 
 	Clouds_Render(projectionUniform, &camera.vp, world, player->position.x, player->position.z);
 
-	Player_Draw(player, projectionUniform);
 	Hand_Draw(projectionUniform, &camera.projection, player->quickSelectBar[player->quickSelectBarSlot], player);
 
 	if (player->blockInActionRange)

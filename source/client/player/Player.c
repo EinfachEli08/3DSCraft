@@ -6,29 +6,30 @@
 #include "util/Paths.h"
 #include "world/phys/Collision.h"
 
-
 #define cubeNo 2
 
 void Player_InitModel(Player* player) {
 	C3D_Mtx matrix;
 	Mtx_Translate(&matrix, player->position.x, player->position.y, player->position.z, true);
 
+#define cTo 2
+
 	CubeModel cubes[cubeNo] = {
 		{ f3_new(0, 0, 0),
-		  f3_new(10, 10, 10),
+		  f3_new(cTo, cTo, cTo),
 		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
 		  { 0, 1, 0, 1, 0, 1 },
 		  2,
 		  { "block/bedrock.png", "block/grass_top.png", 0, 0, 0, 0 },
 		  f3_new(0, 0, 0),
-		  f3_new(0, 0, -10) },
+		  f3_new(0, 1, -2) },
 		{ f3_new(0, 0, 0),
-		  f3_new(10, 10, 10),
+		  f3_new(cTo, cTo, cTo),
 		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
 		  { 0, 1, 0, 1, 0, 1 },
 		  2,
 		  { "block/stone.png", "block/grass_top.png", 0, 0, 0, 0 },
-		  f3_new(0, 10, 10),
+		  f3_new(0, 1, 2),
 		  f3_new(0, 0, 0) }
 	};
 
@@ -42,6 +43,9 @@ void Player_InitModel(Player* player) {
 }
 
 void Player_Draw(Player* player, int projectionUniform) {
+	Model_SetMutual(player->model);
+	Model_SetPos(player->model, player->position);
+	Model_SetRotY(player->model, player->view.y);
 	Model_Draw(player->model, projectionUniform);
 }
 
@@ -198,6 +202,8 @@ void Player_Update(Player* player, Sound* sound, Damage* dmg) {
 				player->position.z = 0.0;
 			}
 			if (player->spawnset = 1) {
+				if (dmg == NULL)
+					DebugUI_Log("Player DMG IS NULL(error)");
 				if (dmg->cause == NULL) {
 					DebugUI_Log("Player died");
 				} else {
