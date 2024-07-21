@@ -2,12 +2,13 @@
 
 #include <stdarg.h>
 
+#include "client/Crash.h"
 #include "client/model/VertexFmt.h"
 #include "client/renderer/texture/SpriteBatch.h"
 #include "util/math/NumberUtils.h"
 
-static InputData oldInput;
-static InputData input;
+extern InputData oldInput;
+extern InputData input;
 
 void Gui_Rev_Init() {
 	memset(&input, 0x0, sizeof(InputData));
@@ -18,23 +19,23 @@ void Gui_Rev_Deinit() {
 }
 
 void Gui_Rev_Label(int x, int y, int z, float size, bool shadow, int16_t color, const char* text, ...) {
-	int wrap	  = size <= 0.f ? INFINITY : relativeToAbsoluteSize(size);
+	int wrap = size <= 0.f ? INFINITY : relativeToAbsoluteSize(size);
 
 	va_list vl;
 	va_start(vl, text);
-    int xTextSize = SpriteBatch_PushTextVargs(x , y, z, color, false, wrap, 0, text, vl);
+	int xTextSize = SpriteBatch_PushTextVargs(x, y, z, color, false, wrap, 0, text, vl);
 
 	va_end(vl);
 }
 
-bool Gui_Rev_Button(int x, int y,int width, int height, int z,float size, const char* label) {
+bool Gui_Rev_Button(int x, int y, int width, int height, int z, float size, const char* label) {
 	// TODO: Redesign
 #define SLICE_SIZE 8
 #define textureY 66
 
 	int textWidth = SpriteBatch_CalcTextWidth(label);  // Adjust this call as necessary
 
-	bool pressed = Gui_IsCursorInside(x, y, width, height);
+	bool pressed = Gui_Rev_IsCursorInside(x, y, width, height);
 
 	int middlePieceSize = width - height * 2;
 
@@ -48,18 +49,16 @@ bool Gui_Rev_Button(int x, int y,int width, int height, int z,float size, const 
 						 pressed ? (y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2) + 1 : y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2, -1,
 						 pressed ? SHADER_RGB(31, 31, 31) : SHADER_RGB(4, 4, 4), false, INT_MAX, NULL, label);
 
-
-
 	if (input.keysup & KEY_TOUCH && Gui_Rev_WasCursorInside(x, y, width, BUTTON_HEIGHT))
 		return true;
 
 	return false;
 }
 
-bool Gui_Rev_IconButton(int x, int y,int width, int height, const char* label) {
+bool Gui_Rev_IconButton(int x, int y, int width, int height, const char* label) {
 	// TODO: Redesign
 
-	bool pressed = Gui_IsCursorInside(x, y, width, height);
+	bool pressed = Gui_Rev_IsCursorInside(x, y, width, height);
 
 	SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
 
@@ -68,8 +67,7 @@ bool Gui_Rev_IconButton(int x, int y,int width, int height, const char* label) {
 	}
 	SpriteBatch_PushText(x + 24, (y + (height - CHAR_HEIGHT) / 2), -1, SHADER_RGB(31, 31, 31), false, INT_MAX, NULL, label);
 
-
-	if (input.keysup & KEY_TOUCH && Gui_WasCursorInside(x, y, width, height))
+	if (input.keysup & KEY_TOUCH && Gui_Rev_WasCursorInside(x, y, width, height))
 		return true;
 
 	return false;
@@ -96,7 +94,7 @@ bool Gui_Rev_EnteredCursorInside(int x, int y, int w, int h) {
 	int sclOldInputX = oldInput.touchX / SpriteBatch_GetScale();
 	int sclOldInputY = oldInput.touchY / SpriteBatch_GetScale();
 
-	return (sclOldInputX == 0 && sclOldInputY == 0) && Gui_IsCursorInside(x, y, w, h);
+	return (sclOldInputX == 0 && sclOldInputY == 0) && Gui_Rev_IsCursorInside(x, y, w, h);
 }
 
 void Gui_Rev_GetCursorMovement(int* x, int* y) {
