@@ -1,7 +1,6 @@
 #include "client/model/Cube.h"
 
 #include "client/Crash.h"
-#include "client/renderer/texture/TextureMap.h"
 
 extern const WorldVertex cube_sides_lut[CUBE_VERTICE_NUM];
 
@@ -28,28 +27,30 @@ Cube* Cube_Init(CubeModel* in, C3D_Tex** textureRef) {
 
 	cube->textureRef = textureRef;
 
+	s16 min[3];
+	memcpy(min, in->from, sizeof(min));
+	s16 max[3];
+	memcpy(max, in->to, sizeof(min));
+
 	for (u8 face = 0; face < 6; ++face) {
 		int lutStartIndex = face * 6;
 
 		s16 uv[4];
 		memcpy(uv, in->faceUV[face], sizeof(uv));
 
-		float3 min = in->from;
-		float3 max = in->to;
-
 		// Apply transformations for each vertex in the LUT
 		for (int i = 0; i < 6; ++i) {
 			int idx				= lutStartIndex + i;
 			WorldVertex* vertex = &cube->vertices[idx];
 
-			float lutPosition[3];
+			s16 lutPosition[3];
 			lutPosition[0] = cube_sides_lut[idx].pos[0];
 			lutPosition[1] = cube_sides_lut[idx].pos[1];
 			lutPosition[2] = cube_sides_lut[idx].pos[2];
 
-			vertex->pos[0] = min.x + (max.x - min.x) * lutPosition[0];
-			vertex->pos[1] = min.y + (max.y - min.y) * lutPosition[1];
-			vertex->pos[2] = min.z + (max.z - min.z) * lutPosition[2];
+			vertex->pos[0] = min[0] + (max[0] - min[0]) * lutPosition[0];
+			vertex->pos[1] = min[1] + (max[1] - min[1]) * lutPosition[1];
+			vertex->pos[2] = min[2] + (max[2] - min[2]) * lutPosition[2];
 
 #define toTexCrd(x, tw) (s16)(((float)(x) / (float)(tw)) * (float)(1 << 15))
 
@@ -67,10 +68,10 @@ Cube* Cube_Init(CubeModel* in, C3D_Tex** textureRef) {
 		}
 	}
 	C3D_Mtx matrix;
-	Mtx_Translate(&matrix, in->position.x, in->position.y, in->position.z, true);
-	Mtx_RotateX(&matrix, in->rotation.x, true);
-	Mtx_RotateY(&matrix, in->rotation.y, true);
-	Mtx_RotateZ(&matrix, in->rotation.z, true);
+	Mtx_Translate(&matrix, in->position[0], in->position[1], in->position[2], true);
+	Mtx_RotateX(&matrix, in->rotation[0], true);
+	Mtx_RotateY(&matrix, in->rotation[1], true);
+	Mtx_RotateZ(&matrix, in->rotation[2], true);
 
 	cube->localMatrix = matrix;
 
@@ -85,7 +86,7 @@ void Cube_Deinit(Cube* cube) {
 	linearFree(cube);
 }
 
-void Cube_Update(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
+void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
 	if (cube == NULL) {
 		Crash("Cube is NULL!");
 		return;

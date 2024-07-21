@@ -9,10 +9,10 @@
 #define CUBE_VERTICE_NUM 6 * 6
 
 typedef struct {
-	float3 from, to;
+	s16 from, to;
 	s16 faceUV[6][4];  // pixel based coordinates
 	u8 faceTexIdx[6];  // index of texture per face
-	float3 position, rotation;
+	s16 position[3], rotation[3];
 } CubeModel;
 
 typedef struct {
@@ -32,6 +32,6 @@ static inline void Cube_Clean(CubeModel* model) {
 
 Cube* Cube_Init(CubeModel* in, C3D_Tex** textureRef);
 
-void Cube_Update(Cube* cube, int shaderUniform, C3D_Mtx* matrix);
+void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix);
 
 void Cube_Deinit(Cube* cube);

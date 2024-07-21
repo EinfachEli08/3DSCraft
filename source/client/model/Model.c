@@ -2,6 +2,7 @@
 
 #include "client/Camera.h"
 #include "client/Crash.h"
+#include "client/renderer/texture/TextureMap.h"
 
 extern Camera camera;
 
@@ -111,7 +112,7 @@ void Model_Draw(Model* model, int projectionUniform, C3D_Mtx* projection) {
 
 	for (u8 i = 0; i < model->cubeNum; ++i) {
 		Cube* cube = &model->cubes[i];
-		Cube_Update(cube, projectionUniform, &matrix);
+		Cube_Draw(cube, projectionUniform, &matrix);
 	}
 
 	C3D_AlphaTest(false, GPU_GREATER, 0);

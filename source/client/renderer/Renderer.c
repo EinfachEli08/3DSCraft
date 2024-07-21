@@ -93,7 +93,7 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 	cubemap_shader_uLocProjection = shaderInstanceGetUniformLocation(cubemap_shader.vertexShader, "projection");
 
 	AttrInfo_Init(&world_vertexAttribs);
-	AttrInfo_AddLoader(&world_vertexAttribs, 0, GPU_FLOAT, 3);
+	AttrInfo_AddLoader(&world_vertexAttribs, 0, GPU_SHORT, 3);
 	AttrInfo_AddLoader(&world_vertexAttribs, 1, GPU_SHORT, 2);
 	AttrInfo_AddLoader(&world_vertexAttribs, 2, GPU_UNSIGNED_BYTE, 3);
 	AttrInfo_AddLoader(&world_vertexAttribs, 3, GPU_UNSIGNED_BYTE, 3);

@@ -4,7 +4,7 @@
 
 typedef struct {
 	C3D_Mtx rootMatrix;
-	
+
 	C3D_Tex** textures;
 
 	u8 cubeNum;
@@ -14,7 +14,7 @@ typedef struct {
 typedef struct {
 	C3D_Mtx* rootMatrix;
 
-	const char* texPath[6];
+	const char** texPath;
 
 	u8 cubeNum;
 	CubeModel** cubes;
@@ -22,7 +22,7 @@ typedef struct {
 
 Model* Model_Init(ModelUnbaked* model);
 
-static inline Model* createModel(C3D_Mtx* matrix, CubeModel* models, u8 numModels) {
+static inline Model* createModel(C3D_Mtx* matrix, CubeModel* models, u8 numModels, const char** strings) {
 	CubeModel** pointers = (CubeModel**)malloc(sizeof(CubeModel*) * numModels);
 	if (!pointers)
 		return NULL;
@@ -31,7 +31,7 @@ static inline Model* createModel(C3D_Mtx* matrix, CubeModel* models, u8 numModel
 		pointers[i] = &models[i];
 	}
 
-	ModelUnbaked preModel = { .rootMatrix = matrix, .cubeNum = numModels, .cubes = pointers };
+	ModelUnbaked preModel = { .rootMatrix = matrix, .cubeNum = numModels, .cubes = pointers, .texPath = strings };
 
 	return Model_Init(&preModel);
 }
