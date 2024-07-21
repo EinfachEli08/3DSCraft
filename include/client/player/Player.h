@@ -69,7 +69,7 @@ void Player_Init(Player* player, World* world);
 
 void Player_InitModel(Player* player);
 
-void Player_Draw(Player* player, int projectionUniform);
+void Player_Draw(Player* player, int projectionUniform, C3D_Mtx* matrix);
 
 void Player_Update(Player* player, Sound* sound, Damage* dmg);
 

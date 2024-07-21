@@ -43,7 +43,7 @@ static inline void Model_Clean(ModelUnbaked* model) {
 	linearFree(model);
 }
 
-void Model_Draw(Model* model, int shaderUniform);
+void Model_Draw(Model* model, int shaderUniform, C3D_Mtx* matrix);
 
 void Model_Deinit(Model* model);
 

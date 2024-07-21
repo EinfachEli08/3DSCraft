@@ -34,11 +34,11 @@ void Player_InitModel(Player* player) {
 	player->model = createModel(&matrix, cubes, cubeNo);
 }
 
-void Player_Draw(Player* player, int projectionUniform) {
+void Player_Draw(Player* player, int projectionUniform, C3D_Mtx* matrix) {
 	Model_SetMutual(player->model);
 	Model_SetPos(player->model, player->position);
 	// Model_SetRotY(player->model, player->view.y);
-	Model_Draw(player->model, projectionUniform);
+	Model_Draw(player->model, projectionUniform, matrix);
 }
 
 void Player_Deinit(Player* player) {
