@@ -130,11 +130,11 @@ static bool canceled_deletion  = false;
 
 static WorldGenType worldGenType = WorldGen_SuperFlat;
 
-static gamemode gamemode1 = Gamemode_Survival;
+static Gamemode gamemode = Gamemode_Survival;
 
-static char* gamemodestr[] = {"Survival", "Creative", "Adventure", "Spectator"};
+static char* gamemodeTypesStr[] = {"Survival", "Creative", "Adventure", "Spectator"};
 
-static char* worldGenTypesStr[] = {"Smea", "Superflat"};
+static char* worldGenTypesStr[] = {"Default", "Superflat"};
 
 static MenuState menustate = MenuState_SelectWorld;
 
@@ -221,7 +221,17 @@ void SelectWorldScreen(state_machine_t* sm) {
 		}
 		Gui_EndRow();
 
-		Gui_VerticalSpace(Gui_RelativeHeight(0.4f));
+        Gui_Offset(0, 32);
+        Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
+        Gui_Label(0.45f, true, INT16_MAX, false, "Game Mode:");
+        Gui_Space(0.1f);
+        if (Gui_Button(0.45f, gamemodeTypesStr[gamemode])) {
+            gamemode++;
+            if (gamemode == Gamemode_Count)
+                gamemode = 0;
+        }
+        Gui_EndRow();
+
 
 		Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
 		canceled_world_options = Gui_Button(0.45f, "Cancel");
