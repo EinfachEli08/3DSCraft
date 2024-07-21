@@ -1,6 +1,7 @@
 #include "world/World.h"
 
 #include "world/level/block/BlockEvents.h"
+#include "client/gui/DebugUI.h"
 
 #include <string.h>
 
@@ -54,7 +55,7 @@ Chunk* World_LoadChunk(World* world, int x, int z) {
 
 			Chunk_Init(chunk, x, z);
 			WorkQueue_AddItem(world->workqueue, (WorkerItem){ WorkerItemType_Load, chunk });
-
+            DebugUI_Text("loading world");
 			chunk->references++;
 			return chunk;
 		}

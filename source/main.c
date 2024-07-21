@@ -185,7 +185,7 @@ int main() {
 				SaveManager_Load(&savemgr, path);
 
 				ChunkWorker_SetHandlerActive(&chunkWorker, WorkerItemType_BaseGen, &flatGen, world->genSettings.type == WorldGen_SuperFlat);
-				ChunkWorker_SetHandlerActive(&chunkWorker, WorkerItemType_BaseGen, &smeaGen, world->genSettings.type == WorldGen_Smea);
+				ChunkWorker_SetHandlerActive(&chunkWorker, WorkerItemType_BaseGen, &smeaGen, world->genSettings.type == WorldGen_Default);
 
 				world->cacheTranslationX = WorldToChunkCoord(FastFloor(player.position.x));
 				world->cacheTranslationZ = WorldToChunkCoord(FastFloor(player.position.z));
