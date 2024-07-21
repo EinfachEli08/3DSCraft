@@ -84,8 +84,8 @@ typedef struct {
 	int8_t x, y, z;
 	Direction direction;
 	Block block;
-	int8_t ao;
-	uint8_t metadata;
+	int8_t ao; 
+	uint8_t metadata; 
 	bool transparent;
 } Face;
 
@@ -226,7 +226,7 @@ void PolyGen_GeneratePolygons(WorkQueue* queue, WorkerItem item, void* this) {
 			currentFace		 = 0;
 			transparentFaces = 0;
 
-			uint16_t visibility = 0;
+			u16 visibility = 0;
 
 			memset(floodfill_visited, 0, sizeof(floodfill_visited));
 			for (int x = 0; x < CHUNK_SIZE; x += CHUNK_SIZE - 1) {

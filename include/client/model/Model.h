@@ -4,6 +4,8 @@
 
 typedef struct {
 	C3D_Mtx rootMatrix;
+	
+	C3D_Tex** textures;
 
 	u8 cubeNum;
 	Cube* cubes;
@@ -11,6 +13,8 @@ typedef struct {
 
 typedef struct {
 	C3D_Mtx* rootMatrix;
+
+	const char* texPath[6];
 
 	u8 cubeNum;
 	CubeModel** cubes;

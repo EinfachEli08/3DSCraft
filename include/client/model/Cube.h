@@ -12,14 +12,14 @@ typedef struct {
 	float3 from, to;
 	s16 faceUV[6][4];  // pixel based coordinates
 	u8 faceTexIdx[6];  // index of texture per face
-	const char* texPath[6];
 	float3 position, rotation;
 } CubeModel;
 
 typedef struct {
 	WorldVertex vertices[CUBE_VERTICE_NUM];
+	u8 textureIdx[6];
 	C3D_Mtx localMatrix;
-	C3D_Tex* textures[6];
+	C3D_Tex** textureRef;
 } Cube;
 
 static inline void Cube_Clean(CubeModel* model) {
@@ -30,8 +30,8 @@ static inline void Cube_Clean(CubeModel* model) {
 	linearFree(model);
 }
 
-Cube* Cube_Init(CubeModel* in);
+Cube* Cube_Init(CubeModel* in, C3D_Tex** textureRef);
 
-void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix);
+void Cube_Update(Cube* cube, int shaderUniform, C3D_Mtx* matrix);
 
 void Cube_Deinit(Cube* cube);

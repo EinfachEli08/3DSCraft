@@ -19,14 +19,14 @@ void Player_InitModel(Player* player) {
 		  f3_new(cTo, cTo, cTo),
 		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
 		  { 0, 1, 0, 1, 0, 1 },
-		  { "block/bedrock.png", "block/grass_top.png", 0, 0, 0, 0 },
+		  { "block/diamond_block.png", "block/gold_block.png", 0, 0, 0, 0 },
 		  f3_new(0, 0, 0),
 		  f3_new(0, 0, 1) },
 		{ f3_new(0, 0, 0),
 		  f3_new(cTo, cTo, cTo),
 		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
 		  { 0, 1, 0, 1, 0, 1 },
-		  { "block/stone.png", "block/grass_top.png", 0, 0, 0, 0 },
+		  { "block/gold_block.png", "block/diamond_block.png", 0, 0, 0, 0 },
 		  f3_new(0, 0, -1),
 		  f3_new(0, 0, 0) }
 	};
@@ -179,8 +179,10 @@ void Player_Update(Player* player, Sound* sound, Damage* dmg) {
 			if (player->spawnset = 0) {
 				if (dmg->cause == NULL) {
 					DebugUI_Log("Player died");
+
 				} else {
 					DebugUI_Log("Died by %s", dmg->cause);
+
 				}
 				DebugUI_Log("No spawn was set");
 				player->position.x = 0.0;
