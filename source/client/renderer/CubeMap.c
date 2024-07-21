@@ -9,9 +9,9 @@
 #include <stdio.h>
 
 #define vSize 1
-#define vUV 32
+#define vUV 1
 
-static WorldVertex vertices[6 * 6] = {
+const WorldVertex cube_center_lut[6 * 6] = {
 	// Front face
 	{ { -vSize, -vSize, vSize }, { 0, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
 	{ { vSize, -vSize, vSize }, { vUV, vUV }, { 255, 255, 255 }, { 0, 0, 0 } },
@@ -74,7 +74,7 @@ static float3 rotation;
 
 void CubeMap_Init(int projUniform_) {
 	projUniform = projUniform_;
-	cubeVBO		= linearAlloc(sizeof(vertices));
+	cubeVBO		= linearAlloc(sizeof(cube_center_lut));
 }
 
 void CubeMap_Set(const char* filename, float3 rotation_) {
@@ -102,7 +102,7 @@ void CubeMap_Draw(C3D_Mtx* projection, float3 rotationOffset) {
 		return;
 	}
 
-	GSPGPU_FlushDataCache(cubeVBO, sizeof(vertices));
+	GSPGPU_FlushDataCache(cubeVBO, sizeof(cube_center_lut));
 
 	C3D_Mtx model, out;
 	Mtx_Identity(&model);
@@ -117,7 +117,7 @@ void CubeMap_Draw(C3D_Mtx* projection, float3 rotationOffset) {
 
 	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, projUniform, &out);
 
-	memcpy(cubeVBO, vertices, sizeof(vertices));
+	memcpy(cubeVBO, cube_center_lut, sizeof(cube_center_lut));
 
 	C3D_CullFace(GPU_CULL_NONE);
 

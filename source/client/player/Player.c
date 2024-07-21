@@ -384,7 +384,7 @@ void Player_PlaceBlock(Player* player, Sound* sound) {
 							  player->viewRayCast.z + offset[2], player->quickSelectBar[player->quickSelectBarSlot].block,
 							  player->quickSelectBar[player->quickSelectBarSlot].meta);
 		sound->background = false;
-		char* soundfile	  = "romfs:/assets/sound/entity/player/hit.opus";
+		char* soundfile	  = gPathRomAssSounds "entity/player/hit.opus";
 		sound->path[0]	  = '\0';
 		strncat(sound->path, soundfile, sizeof(sound->path) - 1);
 		// DebugUI_Log("File path for player sound %s", sound->path);
