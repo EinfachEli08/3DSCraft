@@ -12,14 +12,12 @@ typedef struct {
 	float3 from, to;
 	s16 faceUV[6][4];  // pixel based coordinates
 	u8 faceTexIdx[6];  // index of texture per face
-	u8 texNum;		   // number of textures
 	const char* texPath[6];
 	float3 position, rotation;
 } CubeModel;
 
 typedef struct {
 	WorldVertex vertices[CUBE_VERTICE_NUM];
-	WorldVertex* vbo;
 	C3D_Mtx localMatrix;
 	C3D_Tex* textures[6];
 } Cube;

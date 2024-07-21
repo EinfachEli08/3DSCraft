@@ -5,7 +5,7 @@
 
 extern const WorldVertex cube_sides_lut[CUBE_VERTICE_NUM];
 
-#define toTexCrd(x, tw) (s16)(((float)(x) / (float)(tw)) * (float)(1 << 15))
+static WorldVertex* vbo;
 
 Cube* Cube_Init(CubeModel* in) {
 	if (!in) {
@@ -19,16 +19,25 @@ Cube* Cube_Init(CubeModel* in) {
 		return NULL;
 	}
 
+	if (!vbo)
+		vbo = linearAlloc(sizeof(cube_sides_lut));
+
 	// Crash("Cube Data: Size VBO: %d, Size LUT: %d, Expected Size: %d, sizeof WorldVertex: %d", sizeof(cube->vertices),
 	// sizeof(cube_sides_lut),
 	//	  CUBE_VERTICE_NUM * sizeof(WorldVertex), sizeof(WorldVertex));
 
-	C3D_Tex** textures = linearAlloc(sizeof(C3D_Tex*) * in->texNum);
+	u8 texNum = 0;
+	for (u8 i = 0; i < 6; ++i) {
+		if (in->texPath[i] != NULL)
+			texNum++;
+	}
+
+	C3D_Tex** textures = linearAlloc(sizeof(C3D_Tex*) * texNum);
 	if (!textures) {
 		Crash("Failed to allocate memory for texture pointers.");
 		return NULL;
 	}
-	for (u8 i = 0; i < in->texNum; ++i) {
+	for (u8 i = 0; i < texNum; ++i) {
 		if (in->texPath[i] == NULL)
 			continue;
 
@@ -69,11 +78,9 @@ Cube* Cube_Init(CubeModel* in) {
 				"Textures: %08x, "
 				"%08x, %08x, "
 				"%08x, %08x, %08x",
-				i, in->texNum, cube->textures[i], cube->textures[i]->data, textures[in->faceTexIdx[i]], textures[in->faceTexIdx[i]]->data,
+				i, texNum, cube->textures[i], cube->textures[i]->data, textures[in->faceTexIdx[i]], textures[in->faceTexIdx[i]]->data,
 				textures[0], textures[1], textures[2], textures[3], textures[4], textures[5]);
 	}
-
-	cube->vbo = linearAlloc(sizeof(cube_sides_lut));
 
 	for (u8 face = 0; face < 6; ++face) {
 		int lutStartIndex = face * 6;
@@ -97,6 +104,8 @@ Cube* Cube_Init(CubeModel* in) {
 			vertex->pos[0] = min.x + (max.x - min.x) * lutPosition[0];
 			vertex->pos[1] = min.y + (max.y - min.y) * lutPosition[1];
 			vertex->pos[2] = min.z + (max.z - min.z) * lutPosition[2];
+
+#define toTexCrd(x, tw) (s16)(((float)(x) / (float)(tw)) * (float)(1 << 15))
 
 			vertex->uv[0] = toTexCrd(uv[cube_sides_lut[idx].uv[0]], cube->textures[face]->width);
 			vertex->uv[1] = toTexCrd(uv[cube_sides_lut[idx].uv[1]], cube->textures[face]->width);
@@ -140,28 +149,26 @@ void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
 	if (cube == NULL) {
 		Crash("Cube is NULL!");
 		return;
-	} else if (cube->vbo == NULL) {
-		Crash("Cube VBO is NULL!");
-		return;
 	} else if (cube->textures[0]->data == NULL) {
 		Crash("Cube TextureData 0 is NULL!\n %08x, %08x, %08x, %08x, %08x", cube->textures[0]->data, cube->textures[1]->data,
 			  cube->textures[2]->data, cube->textures[3]->data, cube->textures[4]->data);
 	}
+	if (!vbo)
+		vbo = linearAlloc(sizeof(cube_sides_lut));
 
-	GSPGPU_FlushDataCache(cube->vbo, sizeof(cube_sides_lut));
+	GSPGPU_FlushDataCache(vbo, sizeof(cube_sides_lut));
 
-	memcpy(cube->vbo, cube->vertices, sizeof(cube_sides_lut));
+	memcpy(vbo, cube->vertices, sizeof(cube_sides_lut));
 
 	C3D_Mtx outMatrix;
 	Mtx_Identity(&outMatrix);
-	Mtx_Scale(&outMatrix, 0.2f, 0.2f, 0.2f);
 	Mtx_Multiply(&outMatrix, matrix, &cube->localMatrix);
 
 	C3D_FVUnifMtx4x4(GPU_VERTEX_SHADER, shaderUniform, &outMatrix);
 
 	C3D_BufInfo* bufInfo = C3D_GetBufInfo();
 	BufInfo_Init(bufInfo);
-	BufInfo_Add(bufInfo, cube->vbo, sizeof(WorldVertex), 4, 0x3210);
+	BufInfo_Add(bufInfo, vbo, sizeof(WorldVertex), 4, 0x3210);
 
 	for (u8 i = 0; i < 6; i++) {
 		C3D_TexBind(0, cube->textures[i]);

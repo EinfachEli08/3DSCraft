@@ -116,7 +116,7 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 
 	Gui_Init();
 
-    Gui_Rev_Init();
+	Gui_Rev_Init();
 
 	C3D_CullFace(GPU_CULL_BACK_CCW);
 
@@ -146,7 +146,7 @@ void Renderer_Deinit() {
 
 	Gui_Deinit();
 
-    Gui_Rev_Deinit();
+	Gui_Rev_Deinit();
 
 	SpriteBatch_Deinit();
 

@@ -12,24 +12,22 @@ void Player_InitModel(Player* player) {
 	C3D_Mtx matrix;
 	Mtx_Translate(&matrix, player->position.x, player->position.y, player->position.z, true);
 
-#define cTo 3
+#define cTo 1
 
 	CubeModel cubes[cubeNo] = {
 		{ f3_new(0, 0, 0),
 		  f3_new(cTo, cTo, cTo),
 		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
 		  { 0, 1, 0, 1, 0, 1 },
-		  2,
 		  { "block/bedrock.png", "block/grass_top.png", 0, 0, 0, 0 },
 		  f3_new(0, 0, 0),
-		  f3_new(1, 1, 1) },
+		  f3_new(0, 0, 1) },
 		{ f3_new(0, 0, 0),
 		  f3_new(cTo, cTo, cTo),
 		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
 		  { 0, 1, 0, 1, 0, 1 },
-		  2,
 		  { "block/stone.png", "block/grass_top.png", 0, 0, 0, 0 },
-		  f3_new(-1, -1, -1),
+		  f3_new(0, 0, -1),
 		  f3_new(0, 0, 0) }
 	};
 
