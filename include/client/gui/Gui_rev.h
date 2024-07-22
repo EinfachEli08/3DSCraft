@@ -13,7 +13,7 @@ void Gui_Rev_InputData(InputData data);
 void Gui_Rev_Label(int x, int y, int z, float size, bool shadow, int16_t color, const char* text, ...);
 #define BUTTON_HEIGHT 20
 #define BUTTON_TEXT_PADDING ((BUTTON_HEIGHT - CHAR_HEIGHT) / 2)
-bool Gui_Rev_Button(int x, int y, int width, int height, int z, float size, const char* label);
+bool Gui_Rev_Button(int x, int y, int width, int height, int z, const char* label);
 bool Gui_Rev_IconButton(int x, int y, int width, int height, const char* label);
 bool Gui_Rev_IsCursorInside(int x, int y, int w, int h);
 bool Gui_Rev_WasCursorInside(int x, int y, int w, int h);

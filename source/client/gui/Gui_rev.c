@@ -9,6 +9,7 @@
 static InputData oldInput;
 static InputData input;
 
+
 void Gui_Rev_Init() {
 	memset(&input, 0x0, sizeof(InputData));
 	memset(&oldInput, 0x0, sizeof(InputData));
@@ -18,7 +19,7 @@ void Gui_Rev_Deinit() {
 }
 
 void Gui_Rev_Label(int x, int y, int z, float size, bool shadow, int16_t color, const char* text, ...) {
-	int wrap	  = size <= 0.f ? INFINITY : relativeToAbsoluteSize(size);
+	int wrap	  = size <= 0.f ? INFINITY :size;
 
 	va_list vl;
 	va_start(vl, text);
@@ -27,26 +28,26 @@ void Gui_Rev_Label(int x, int y, int z, float size, bool shadow, int16_t color, 
 	va_end(vl);
 }
 
-bool Gui_Rev_Button(int x, int y,int width, int height, int z,float size, const char* label) {
+bool Gui_Rev_Button(int x, int y,int width, int height, int z, const char* label) {
 	// TODO: Redesign
 #define SLICE_SIZE 8
 #define textureY 66
 
-	int textWidth = SpriteBatch_CalcTextWidth(label);  // Adjust this call as necessary
+    int textWidth = SpriteBatch_CalcTextWidth(label);  // Adjust this call as necessary
 
-	bool pressed = Gui_Rev_IsCursorInside(x, y, width, height);
+    bool pressed = Gui_Rev_IsCursorInside(x, y, width, height);
 
-	int middlePieceSize = width - height * 2;
+    int middlePieceSize = width - height * 2;
 
-	SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
+    SpriteBatch_BindGuiTexture(GuiTexture_Widgets);
 
-	SpriteBatch_PushQuad(x, y, z, SLICE_SIZE, 20, 0, 66 + (pressed * BUTTON_HEIGHT), SLICE_SIZE, 20);
-	SpriteBatch_PushQuad(x + SLICE_SIZE, y, z, middlePieceSize, 20, SLICE_SIZE, 66 + (pressed * BUTTON_HEIGHT), middlePieceSize, 20);
-	SpriteBatch_PushQuad(x + SLICE_SIZE + middlePieceSize, y, z, SLICE_SIZE, 20, 192, 66 + (pressed * BUTTON_HEIGHT), SLICE_SIZE, 20);
+    SpriteBatch_PushQuad(x, y, z, SLICE_SIZE, 20, 0, 66 + (pressed * BUTTON_HEIGHT), SLICE_SIZE, 20);
+    SpriteBatch_PushQuad(x + SLICE_SIZE, y, z, middlePieceSize, 20, SLICE_SIZE, 66 + (pressed * BUTTON_HEIGHT), middlePieceSize, 20);
+    SpriteBatch_PushQuad(x + SLICE_SIZE + middlePieceSize, y, z, SLICE_SIZE, 20, 192, 66 + (pressed * BUTTON_HEIGHT), SLICE_SIZE, 20);
 
-	SpriteBatch_PushText(x + (width / 2 - textWidth / 2),
-						 pressed ? (y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2) + 1 : y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2, -1,
-						 pressed ? SHADER_RGB(31, 31, 31) : SHADER_RGB(4, 4, 4), false, INT_MAX, NULL, label);
+    SpriteBatch_PushText( (x+width/2) - (textWidth / 2),
+                          pressed ? (y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2) + 1 : y + (BUTTON_HEIGHT - CHAR_HEIGHT) / 2, z + 1,
+                          pressed ? SHADER_RGB(31, 31, 31) : SHADER_RGB(4, 4, 4), false, INT_MAX, NULL, label);
 
 
 

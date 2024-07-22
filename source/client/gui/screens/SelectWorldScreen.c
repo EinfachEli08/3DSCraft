@@ -2,7 +2,7 @@
 #include "client/gui/screens/SelectWorldScreen.h"
 
 #include "client/Crash.h"
-#include "client/gui/Gui.h"
+#include "client/gui/Gui_rev.h"
 #include "client/gui/state_machine/state_machine.h"
 #include "client/model/VertexFmt.h"
 #include "client/renderer/texture/SpriteBatch.h"
@@ -151,18 +151,16 @@ extern void TitleScreen(state_machine_t* machine);	// Forward declare state1
 void SelectWorldScreen(state_machine_t* sm) {
 	machine = sm;  // Update machine when state2 is called with a new state_machine_t
 
-	SpriteBatch_SetScale(2);
-
 	for (int i = 0; i < 160 / 16 + 1; i++) {
 		for (int j = 0; j < 120 / 16 + 1; j++) {
 			bool overlay = j >= 2 && menustate == MenuState_SelectWorld;
-			Gui_DrawBackground(overlay ? 0 : 1, i, j, overlay ? -4 : -10);
+			Gui_Rev_DrawBackground(overlay ? 0 : 1, i, j, overlay ? -4 : -10);
 		}
 	}
 	if (menustate == MenuState_SelectWorld) {
 		int movementX = 0, movementY = 0;
-		Gui_GetCursorMovement(&movementX, &movementY);
-		if (Gui_IsCursorInside(0, 0, 160, 2 * 32)) {
+		Gui_Rev_GetCursorMovement(&movementX, &movementY);
+		if (Gui_Rev_IsCursorInside(0, 0, 160, 2 * 32)) {
 			velocity += movementY / 2.f;
 			velocity = CLAMP(velocity, -max_velocity, max_velocity);
 		}
@@ -193,69 +191,55 @@ void SelectWorldScreen(state_machine_t* sm) {
 			SpriteBatch_PushText(20, y, -6, INT16_MAX, true, INT_MAX, NULL, "%s", info.name, movementY);
 		}
 
-		Gui_Offset(0, 2 * 32 + 5 + BUTTON_TEXT_PADDING);
-		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 1);
-		clicked_play = Gui_Button(1.f, "Play selected world");
-		Gui_EndRow();
-		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 2);
-		clicked_new_world	 = Gui_Button(0.33f, "New");
-		clicked_delete_world = Gui_Button(0.33f, "Delete");
-		clicked_back		 = Gui_Button(0.33f, "Back");
-		Gui_EndRow();
+        int margin = 5;
+        int buttonWidth = 40;
+		clicked_play = Gui_Rev_Button(margin,70,140-margin,0,0, "Play selected world");
+
+		clicked_new_world	 = Gui_Rev_Button(5,92,25,0,0, "New");
+		clicked_delete_world = Gui_Rev_Button(62,92,25,0,0, "Delete");
+		clicked_back		 = Gui_Rev_Button(120,92,25-5,0,0, "Back");
+
 	} else if (menustate == MenuState_ConfirmDeletion) {
-		Gui_Offset(0, 10);
-		Gui_BeginRow(SpriteBatch_GetWidth(), 1);
-		Gui_Label(0.f, true, INT16_MAX, true, "Are you sure?");
-		Gui_EndRow();
-		Gui_VerticalSpace(Gui_RelativeHeight(0.4f));
-		Gui_BeginRowCenter(Gui_RelativeWidth(0.8f), 3);
-		canceled_deletion = Gui_Button(0.4f, "No");
-		Gui_Space(0.2f);
-		confirmed_deletion = Gui_Button(0.4f, "Yes");
-		Gui_EndRow();
+
+		Gui_Rev_Label(10,10,1,0, true, INT16_MAX, true, "Are you sure?");
+
+		canceled_deletion = Gui_Rev_Button(5,92,25,0,0, "No");
+
+		confirmed_deletion = Gui_Rev_Button(115,92,25,0,0, "Yes");
+
 	} else if (menustate == MenuState_WorldOptions) {
-		Gui_Offset(0, 10);
-		Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
-		Gui_Label(0.45f, true, INT16_MAX, false, "World type:");
-		Gui_Space(0.1f);
-		if (Gui_Button(0.45f, worldGenTypesStr[worldGenType])) {
+
+		Gui_Rev_Label(0,0,0,0, true, INT16_MAX, false, "World type:");
+
+		if (Gui_Rev_Button(115,10,25,0,0, worldGenTypesStr[worldGenType])) {
 			worldGenType++;
 			if (worldGenType == WorldGenTypes_Count)
 				worldGenType = 0;
 		}
-		Gui_EndRow();
 
-        Gui_Offset(0, 32);
-        Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
-        Gui_Label(0.45f, true, INT16_MAX, false, "Game Mode:");
-        Gui_Space(0.1f);
-        if (Gui_Button(0.45f, gamemodeTypesStr[gamemode])) {
+        Gui_Rev_Label(0,0,0,0, true, INT16_MAX, false, "Game Mode:");
+
+        if (Gui_Rev_Button(115,35,25,0,0, gamemodeTypesStr[gamemode])) {
             gamemode++;
 
             //player->gamemode = gamemode;
             if (gamemode == Gamemode_Count)
                 gamemode = 0;
         }
-        Gui_EndRow();
 
-        Gui_Offset(0, 54);
-        Gui_BeginRowCenter(Gui_RelativeWidth(0.9f), 3);
-        Gui_Label(0.45f, true, INT16_MAX, false, "Difficulty:");
-        Gui_Space(0.1f);
-        if (Gui_Button(0.45f, difficultyTypesStr[difficulty])) {
+        Gui_Rev_Label(0,0,0,0, true, INT16_MAX, false, "Difficulty:");
+
+        if (Gui_Rev_Button(115,60,25,0,0, difficultyTypesStr[difficulty])) {
             difficulty++;
 
             //player->difficulty = difficulty;
             if (difficulty == Difficulty_Count)
                 difficulty = 0;
         }
-        Gui_EndRow();
 
-        Gui_Offset(0, 3 * 31 + BUTTON_TEXT_PADDING);
-		Gui_BeginRowCenter(Gui_RelativeWidth(0.95f), 3);
-		canceled_world_options = Gui_Button(0.45f, "Cancel");
-		Gui_Space(0.1f);
-		confirmed_world_options = Gui_Button(0.45f, "Continue");
+		canceled_world_options = Gui_Rev_Button(5,92,25,0,0, "Cancel");
+
+		confirmed_world_options = Gui_Rev_Button(115,92,12,0,0, "Continue");
 	}
 }
 
