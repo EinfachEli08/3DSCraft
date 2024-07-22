@@ -30,7 +30,7 @@ void Player_InitModel(Player* player) {
 	};
 
 	const char* paths[2] = { "block/gold_block.png", "block/diamond_block.png" };
-	player->model		 = createModel(&matrix, cubes, cubeNo, paths);
+	player->model		 = createModel(&matrix, cubes, cubeNo, paths, 2);
 }
 
 void Player_Draw(Player* player, int projectionUniform, C3D_Mtx* matrix) {

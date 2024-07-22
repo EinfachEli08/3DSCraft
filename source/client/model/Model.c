@@ -25,20 +25,14 @@ Model* Model_Init(ModelUnbaked* in) {
 
 	model->rootMatrix = *in->rootMatrix;
 
-	u8 texNum;
-	for (texNum = 0; texNum < 6; ++texNum) {
-		if (in->texPath[texNum] == NULL)
-			break;
-	}
-
-	model->textures = linearAlloc(sizeof(C3D_Tex*) * texNum);
+	model->textures = linearAlloc(sizeof(C3D_Tex*) * in->texNum);
 	if (!model->textures) {
 		Crash("Failed to allocate memory for texture pointers.");
 		return NULL;
 	}
-	for (u8 i = 0; i < texNum; ++i) {
+	for (u8 i = 0; i < in->texNum; ++i) {
 		if (in->texPath[i] == NULL)
-			continue;
+			Crash("CubeModel Texture No. %d is NULL!", i);
 
 		model->textures[i] = linearAlloc(sizeof(C3D_Tex));
 
