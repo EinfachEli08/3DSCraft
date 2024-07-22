@@ -20,37 +20,11 @@ Model* Model_Init(ModelUnbaked* in) {
 		Crash("Could not allocate memory for model");
 		return NULL;
 	}
+    model->texture = in->texture;
 
 	model->cubeNum = in->cubeNum;
 
 	model->rootMatrix = *in->rootMatrix;
-
-	model->textures = linearAlloc(sizeof(C3D_Tex*) * in->texNum);
-	if (!model->textures) {
-		Crash("Failed to allocate memory for texture pointers.");
-		return NULL;
-	}
-	for (u8 i = 0; i < in->texNum; ++i) {
-		if (in->texPath[i] == NULL)
-			Crash("CubeModel Texture No. %d is NULL!", i);
-
-		model->textures[i] = linearAlloc(sizeof(C3D_Tex));
-
-		Texture_Load(model->textures[i], in->texPath[i]);
-		if (model->textures[i]->data == NULL) {
-			Crash("Cube Texture No. %d failed to initialize:\n %s", i, in->texPath[i]);
-			// Free previously allocated textures to avoid memory leak
-			for (u8 j = 0; j <= i; ++j) {
-				if (model->textures[j]) {
-					linearFree(model->textures[j]);
-				}
-			}
-			linearFree(model->textures);
-			return NULL;
-		}
-		C3D_TexSetFilter(model->textures[i], GPU_NEAREST, GPU_NEAREST);
-		C3D_TexSetWrap(model->textures[i], GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
-	}
 
 	model->cubes = linearAlloc(model->cubeNum * sizeof(Cube));
 	if (!model->cubes) {
@@ -67,7 +41,7 @@ Model* Model_Init(ModelUnbaked* in) {
 				i, model->cubeNum, in->cubes, in->cubes[0], in->cubes[1], in->cubes[2], in->cubes[3], in->cubes[4], in->cubes[5],
 				in->cubes[6], in->cubes[7], in->cubes[8], in->cubes[9]);
 		}
-		model->cubes[i] = *Cube_Init(in->cubes[i], model->textures);
+		model->cubes[i] = *Cube_Init(in->cubes[i]);
 	}
 
 	Model_Clean(in);
@@ -87,22 +61,22 @@ void Model_Deinit(Model* model) {
 	for (u8 i = 0; i < model->cubeNum; ++i) {
 		Cube_Deinit(&model->cubes[i]);
 	}
-	for (u8 i = 0; i < 6; ++i) {
-		if (model->textures[i]) {
-			C3D_TexDelete(model->textures[i]);
-			linearFree(model->textures[i]);
-		}
-	}
+    //every class handles textures themselves. they init it.
 
 	linearFree(model->cubes);
 	linearFree(model);
 }
 
 void Model_Draw(Model* model, int projectionUniform, C3D_Mtx* projection) {
-	C3D_AlphaTest(true, GPU_GREATER, 0);
 
 	C3D_Mtx matrix;
 	Mtx_Multiply(&matrix, projection, &model->rootMatrix);
+
+    if(model->texture==NULL)
+        Crash("CUBEMODEL TEXTURE IS NULL"); // todo: broken texture handling
+
+    C3D_AlphaTest(true, GPU_GREATER, 0);
+    C3D_TexBind(0, model->texture);
 
 	for (u8 i = 0; i < model->cubeNum; ++i) {
 		Cube* cube = &model->cubes[i];

@@ -5,32 +5,34 @@
 #include "sounds/Sound.h"
 #include "util/Paths.h"
 #include "world/phys/Collision.h"
+#include "client/renderer/texture/TextureMap.h"
 
-#define cubeNo 2
+static C3D_Tex textureSkin;
 
 void Player_InitModel(Player* player) {
+    Texture_Load(&textureSkin, "block/diamond_block.png" /*"entity/player/wide/steve.png"*/);
+
 	C3D_Mtx matrix;
 	Mtx_Translate(&matrix, player->position.x, player->position.y, player->position.z, true);
 
-#define cTo 100
+#define cTo 1
 
-	CubeModel cubes[cubeNo] = {
+	CubeModel cubes[2] = {
 		{ { 0, 0, 0 },
 		  { cTo, cTo, cTo },
+          {16, 16},
 		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
-		  { 0, 1, 0, 1, 0, 1 },
 		  { 0, 0, 0 },
 		  { 0, 0, 1 } },
 		{ { 0, 0, 0 },
 		  { cTo, cTo, cTo },
+          {16, 16},
 		  { { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 }, { 0, 0, 16, 16 } },
-		  { 0, 1, 0, 1, 0, 1 },
 		  { 0, 0, -1 },
 		  { 0, 0, 0 } }
 	};
 
-	const char* paths[2] = { "block/gold_block.png", "block/diamond_block.png" };
-	player->model		 = createModel(&matrix, cubes, cubeNo, paths, 2);
+	player->model = createModel(&matrix, cubes, 2, &textureSkin);
 }
 
 void Player_Draw(Player* player, int projectionUniform, C3D_Mtx* matrix) {
@@ -42,6 +44,7 @@ void Player_Draw(Player* player, int projectionUniform, C3D_Mtx* matrix) {
 
 void Player_Deinit(Player* player) {
 	Model_Deinit(player->model);
+    C3D_TexDelete(&textureSkin);
 }
 
 void Player_Init(Player* player, World* world) {

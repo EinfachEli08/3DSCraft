@@ -5,25 +5,24 @@
 typedef struct {
 	C3D_Mtx rootMatrix;
 
-	C3D_Tex** textures;
-
-	u8 cubeNum;
+    u8 cubeNum;
 	Cube* cubes;
+
+    C3D_Tex* texture;
 } Model;
 
 typedef struct {
 	C3D_Mtx* rootMatrix;
 
-	const char** texPath;
-    u8 texNum;
-
 	u8 cubeNum;
 	CubeModel** cubes;
+
+    C3D_Tex* texture;
 } ModelUnbaked;
 
 Model* Model_Init(ModelUnbaked* model);
 
-static inline Model* createModel(C3D_Mtx* matrix, CubeModel* models, u8 numModels, const char** strings, u8 texNum) {
+static inline Model* createModel(C3D_Mtx* matrix, CubeModel* models, u8 numModels, C3D_Tex* texture) {
 	CubeModel** pointers = (CubeModel**)malloc(sizeof(CubeModel*) * numModels);
 	if (!pointers)
 		return NULL;
@@ -32,20 +31,10 @@ static inline Model* createModel(C3D_Mtx* matrix, CubeModel* models, u8 numModel
 		pointers[i] = &models[i];
 	}
 
-    char** paths = linearAlloc(sizeof(char*) * (texNum + 1));
-    for(u8 i = 0; i <= texNum; i++) {
-        if(i == texNum) {
-            paths[i] = "NULL";
-        } else {
-            paths[i] = linearAlloc(strlen(strings[i]) + 1);
-            strcpy(paths[i], strings[i]);
-        }
-    }
-	ModelUnbaked preModel = { .rootMatrix = matrix, .cubeNum = numModels, .cubes = pointers, .texPath = (const char**)paths, .texNum = texNum };
+	ModelUnbaked preModel = { .rootMatrix = matrix, .cubeNum = numModels, .cubes = pointers, .texture = texture };
 
 	return Model_Init(&preModel);
 }
-
 static inline void Model_Clean(ModelUnbaked* model) {
 	if (model == NULL)
 		return;
@@ -55,6 +44,9 @@ static inline void Model_Clean(ModelUnbaked* model) {
 
 	linearFree(model->cubes);
 	linearFree(model);
+}
+static inline void Model_SetTexture(Model* m, C3D_Tex* tex){
+    m->texture = tex;
 }
 
 void Model_Draw(Model* model, int shaderUniform, C3D_Mtx* matrix);

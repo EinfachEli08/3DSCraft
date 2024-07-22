@@ -6,7 +6,7 @@ extern const WorldVertex cube_sides_lut[CUBE_VERTICE_NUM];
 
 static WorldVertex* vbo;
 
-Cube* Cube_Init(CubeModel* in, C3D_Tex** textureRef) {
+Cube* Cube_Init(CubeModel* in) {
 	if (!in) {
 		Crash("Passed unbaked CubeModel is NULL!");
 		return NULL;
@@ -24,8 +24,6 @@ Cube* Cube_Init(CubeModel* in, C3D_Tex** textureRef) {
 	// Crash("Cube Data: Size VBO: %d, Size LUT: %d, Expected Size: %d, sizeof WorldVertex: %d", sizeof(cube->vertices),
 	// sizeof(cube_sides_lut),
 	//	  CUBE_VERTICE_NUM * sizeof(WorldVertex), sizeof(WorldVertex));
-
-	cube->textureRef = textureRef;
 
 	s16 min[3];
 	memcpy(min, in->from, sizeof(min));
@@ -54,9 +52,10 @@ Cube* Cube_Init(CubeModel* in, C3D_Tex** textureRef) {
 
 #define toTexCrd(x, tw) (s16)(((float)(x) / (float)(tw)) * (float)(1 << 15))
 
-			vertex->uv[0] = toTexCrd(uv[cube_sides_lut[idx].uv[0]], cube->textureRef[face]->width);
-			vertex->uv[1] = toTexCrd(uv[cube_sides_lut[idx].uv[1]], cube->textureRef[face]->width);
+			vertex->uv[0] = toTexCrd(uv[cube_sides_lut[idx].uv[0]], in->dimensions[0]);
+			vertex->uv[1] = toTexCrd(uv[cube_sides_lut[idx].uv[1]], in->dimensions[1]);
 
+            /*
 			// (for simplicity, using white here)
 			vertex->rgb[0] = 255;
 			vertex->rgb[1] = 255;
@@ -65,6 +64,7 @@ Cube* Cube_Init(CubeModel* in, C3D_Tex** textureRef) {
 			vertex->fxyz[0] = 0;
 			vertex->fxyz[1] = 0;
 			vertex->fxyz[2] = 0;
+             */
 		}
 	}
 	C3D_Mtx matrix;
@@ -90,9 +90,6 @@ void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
 	if (cube == NULL) {
 		Crash("Cube is NULL!");
 		return;
-	} else if (cube->textureRef == NULL) {
-		Crash("Cube Texture Reference is NULL!");
-		return;
 	}
 
 	if (!vbo)
@@ -112,8 +109,6 @@ void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
 	BufInfo_Init(bufInfo);
 	BufInfo_Add(bufInfo, vbo, sizeof(WorldVertex), 4, 0x3210);
 
-	for (u8 i = 0; i < 6; i++) {
-		C3D_TexBind(0, cube->textureRef[cube->textureIdx[i]]);
-		C3D_DrawArrays(GPU_TRIANGLES, i * 6, 6);
-	}
+	C3D_DrawArrays(GPU_TRIANGLES, 0, CUBE_VERTICE_NUM);
+
 }
