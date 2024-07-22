@@ -68,6 +68,7 @@ Cube* Cube_Init(CubeModel* in) {
 		}
 	}
 	C3D_Mtx matrix;
+    Mtx_Identity(&matrix);
 	Mtx_Translate(&matrix, in->position[0], in->position[1], in->position[2], true);
 	Mtx_RotateX(&matrix, in->rotation[0], true);
 	Mtx_RotateY(&matrix, in->rotation[1], true);

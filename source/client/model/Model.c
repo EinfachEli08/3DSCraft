@@ -70,6 +70,7 @@ void Model_Deinit(Model* model) {
 void Model_Draw(Model* model, int projectionUniform, C3D_Mtx* projection) {
 
 	C3D_Mtx matrix;
+    Mtx_Identity(&matrix);
 	Mtx_Multiply(&matrix, projection, &model->rootMatrix);
 
     if(model->texture==NULL)

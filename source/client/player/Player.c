@@ -13,9 +13,10 @@ void Player_InitModel(Player* player) {
     Texture_Load(&textureSkin, "block/diamond_block.png" /*"entity/player/wide/steve.png"*/);
 
 	C3D_Mtx matrix;
+    Mtx_Identity(&matrix);
 	Mtx_Translate(&matrix, player->position.x, player->position.y, player->position.z, true);
 
-#define cTo 1
+#define cTo 10
 
 	CubeModel cubes[2] = {
 		{ { 0, 0, 0 },
