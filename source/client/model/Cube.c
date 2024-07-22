@@ -6,9 +6,9 @@ extern const WorldVertex cube_sides_lut[CUBE_VERTICE_NUM];
 
 static WorldVertex* vbo;
 
-Cube* Cube_Init(CubeModel* in) {
+Cube* Cube_Init(CubeRaw* in) {
 	if (!in) {
-		Crash("Passed unbaked CubeModel is NULL!");
+		Crash("Passed unbaked CubeRaw is NULL!");
 		return NULL;
 	}
 
@@ -55,7 +55,7 @@ Cube* Cube_Init(CubeModel* in) {
 			vertex->uv[0] = toTexCrd(uv[cube_sides_lut[idx].uv[0]], in->dimensions[0]);
 			vertex->uv[1] = toTexCrd(uv[cube_sides_lut[idx].uv[1]], in->dimensions[1]);
 
-            /*
+            
 			// (for simplicity, using white here)
 			vertex->rgb[0] = 255;
 			vertex->rgb[1] = 255;
@@ -64,7 +64,7 @@ Cube* Cube_Init(CubeModel* in) {
 			vertex->fxyz[0] = 0;
 			vertex->fxyz[1] = 0;
 			vertex->fxyz[2] = 0;
-             */
+             
 		}
 	}
 	C3D_Mtx matrix;
@@ -74,7 +74,8 @@ Cube* Cube_Init(CubeModel* in) {
 	Mtx_RotateY(&matrix, in->rotation[1], true);
 	Mtx_RotateZ(&matrix, in->rotation[2], true);
 
-	cube->localMatrix = matrix;
+	Mtx_Copy(&cube->localMatrix, &matrix);
+	Mtx_Copy(&cube->initialMatrix, &matrix);
 
 	return cube;
 }
@@ -112,4 +113,20 @@ void Cube_Draw(Cube* cube, int shaderUniform, C3D_Mtx* matrix) {
 
 	C3D_DrawArrays(GPU_TRIANGLES, 0, CUBE_VERTICE_NUM);
 
+}
+
+void Cube_Reset(Cube* c){
+	Mtx_Identity(&c->localMatrix);
+}
+void Cube_ResetToInit(Cube* c){
+	Cube_Reset(c);
+	Mtx_Copy(&c->localMatrix, &c->initialMatrix);
+}
+void Cube_SetPos(Cube* cube, float3 pos){
+	Mtx_Translate(&cube->localMatrix, pos.x, pos.y, pos.z, true);
+}
+void Cube_SetRot(Cube* c, float3 rot){
+	Mtx_RotateX(&c->localMatrix, rot.x, true);
+	Mtx_RotateY(&c->localMatrix, rot.y, true);
+	Mtx_RotateZ(&c->localMatrix, rot.z, true);
 }

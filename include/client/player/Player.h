@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #include "client/gui/Inventory.h"
-#include "client/model/Model.h"
+#include "client/model/CubeModel.h"
 #include "client/player/Damage.h"
 
 #include "sounds/Sound.h"
@@ -62,7 +62,7 @@ typedef struct {
 	bool blockInSight, blockInActionRange;
 	ItemStack inventory[64];
 
-	Model* model;
+	CubeModel* model;
 } Player;
 
 void Player_Init(Player* player, World* world);
