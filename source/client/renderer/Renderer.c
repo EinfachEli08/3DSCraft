@@ -3,7 +3,6 @@
 #include <client/Camera.h>
 #include <client/gui/DebugUI.h>
 #include <client/gui/Gui.h>
-#include <client/gui/Gui_rev.h>
 #include <client/gui/Inventory.h>
 #include <client/gui/screens/SelectWorldScreen.h>
 #include <client/renderer/Clouds.h>
@@ -52,9 +51,6 @@ static GameState* gamestate;
 static state_machine_t* machine;
 
 extern bool showDebugInfo;
-
-extern void TitleScreen(state_machine_t* machine);
-extern void SelectWorldScreen(state_machine_t* machine);
 
 extern Camera camera;
 
@@ -116,8 +112,6 @@ void Renderer_Init(World* world_, Player* player_, WorkQueue* queue, GameState* 
 
 	Gui_Init();
 
-	Gui_Rev_Init();
-
 	C3D_CullFace(GPU_CULL_BACK_CCW);
 
 	Block_Init();
@@ -145,8 +139,6 @@ void Renderer_Deinit() {
 	WorldRenderer_Deinit();
 
 	Gui_Deinit();
-
-	Gui_Rev_Deinit();
 
 	SpriteBatch_Deinit();
 
@@ -232,7 +224,6 @@ void Renderer_Render() {
 	if (showDebugInfo)
 		DebugUI_Draw();
 
-	Gui_Frame();
 
 	SpriteBatch_Render(GFX_BOTTOM);
 

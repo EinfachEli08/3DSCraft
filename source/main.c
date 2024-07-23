@@ -8,7 +8,6 @@
 #include "client/Crash.h"
 #include "client/gui/DebugUI.h"
 #include "client/gui/Gui.h"
-#include "client/gui/Gui_rev.h"
 #include "client/gui/screens/SelectWorldScreen.h"
 #include "client/player/Damage.h"
 #include "client/player/Player.h"
@@ -223,7 +222,6 @@ int main() {
 			}
 		}
 		Gui_InputData(inputData);
-		Gui_Rev_InputData(inputData);
 	}
 
 	if (gamestate == GameState_Playing) {

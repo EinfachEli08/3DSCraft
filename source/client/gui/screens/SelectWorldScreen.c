@@ -3,7 +3,7 @@
 
 #include "client/gui/DebugUI.h"
 #include "client/Crash.h"
-#include "client/gui/Gui_rev.h"
+#include "client/gui/Gui.h"
 #include "client/gui/state_machine/state_machine.h"
 #include "client/model/VertexFmt.h"
 #include "client/renderer/texture/SpriteBatch.h"
@@ -155,13 +155,13 @@ void SelectWorldScreen(state_machine_t* sm) {
     for (int i = 0; i < 160 / 16 + 1; i++) {
         for (int j = 0; j < 120 / 16 + 1; j++) {
             bool overlay = j >= 2 && menustate == MenuState_SelectWorld;
-            Gui_Rev_DrawBackground(overlay ? 0 : 1, i, j, overlay ? -4 : -10);
+            Gui_DrawBackground(overlay ? 0 : 1, i, j, overlay ? -4 : -10);
         }
     }
     if (menustate == MenuState_SelectWorld) {
         int movementX = 0, movementY = 0;
-        Gui_Rev_GetCursorMovement(&movementX, &movementY);
-        if (Gui_Rev_IsCursorInside(0, 0, 160, 2 * 32)) {
+        Gui_GetCursorMovement(&movementX, &movementY);
+        if (Gui_IsCursorInside(0, 0, 160, 2 * 32)) {
             velocity += movementY / 2.f;
             velocity = CLAMP(velocity, -max_velocity, max_velocity);
         }
@@ -194,33 +194,33 @@ void SelectWorldScreen(state_machine_t* sm) {
 
         int margin = 5;
         DebugUI_Text("%d",selectedWorld);
-        clicked_play = Gui_Rev_Button(selectedWorld != -1, margin, 70, 155 - margin, 0, "Play selected world");
+        clicked_play = Gui_Button(selectedWorld != -1, margin, 70, 155 - margin, 0, "Play selected world");
 
-        clicked_new_world = Gui_Rev_Button(true, 5, 92, 50, 0, "New");
-        clicked_delete_world = Gui_Rev_Button(selectedWorld != -1, 57, 92, 50, 0, "Delete");
-        clicked_back = Gui_Rev_Button(true, 110, 92, 50 - 5, 0, "Back");
+        clicked_new_world = Gui_Button(true, 5, 92, 50, 0, "New");
+        clicked_delete_world = Gui_Button(selectedWorld != -1, 57, 92, 50, 0, "Delete");
+        clicked_back = Gui_Button(true, 110, 92, 50 - 5, 0, "Back");
 
     } else if (menustate == MenuState_ConfirmDeletion) {
 
         char* label = "Are you sure?";
 
-        Gui_Rev_Label((SpriteBatch_GetWidth() / 2) - (SpriteBatch_CalcTextWidth(label) / 2), 20, 1, 0, true, INT16_MAX, label);
+        Gui_Label((SpriteBatch_GetWidth() / 2) - (SpriteBatch_CalcTextWidth(label) / 2), 20, 1, 0, true, INT16_MAX, label);
 
-        canceled_deletion = Gui_Rev_Button(true, 5, 92, 70, 0, "No");
+        canceled_deletion = Gui_Button(true, 5, 92, 70, 0, "No");
 
-        confirmed_deletion = Gui_Rev_Button(true, 80, 92, 75, 0, "Yes");
+        confirmed_deletion = Gui_Button(true, 80, 92, 75, 0, "Yes");
 
     } else if (menustate == MenuState_WorldOptions) {
 
-        Gui_Rev_Label(5, 15, 0, 0, true, INT16_MAX, "World type:");
-        if (Gui_Rev_Button(true, 95, 10, 60, 0, worldGenTypesStr[worldGenType])) {
+        Gui_Label(5, 15, 0, 0, true, INT16_MAX, "World type:");
+        if (Gui_Button(true, 95, 10, 60, 0, worldGenTypesStr[worldGenType])) {
             worldGenType++;
             if (worldGenType == WorldGenTypes_Count)
                 worldGenType = 0;
         }
 
-        Gui_Rev_Label(5, 40, 0, 0, true, INT16_MAX, "Game Mode:");
-        if (Gui_Rev_Button(true, 95, 35, 60, 0, gamemodeTypesStr[gamemode])) {
+        Gui_Label(5, 40, 0, 0, true, INT16_MAX, "Game Mode:");
+        if (Gui_Button(true, 95, 35, 60, 0, gamemodeTypesStr[gamemode])) {
             gamemode++;
 
             //player->gamemode = gamemode;
@@ -228,8 +228,8 @@ void SelectWorldScreen(state_machine_t* sm) {
                 gamemode = 0;
         }
 
-        Gui_Rev_Label(5, 65, 0, 0, true, INT16_MAX, "Difficulty:");
-        if (Gui_Rev_Button(true, 95, 60, 60, 0, difficultyTypesStr[difficulty])) {
+        Gui_Label(5, 65, 0, 0, true, INT16_MAX, "Difficulty:");
+        if (Gui_Button(true, 95, 60, 60, 0, difficultyTypesStr[difficulty])) {
             difficulty++;
 
             //player->difficulty = difficulty;
@@ -237,15 +237,16 @@ void SelectWorldScreen(state_machine_t* sm) {
                 difficulty = 0;
         }
 
-        canceled_world_options = Gui_Rev_Button(true, 5, 92, 70, 0, "Cancel");
+        canceled_world_options = Gui_Button(true, 5, 92, 70, 0, "Cancel");
 
-        confirmed_world_options = Gui_Rev_Button(true, 80, 92, 75, 0, "Continue");
+        confirmed_world_options = Gui_Button(true, 80, 92, 75, 0, "Continue");
     }
 }
 
 
 bool SelectWorldScreen_Update(char* out_worldpath, char* out_name, WorldGenType* worldType, bool* newWorld) {
 	if (clicked_back) {
+        clicked_back = false;
 		state_machine_set_current_state(machine, TitleScreen);
 	}
 	if (clicked_new_world) {

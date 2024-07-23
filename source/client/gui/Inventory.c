@@ -61,12 +61,12 @@ int Inventory_Draw(int x, int y, int w, ItemStack* stacks, int count, int _site)
 
 	const int16_t colors[2] = {SHADER_RGB_DARKEN(SHADER_RGB(20, 20, 21), 9), SHADER_RGB_DARKEN(SHADER_RGB(20, 20, 21), 8)};
 	if (count > INVENTORY_MAX_PER_SITE) {
-		Gui_Offset(0, 60);
-		if (Gui_Button(0.f, " << ") && site > 1) {
+
+		if (Gui_Button(true,7,60,20,0, " << ") && site > 1) {
 			site--;
 		}
-		Gui_Offset(270, 60);
-		if (Gui_Button(0.f, " >> ") && site * INVENTORY_MAX_PER_SITE < count) {
+
+		if (Gui_Button(true,295,60,20,0, " >> ") && site * INVENTORY_MAX_PER_SITE < count) {
 			site++;
 		}
 	}
