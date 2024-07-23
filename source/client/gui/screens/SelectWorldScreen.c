@@ -1,6 +1,7 @@
 
 #include "client/gui/screens/SelectWorldScreen.h"
 
+#include "client/gui/DebugUI.h"
 #include "client/Crash.h"
 #include "client/gui/Gui_rev.h"
 #include "client/gui/state_machine/state_machine.h"
@@ -149,77 +150,77 @@ bool overlay = false;
 extern void TitleScreen(state_machine_t* machine);	// Forward declare state1
 
 void SelectWorldScreen(state_machine_t* sm) {
-	machine = sm;  // Update machine when state2 is called with a new state_machine_t
+    machine = sm;  // Update machine when state2 is called with a new state_machine_t
 
-	for (int i = 0; i < 160 / 16 + 1; i++) {
-		for (int j = 0; j < 120 / 16 + 1; j++) {
-			bool overlay = j >= 2 && menustate == MenuState_SelectWorld;
-			Gui_Rev_DrawBackground(overlay ? 0 : 1, i, j, overlay ? -4 : -10);
-		}
-	}
-	if (menustate == MenuState_SelectWorld) {
-		int movementX = 0, movementY = 0;
-		Gui_Rev_GetCursorMovement(&movementX, &movementY);
-		if (Gui_Rev_IsCursorInside(0, 0, 160, 2 * 32)) {
-			velocity += movementY / 2.f;
-			velocity = CLAMP(velocity, -max_velocity, max_velocity);
-		}
-		scroll += velocity;
-		velocity *= 0.75f;
-		if (ABS(velocity) < 0.001f)
-			velocity = 0.f;
+    for (int i = 0; i < 160 / 16 + 1; i++) {
+        for (int j = 0; j < 120 / 16 + 1; j++) {
+            bool overlay = j >= 2 && menustate == MenuState_SelectWorld;
+            Gui_Rev_DrawBackground(overlay ? 0 : 1, i, j, overlay ? -4 : -10);
+        }
+    }
+    if (menustate == MenuState_SelectWorld) {
+        int movementX = 0, movementY = 0;
+        Gui_Rev_GetCursorMovement(&movementX, &movementY);
+        if (Gui_Rev_IsCursorInside(0, 0, 160, 2 * 32)) {
+            velocity += movementY / 2.f;
+            velocity = CLAMP(velocity, -max_velocity, max_velocity);
+        }
+        scroll += velocity;
+        velocity *= 0.75f;
+        if (ABS(velocity) < 0.001f)
+            velocity = 0.f;
 
-		int maximumSize = CHAR_HEIGHT * 2 * worlds.length;
-		if (scroll < -maximumSize)
-			scroll = -maximumSize;
-		if (scroll > 0)
-			scroll = 0;
+        int maximumSize = CHAR_HEIGHT * 2 * worlds.length;
+        if (scroll < -maximumSize)
+            scroll = -maximumSize;
+        if (scroll > 0)
+            scroll = 0;
 
-		WorldInfo info;
-		int i = 0;
-		vec_foreach (&worlds, info, i) {
-			int y = i * (CHAR_HEIGHT + CHAR_HEIGHT) + 10 + scroll;
-			if (selectedWorld == i) {
-				SpriteBatch_PushSingleColorQuad(10, y - 3, -7, 140, 1, SHADER_RGB(20, 20, 20));
-				SpriteBatch_PushSingleColorQuad(10, y + CHAR_HEIGHT + 2, -7, 140, 1, SHADER_RGB(20, 20, 20));
-				SpriteBatch_PushSingleColorQuad(10, y - 3, -7, 1, CHAR_HEIGHT + 6, SHADER_RGB(20, 20, 20));
-				SpriteBatch_PushSingleColorQuad(10 + 140, y - 3, -7, 1, CHAR_HEIGHT + 6, SHADER_RGB(20, 20, 20));
-			}
-			if (Gui_EnteredCursorInside(10, y - 3, 140, CHAR_HEIGHT + 6) && y < 32 * 2) {
-				selectedWorld = i;
-			}
-			SpriteBatch_PushText(20, y, -6, INT16_MAX, true, INT_MAX, NULL, "%s", info.name, movementY);
-		}
+        WorldInfo info;
+        int i = 0;
+        vec_foreach (&worlds, info, i) {
+            int y = i * (CHAR_HEIGHT + CHAR_HEIGHT) + 10 + scroll;
+            if (Gui_EnteredCursorInside(10, y - 3, 140, CHAR_HEIGHT + 6) && y < 32 * 2) {
+                selectedWorld = i;
+            }
+            if (selectedWorld == i) {
+                SpriteBatch_PushSingleColorQuad(10, y - 3, -7, 140, 1, SHADER_RGB(20, 20, 20));
+                SpriteBatch_PushSingleColorQuad(10, y + CHAR_HEIGHT + 2, -7, 140, 1, SHADER_RGB(20, 20, 20));
+                SpriteBatch_PushSingleColorQuad(10, y - 3, -7, 1, CHAR_HEIGHT + 6, SHADER_RGB(20, 20, 20));
+                SpriteBatch_PushSingleColorQuad(10 + 140, y - 3, -7, 1, CHAR_HEIGHT + 6, SHADER_RGB(20, 20, 20));
+            }
+            SpriteBatch_PushText(20, y, -6, INT16_MAX, true, INT_MAX, NULL, "%s", info.name, movementY);
+        }
 
         int margin = 5;
-        int buttonWidth = 40;
-		clicked_play = Gui_Rev_Button(margin,70,140-margin,0,0, "Play selected world");
+        DebugUI_Text("%d",selectedWorld);
+        clicked_play = Gui_Rev_Button(selectedWorld != -1, margin, 70, 155 - margin, 0, "Play selected world");
 
-		clicked_new_world	 = Gui_Rev_Button(5,92,25,0,0, "New");
-		clicked_delete_world = Gui_Rev_Button(62,92,25,0,0, "Delete");
-		clicked_back		 = Gui_Rev_Button(120,92,25-5,0,0, "Back");
+        clicked_new_world = Gui_Rev_Button(true, 5, 92, 50, 0, "New");
+        clicked_delete_world = Gui_Rev_Button(selectedWorld != -1, 57, 92, 50, 0, "Delete");
+        clicked_back = Gui_Rev_Button(true, 110, 92, 50 - 5, 0, "Back");
 
-	} else if (menustate == MenuState_ConfirmDeletion) {
+    } else if (menustate == MenuState_ConfirmDeletion) {
 
-		Gui_Rev_Label(10,10,1,0, true, INT16_MAX, true, "Are you sure?");
+        char* label = "Are you sure?";
 
-		canceled_deletion = Gui_Rev_Button(5,92,25,0,0, "No");
+        Gui_Rev_Label((SpriteBatch_GetWidth() / 2) - (SpriteBatch_CalcTextWidth(label) / 2), 20, 1, 0, true, INT16_MAX, label);
 
-		confirmed_deletion = Gui_Rev_Button(115,92,25,0,0, "Yes");
+        canceled_deletion = Gui_Rev_Button(true, 5, 92, 70, 0, "No");
 
-	} else if (menustate == MenuState_WorldOptions) {
+        confirmed_deletion = Gui_Rev_Button(true, 80, 92, 75, 0, "Yes");
 
-		Gui_Rev_Label(0,0,0,0, true, INT16_MAX, false, "World type:");
+    } else if (menustate == MenuState_WorldOptions) {
 
-		if (Gui_Rev_Button(115,10,25,0,0, worldGenTypesStr[worldGenType])) {
-			worldGenType++;
-			if (worldGenType == WorldGenTypes_Count)
-				worldGenType = 0;
-		}
+        Gui_Rev_Label(5, 15, 0, 0, true, INT16_MAX, "World type:");
+        if (Gui_Rev_Button(true, 95, 10, 60, 0, worldGenTypesStr[worldGenType])) {
+            worldGenType++;
+            if (worldGenType == WorldGenTypes_Count)
+                worldGenType = 0;
+        }
 
-        Gui_Rev_Label(0,0,0,0, true, INT16_MAX, false, "Game Mode:");
-
-        if (Gui_Rev_Button(115,35,25,0,0, gamemodeTypesStr[gamemode])) {
+        Gui_Rev_Label(5, 40, 0, 0, true, INT16_MAX, "Game Mode:");
+        if (Gui_Rev_Button(true, 95, 35, 60, 0, gamemodeTypesStr[gamemode])) {
             gamemode++;
 
             //player->gamemode = gamemode;
@@ -227,9 +228,8 @@ void SelectWorldScreen(state_machine_t* sm) {
                 gamemode = 0;
         }
 
-        Gui_Rev_Label(0,0,0,0, true, INT16_MAX, false, "Difficulty:");
-
-        if (Gui_Rev_Button(115,60,25,0,0, difficultyTypesStr[difficulty])) {
+        Gui_Rev_Label(5, 65, 0, 0, true, INT16_MAX, "Difficulty:");
+        if (Gui_Rev_Button(true, 95, 60, 60, 0, difficultyTypesStr[difficulty])) {
             difficulty++;
 
             //player->difficulty = difficulty;
@@ -237,11 +237,12 @@ void SelectWorldScreen(state_machine_t* sm) {
                 difficulty = 0;
         }
 
-		canceled_world_options = Gui_Rev_Button(5,92,25,0,0, "Cancel");
+        canceled_world_options = Gui_Rev_Button(true, 5, 92, 70, 0, "Cancel");
 
-		confirmed_world_options = Gui_Rev_Button(115,92,12,0,0, "Continue");
-	}
+        confirmed_world_options = Gui_Rev_Button(true, 80, 92, 75, 0, "Continue");
+    }
 }
+
 
 bool SelectWorldScreen_Update(char* out_worldpath, char* out_name, WorldGenType* worldType, bool* newWorld) {
 	if (clicked_back) {

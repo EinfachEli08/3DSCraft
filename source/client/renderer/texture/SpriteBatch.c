@@ -109,6 +109,7 @@ void SpriteBatch_PushQuadColor(int x, int y, int z, int w, int h, int rx, int ry
 
 static float rot = 0.f;
 extern const WorldVertex cube_sides_lut[6 * 6];
+//TODO: Größe konfigurierbar machen
 void SpriteBatch_PushIcon(Block block, uint8_t metadata, int x, int y, int z) {
 	WorldVertex vertices[6 * 6];
 	memcpy(vertices, cube_sides_lut, sizeof(cube_sides_lut));
