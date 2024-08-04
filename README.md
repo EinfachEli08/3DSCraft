@@ -1,3 +1,6 @@
+# WE MOVED!
+You can find the new Repository at: https://github.com/Team8Omega/3DSCraft
+
 # 3DSCraft
 Yet another revival of craftus, updating to more recent behavior and rebrandings.
 
@@ -8,9 +11,7 @@ Yet another revival of craftus, updating to more recent behavior and rebrandings
 
 You'll need a hacked system that can load homebrew for this to run (citra is good for testing but i haven't been able to get most of the controls working there)
 
-
 This was forked from Onixiya/craftus: https://github.com/Onixiya/craftus
-
 
 After launching it for the first time, you can change the controls in `sd:/3dscraft/options.ini`.
 You can also change the settings in `sd:/3dscraft/options.ini`.
